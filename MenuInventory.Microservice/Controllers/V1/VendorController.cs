@@ -1,4 +1,5 @@
-﻿using MicroService.Shared.Models;
+﻿using MenuInventory.Microservice.BuisnessLayer.IBuisnessLayer;
+using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,13 @@ namespace MenuInventory.Microservice.Controllers.V1
     [ApiController]
     public class VendorController : ControllerBase
     {
+        private readonly IVendorBL _vendor;
+
+        public VendorController(IVendorBL vendor)
+        {
+            _vendor = vendor;
+        }
+
         [HttpGet]
         public string GetVendor()
         {
@@ -28,7 +36,7 @@ namespace MenuInventory.Microservice.Controllers.V1
         public async Task<IActionResult> GetVendorListAsync()
         {
             APIResponse aPIResponse = new APIResponse();
-            var getResult = await _orderBL.GetVendorListAsync();
+            var getResult = await _vendor.GetVendorListAsync();
             if (getResult.Count > 0)
             {
                 aPIResponse.Content = getResult;

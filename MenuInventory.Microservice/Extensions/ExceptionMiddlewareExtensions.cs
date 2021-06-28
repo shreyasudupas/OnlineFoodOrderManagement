@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using User.MicroService.Security.Middleware;
+﻿using MenuInventory.MicroService.Security.Middleware;
+using Microsoft.AspNetCore.Builder;
 
 namespace MenuInventory.MicroService.Extensions
 {

@@ -11,10 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BuisnessLayer\IBuisnessLayer\" />
     <Folder Include="Controllers\V2\" />
     <Folder Include="Data\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Security\Handlers\" />
     <Folder Include="Security\Middlewares\" />
     <Folder Include="Security\Requirements\" />
