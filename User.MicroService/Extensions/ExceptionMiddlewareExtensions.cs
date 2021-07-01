@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using User.MicroService.Security.Middleware;
+using Identity.MicroService.Security.Middleware;
 
-namespace User.MicroService.Extensions
+namespace Identity.MicroService.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace User.MicroService.Security.Middleware
+namespace Identity.MicroService.Security.Middleware
 {
     public class GetUserMiddleware
     {

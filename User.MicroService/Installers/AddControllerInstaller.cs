@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace User.MicroService.Installers
+namespace Identity.MicroService.Installers
 {
     public class AddControllerInstaller : IInstaller
     {

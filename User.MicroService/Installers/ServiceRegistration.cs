@@ -3,16 +3,16 @@ using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using User.MicroService.Security.Handlers;
+using Identity.MicroService.Security.Handlers;
 
-namespace User.MicroService.Installers
+namespace Identity.MicroService.Installers
 {
     public class ServiceRegistration : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             //register services
-            services.AddScoped<IUser, UserBuisness>();
+            //services.AddScoped<IUser, UserBuisness>();
 
             //register for properties
             services.AddScoped<IProfileUser, ProfileUser>();

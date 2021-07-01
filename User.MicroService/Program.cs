@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace User.MicroService
+namespace Identity.MicroService
 {
     public class Program
     {

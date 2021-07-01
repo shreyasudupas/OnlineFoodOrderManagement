@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
-using User.MicroService.Extensions;
-using User.MicroService.Installers;
+using Identity.MicroService.Extensions;
+using Identity.MicroService.Installers;
 
-namespace User.MicroService
+namespace Identity.MicroService
 {
     public class Startup
     {
@@ -32,7 +32,7 @@ namespace User.MicroService
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "User.MicroService v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.MicroService v1"));
             }
 
             app.UseHttpsRedirection();

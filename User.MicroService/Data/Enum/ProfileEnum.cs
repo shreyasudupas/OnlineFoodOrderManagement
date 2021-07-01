@@ -1,4 +1,4 @@
-﻿namespace User.MicroService.Data.Enum
+﻿namespace Identity.MicroService.Data.Enum
 {
     public enum ProfileEnum
     {

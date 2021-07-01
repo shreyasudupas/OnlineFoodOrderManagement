@@ -6,20 +6,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BuisnessLayer\**" />
+    <Content Remove="BuisnessLayer\**" />
+    <EmbeddedResource Remove="BuisnessLayer\**" />
+    <None Remove="BuisnessLayer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\V2\" />
-    <Folder Include="Data\" />
     <Folder Include="Security\Handlers\" />
     <Folder Include="Security\Middlewares\" />
     <Folder Include="Security\Requirements\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Menu.Database\MenuDatabase.csproj" />
     <ProjectReference Include="..\MicroService.Shared\MicroService.Shared.csproj" />
   </ItemGroup>
 

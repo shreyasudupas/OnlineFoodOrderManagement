@@ -1,7 +1,4 @@
-﻿using MenuInventory.Microservice.BuisnessLayer;
-using MenuInventory.Microservice.BuisnessLayer.IBuisnessLayer;
-using MenuInventory.Microservice.IBuisnessLayer;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MenuInventory.Microservice.Installers
@@ -15,8 +12,8 @@ namespace MenuInventory.Microservice.Installers
 
             //register services
             //services.AddScoped<IUser, UserBuisness>();
-            services.AddScoped<IVendorBL, VendorBL>();
-            services.AddScoped<IMenuBL, MenuBL>();
+            //services.AddScoped<IVendorBL, VendorBL>();
+            //services.AddScoped<IMenuBL, MenuBL>();
         }
     }
 }

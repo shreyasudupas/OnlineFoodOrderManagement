@@ -1,4 +1,5 @@
-﻿using MenuInventory.Microservice.IBuisnessLayer;
+﻿using MediatR;
+using MenuInventory.Microservice.Features.MenuFeature.Querries;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,20 @@ using System.Threading.Tasks;
 
 namespace MenuInventory.Microservice.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class MenuController : ControllerBase
     {
-        private readonly IMenuBL _menu;
+        private readonly IMediator _mediator;
 
-        public MenuController(IMenuBL menu)
+        public MenuController(IMediator mediator)
         {
-            _menu = menu;
+            _mediator = mediator;
+        }
+        [HttpGet]
+        public string SampleMenu()
+        {
+            return "MenuController Works";
         }
 
         /// <summary>
@@ -31,7 +37,8 @@ namespace MenuInventory.Microservice.Controllers.V1
             //var headers = HttpContext.Request.Headers["UserInfo"];
 
             APIResponse response = new APIResponse();
-            var result = await _menu.GetMenuListForVednorId(VendorId);
+            //var result = await _menu.GetMenuListForVednorId(VendorId);
+            var result = await _mediator.Send(new VendorIdRequest(VendorId));
             if (result != null)
             {
                 response.Content = result;

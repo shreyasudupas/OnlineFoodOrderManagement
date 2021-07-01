@@ -1,4 +1,5 @@
-﻿using MenuInventory.Microservice.BuisnessLayer.IBuisnessLayer;
+﻿using MediatR;
+using MenuInventory.Microservice.Features.VendorFeature.Querries;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,17 @@ namespace MenuInventory.Microservice.Controllers.V1
     [ApiController]
     public class VendorController : ControllerBase
     {
-        private readonly IVendorBL _vendor;
+        //private readonly IVendorBL _vendor;
 
-        public VendorController(IVendorBL vendor)
+        //public VendorController(IVendorBL vendor)
+        //{
+        //    _vendor = vendor;
+        //}
+        private readonly IMediator _mediator;
+
+        public VendorController(IMediator mediator)
         {
-            _vendor = vendor;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -36,7 +43,8 @@ namespace MenuInventory.Microservice.Controllers.V1
         public async Task<IActionResult> GetVendorListAsync()
         {
             APIResponse aPIResponse = new APIResponse();
-            var getResult = await _vendor.GetVendorListAsync();
+            //var getResult = await _vendor.GetVendorListAsync();
+            var getResult = await _mediator.Send(new GetAllVendorRequest());
             if (getResult.Count > 0)
             {
                 aPIResponse.Content = getResult;

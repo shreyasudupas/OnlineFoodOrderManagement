@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace User.MicroService.Security.Requirments
+namespace Identity.MicroService.Security.Requirments
 {
     public class UserRequirement : IAuthorizationRequirement
     {

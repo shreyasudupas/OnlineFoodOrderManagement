@@ -1,33 +1,38 @@
-﻿using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
+﻿using Identity.MicroService.Features.UserFeature.Queries;
+using MediatR;
+using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace User.MicroService.Controllers.V1
+namespace Identity.MicroService.Controllers.V1
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUser _user;
-        public UserController(IUser user)
+        private readonly IMediator _mediator;
+
+        public UserController(IMediator mediator)
         {
-            _user = user;
+            _mediator = mediator;
         }
+
         /// <summary>
         /// Gets the user details and if not present then adds it
         /// </summary>
         /// <returns>User Profile Details</returns>
         /// <response code="200">success userDetails</response>
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetOrUpdateUserDetails(UserProfile userProfile)
+        //[AllowAnonymous]
+        [Authorize(Policy = "AllowUserAccess")]
+        public async Task<IActionResult> GetOrUpdateUserDetails(AddUserRequestModel userProfile)
         {
             APIResponse response = new APIResponse();
-            
-            var res = await _user.AddOrGetUserDetails(userProfile);
+
+            var res = await _mediator.Send(userProfile);
             if (res != null)
             {
                 response.Content = res;

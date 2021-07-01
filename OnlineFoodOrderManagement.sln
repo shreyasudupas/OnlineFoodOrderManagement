@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroServices", "MicroServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayAPI", "GatewayAPI\GatewayAPI.csproj", "{E3584950-B01F-49F7-B873-334891A90B97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.MicroService", "User.MicroService\User.MicroService.csproj", "{A634245C-4F92-49E9-9B33-B7AEED02FFAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.MicroService", "User.MicroService\Identity.MicroService.csproj", "{A634245C-4F92-49E9-9B33-B7AEED02FFAD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuDatabase", "Menu.Database\MenuDatabase.csproj", "{8EA79003-7836-4D35-B58C-BC4C0646B58A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroService.Shared", "MicroService.Shared\MicroService.Shared.csproj", "{B7DA6620-0407-438C-856B-7BCC722A307F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroService.Shared", "MicroService.Shared\MicroService.Shared.csproj", "{B7DA6620-0407-438C-856B-7BCC722A307F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuInventory.Microservice", "MenuInventory.Microservice\MenuInventory.Microservice.csproj", "{0E8EA31A-8758-4906-A89D-E62BBE9C841A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuInventory.Microservice", "MenuInventory.Microservice\MenuInventory.Microservice.csproj", "{0E8EA31A-8758-4906-A89D-E62BBE9C841A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

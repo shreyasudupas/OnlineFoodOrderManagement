@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace User.MicroService.Security.Middleware
+namespace Identity.MicroService.Security.Middleware
 {
     public class ExceptionMiddleware
     {

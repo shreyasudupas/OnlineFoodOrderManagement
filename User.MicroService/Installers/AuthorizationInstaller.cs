@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using User.MicroService.Security.Requirments;
+using Identity.MicroService.Security.Requirments;
 
-namespace User.MicroService.Installers
+namespace Identity.MicroService.Installers
 {
     public class AuthorizationInstaller : IInstaller
     {
