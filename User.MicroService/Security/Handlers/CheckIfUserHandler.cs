@@ -37,20 +37,17 @@ namespace Identity.MicroService.Security.Handlers
                     //Userprofile value is got from Middleware where the header value is stored
                     if (!string.IsNullOrEmpty(_profile.GetUserDetails().Item1))
                     {
-                        //UserProfile user = new UserProfile();
-                        AddUserRequestModel request = new AddUserRequestModel();
+                        GetUsernameRoleRequest request = new GetUsernameRoleRequest();
 
                         var Item = _profile.GetUserDetails();
-                        request.Username = Item.Item1;
-                        request.PictureLocation = Item.Item2;
-                        request.NickName = Item.Item3;
+                        request.UserName = Item.Item1;
                         request.RoleId = (int)Enum.Parse(typeof(ProfileEnum), UserPermisson.ToLower());
 
                         //var userPresent = _userBL.AddOrGetUserDetails(user);
                         var userPresent = _mediator.Send(request).GetAwaiter().GetResult();
 
                         //Debug.WriteLine(getEmailId);
-                        if (userPresent != null)
+                        if (userPresent == true)
                             //succeded the request
                             context.Succeed(requirement);
                     }

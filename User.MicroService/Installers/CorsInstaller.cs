@@ -11,13 +11,14 @@ namespace Identity.MicroService.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowMyOrigin", options => options.AllowAnyOrigin()
-                 .AllowAnyHeader()
-                 .AllowAnyMethod()
-                );
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowMyOrigin", options => options.AllowAnyOrigin()
+            //     .AllowAnyHeader()
+            //     .AllowAnyMethod()
+            //    );
+            //});
+            //services.AddCors();
         }
     }
 }

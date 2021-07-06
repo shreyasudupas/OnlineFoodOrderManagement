@@ -13,7 +13,7 @@ namespace MenuInventory.Microservice.Models
 
     public class MenuList
     {
-        public long MenuId { get; set; }
+        public long Id { get; set; }
         public string MenuItem { get; set; }
         public int Price { get; set; }
         public long VendorId { get; set; }
@@ -26,7 +26,7 @@ namespace MenuInventory.Microservice.Models
 
     public class MenuItemDetail
     {
-        public long MenuTypeId { get; set; }
+        public long Id { get; set; }
         public string MenuTypeName { get; set; }
         public string ImagePath { get; set; }
     }
