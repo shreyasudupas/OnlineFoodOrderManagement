@@ -1,19 +1,17 @@
 ﻿using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Identity.MicroService.Security.Middleware
+namespace BasketService.MicroService.Security.Middleware
 {
-    public class ExceptionMiddleware
+    public class GlobalExceptionMiddleware
     {
         private readonly RequestDelegate _next;
         //private readonly ILogger _logger;
-        public ExceptionMiddleware(RequestDelegate next/*, ILogger logger*/)
+        public GlobalExceptionMiddleware(RequestDelegate next)
         {
-            //_logger = logger;
             _next = next;
         }
         public async Task InvokeAsync(HttpContext httpContext)
@@ -35,7 +33,7 @@ namespace Identity.MicroService.Security.Middleware
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 Response = context.Response.StatusCode,
-                Exception = new ExceptionDetails { Message=exception.Message,StackTrace=exception.StackTrace }
+                Exception = new ExceptionDetails { Message = exception.Message,StackTrace=exception.StackTrace}
             }.ToString());
         }
     }

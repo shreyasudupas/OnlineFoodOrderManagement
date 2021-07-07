@@ -27,8 +27,8 @@ namespace Identity.MicroService.Controllers.V1
         /// <returns>User Profile Details</returns>
         /// <response code="200">success userDetails</response>
         [HttpPost]
-        [AllowAnonymous]
-        //[Authorize(Policy = "AllowUserAccess")]
+        //[AllowAnonymous]
+        [Authorize(Policy = "AllowUserAccess")]
         public async Task<IActionResult> GetOrUpdateUserDetails(GetUserRequestModel Username)
         {
             APIResponse response = new APIResponse();

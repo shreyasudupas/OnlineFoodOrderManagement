@@ -31,15 +31,13 @@ namespace BasketService.MicroService.BuisnessLayer
                 deserilizeUserInfo.Items = items;
 
                 await updateUserCartCache(db, Username, deserilizeUserInfo);
-                //var itemsToBeStored = JsonConvert.SerializeObject(items);
-                //await db.StringSetAsync(Username, itemsToBeStored);
+                
                 Items += 1;
             }
             else
             {
                 //if additional item added
-                //var ItemConvert = JsonConvert.DeserializeObject<List<CartItems>>(ifItemPresent);
-                //var getItem = ItemConvert.Find(x =>x.id == cartItems.id);
+                
                 var getItem = deserilizeUserInfo.Items.Find(x => x.id == cartItems.id);
                 //if the added item is same
                 if (getItem!=null)
@@ -48,7 +46,6 @@ namespace BasketService.MicroService.BuisnessLayer
                 }
                 else
                 {
-                    //cartItems.quantity += 1;
                     //add in the cart 
                     deserilizeUserInfo.Items.Add(cartItems);
                 }
@@ -132,14 +129,14 @@ namespace BasketService.MicroService.BuisnessLayer
             return ItemsCount;
         }
 
-        public async Task updateCartCache(IDatabase db,string Username,List<CartItems> items)
-        {
-            //remove the current value from cache
-            await db.KeyDeleteAsync(Username);
-            //add the updated value
-            var serilizeItem = JsonConvert.SerializeObject(items);
-            await db.StringSetAsync(Username, serilizeItem);
-        }
+        //public async Task updateCartCache(IDatabase db,string Username,List<CartItems> items)
+        //{
+        //    //remove the current value from cache
+        //    await db.KeyDeleteAsync(Username);
+        //    //add the updated value
+        //    var serilizeItem = JsonConvert.SerializeObject(items);
+        //    await db.StringSetAsync(Username, serilizeItem);
+        //}
         public async Task updateUserCartCache(IDatabase db, string Username, UserCartInfo items)
         {
             //remove the current value from cache

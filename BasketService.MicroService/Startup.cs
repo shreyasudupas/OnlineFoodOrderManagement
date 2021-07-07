@@ -1,5 +1,6 @@
 using BasketService.MicroService.BuisnessLayer;
 using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
+using BasketService.MicroService.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -63,6 +64,8 @@ namespace BasketService.MicroService
             });
 
             app.UseRouting();
+
+            app.InstallCustomExceptionMiddleware();
 
             app.UseAuthorization();
 
