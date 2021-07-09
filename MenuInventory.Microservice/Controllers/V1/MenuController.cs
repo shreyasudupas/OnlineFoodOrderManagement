@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using MenuInventory.Microservice.Features.MenuFeature.Querries;
 using MicroService.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +14,7 @@ namespace MenuInventory.Microservice.Controllers.V1
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class MenuController : ControllerBase
     {
         private readonly IMediator _mediator;

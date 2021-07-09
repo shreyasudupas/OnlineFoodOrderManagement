@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="BuisnessLayer\IBuisnessLayer\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -29,7 +29,7 @@ namespace MenuInventory.Microservice.Features.MenuFeature.Command
                                  orderby Menu.MenuTypeId
                                  select new MenuList
                                  {
-                                     MenuId = Menu.Id,
+                                     Id = Menu.Id,
                                      MenuItem = Menu.MenuItem,
                                      Price = Menu.Price,
                                      VendorId = Menu.VendorId,
@@ -43,7 +43,7 @@ namespace MenuInventory.Microservice.Features.MenuFeature.Command
                                                where (type.Id > 0)
                                                select new MenuItemDetail
                                                {
-                                                   MenuTypeId = type.Id,
+                                                   Id = type.Id,
                                                    MenuTypeName = type.MenuTypeName,
                                                    ImagePath = type.ImagePath
                                                }).ToListAsync();

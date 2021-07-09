@@ -4,6 +4,8 @@ using Identity.MicroService.Features.UserFeature.Queries;
 using MediatR;
 using MicroService.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,39 +14,52 @@ using System.Threading.Tasks;
 
 namespace Identity.MicroService.Features.UserFeature.Commands
 {
-    public class GetUpdateUserHandler : IRequestHandler<AddUserRequestModel, Users>
+    public class GetUpdateUserHandler : IRequestHandler<GetUserRequestModel, Users>
     {
         private readonly UserContext _userContext;
         private readonly IMapper _mapper;
-
-        public GetUpdateUserHandler(UserContext userContext, IMapper mapper)
+        private readonly IConnectionMultiplexer _connectionMultiplexer;
+        public GetUpdateUserHandler(UserContext userContext, IMapper mapper, IConnectionMultiplexer connectionMultiplexer)
         {
             _userContext = userContext;
             _mapper = mapper;
+            _connectionMultiplexer = connectionMultiplexer;
         }
 
-        public async Task<Users> Handle(AddUserRequestModel request, CancellationToken cancellationToken)
+        public async Task<Users> Handle(GetUserRequestModel request, CancellationToken cancellationToken)
         {
             Users UserProfile = new Users();
+            var db = _connectionMultiplexer.GetDatabase();
+            var getUserInfoFromCache = await db.StringGetAsync(request.Username);
 
-            var user = await _userContext.Users.Where(x => x.UserName == request.Username).FirstOrDefaultAsync();
-            if (user == null)
+            if(!getUserInfoFromCache.HasValue)
             {
-                user.UserName = request.Username;
-                user.FullName = request.NickName;
-                user.PictureLocation = request.PictureLocation;
-                user.RoleId = request.RoleId;
-                user.Points = 0;
-                user.CartAmount = 0;
-                user.CreatedDate = DateTime.Now;
+                var user = await _userContext.Users
+                    .Include(x=>x.State)
+                    .Include(x=>x.City).Where(x => x.UserName == request.Username).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    UserProfile = _mapper.Map<Users>(user);
 
-                _userContext.Users.Add(user);
-                _userContext.SaveChanges();
+                    UserCartInfo info = new UserCartInfo();
+                    info.UserInfo = _mapper.Map<UserInfo>(UserProfile);
+
+                    await db.StringSetAsync(request.Username, JsonConvert.SerializeObject(info));
+                }
             }
+            else
+            {
+                var user = await _userContext.Users
+                    .Include(x => x.State)
+                    .Include(x => x.City).Where(x => x.UserName == request.Username).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    UserProfile = _mapper.Map<Users>(user);
+                }
+            }
+            
             //throw new Exception("I am throwing exceptions");
-
-            UserProfile = _mapper.Map<Users>(user);
-
+            
             return UserProfile;
         }
     }

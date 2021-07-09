@@ -35,7 +35,7 @@ namespace MenuInventory.MicroService.Security.Middleware
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 Response = context.Response.StatusCode,
-                Exception = exception.Message
+                Exception = new ExceptionDetails { Message = exception.Message, StackTrace = exception.StackTrace }
             }.ToString());
         }
     }

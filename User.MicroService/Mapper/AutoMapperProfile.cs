@@ -14,6 +14,11 @@ namespace Identity.MicroService.Mapper
                 .ForMember(dest => dest.CityName, source => source.MapFrom(s => s.CityId != null ? s.City.CityNames : string.Empty))
                 .ForMember(dest => dest.CreatedDate, source => source.MapFrom(s => s.CreatedDate.ToString("dddd, dd MMMM yyyy")))
                 .ForMember(dest => dest.UpdatedDate, source => source.MapFrom(s => s.UpdatedDate.GetValueOrDefault().ToString("dddd, dd MMMM yyyy")));
+
+            CreateMap<Users,UserInfo>()
+                .ForMember(dest => dest.StateName, source => source.MapFrom(s => s.StateName))
+                .ForMember(dest => dest.CityName, source => source.MapFrom(s => s.CityName))
+                .ForMember(dest => dest.RoleName, source => source.MapFrom(s => s.RoleId == 1?"User":"Admin"));
         }
     }
 }
