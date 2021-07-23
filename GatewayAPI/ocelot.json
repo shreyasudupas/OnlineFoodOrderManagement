@@ -47,7 +47,19 @@
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/basketservice/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get" ,"Delete"]
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/order/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44376
+        }
+      ],
+      "UpstreamPathTemplate": "/api/gateway/orders/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ]
     }
 
   ],
