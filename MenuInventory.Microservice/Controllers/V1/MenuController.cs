@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Identity.MicroService.Models.APIResponse;
+using MediatR;
 using MenuInventory.Microservice.Features.MenuFeature.Querries;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -35,24 +36,19 @@ namespace MenuInventory.Microservice.Controllers.V1
         /// <param name="VendorId"></param>
         /// <returns>Menu list</returns>
         [HttpGet]
-        public async Task<IActionResult> GetMenuListAsync(int VendorId)
+        public async Task<Response> GetMenuListAsync(int VendorId)
         {
             //var headers = HttpContext.Request.Headers["UserInfo"];
 
-            APIResponse response = new APIResponse();
-            //var result = await _menu.GetMenuListForVednorId(VendorId);
             var result = await _mediator.Send(new VendorIdRequest(VendorId));
             if (result != null)
             {
-                response.Content = result;
-                response.Response = 200;
+                return new Response(System.Net.HttpStatusCode.OK, result, null);
             }
             else
             {
-                response.Response = 404;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
             }
-
-            return Ok(response);
         }
     }
 }

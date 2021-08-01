@@ -24,6 +24,7 @@ namespace Identity.MicroService.Data.DatabaseContext
         public  DbSet<UserRole> UserRoles { get; set; }
         public  DbSet<City> Cities { get; set; }
         public  DbSet<State> States { get; set; }
+        public DbSet<PaymentDropDown> PaymentDropDown { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -76,6 +77,17 @@ namespace Identity.MicroService.Data.DatabaseContext
                 entity.HasOne(e => e.State).WithMany(d => d.Users).HasForeignKey(e => e.StateId).OnDelete(DeleteBehavior.ClientSetNull);
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasDefaultValueSql("(getdate())");
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<PaymentDropDown>(entity =>
+            {
+                entity.ToTable("PaymentDropDown");
+                entity.HasKey(e => e.Id);
+                entity.HasData(
+                new PaymentDropDown { Id = 1,Label = "Credit Card", Value = "Credit Card" },
+                new PaymentDropDown { Id = 2,Label = "UPI", Value = "UPI" },
+                new PaymentDropDown { Id = 3,Label = "Debit Card", Value = "Debit Card" },
+                new PaymentDropDown { Id = 4,Label = "Wallet", Value = "Wallet" }); ;
             });
         }
     }

@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Compile Remove="Installers\CorsInstaller.cs" />
-    <Compile Remove="Models\UserProfile.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\V2\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

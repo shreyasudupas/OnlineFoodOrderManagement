@@ -1,4 +1,5 @@
-﻿using MenuOrder.MicroService.Data;
+﻿using MenuOrder.MicroService.BackgroundServiceTasks;
+using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Data.Context;
 using MenuOrder.MicroService.Models;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,9 @@ namespace MenuOrder.MicroService.SeriviceInstallers
             services.Configure<MongoDatabaseConfiguration>(configuration.GetSection("MenuOrderDatabaseSettings"));
             services.AddScoped<IMongoDBContext, MongoDBContext>();
             services.AddScoped<OrderRepository>();
+
+            services.AddHostedService<QueueHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
         }
     }
 }

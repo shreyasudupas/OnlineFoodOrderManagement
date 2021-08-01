@@ -1,5 +1,6 @@
 ﻿using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Models;
+using Identity.MicroService.Models.APIResponse;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -80,54 +81,43 @@ namespace BasketService.MicroService.Controllers.V1
 
 
         [HttpPost]
-        public async Task<APIResponse> StoreUserBasketValue(CartItems cartItems)
+        public async Task<Response> StoreUserBasketValue(CartItems cartItems)
         {
             var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
-            APIResponse response = new APIResponse();
             var result = await _cartS.AddItemsinCart(User.Username, cartItems);
             if(result>0 )
             {
-                response.Response = 200;
-                response.Content = result;
+                return new Response(System.Net.HttpStatusCode.OK, result, null);
             }
             else
             {
-                response.Response = 404;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
             }
-            return response;
         }
         [HttpGet]
-        public async Task<APIResponse> GetUserBasket()
+        public async Task<Response> GetUserBasket()
         {
             var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
-            APIResponse response = new APIResponse();
             var result =await _cartS.GetItemsFromCacheCart(User.Username);
             if (result != null)
             {
-                response.Content = result;
-                response.Response = 200;
+                return new Response(System.Net.HttpStatusCode.OK, result, null);
             }
             else
-                response.Response = 404;
-
-            return response;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
         }
 
         [HttpPost]
-        public async Task<APIResponse> UpdateUserBasket(CartItems cartItems)
+        public async Task<Response> UpdateUserBasket(CartItems cartItems)
         {
             var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
-            APIResponse response = new APIResponse();
             var result = await _cartS.RemoveItemsFromCart(User.Username,cartItems);
             if (result >= 0)
             {
-                response.Content = result;
-                response.Response = 200;
+                return new Response(System.Net.HttpStatusCode.OK, result, null);
             }
             else
-                response.Response = 404;
-
-            return response;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
         }
     }
 }

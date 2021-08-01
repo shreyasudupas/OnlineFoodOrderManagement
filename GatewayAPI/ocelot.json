@@ -55,7 +55,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44376
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/orders/{everything}",

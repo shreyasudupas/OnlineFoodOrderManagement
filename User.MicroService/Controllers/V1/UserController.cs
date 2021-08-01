@@ -1,4 +1,5 @@
 ﻿using Identity.MicroService.Features.UserFeature.Queries;
+using Identity.MicroService.Models.APIResponse;
 using MediatR;
 using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
 using MicroService.Shared.Models;
@@ -12,6 +13,7 @@ namespace Identity.MicroService.Controllers.V1
 {
     [ApiController]
     [Route("api/v1/[controller]/[action]")]
+    [Authorize(Policy = "AllowUserAccess")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -28,22 +30,36 @@ namespace Identity.MicroService.Controllers.V1
         /// <response code="200">success userDetails</response>
         [HttpPost]
         //[AllowAnonymous]
-        [Authorize(Policy = "AllowUserAccess")]
-        public async Task<IActionResult> GetOrUpdateUserDetails(GetUserRequestModel Username)
+        public async Task<Response> GetOrUpdateUserDetails(GetUserRequestModel Username)
         {
-            APIResponse response = new APIResponse();
-
             var res = await _mediator.Send(Username);
             if (res != null)
             {
-                response.Content = res;
-                response.Response = 200;
+                return new Response(System.Net.HttpStatusCode.OK, res, null);
             }
             else
             {
-                response.Response = 404;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
             }
-            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get the dropdown values
+        /// </summary>
+        /// <returns>List of drop down value if ok</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<Response> GetPaymentDropDown()
+        {
+            var res = await _mediator.Send(new GetPaymentDropdownValue());
+            if (res.Count> 0)
+            {
+                return new Response(System.Net.HttpStatusCode.OK, res, null);
+            }
+            else
+            {
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
+            }
         }
     }
 }

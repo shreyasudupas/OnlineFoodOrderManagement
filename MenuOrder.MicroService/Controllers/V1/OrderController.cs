@@ -1,10 +1,13 @@
-﻿using MediatR;
+﻿using Identity.MicroService.Models.APIResponse;
+using MediatR;
+using MenuOrder.MicroService.BackgroundServiceTasks;
 using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
 using MenuOrder.MicroService.Models;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,10 +22,14 @@ namespace MenuOrder.MicroService.Controllers.V1
     {
         private readonly OrderRepository orderRepository;
         private readonly IMediator _mediator;
-        public OrderController(OrderRepository orderRepository, IMediator mediator)
+        public IBackgroundTaskQueue _queue;
+        private IServiceScopeFactory _serviceScopeFactory;
+        public OrderController(OrderRepository orderRepository, IMediator mediator, IBackgroundTaskQueue queue, IServiceScopeFactory serviceScopeFactory)
         {
             this.orderRepository = orderRepository;
             _mediator = mediator;
+            _queue = queue;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         [HttpGet]
@@ -37,31 +44,36 @@ namespace MenuOrder.MicroService.Controllers.V1
         /// <returns>user Id if ok</returns>
 
         [HttpPost]
-        public async Task<IActionResult> UserOrder()
+        public async Task<Response> UserOrder()
         {
-            APIResponse response = new APIResponse();
             var GetUserInfoFromheader = HttpContext.Request.Headers["UserInfo"];
             if (GetUserInfoFromheader.Where(x => x.Length > 0).Any())
             {
-                var UserInfo = JsonConvert.DeserializeObject<UserHeaderInfo>(GetUserInfoFromheader);
-                var result = await _mediator.Send(new AddUserMenuOrder() { UserName = UserInfo.Username });
-                if (result.UserId != null)
+                _queue.QueueBackgroundWorkItem(async token =>
                 {
-                    response.Response = 200;
-                    response.Content = result;
-                }
-                else
-                {
-                    response.Response = 404;
-                }
+                    var UserInfo = JsonConvert.DeserializeObject<UserHeaderInfo>(GetUserInfoFromheader);
+                    using(var scope = _serviceScopeFactory.CreateScope())
+                    {
+                        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                        var result = await mediator.Send(new AddUserMenuOrder() { UserName = UserInfo.Username });
+                        if (result.UserId != null)
+                        {
+                            //response.Response = 200;
+                        }
+                        else
+                        {
+                            //response.Response = 404;
+                        }
+                    }
+                    
+                });
+
+                return new Response(System.Net.HttpStatusCode.Accepted, "Order Sent Successfully", null);
             }
             else
             {
-                response.Response = 404;
-                response.Exception = "Header Empty";
+                return new Response(System.Net.HttpStatusCode.BadRequest, null, "Header Empty");
             }
-            
-            return Ok(response);
         }
     }
 }

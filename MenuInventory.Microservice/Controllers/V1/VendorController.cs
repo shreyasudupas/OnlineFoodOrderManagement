@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Identity.MicroService.Models.APIResponse;
+using MediatR;
 using MenuInventory.Microservice.Features.VendorFeature.Querries;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -43,21 +44,17 @@ namespace MenuInventory.Microservice.Controllers.V1
         /// <response code="404">No Vendors</response>
         /// <response code="500">Exception in code</response>
         [HttpGet]
-        public async Task<IActionResult> GetVendorListAsync()
+        public async Task<Response> GetVendorListAsync()
         {
-            APIResponse aPIResponse = new APIResponse();
-            //var getResult = await _vendor.GetVendorListAsync();
             var getResult = await _mediator.Send(new GetAllVendorRequest());
             if (getResult.Count > 0)
             {
-                aPIResponse.Content = getResult;
-                aPIResponse.Response = 200;
+                return new Response(System.Net.HttpStatusCode.OK, getResult, null);
             }
             else
             {
-                aPIResponse.Response = 404;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
             }
-            return Ok(aPIResponse);
         }
     }
 }
