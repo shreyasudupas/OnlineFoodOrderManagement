@@ -61,5 +61,13 @@ namespace Identity.MicroService.Controllers.V1
                 return new Response(System.Net.HttpStatusCode.NotFound, null, null);
             }
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<Response> Authenticate(GetAuthorizationTokenForUser User)
+        {
+            var result = await _mediator.Send(User);
+            return new Response(System.Net.HttpStatusCode.OK, result, null);
+        }
     }
 }
