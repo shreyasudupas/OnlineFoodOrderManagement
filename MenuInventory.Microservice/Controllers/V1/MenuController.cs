@@ -36,12 +36,12 @@ namespace MenuInventory.Microservice.Controllers.V1
         /// <param name="VendorId"></param>
         /// <returns>Menu list</returns>
         [HttpGet]
-        public async Task<Response> GetMenuListAsync(int VendorId)
+        public async Task<Response> GetMenuListAsync(string VendorId)
         {
             //var headers = HttpContext.Request.Headers["UserInfo"];
 
             var result = await _mediator.Send(new VendorIdRequest(VendorId));
-            if (result != null)
+            if (result.Data != null && result.MenuColumnData != null)
             {
                 return new Response(System.Net.HttpStatusCode.OK, result, null);
             }

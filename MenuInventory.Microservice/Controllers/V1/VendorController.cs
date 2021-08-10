@@ -1,5 +1,6 @@
 ﻿using Identity.MicroService.Models.APIResponse;
 using MediatR;
+using MenuInventory.Microservice.Data.MenuRepository;
 using MenuInventory.Microservice.Features.VendorFeature.Querries;
 using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MenuInventory.Microservice.Controllers.V1
@@ -25,10 +27,12 @@ namespace MenuInventory.Microservice.Controllers.V1
         //    _vendor = vendor;
         //}
         private readonly IMediator _mediator;
+        private readonly MenuRepository _menuRepository;
 
-        public VendorController(IMediator mediator)
+        public VendorController(IMediator mediator, MenuRepository menuRepository)
         {
             _mediator = mediator;
+            _menuRepository = menuRepository;
         }
 
         [HttpGet]
@@ -49,11 +53,11 @@ namespace MenuInventory.Microservice.Controllers.V1
             var getResult = await _mediator.Send(new GetAllVendorRequest());
             if (getResult.Count > 0)
             {
-                return new Response(System.Net.HttpStatusCode.OK, getResult, null);
+                return new Response(HttpStatusCode.OK, getResult, null);
             }
             else
             {
-                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
+                return new Response(HttpStatusCode.NotFound, null, null);
             }
         }
     }
