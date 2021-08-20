@@ -1,5 +1,6 @@
 ﻿using MenuInventory.Microservice.Data.Context;
 using MenuInventory.Microservice.Data.MenuRepository;
+using MenuInventory.Microservice.Data.VendorCartConfigurationRepository;
 using MenuOrder.MicroService.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace MenuInventory.Microservice.Installers
             services.Configure<MongoDatabaseConfiguration>(configuration.GetSection("MenuOrderDatabaseSettings"));
             services.AddScoped<IMongoDBContext, MongoDBContext>();
             services.AddScoped<MenuRepository>();
+            services.AddScoped<VendorCartRepository>();
         }
     }
 }

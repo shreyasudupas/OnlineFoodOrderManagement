@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace MicroService.Shared.Models.CartInformationModels
@@ -7,5 +8,14 @@ namespace MicroService.Shared.Models.CartInformationModels
     {
         public UserInfo UserInfo { get; set; }
         public List<JObject> Items { get; set; }
+        public VendorDetail VendorDetails { get; set; }
+    }
+
+    public class VendorDetail
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }

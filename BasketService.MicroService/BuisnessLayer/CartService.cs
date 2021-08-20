@@ -64,8 +64,9 @@ namespace BasketService.MicroService.BuisnessLayer
             var IsSucess = false;
             string cartMenuId;
             Dictionary<string, object> menuObject;
+            VendorDetail vendorDetail=new VendorDetail();
             //This will create a object of item got from header
-            CreateCartMenuObject(CartInfoFromHeader, out cartMenuId, out menuObject);
+            CreateCartMenuObject(CartInfoFromHeader, out cartMenuId, out menuObject,out vendorDetail);
 
             var db = _connectionMultiplexer.GetDatabase();
             var IsUserInfo = await db.StringGetAsync(Username);
@@ -78,6 +79,7 @@ namespace BasketService.MicroService.BuisnessLayer
                 JObject newObj = JObject.Parse(JsonConvert.SerializeObject(menuObject));
                 UserInfoInCache.Items = new List<JObject>();
                 UserInfoInCache.Items.Add(newObj);
+                UserInfoInCache.VendorDetails = vendorDetail;
 
                 //update the item in cache
                 await updateUserCartCacheV2(db, Username, UserInfoInCache);
@@ -113,7 +115,7 @@ namespace BasketService.MicroService.BuisnessLayer
             return IsSucess;
         }
 
-        private static void CreateCartMenuObject(JObject CartInfoFromHeader, out string cartMenuId, out Dictionary<string, object> menuObject)
+        private static void CreateCartMenuObject(JObject CartInfoFromHeader, out string cartMenuId, out Dictionary<string, object> menuObject,out VendorDetail vendorDetail)
         {
             //Get the menu id from the selected object of the user
             cartMenuId = (string)CartInfoFromHeader["Data"]["id"];
@@ -129,7 +131,8 @@ namespace BasketService.MicroService.BuisnessLayer
                 menuObject[cartObject.Keys.ElementAt(i).ToString()] = cartObject.Values.ElementAt(i);
             }
             //for vendor object
-            menuObject[cartObject.Keys.ElementAt(ColumnsList.Count()).ToString()] = cartObject.Values.ElementAt(ColumnsList.Count());
+            //menuObject[cartObject.Keys.ElementAt(ColumnsList.Count()).ToString()] = cartObject.Values.ElementAt(ColumnsList.Count());
+            vendorDetail = CartInfoFromHeader["vendor details"].ToObject<VendorDetail>();
         }
 
         public async Task<bool> RemoveItemsFromCartV2(string Username, JObject CartInfoFromHeader)
@@ -137,50 +140,54 @@ namespace BasketService.MicroService.BuisnessLayer
             var IsSucess = false;
             string cartMenuId;
             Dictionary<string, object> menuObject;
-
+            VendorDetail vendorDetail = new VendorDetail();
             //This will create a object of item got from header
-            CreateCartMenuObject(CartInfoFromHeader, out cartMenuId, out menuObject);
+            CreateCartMenuObject(CartInfoFromHeader, out cartMenuId, out menuObject,out vendorDetail);
 
             var db = _connectionMultiplexer.GetDatabase();
             var IsUserInfo = await db.StringGetAsync(Username);
             var UserInfoInCache = JsonConvert.DeserializeObject<UserCartInformation>(IsUserInfo);
 
-            //find if menu id is present in cache
-            var ItemExistsInCache = (from cache in UserInfoInCache.Items
-                                     where cartMenuId == (string)cache["id"]
-                                     select cache).FirstOrDefault();
-
-            if(ItemExistsInCache != null)
+            if(UserInfoInCache.Items != null)
             {
-                //get the quantity of menu Object
-                var quantity = (long?)(menuObject.FirstOrDefault(x=>x.Key == "quantity")).Value;
+                //find if menu id is present in cache
+                var ItemExistsInCache = (from cache in UserInfoInCache.Items
+                                         where cartMenuId == (string)cache["id"]
+                                         select cache).FirstOrDefault();
 
-                if(quantity.Value == 0)
+                if (ItemExistsInCache != null)
                 {
-                    //remove the item from the list
-                    UserInfoInCache.Items.Remove(ItemExistsInCache);
+                    //get the quantity of menu Object
+                    var quantity = (long?)(menuObject.FirstOrDefault(x => x.Key == "quantity")).Value;
 
-                    if(UserInfoInCache.Items.Count > 0)
+                    if (quantity.Value == 0)
                     {
+                        //remove the item from the list
+                        UserInfoInCache.Items.Remove(ItemExistsInCache);
+
+                        if (UserInfoInCache.Items.Count > 0)
+                        {
+                            //update the item in cache
+                            await updateUserCartCacheV2(db, Username, UserInfoInCache);
+                            IsSucess = true;
+                        }
+                        else
+                        {
+                            UserInfoInCache.Items = null;
+                            UserInfoInCache.VendorDetails = null;
+                            //update the item in cache
+                            await updateUserCartCacheV2(db, Username, UserInfoInCache);
+                            IsSucess = true;
+                        }
+                    }
+                    else//Then reduce the item count and update in cache
+                    {
+                        UpdateUserCacheCartQuantity(menuObject, UserInfoInCache, ItemExistsInCache);
+
                         //update the item in cache
                         await updateUserCartCacheV2(db, Username, UserInfoInCache);
                         IsSucess = true;
                     }
-                    else
-                    {
-                        UserInfoInCache.Items = null;
-                        //update the item in cache
-                        await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                        IsSucess = true;
-                    }
-                }
-                else//Then reduce the item count and update in cache
-                {
-                    UpdateUserCacheCartQuantity(menuObject, UserInfoInCache, ItemExistsInCache);
-
-                    //update the item in cache
-                    await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                    IsSucess = true;
                 }
             }
 
@@ -291,9 +298,11 @@ namespace BasketService.MicroService.BuisnessLayer
             var db = _connectionMultiplexer.GetDatabase();
             var IsUserInfo = await db.StringGetAsync(Username);
             var UserInfoInCache = JsonConvert.DeserializeObject<UserCartInformation>(IsUserInfo);
-            var Items = JsonConvert.SerializeObject( new MenuCartResponse { 
-             UserInfo = UserInfoInCache.UserInfo,
-             Items = UserInfoInCache.Items
+            var Items = JsonConvert.SerializeObject(new MenuCartResponse
+            {
+                UserInfo = UserInfoInCache.UserInfo,
+                Items = UserInfoInCache.Items,
+                VendorDetails = UserInfoInCache.VendorDetails
             });
             
 

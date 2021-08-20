@@ -19,6 +19,9 @@ namespace Identity.MicroService.Mapper
                 .ForMember(dest => dest.StateName, source => source.MapFrom(s => s.StateName))
                 .ForMember(dest => dest.CityName, source => source.MapFrom(s => s.CityName))
                 .ForMember(dest => dest.RoleName, source => source.MapFrom(s => s.RoleId == 1?"User":"Admin"));
+
+            CreateMap<UserInfo, Users>()
+                .ForMember(dest => dest.RoleId, act => act.MapFrom(src => (src.RoleName.Contains("User")) ? 1 : 2));
         }
     }
 }

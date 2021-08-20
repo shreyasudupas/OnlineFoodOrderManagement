@@ -3,6 +3,7 @@ using Identity.MicroService.Data.DatabaseContext;
 using Identity.MicroService.Features.UserFeature.Queries;
 using MediatR;
 using MicroService.Shared.Models;
+using MicroService.Shared.Models.CartInformationModels;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -32,35 +33,32 @@ namespace Identity.MicroService.Features.UserFeature.Commands
             var db = _connectionMultiplexer.GetDatabase();
             var getUserInfoFromCache = await db.StringGetAsync(request.Username);
 
-            if(!getUserInfoFromCache.HasValue)
+            //If no  value present in cache then add it
+            if (!getUserInfoFromCache.HasValue)
             {
-                var user = await _userContext.Users
-                    .Include(x=>x.State)
-                    .Include(x=>x.City).Where(x => x.UserName == request.Username).FirstOrDefaultAsync();
-                if (user != null)
+                var GetUserProfile = await _userContext.Users
+                    .Include(x => x.State)
+                    .Include(x => x.City).Where(x => x.UserName == request.Username).FirstOrDefaultAsync();
+
+                if (GetUserProfile != null)
                 {
-                    UserProfile = _mapper.Map<Users>(user);
+                    UserCartInformation UserCartInfo = new UserCartInformation();
+                    UserCartInfo.UserInfo = _mapper.Map<UserInfo>(GetUserProfile);
+                    UserCartInfo.VendorDetails = null;
+                    UserCartInfo.Items = null;
 
-                    UserCartInfo info = new UserCartInfo();
-                    info.UserInfo = _mapper.Map<UserInfo>(UserProfile);
-
-                    await db.StringSetAsync(request.Username, JsonConvert.SerializeObject(info));
+                    await db.StringSetAsync(request.Username, JsonConvert.SerializeObject(UserCartInfo));
                 }
+                return UserProfile;
             }
             else
             {
-                var user = await _userContext.Users
-                    .Include(x => x.State)
-                    .Include(x => x.City).Where(x => x.UserName == request.Username).FirstOrDefaultAsync();
-                if (user != null)
-                {
-                    UserProfile = _mapper.Map<Users>(user);
-                }
+                //if present then display from cache
+                var UserInfoInCache = JsonConvert.DeserializeObject<UserCartInformation>(getUserInfoFromCache);
+                var UserProfileFromDB_Converted = _mapper.Map<Users>(UserInfoInCache.UserInfo);
+                return UserProfileFromDB_Converted;
             }
-            
             //throw new Exception("I am throwing exceptions");
-            
-            return UserProfile;
         }
     }
 }
