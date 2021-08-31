@@ -2,7 +2,7 @@
 using MediatR;
 using MenuInventory.Microservice.Data.MenuRepository;
 using MenuInventory.Microservice.Features.VendorFeature.Querries;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;

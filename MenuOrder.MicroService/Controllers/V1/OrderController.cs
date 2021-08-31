@@ -4,7 +4,7 @@ using MenuOrder.MicroService.BackgroundServiceTasks;
 using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
 using MenuOrder.MicroService.Models;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;

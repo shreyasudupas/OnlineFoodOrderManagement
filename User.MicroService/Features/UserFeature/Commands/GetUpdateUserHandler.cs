@@ -2,8 +2,8 @@
 using Identity.MicroService.Data.DatabaseContext;
 using Identity.MicroService.Features.UserFeature.Queries;
 using MediatR;
-using MicroService.Shared.Models;
-using MicroService.Shared.Models.CartInformationModels;
+using Common.Utility.Models;
+using Common.Utility.Models.CartInformationModels;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using StackExchange.Redis;

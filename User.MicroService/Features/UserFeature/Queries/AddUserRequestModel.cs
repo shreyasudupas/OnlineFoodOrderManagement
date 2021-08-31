@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 
 namespace Identity.MicroService.Features.UserFeature.Queries
 {

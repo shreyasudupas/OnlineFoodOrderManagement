@@ -1,7 +1,7 @@
 ﻿using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Models;
 using Identity.MicroService.Models.APIResponse;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

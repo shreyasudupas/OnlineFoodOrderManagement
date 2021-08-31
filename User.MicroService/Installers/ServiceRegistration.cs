@@ -1,5 +1,5 @@
-﻿using MicroService.Shared.BuisnessLayer;
-using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
+﻿using Common.Utility.BuisnessLayer;
+using Common.Utility.BuisnessLayer.IBuisnessLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

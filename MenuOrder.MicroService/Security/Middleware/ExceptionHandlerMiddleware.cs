@@ -1,4 +1,4 @@
-﻿using MicroService.Shared.Models;
+﻿using Common.Utility.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;

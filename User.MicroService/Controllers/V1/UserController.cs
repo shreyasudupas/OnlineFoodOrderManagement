@@ -1,12 +1,8 @@
 ﻿using Identity.MicroService.Features.UserFeature.Queries;
 using Identity.MicroService.Models.APIResponse;
 using MediatR;
-using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
-using MicroService.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace Identity.MicroService.Controllers.V1
@@ -48,7 +44,7 @@ namespace Identity.MicroService.Controllers.V1
         /// </summary>
         /// <returns>List of drop down value if ok</returns>
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<Response> GetPaymentDropDown()
         {
             var res = await _mediator.Send(new GetPaymentDropdownValue());

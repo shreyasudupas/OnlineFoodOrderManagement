@@ -1,7 +1,7 @@
 ﻿using Identity.MicroService.Models.APIResponse;
 using MediatR;
 using MenuInventory.Microservice.Features.MenuFeature.Querries;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;

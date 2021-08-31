@@ -51,6 +51,7 @@ namespace Identity.MicroService
             app.UseAuthentication();
 
             //middleware
+            app.CallRequestLoggingMiddleware();
             app.ConfigureCustomExceptionMiddleware();
             app.ConfigureAuthoriziationMiddleware();
 

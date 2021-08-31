@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 using MenuOrder.MicroService.Data.Enum;
 
 namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands

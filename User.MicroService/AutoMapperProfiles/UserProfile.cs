@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Identity.MicroService.Data;
-using MicroService.Shared.Models;
+using Common.Utility.Models;
 
 namespace Identity.MicroService.Mapper
 {

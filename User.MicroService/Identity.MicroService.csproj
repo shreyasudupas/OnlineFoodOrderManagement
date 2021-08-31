@@ -30,11 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MicroService.Shared\Common.Utility.csproj" />
+    <Folder Include="Controllers\V2\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\V2\" />
+    <ProjectReference Include="..\MicroService.Shared\Common.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

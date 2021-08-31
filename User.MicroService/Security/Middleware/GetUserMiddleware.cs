@@ -1,6 +1,7 @@
-﻿using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
-using MicroService.Shared.Models;
+﻿using Common.Utility.BuisnessLayer.IBuisnessLayer;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -10,9 +11,11 @@ namespace Identity.MicroService.Security.Middleware
     public class GetUserMiddleware
     {
         private readonly RequestDelegate _next;
-        public GetUserMiddleware(RequestDelegate next)
+        private readonly ILogger _logger;
+        public GetUserMiddleware(RequestDelegate next, ILogger<GetUserMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context, IProfileUser profile)
@@ -22,6 +25,7 @@ namespace Identity.MicroService.Security.Middleware
                 //get UserInfo from header
                 var User = JsonConvert.DeserializeObject<UserProfile>(context.Request.Headers["UserInfo"]);
 
+                _logger.LogInformation("Identity Header Middleware called, Username: {0}",User.Username);
                 if (!string.IsNullOrEmpty(User.Username))
                     profile.SetUserDetails(User.Username, User.PictureLocation, User.NickName, User.RoleId);
             }

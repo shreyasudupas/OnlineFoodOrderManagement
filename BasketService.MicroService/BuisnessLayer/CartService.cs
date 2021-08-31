@@ -1,6 +1,6 @@
 ﻿using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
-using MicroService.Shared.Models;
-using MicroService.Shared.Models.CartInformationModels;
+using Common.Utility.Models;
+using Common.Utility.Models.CartInformationModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;

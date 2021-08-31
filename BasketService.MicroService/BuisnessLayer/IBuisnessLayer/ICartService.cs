@@ -1,4 +1,4 @@
-﻿using MicroService.Shared.Models.CartInformationModels;
+﻿using Common.Utility.Models.CartInformationModels;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
