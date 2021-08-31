@@ -48,7 +48,7 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
                             Id = BasketUserInfo.Id,
                             UserName = BasketUserInfo.UserName,
                             RoleName = BasketUserInfo.RoleName,
-                            FullName = BasketUserInfo.FullName,
+                            FullName = BasketUserInfo.Nickname,
                             Address = BasketUserInfo.Address,
                             CityName = BasketUserInfo.CityName,
                             StateName = BasketUserInfo.StateName,

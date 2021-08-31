@@ -5,9 +5,9 @@ using MenuInventory.Microservice.Models.VendorCartConfiguration;
 
 namespace MenuInventory.Microservice.Mapper
 {
-    public class AutoMapperProfile:Profile
+    public class VendorProfile:Profile
     {
-        public AutoMapperProfile()
+        public VendorProfile()
         {
             //CreateMap<VendorCartConfigurations, VendorCartConfigurationResponse>()
             //    .ForMember(dest => dest.VendorDetails, act => act.MapFrom(source => new VendorDetail()
