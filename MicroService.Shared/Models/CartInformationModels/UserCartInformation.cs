@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace MicroService.Shared.Models.CartInformationModels
+namespace Common.Utility.Models.CartInformationModels
 {
     public class UserCartInformation
     {

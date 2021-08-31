@@ -1,4 +1,4 @@
-﻿namespace MicroService.Shared.Models.CartInformationModels
+﻿namespace Common.Utility.Models.CartInformationModels
 {
     public class MenuColumnData
     {

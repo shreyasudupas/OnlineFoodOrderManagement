@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MicroService.Shared\MicroService.Shared.csproj" />
+    <ProjectReference Include="..\MicroService.Shared\Common.Utility.csproj" />
   </ItemGroup>
 
 </Project>

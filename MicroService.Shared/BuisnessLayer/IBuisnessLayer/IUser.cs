@@ -1,7 +1,7 @@
-﻿using MicroService.Shared.Models;
+﻿using Common.Utility.Models;
 using System.Threading.Tasks;
 
-namespace MicroService.Shared.BuisnessLayer.IBuisnessLayer
+namespace Common.Utility.BuisnessLayer.IBuisnessLayer
 {
     public interface IUser
     {

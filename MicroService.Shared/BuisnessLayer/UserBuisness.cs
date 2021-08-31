@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using MenuDatabase.Data.Database;
-using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
-using MicroService.Shared.Models;
+using Common.Utility.BuisnessLayer.IBuisnessLayer;
+using Common.Utility.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MicroService.Shared.BuisnessLayer
+namespace Common.Utility.BuisnessLayer
 {
     public class UserBuisness : IUser
     {

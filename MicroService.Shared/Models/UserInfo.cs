@@ -1,4 +1,4 @@
-﻿namespace MicroService.Shared.Models
+﻿namespace Common.Utility.Models
 {
     public class UserInfo
     {

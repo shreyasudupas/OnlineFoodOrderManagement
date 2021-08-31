@@ -40,64 +40,6 @@ namespace BasketService.MicroService.Controllers.V1
                 result = await cartService.AddItemsInCartV2(UserInfo.Username, Obj);
             }
             
-            //foreach (JProperty property in Obj.Properties())
-            //{
-            //    Console.WriteLine(property.Name + " - " + property.Value);
-            //}
-            //var cartMenuId = (string)Obj["Data"]["id"];
-            //var cartObject = Obj["Data"].ToObject<Dictionary<string,object>>();
-            //var menuObject = new Dictionary<string, object>();
-
-            //var ColumnsList = (from columns in Obj["ColumnData"]
-            //                     select columns).ToList();
-
-            ////prepare the object with column names
-            //for(int i = 0;i< ColumnsList.Count();i++)
-            //{
-            //    menuObject[cartObject.Keys.ElementAt(i).ToString()] = cartObject.Values.ElementAt(i);
-            //}
-
-
-            //var db = _connectionMultiplexer.GetDatabase();
-            //var ifItemPresent =  db.StringGetAsync("admin@test.com").GetAwaiter().GetResult();
-            //var deserilizeUserInfo = JsonConvert.DeserializeObject<UserCartInfoDemo>(ifItemPresent);
-
-            //if(deserilizeUserInfo.Items != null)
-            //{
-            //    //find if menu id is present
-            //    var ItemExists = (from cache in deserilizeUserInfo.Items
-            //                   where cartMenuId == (string)cache["id"]
-            //                   select cache).FirstOrDefault();
-
-            //    if(ItemExists != null)
-            //    {
-            //        //then updat the cart info
-            //         deserilizeUserInfo.Items.Remove(ItemExists);
-
-            //        JObject newCartItem = JObject.Parse(JsonConvert.SerializeObject(menuObject));
-            //        //add item in Item back with updated value
-            //        deserilizeUserInfo.Items.Add(newCartItem);
-            //    }
-
-            //}
-            //else
-            //{
-            //    List<Dictionary<string, object>> MenuItemsInCart = new List<Dictionary<string, object>>();
-            //    MenuItemsInCart.Add(menuObject);
-                
-            //    //assign to userInfo
-            //    UserCartInfoDemoOutPut output = new UserCartInfoDemoOutPut();
-            //    output.UserInfo = deserilizeUserInfo.UserInfo;
-            //    output.Items = MenuItemsInCart;
-
-            //    //remove the current value from cache
-            //    db.KeyDeleteAsync(output.UserInfo.UserName).GetAwaiter().GetResult();
-            //    //add the updated value
-            //    var serilizeItem = JsonConvert.SerializeObject(output);
-            //    db.StringSetAsync(output.UserInfo.UserName, serilizeItem).GetAwaiter().GetResult();
-            //}
-
-
             return new Response(HttpStatusCode.OK, result, null);
         }
 

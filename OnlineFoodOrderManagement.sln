@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.MicroService", "Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuDatabase", "Menu.Database\MenuDatabase.csproj", "{8EA79003-7836-4D35-B58C-BC4C0646B58A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroService.Shared", "MicroService.Shared\MicroService.Shared.csproj", "{B7DA6620-0407-438C-856B-7BCC722A307F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Utility", "MicroService.Shared\Common.Utility.csproj", "{B7DA6620-0407-438C-856B-7BCC722A307F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuInventory.Microservice", "MenuInventory.Microservice\MenuInventory.Microservice.csproj", "{0E8EA31A-8758-4906-A89D-E62BBE9C841A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasketService.MicroService", "BasketService.MicroService\BasketService.MicroService.csproj", "{5D3671CC-9471-4312-9BCD-1DF6E25193D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuOrder.MicroService", "MenuOrder.MicroService\MenuOrder.MicroService.csproj", "{B735B7CE-AF78-4E3A-AF3D-301AF67B1005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.MicroService", "MenuOrder.MicroService\MenuOrder.MicroService.csproj", "{B735B7CE-AF78-4E3A-AF3D-301AF67B1005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
