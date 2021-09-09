@@ -43,6 +43,7 @@ namespace MenuOrder.MicroService
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseCors(builder =>
             {

@@ -4,20 +4,19 @@ using MenuOrder.MicroService.BackgroundServiceTasks;
 using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
 using MenuOrder.MicroService.Models;
-using Common.Utility.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MenuOrder.MicroService.Controllers.V1
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly OrderRepository orderRepository;
