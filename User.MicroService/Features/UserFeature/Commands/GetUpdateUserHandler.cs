@@ -6,9 +6,6 @@ using Common.Utility.Models;
 using Common.Utility.Models.CartInformationModels;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,21 +17,19 @@ namespace Identity.MicroService.Features.UserFeature.Commands
     {
         private readonly UserContext _userContext;
         private readonly IMapper _mapper;
-        private readonly IConnectionMultiplexer _connectionMultiplexer;
         private readonly IGetCacheBasketItemsService _getCacheBasketItemsService;
-        public GetUpdateUserHandler(UserContext userContext, IMapper mapper, IConnectionMultiplexer connectionMultiplexer, IGetCacheBasketItemsService getCacheBasketItemsService)
+        public GetUpdateUserHandler(UserContext userContext, IMapper mapper, IGetCacheBasketItemsService getCacheBasketItemsService)
         {
             _userContext = userContext;
             _mapper = mapper;
-            _connectionMultiplexer = connectionMultiplexer;
             _getCacheBasketItemsService = getCacheBasketItemsService;
         }
 
         public async Task<Users> Handle(GetUserRequestModel request, CancellationToken cancellationToken)
         {
             Users UserProfile = new Users();
-            //var db = _connectionMultiplexer.GetDatabase();
-            //var getUserInfoFromCache = await db.StringGetAsync(request.Username);
+            
+            //Get Item and User info from cache service
             var getUserInfoFromCache = await _getCacheBasketItemsService.GetCacheItem(request.Username);
 
             //If no  value present in cache then add it
