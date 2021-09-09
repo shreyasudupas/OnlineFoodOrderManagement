@@ -1,6 +1,7 @@
 using BasketService.MicroService.BuisnessLayer;
 using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Extensions;
+using Common.Utility.Security;
 using Common.Utility.Tools.RedisCache;
 using Common.Utility.Tools.RedisCache.Interface;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,9 @@ namespace BasketService.MicroService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BasketService.MicroService", Version = "v1" });
             });
 
+            //Add Authnetication Extension
+            services.AddJwtAuthentication(Configuration);
+
             var redis = ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection"));
 
             //Register services
@@ -69,6 +73,8 @@ namespace BasketService.MicroService
             });
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.InstallCustomExceptionMiddleware();
 

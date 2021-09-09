@@ -1,19 +1,19 @@
 ﻿using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Models;
 using Identity.MicroService.Models.APIResponse;
-using Common.Utility.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BasketService.MicroService.Controllers.V1
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class CartInformationController : ControllerBase
     {
         private readonly ICartService cartService;
@@ -72,38 +72,5 @@ namespace BasketService.MicroService.Controllers.V1
                 return new Response(HttpStatusCode.InternalServerError, null, "No user Header value was present");
             }
         }
-
-        public class CartItems
-        {
-            public List<MenuColumnData> ColumnData { get; set; }
-            
-            public object Data { get; set; }
-        }
-
-        public class MenuColumnData
-        {
-            public string Field { get; set; }
-            public string Header { get; set; }
-            public string Display { get; set; }
-        }
-
-        public class UserCartInfoDemo
-        {
-            public UserInfo UserInfo { get; set; }
-            public List<JObject> Items { get; set; }
-        }
-
-        public class UserCartInfoDemoOutPut
-        {
-            public UserInfo UserInfo { get; set; }
-            public List<Dictionary<string,object>> Items { get; set; }
-        }
-
-        public class MenuItem
-        {
-            public string MenuId { get; set; }
-            public int? Quantity { get; set; }
-        }
-
     }
 }
