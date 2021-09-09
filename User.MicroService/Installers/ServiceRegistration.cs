@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Identity.MicroService.Security.Handlers;
+using Common.Utility.Tools.RedisCache.Interface;
+using Common.Utility.Tools.RedisCache;
 
 namespace Identity.MicroService.Installers
 {
@@ -16,6 +18,7 @@ namespace Identity.MicroService.Installers
 
             //register for properties
             services.AddScoped<IProfileUser, ProfileUser>();
+            services.AddScoped<IGetCacheBasketItemsService, GetCacheBasketItemsService>();
 
             //register all the Authorization Handlers here
             services.AddScoped<IAuthorizationHandler, CheckIfUserHandler>();

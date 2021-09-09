@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Utility.Tools.RedisCache.Interface;
 
 namespace Identity.MicroService.Features.UserFeature.Commands
 {
@@ -20,18 +21,21 @@ namespace Identity.MicroService.Features.UserFeature.Commands
         private readonly UserContext _userContext;
         private readonly IMapper _mapper;
         private readonly IConnectionMultiplexer _connectionMultiplexer;
-        public GetUpdateUserHandler(UserContext userContext, IMapper mapper, IConnectionMultiplexer connectionMultiplexer)
+        private readonly IGetCacheBasketItemsService _getCacheBasketItemsService;
+        public GetUpdateUserHandler(UserContext userContext, IMapper mapper, IConnectionMultiplexer connectionMultiplexer, IGetCacheBasketItemsService getCacheBasketItemsService)
         {
             _userContext = userContext;
             _mapper = mapper;
             _connectionMultiplexer = connectionMultiplexer;
+            _getCacheBasketItemsService = getCacheBasketItemsService;
         }
 
         public async Task<Users> Handle(GetUserRequestModel request, CancellationToken cancellationToken)
         {
             Users UserProfile = new Users();
-            var db = _connectionMultiplexer.GetDatabase();
-            var getUserInfoFromCache = await db.StringGetAsync(request.Username);
+            //var db = _connectionMultiplexer.GetDatabase();
+            //var getUserInfoFromCache = await db.StringGetAsync(request.Username);
+            var getUserInfoFromCache = await _getCacheBasketItemsService.GetCacheItem(request.Username);
 
             //If no  value present in cache then add it
             if (!getUserInfoFromCache.HasValue)
@@ -47,7 +51,8 @@ namespace Identity.MicroService.Features.UserFeature.Commands
                     UserCartInfo.VendorDetails = null;
                     UserCartInfo.Items = null;
 
-                    await db.StringSetAsync(request.Username, JsonConvert.SerializeObject(UserCartInfo));
+                    //await db.StringSetAsync(request.Username, JsonConvert.SerializeObject(UserCartInfo));
+                    await _getCacheBasketItemsService.SetCacheItem(request.Username, UserCartInfo);
                 }
                 return UserProfile;
             }

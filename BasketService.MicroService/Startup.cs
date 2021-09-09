@@ -1,6 +1,8 @@
 using BasketService.MicroService.BuisnessLayer;
 using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Extensions;
+using Common.Utility.Tools.RedisCache;
+using Common.Utility.Tools.RedisCache.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,8 +40,11 @@ namespace BasketService.MicroService
             });
 
             var redis = ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection"));
+
+            //Register services
             services.AddSingleton<IConnectionMultiplexer>(redis);
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IGetCacheBasketItemsService, GetCacheBasketItemsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

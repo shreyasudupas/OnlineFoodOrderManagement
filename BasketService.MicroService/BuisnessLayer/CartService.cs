@@ -1,6 +1,8 @@
 ﻿using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using Common.Utility.Models;
 using Common.Utility.Models.CartInformationModels;
+using Common.Utility.Tools.RedisCache.Interface;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
@@ -13,11 +15,14 @@ namespace BasketService.MicroService.BuisnessLayer
 {
     public class CartService : ICartService
     {
-        private readonly IConnectionMultiplexer _connectionMultiplexer;
+        //private readonly IConnectionMultiplexer _connectionMultiplexer;
+        private readonly IGetCacheBasketItemsService _getCacheBasketService;
+        private readonly ILogger _logger;
 
-        public CartService(IConnectionMultiplexer connectionMultiplexer)
+        public CartService(IGetCacheBasketItemsService getCacheBasketItemsService,ILogger<CartService> logger)
         {
-            _connectionMultiplexer = connectionMultiplexer;
+            _getCacheBasketService = getCacheBasketItemsService;
+            _logger = logger;
         }
         //public async Task<int> AddItemsinCart(string Username,CartItems cartItems)
         //{
@@ -61,6 +66,8 @@ namespace BasketService.MicroService.BuisnessLayer
 
         public async Task<bool> AddItemsInCartV2(string Username,JObject CartInfoFromHeader)
         {
+            _logger.LogInformation("AddItemsInCartV2 for username: {0} started",Username);
+
             var IsSucess = false;
             string cartMenuId;
             Dictionary<string, object> menuObject;
@@ -68,9 +75,8 @@ namespace BasketService.MicroService.BuisnessLayer
             //This will create a object of item got from header
             CreateCartMenuObject(CartInfoFromHeader, out cartMenuId, out menuObject,out vendorDetail);
 
-            var db = _connectionMultiplexer.GetDatabase();
-            var IsUserInfo = await db.StringGetAsync(Username);
-            var UserInfoInCache = JsonConvert.DeserializeObject<UserCartInformation>(IsUserInfo);
+            
+            var UserInfoInCache = await _getCacheBasketService.GetBasketItems(Username);
 
             //if item is added in cache for the first time
             if (UserInfoInCache.Items == null)
@@ -81,9 +87,8 @@ namespace BasketService.MicroService.BuisnessLayer
                 UserInfoInCache.Items.Add(newObj);
                 UserInfoInCache.VendorDetails = vendorDetail;
 
-                //update the item in cache
-                await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                IsSucess = true;
+                
+                IsSucess = await _getCacheBasketService.UpdateBasketItems(Username, UserInfoInCache);
             }
             else
             {
@@ -99,19 +104,18 @@ namespace BasketService.MicroService.BuisnessLayer
                     UserInfoInCache.Items.Add(ConvertAddedItemInCache);
 
                     //update the item in cache
-                    await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                    IsSucess = true;
+                    IsSucess = await _getCacheBasketService.UpdateBasketItems(Username, UserInfoInCache);
                 }
                 else
                 {
                     UpdateUserCacheCartQuantity(menuObject, UserInfoInCache, ItemExistsInCache);
 
                     //update the item in cache
-                    await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                    IsSucess = true;
+                    IsSucess = await _getCacheBasketService.UpdateBasketItems(Username, UserInfoInCache);
                 }
             }
 
+            _logger.LogInformation("AddItemsInCartV2 for username: {0} ended with success {1}", Username,IsSucess);
             return IsSucess;
         }
 
@@ -137,6 +141,8 @@ namespace BasketService.MicroService.BuisnessLayer
 
         public async Task<bool> RemoveItemsFromCartV2(string Username, JObject CartInfoFromHeader)
         {
+            _logger.LogInformation("RemoveItemsFromCartV2 for username: {0} started", Username);
+
             var IsSucess = false;
             string cartMenuId;
             Dictionary<string, object> menuObject;
@@ -144,11 +150,9 @@ namespace BasketService.MicroService.BuisnessLayer
             //This will create a object of item got from header
             CreateCartMenuObject(CartInfoFromHeader, out cartMenuId, out menuObject,out vendorDetail);
 
-            var db = _connectionMultiplexer.GetDatabase();
-            var IsUserInfo = await db.StringGetAsync(Username);
-            var UserInfoInCache = JsonConvert.DeserializeObject<UserCartInformation>(IsUserInfo);
+            var UserInfoInCache = await _getCacheBasketService.GetBasketItems(Username);
 
-            if(UserInfoInCache.Items != null)
+            if (UserInfoInCache.Items != null)
             {
                 //find if menu id is present in cache
                 var ItemExistsInCache = (from cache in UserInfoInCache.Items
@@ -168,16 +172,14 @@ namespace BasketService.MicroService.BuisnessLayer
                         if (UserInfoInCache.Items.Count > 0)
                         {
                             //update the item in cache
-                            await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                            IsSucess = true;
+                            IsSucess = await _getCacheBasketService.UpdateBasketItems(Username, UserInfoInCache);
                         }
                         else
                         {
                             UserInfoInCache.Items = null;
                             UserInfoInCache.VendorDetails = null;
                             //update the item in cache
-                            await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                            IsSucess = true;
+                            IsSucess = await _getCacheBasketService.UpdateBasketItems(Username, UserInfoInCache);
                         }
                     }
                     else//Then reduce the item count and update in cache
@@ -185,11 +187,11 @@ namespace BasketService.MicroService.BuisnessLayer
                         UpdateUserCacheCartQuantity(menuObject, UserInfoInCache, ItemExistsInCache);
 
                         //update the item in cache
-                        await updateUserCartCacheV2(db, Username, UserInfoInCache);
-                        IsSucess = true;
+                        IsSucess = await _getCacheBasketService.UpdateBasketItems(Username, UserInfoInCache);
                     }
                 }
             }
+            _logger.LogInformation("RemoveItemsFromCartV2 for username: {0} eneded with success {1}", Username,IsSucess);
 
             return IsSucess;
         }
@@ -203,19 +205,19 @@ namespace BasketService.MicroService.BuisnessLayer
             UserInfoInCache.Items.Add(newCartItem);
         }
 
-        public async Task<UserCartInfo> GetItemsFromCacheCart(string Username)
-        {
-            //List<CartItems> items = new List<CartItems>();
-            UserCartInfo userCartInfo = new UserCartInfo();  
-            var db = _connectionMultiplexer.GetDatabase();
-            var getUserInfo = await db.StringGetAsync(Username);
-            if(getUserInfo.HasValue)
-            {
-                userCartInfo = JsonConvert.DeserializeObject<UserCartInfo>(getUserInfo);
+        //public async Task<UserCartInfo> GetItemsFromCacheCart(string Username)
+        //{
+        //    //List<CartItems> items = new List<CartItems>();
+        //    UserCartInfo userCartInfo = new UserCartInfo();  
+        //    var db = _connectionMultiplexer.GetDatabase();
+        //    var getUserInfo = await db.StringGetAsync(Username);
+        //    if(getUserInfo.HasValue)
+        //    {
+        //        userCartInfo = JsonConvert.DeserializeObject<UserCartInfo>(getUserInfo);
                 
-            }
-            return userCartInfo;
-        }
+        //    }
+        //    return userCartInfo;
+        //}
 
         //public async Task<int> RemoveItemsFromCart(string Username, CartItems cartItems)
         //{
@@ -233,47 +235,47 @@ namespace BasketService.MicroService.BuisnessLayer
         //    return Items;
         //}
 
-        public async Task<int> UpdateCartRecord(CartItems CartItemFromUI, UserCartInfo CartItemFromCache, string Username,IDatabase db)
-        {
-            var ItemsCount = 0;
-            var getItem = CartItemFromCache.Items.Find(x => x.id == CartItemFromUI.id);
+        //public async Task<int> UpdateCartRecord(CartItems CartItemFromUI, UserCartInfo CartItemFromCache, string Username,IDatabase db)
+        //{
+        //    var ItemsCount = 0;
+        //    var getItem = CartItemFromCache.Items.Find(x => x.id == CartItemFromUI.id);
 
-            if(getItem!= null)
-            {
-                if (CartItemFromUI.quantity == 0)
-                {
-                    //remove the current value from cache
-                    CartItemFromCache.Items.Remove(getItem);
+        //    if(getItem!= null)
+        //    {
+        //        if (CartItemFromUI.quantity == 0)
+        //        {
+        //            //remove the current value from cache
+        //            CartItemFromCache.Items.Remove(getItem);
 
-                    if (CartItemFromCache.Items.Count > 0)
-                        //await updateCartCache(db, Username, CartItemFromCache);
-                        await updateUserCartCache(db, Username, CartItemFromCache);
-                    else
-                    //await db.KeyDeleteAsync(Username);
-                    {
-                        CartItemFromCache.Items = null;
-                        await updateUserCartCache(db, Username, CartItemFromCache);
-                    }
-                }
-                else
-                {
-                    //more than 1 quantity is present then reduce the quantity and updat the cache
-                    //var getItem = CartItemFromCache.Find(x => x.id == CartItemFromUI.id);
-                    getItem.quantity -= 1;
-                    List<CartItems> newItem = new List<CartItems>();
-                    newItem.Add(getItem);
-                    var otherItems = CartItemFromCache.Items.FindAll(x => x.id != CartItemFromUI.id);
-                    newItem.AddRange(otherItems);
+        //            if (CartItemFromCache.Items.Count > 0)
+        //                //await updateCartCache(db, Username, CartItemFromCache);
+        //                await updateUserCartCache(db, Username, CartItemFromCache);
+        //            else
+        //            //await db.KeyDeleteAsync(Username);
+        //            {
+        //                CartItemFromCache.Items = null;
+        //                await updateUserCartCache(db, Username, CartItemFromCache);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //more than 1 quantity is present then reduce the quantity and updat the cache
+        //            //var getItem = CartItemFromCache.Find(x => x.id == CartItemFromUI.id);
+        //            getItem.quantity -= 1;
+        //            List<CartItems> newItem = new List<CartItems>();
+        //            newItem.Add(getItem);
+        //            var otherItems = CartItemFromCache.Items.FindAll(x => x.id != CartItemFromUI.id);
+        //            newItem.AddRange(otherItems);
 
-                    CartItemFromCache.Items = newItem;
-                    //await updateCartCache(db, Username, newItem);
-                    await updateUserCartCache(db, Username, CartItemFromCache);
-                    ItemsCount = newItem.Sum(x => x.quantity);
-                }
-            }
+        //            CartItemFromCache.Items = newItem;
+        //            //await updateCartCache(db, Username, newItem);
+        //            await updateUserCartCache(db, Username, CartItemFromCache);
+        //            ItemsCount = newItem.Sum(x => x.quantity);
+        //        }
+        //    }
             
-            return ItemsCount;
-        }
+        //    return ItemsCount;
+        //}
 
         public async Task updateUserCartCacheV2(IDatabase db, string Username, UserCartInformation items)
         {
@@ -295,17 +297,17 @@ namespace BasketService.MicroService.BuisnessLayer
 
         public async Task<string> GetAllBasketUserMenuList(string Username)
         {
-            var db = _connectionMultiplexer.GetDatabase();
-            var IsUserInfo = await db.StringGetAsync(Username);
-            var UserInfoInCache = JsonConvert.DeserializeObject<UserCartInformation>(IsUserInfo);
+            _logger.LogInformation("GetAllBasketUserMenuList called for user {0}",Username);
+
+            var UserInfoInCache =await _getCacheBasketService.GetBasketItems(Username);
             var Items = JsonConvert.SerializeObject(new MenuCartResponse
             {
                 UserInfo = UserInfoInCache.UserInfo,
                 Items = UserInfoInCache.Items,
                 VendorDetails = UserInfoInCache.VendorDetails
             });
-            
 
+            _logger.LogInformation("GetAllBasketUserMenuList ended for user {0} with item success", Username);
 
             return Items;
         }
