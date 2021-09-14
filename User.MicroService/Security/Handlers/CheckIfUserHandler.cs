@@ -1,5 +1,5 @@
-﻿using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
-using MicroService.Shared.Models;
+﻿using Common.Utility.BuisnessLayer.IBuisnessLayer;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -10,6 +10,7 @@ using Identity.MicroService.Data.Enum;
 using Identity.MicroService.Security.Requirments;
 using MediatR;
 using Identity.MicroService.Features.UserFeature.Queries;
+using Microsoft.Extensions.Logging;
 
 namespace Identity.MicroService.Security.Handlers
 {
@@ -17,12 +18,13 @@ namespace Identity.MicroService.Security.Handlers
     {
         private readonly IProfileUser _profile;
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
 
-        public CheckIfUserHandler(IProfileUser profile,IMediator mediator)
+        public CheckIfUserHandler(IProfileUser profile, IMediator mediator, ILogger<CheckIfUserHandler> logger)
         {
             _profile = profile;
             _mediator = mediator;
-            //_userBL = user;
+            _logger = logger;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserRequirement requirement)
@@ -48,13 +50,22 @@ namespace Identity.MicroService.Security.Handlers
 
                         //Debug.WriteLine(getEmailId);
                         if (userPresent == true)
+                        {
                             //succeded the request
                             context.Succeed(requirement);
+                            _logger.LogInformation("Identity {0} success",_profile.GetUserDetails().Item1);
+                        }
+                            
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Header value not present");
                     }
                 }
             }
             else
             {
+                _logger.LogInformation("Token Expired");
                 return Task.CompletedTask;
             }
             return Task.CompletedTask;

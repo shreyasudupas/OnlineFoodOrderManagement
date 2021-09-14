@@ -8,7 +8,17 @@ namespace Identity.MicroService.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            var redis = ConnectionMultiplexer.Connect(configuration.GetValue<string>("RedisConnection"));
+            ConfigurationOptions config = new ConfigurationOptions()
+            {
+                SyncTimeout = 500000,
+                EndPoints =
+                {
+                    {"127.0.0.1",6379 }
+                },
+                AbortOnConnectFail = false // this prevents that error
+            };
+            //var redis = ConnectionMultiplexer.Connect(configuration.GetValue<string>("RedisConnection"));
+            var redis = ConnectionMultiplexer.Connect(config);
             services.AddSingleton<IConnectionMultiplexer>(redis);
         }
     }

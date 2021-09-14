@@ -73,6 +73,53 @@ namespace Identity.MicroService.Migrations
                     b.ToTable("Log");
                 });
 
+            modelBuilder.Entity("Identity.MicroService.Data.PaymentDropDown", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentDropDown");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Label = "Credit Card",
+                            Value = "Credit Card"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Label = "UPI",
+                            Value = "UPI"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Label = "Debit Card",
+                            Value = "Debit Card"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Label = "Wallet",
+                            Value = "Wallet"
+                        });
+                });
+
             modelBuilder.Entity("Identity.MicroService.Data.State", b =>
                 {
                     b.Property<long>("Id")

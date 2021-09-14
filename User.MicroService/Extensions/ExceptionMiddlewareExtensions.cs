@@ -15,6 +15,11 @@ namespace Identity.MicroService.Extensions
         {
             app.UseMiddleware<GetUserMiddleware>();
         }
+
+        public static void CallRequestLoggingMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<RequestLoggingMiddleware>();
+        }
     }
 
 }

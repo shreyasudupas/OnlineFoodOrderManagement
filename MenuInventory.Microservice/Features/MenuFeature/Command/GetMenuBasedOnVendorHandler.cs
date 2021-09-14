@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using MenuInventory.Microservice.Data.Context;
+using MenuInventory.Microservice.Data.MenuRepository;
 using MenuInventory.Microservice.Features.MenuFeature.Querries;
 using MenuInventory.Microservice.Models;
+using MenuInventory.Microservice.Models.Menu;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,45 +13,37 @@ using System.Threading.Tasks;
 
 namespace MenuInventory.Microservice.Features.MenuFeature.Command
 {
-    public class GetMenuBasedOnVendorHandler : IRequestHandler<VendorIdRequest, MenuDisplayList>
+    public class GetMenuBasedOnVendorHandler : IRequestHandler<VendorIdRequest, MenuListReposnse>
     {
-        private readonly MenuInventoryContext _dbContext;
-        public GetMenuBasedOnVendorHandler(MenuInventoryContext dbContext)
+        //private readonly MenuInventoryContext _dbContext;
+        private readonly MenuRepository menuRepository;
+        public GetMenuBasedOnVendorHandler(MenuRepository menuRepository)
         {
-            _dbContext = dbContext;
+            this.menuRepository = menuRepository;
         }
 
-        public async Task<MenuDisplayList> Handle(VendorIdRequest request, CancellationToken cancellationToken)
+        public async Task<MenuListReposnse> Handle(VendorIdRequest request, CancellationToken cancellationToken)
         {
-            MenuDisplayList ListMenu = new MenuDisplayList();
+            MenuListReposnse ListMenu = new MenuListReposnse();
+            
+            var vendorItem = await menuRepository.GetById(request.VendorId);
 
-            var MenuList = await(from Menu in _dbContext.Menus
-                                 join MenuTypeName in _dbContext.MenuTypes on Menu.MenuTypeId equals MenuTypeName.Id
-                                 where (Menu.VendorId == request.VendorId)
-                                 orderby Menu.MenuTypeId
-                                 select new MenuList
-                                 {
-                                     Id = Menu.Id,
-                                     MenuItem = Menu.MenuItem,
-                                     Price = Menu.Price,
-                                     VendorId = Menu.VendorId,
-                                     MenuType = MenuTypeName.MenuTypeName,
-                                     ImagePath = Menu.ImagePath,
-                                     OfferPrice = Menu.OfferPrice,
-                                     CreatedDate = Menu.CreatedDate
-                                 }).ToListAsync();
+            if(vendorItem.VendorDetails != null && vendorItem.VendorDetails.ColumnDetails.Count >0 && vendorItem.VendorDetails.Data != null)
+            {
+                var VendorColumnData = vendorItem.VendorDetails.ColumnDetails;
 
-            var GetImageLinkOfMenuType = await(from type in _dbContext.MenuTypes
-                                               where (type.Id > 0)
-                                               select new MenuItemDetail
-                                               {
-                                                   Id = type.Id,
-                                                   MenuTypeName = type.MenuTypeName,
-                                                   ImagePath = type.ImagePath
-                                               }).ToListAsync();
+                //prepare the column 
+                List<MenuColumnData> ColumnData = new List<MenuColumnData>();
+                foreach (var column in VendorColumnData)
+                {
+                    ColumnData.Add(new MenuColumnData { Field = column.ColumnName, Header = column.DisplayName, Display = column.Display });
+                }
 
-            ListMenu.MenuItemDetails = GetImageLinkOfMenuType;
-            ListMenu.MenuItemList = MenuList;
+                //prepare the data
+                ListMenu.Data = vendorItem.VendorDetails.Data;
+                ListMenu.MenuColumnData = ColumnData;
+            }
+            
 
             return ListMenu;
         }

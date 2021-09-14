@@ -1,6 +1,7 @@
 ﻿using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Models;
-using MicroService.Shared.Models;
+using Identity.MicroService.Models.APIResponse;
+using Common.Utility.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -79,55 +80,44 @@ namespace BasketService.MicroService.Controllers.V1
         }
 
 
-        [HttpPost]
-        public async Task<APIResponse> StoreUserBasketValue(CartItems cartItems)
-        {
-            var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
-            APIResponse response = new APIResponse();
-            var result = await _cartS.AddItemsinCart(User.Username, cartItems);
-            if(result>0 )
-            {
-                response.Response = 200;
-                response.Content = result;
-            }
-            else
-            {
-                response.Response = 404;
-            }
-            return response;
-        }
-        [HttpGet]
-        public async Task<APIResponse> GetUserBasket()
-        {
-            var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
-            APIResponse response = new APIResponse();
-            var result =await _cartS.GetItemsFromCacheCart(User.Username);
-            if (result != null)
-            {
-                response.Content = result;
-                response.Response = 200;
-            }
-            else
-                response.Response = 404;
+        //[HttpPost]
+        //public async Task<Response> StoreUserBasketValue(CartItems cartItems)
+        //{
+        //    var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
+        //    var result = await _cartS.AddItemsinCart(User.Username, cartItems);
+        //    if(result>0 )
+        //    {
+        //        return new Response(System.Net.HttpStatusCode.OK, result, null);
+        //    }
+        //    else
+        //    {
+        //        return new Response(System.Net.HttpStatusCode.NotFound, null, null);
+        //    }
+        //}
+        //[HttpGet]
+        //public async Task<Response> GetUserBasket()
+        //{
+        //    var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
+        //    var result =await _cartS.GetItemsFromCacheCart(User.Username);
+        //    if (result != null)
+        //    {
+        //        return new Response(System.Net.HttpStatusCode.OK, result, null);
+        //    }
+        //    else
+        //        return new Response(System.Net.HttpStatusCode.NotFound, null, null);
+        //}
 
-            return response;
-        }
-
-        [HttpPost]
-        public async Task<APIResponse> UpdateUserBasket(CartItems cartItems)
-        {
-            var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
-            APIResponse response = new APIResponse();
-            var result = await _cartS.RemoveItemsFromCart(User.Username,cartItems);
-            if (result >= 0)
-            {
-                response.Content = result;
-                response.Response = 200;
-            }
-            else
-                response.Response = 404;
-
-            return response;
-        }
+        //[HttpPost]
+        //public async Task<Response> UpdateUserBasket(CartItems cartItems)
+        //{
+        //    var User = JsonConvert.DeserializeObject<UserHeader>(HttpContext.Request.Headers["UserInfo"]);
+        //    var result = await _cartS.RemoveItemsFromCart(User.Username,cartItems);
+        //    if (result >= 0)
+        //    {
+        //        return new Response(System.Net.HttpStatusCode.OK, result, null);
+        //    }
+        //    else
+        //        return new Response(System.Net.HttpStatusCode.NotFound, null, null);
+        //}
     }
 }

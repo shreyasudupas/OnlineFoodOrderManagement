@@ -1,6 +1,9 @@
 using BasketService.MicroService.BuisnessLayer;
 using BasketService.MicroService.BuisnessLayer.IBuisnessLayer;
 using BasketService.MicroService.Extensions;
+using Common.Utility.Security;
+using Common.Utility.Tools.RedisCache;
+using Common.Utility.Tools.RedisCache.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,9 +40,15 @@ namespace BasketService.MicroService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BasketService.MicroService", Version = "v1" });
             });
 
+            //Add Authnetication Extension
+            services.AddJwtAuthentication(Configuration);
+
             var redis = ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection"));
+
+            //Register services
             services.AddSingleton<IConnectionMultiplexer>(redis);
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IGetCacheBasketItemsService, GetCacheBasketItemsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +73,8 @@ namespace BasketService.MicroService
             });
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.InstallCustomExceptionMiddleware();
 

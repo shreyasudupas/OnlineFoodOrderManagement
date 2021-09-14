@@ -1,12 +1,8 @@
 ﻿using MediatR;
-using MenuInventory.Microservice.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MenuInventory.Microservice.Models.Menu;
 
 namespace MenuInventory.Microservice.Features.MenuFeature.Querries
 {
-    public record VendorIdRequest(int VendorId):IRequest<MenuDisplayList>;
+    public record VendorIdRequest(string VendorId):IRequest<MenuListReposnse>;
     
 }

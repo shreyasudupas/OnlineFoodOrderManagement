@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace MicroService.Shared.Models
+namespace Common.Utility.Models
 {
     public class ErrorDetails
     {

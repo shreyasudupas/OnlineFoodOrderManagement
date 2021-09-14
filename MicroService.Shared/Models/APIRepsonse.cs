@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MicroService.Shared.Models
+namespace Common.Utility.Models
 {
     public class APIResponse
     {

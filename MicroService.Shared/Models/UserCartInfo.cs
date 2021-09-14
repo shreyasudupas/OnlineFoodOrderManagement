@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
-namespace MicroService.Shared.Models
+namespace Common.Utility.Models
 {
     public class UserCartInfo
     {
