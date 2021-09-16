@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Linq;
 using Identity.MicroService.Extensions;
 using Identity.MicroService.Installers;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace Identity.MicroService
 {
@@ -38,6 +38,30 @@ namespace Identity.MicroService
 
             app.UseHttpsRedirection();
 
+            //app.UseHealthChecks("/heath", new HealthCheckOptions
+            //{
+            //    //ResponseWriter = async (context,report) =>
+            //    //{
+            //    //    context.Response.ContentType = "application/json";
+            //    //    var response = new HealthCheckResponse
+            //    //    {
+            //    //        Status = report.Status.ToString(),
+            //    //        Checks = report.Entries.Select(entry => new HealthCheck
+            //    //        {
+            //    //            Status = entry.Key,
+            //    //            Component = entry.Value.Status.ToString(),
+            //    //            Description = entry.Value.Description
+            //    //        }),
+            //    //        Duration = report.TotalDuration
+            //    //    };
+
+            //    //    await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+            //    //}
+            //    Predicate = _ => true,
+            //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            //}) ;
+
+
             app.UseCors(builder =>
             {
                 builder.WithOrigins("http://localhost:4200")
@@ -59,6 +83,11 @@ namespace Identity.MicroService
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
                 endpoints.MapControllers();
             });
         }

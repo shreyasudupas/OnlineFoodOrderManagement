@@ -1,14 +1,18 @@
-using HealthChecks.UI.Client;
-using MenuInventory.Microservice.Installers;
-using MenuInventory.MicroService.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace MenuInventory.Microservice
+namespace HealthCheck.API.MicroService
 {
     public class Startup
     {
@@ -22,7 +26,15 @@ namespace MenuInventory.Microservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.InstallServiceAssembly(Configuration);
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "HealthCheck.API.MicroService", Version = "v1" });
+            });
+
+            services.AddHealthChecksUI().AddInMemoryStorage();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,38 +44,21 @@ namespace MenuInventory.Microservice
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MenuInventory.Microservice v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HealthCheck.API.MicroService v1"));
             }
+
+            app.UseHealthChecksUI();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseCors(builder =>
-            {
-                builder
-                .WithOrigins("http://localhost:4200")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-            });
-
-            //middleware
-            app.ConfigureCustomExceptionMiddleware();
-
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("hc", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
                 endpoints.MapControllers();
             });
         }
-
     }
 }
