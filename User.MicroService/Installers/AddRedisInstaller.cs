@@ -10,10 +10,10 @@ namespace Identity.MicroService.Installers
         {
             ConfigurationOptions config = new ConfigurationOptions()
             {
-                SyncTimeout = 500000,
+                SyncTimeout = 5000,//checks for every 5 seconds
                 EndPoints =
                 {
-                    {"127.0.0.1",6379 }
+                    {configuration.GetValue<string>("RedisConfiguration:Server"),configuration.GetValue<int>("RedisConfiguration:Port") }
                 },
                 AbortOnConnectFail = false // this prevents that error
             };

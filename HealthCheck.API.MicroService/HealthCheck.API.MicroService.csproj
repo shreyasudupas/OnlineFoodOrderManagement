@@ -2,24 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>019dad50-a981-45df-a5e9-085a0fca4cc9</UserSecretsId>
+    <UserSecretsId>b5eeccb7-c7aa-4617-bf97-d9c48ba7be94</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="5.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\V2\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MicroService.Shared\Common.Utility.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
