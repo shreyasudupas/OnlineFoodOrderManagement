@@ -1,17 +1,11 @@
 ﻿using Identity.MicroService.Models.APIResponse;
 using MediatR;
-using MenuInventory.Microservice.Data.MenuRepository;
 using MenuInventory.Microservice.Features.VendorFeature.Querries;
-using Common.Utility.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Common.Mongo.Database.Data.Context;
 
 namespace MenuInventory.Microservice.Controllers.V1
 {

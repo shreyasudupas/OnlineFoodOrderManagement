@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayAPI", "GatewayAPI\Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.MicroService", "User.MicroService\Identity.MicroService.csproj", "{A634245C-4F92-49E9-9B33-B7AEED02FFAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuDatabase", "Menu.Database\MenuDatabase.csproj", "{8EA79003-7836-4D35-B58C-BC4C0646B58A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Mongo.Database", "Menu.Database\Common.Mongo.Database.csproj", "{8EA79003-7836-4D35-B58C-BC4C0646B58A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Utility", "MicroService.Shared\Common.Utility.csproj", "{B7DA6620-0407-438C-856B-7BCC722A307F}"
 EndProject
@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasketService.MicroService"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.MicroService", "MenuOrder.MicroService\MenuOrder.MicroService.csproj", "{B735B7CE-AF78-4E3A-AF3D-301AF67B1005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCheck.API.MicroService", "HealthCheck.API.MicroService\HealthCheck.API.MicroService.csproj", "{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck.API.MicroService", "HealthCheck.API.MicroService\HealthCheck.API.MicroService.csproj", "{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

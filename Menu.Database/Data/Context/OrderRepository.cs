@@ -1,16 +1,17 @@
-﻿using MenuOrder.MicroService.Data.Context;
+﻿using Common.Mongo.Database.Data.BaseContext;
+using Common.Mongo.Database.Data.Models;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
-namespace MenuOrder.MicroService.Data
+namespace Common.Mongo.Database.Data.Context
 {
-    public class OrderRepository:BaseRepository<Orders>
+    public class OrderRepository : BaseRepository<Orders>
     {
-       
-        public OrderRepository(IMongoDBContext mongoDBContext):base(mongoDBContext)
+
+        public OrderRepository(IMongoDBContext mongoDBContext) : base(mongoDBContext)
         {
         }
-        
+
         public async Task UpdateOrders(Orders orders)
         {
             //var OldData = await mongoCollection.Find(x => x.Id == orders.Id).FirstOrDefaultAsync();
@@ -19,7 +20,7 @@ namespace MenuOrder.MicroService.Data
             var updateRow = Builders<Orders>.Update.Set(x => x.OrderItems, orders.OrderItems);
 
             var update = await mongoCollection.UpdateOneAsync(Filter, updateRow);
-            
+
         }
 
         public async Task<Orders> GetUserOrdersBasedOnUserName(string UserName)
@@ -30,7 +31,7 @@ namespace MenuOrder.MicroService.Data
 
         public async Task InsertUserOrders(Orders orders)
         {
-           await mongoCollection.InsertOneAsync(orders);
+            await mongoCollection.InsertOneAsync(orders);
         }
 
     }

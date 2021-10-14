@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Common.Mongo.Database.Data.Context;
 using MediatR;
-using MenuInventory.Microservice.Data.VendorCartConfigurationRepository;
 using MenuInventory.Microservice.Features.VendorCartConfigurationFeature.Querries;
 using MenuInventory.Microservice.Models.Vendor;
 using MenuInventory.Microservice.Models.VendorCartConfiguration;

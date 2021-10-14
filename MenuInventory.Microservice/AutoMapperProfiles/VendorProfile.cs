@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MenuInventory.Microservice.Data.VendorCartModel;
+using Common.Mongo.Database.Data.Models;
 using MenuInventory.Microservice.Models.Vendor;
 using MenuInventory.Microservice.Models.VendorCartConfiguration;
 
@@ -22,10 +22,10 @@ namespace MenuInventory.Microservice.Mapper
             //{
             //    ColumnDescription = source.ColumnDetails.
             //}))
-            CreateMap<VendorDetail, VendorListResponse>()
+            CreateMap<CartVendorDetail, VendorListResponse>()
                 .ForMember(dest=>dest.Id,act=>act.MapFrom(src=>src.VendorId));
 
-            CreateMap<Data.MenuModels.ColumnDetail, ColumnDetails>()
+            CreateMap<ColumnDetail, ColumnDetails>()
                 .ForMember(dest=>dest.DisplayScreen,act=>act.MapFrom(src=>src.Display));
         }
     }

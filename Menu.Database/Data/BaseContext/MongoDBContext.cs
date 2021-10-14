@@ -1,8 +1,8 @@
-﻿using MenuOrder.MicroService.Models;
+﻿using Common.Mongo.Database.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace MenuOrder.MicroService.Data.Context
+namespace Common.Mongo.Database.Data.BaseContext
 {
     public class MongoDBContext : IMongoDBContext
     {

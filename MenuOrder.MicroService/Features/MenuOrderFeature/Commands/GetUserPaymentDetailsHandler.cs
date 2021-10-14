@@ -6,6 +6,7 @@ using MenuOrder.MicroService.Features.MenuOrderFeature.Response;
 using MenuOrder.MicroService.Helper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +39,12 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
                  var CartResponse= JsonConvert.DeserializeObject<UserCartInformation>(UserBasketInfo);
                     
                 //Calcualte total Amount
-                 PaymentInfo = _mapper.Map<UserPaymentDetailsReponse>(CartResponse);
+                 if(CartResponse.Items != null)
+                {
+                    var GetItems = CartResponse.Items.Select(x => x["quantity"]).ToArray();
+                }
+
+                
             }
 
             return PaymentInfo;

@@ -1,6 +1,5 @@
-﻿using MediatR;
-using MenuInventory.Microservice.Data.Context;
-using MenuInventory.Microservice.Data.MenuRepository;
+﻿using Common.Mongo.Database.Data.Context;
+using MediatR;
 using MenuInventory.Microservice.Features.VendorFeature.Querries;
 using MenuInventory.Microservice.Models.Vendor;
 using System.Collections.Generic;
@@ -11,20 +10,15 @@ namespace MenuInventory.Microservice.Features.VendorFeature.Command
 {
     public class GetVendorListHandler : IRequestHandler<GetAllVendorRequest, List<VendorListResponse>>
     {
-        private readonly MenuInventoryContext _dbContext;
         private readonly MenuRepository _menuRepository;
 
-        public GetVendorListHandler(MenuInventoryContext dbContext, MenuRepository menuRepository)
+        public GetVendorListHandler(MenuRepository menuRepository)
         {
-            _dbContext = dbContext;
             _menuRepository = menuRepository;
         }
 
         public async Task<List<VendorListResponse>> Handle(GetAllVendorRequest request, CancellationToken cancellationToken)
         {
-            //List<VendorList> Vendorlist = new List<VendorList>();
-            //Vendorlist = await _dbContext.VendorLists.Where(x => x.Id > 0).ToListAsync();
-
             //return Vendorlist;
             List<VendorListResponse> vendorListResponses = new List<VendorListResponse>();
             var getitems = await _menuRepository.GetAllItems();
