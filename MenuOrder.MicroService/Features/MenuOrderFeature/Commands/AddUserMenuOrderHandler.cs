@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
 using StackExchange.Redis;
 using System;
@@ -8,8 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Common.Utility.Models;
-using MenuOrder.MicroService.Data.Enum;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Response;
+using Common.Mongo.Database.Data.Context;
+using Common.Mongo.Database.Data.Models;
+using Common.Mongo.Database.Data.Enum;
 
 namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
 {
@@ -42,11 +43,11 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
                         //Then insert the user into the database
                         Orders NewUser = new Orders();
                         var BasketUserInfo = GetBasketUserItems.UserInfo;
-                        NewUser.UserInfo = new Data.UserInfo
+                        NewUser.UserInfo = new Common.Mongo.Database.Data.Models.UserInfo
                         {
                             UserName = BasketUserInfo.UserName,
                             RoleName = BasketUserInfo.RoleName,
-                            Address = new Data.UserAddress
+                            Address = new Common.Mongo.Database.Data.Models.UserAddress
                             {
                                 City = BasketUserInfo.Address.City,
                                 FullAddress = BasketUserInfo.Address.FullAddress,

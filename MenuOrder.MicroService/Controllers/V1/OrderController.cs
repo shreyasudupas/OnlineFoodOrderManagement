@@ -1,7 +1,6 @@
 ﻿using Identity.MicroService.Models.APIResponse;
 using MediatR;
 using MenuOrder.MicroService.BackgroundServiceTasks;
-using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
 using MenuOrder.MicroService.Models;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using Common.Mongo.Database.Data.Context;
 
 namespace MenuOrder.MicroService.Controllers.V1
 {
