@@ -1,4 +1,4 @@
-﻿namespace MenuOrder.MicroService.Models
+﻿namespace MenuOrder.MicroService.Features.MenuOrderFeature.Response
 {
     public class MenuOrderResponse
     {

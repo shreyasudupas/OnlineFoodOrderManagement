@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5371",
+      "applicationUrl": "http://localhost:5371", 
       "sslPort": 44306
     }
   },
@@ -19,7 +19,6 @@
     },
     "HealthCheck.API.MicroService": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "https://localhost:5005/healthchecks-ui",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

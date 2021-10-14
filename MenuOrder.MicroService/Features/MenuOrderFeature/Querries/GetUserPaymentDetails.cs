@@ -4,8 +4,9 @@ using MenuOrder.MicroService.Models;
 
 namespace MenuOrder.MicroService.Features.MenuOrderFeature.Querries
 {
-    public class AddUserMenuOrder:IRequest<MenuOrderResponse>
+    public class GetUserPaymentDetails:IRequest<UserPaymentDetailsReponse>
     {
-        public string UserName { get; set; }
+        public UserHeaderInfo UserInfo { get; set; }
+        public string Token { get; set; }
     }
 }

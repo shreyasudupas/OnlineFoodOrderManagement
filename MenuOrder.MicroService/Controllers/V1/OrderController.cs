@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace MenuOrder.MicroService.Controllers.V1
 {
@@ -67,12 +68,38 @@ namespace MenuOrder.MicroService.Controllers.V1
                     
                 });
 
-                return new Response(System.Net.HttpStatusCode.Accepted, "Order Sent Successfully", null);
+                return new Response(HttpStatusCode.Accepted, "Order Sent Successfully", null);
             }
             else
             {
-                return new Response(System.Net.HttpStatusCode.BadRequest, null, "Header Empty");
+                return new Response(HttpStatusCode.BadRequest, null, "Header Empty");
             }
+        }
+
+        /// <summary>
+        /// Get Payment Information
+        /// </summary>
+        /// <returns>Return User Information</returns>
+        [HttpGet]
+        public async Task<Response> GetUserPaymentDetails()
+        {
+            var GetUserInfoFromheader = HttpContext.Request.Headers["UserInfo"];
+
+            var accessToken =  HttpContext.Request.Headers["Authorization"].ToString();
+
+            if (GetUserInfoFromheader.Where(x => x.Length > 0).Any())
+            {
+                var UserInfo = JsonConvert.DeserializeObject<UserHeaderInfo>(GetUserInfoFromheader);
+
+                var result = await _mediator.Send(new GetUserPaymentDetails { UserInfo = UserInfo , Token = accessToken.Replace("Bearer","")  });
+
+                return new Response(HttpStatusCode.OK, result, null);
+            }
+            else
+            {
+                return new Response(HttpStatusCode.BadRequest, null, "Header User details is emtpy");
+            }
+                
         }
     }
 }

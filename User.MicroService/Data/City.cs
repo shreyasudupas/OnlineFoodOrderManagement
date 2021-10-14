@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Identity.MicroService.Data
 {
@@ -12,7 +9,7 @@ namespace Identity.MicroService.Data
         public long StateId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public State State { get; set; }
-        public ICollection<User> Users { get; set; }
+        public State StateEntityFK { get; set; }
+        //public ICollection<User> Users { get; set; }
     }
 }

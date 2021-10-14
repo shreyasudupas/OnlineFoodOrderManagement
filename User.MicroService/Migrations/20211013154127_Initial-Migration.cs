@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Identity.MicroService.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,21 @@ namespace Identity.MicroService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Log", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentDropDown",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Label = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentDropDown", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +84,7 @@ namespace Identity.MicroService.Migrations
                         column: x => x.StateId,
                         principalTable: "State",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,11 +94,8 @@ namespace Identity.MicroService.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    RoleId = table.Column<long>(type: "bigint", nullable: false),
+                    UserRoleId = table.Column<long>(type: "bigint", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CityId = table.Column<long>(type: "bigint", nullable: true),
-                    StateId = table.Column<long>(type: "bigint", nullable: true),
                     PictureLocation = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     Points = table.Column<long>(type: "bigint", nullable: false),
                     CartAmount = table.Column<double>(type: "float", nullable: false),
@@ -94,23 +106,49 @@ namespace Identity.MicroService.Migrations
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_City_CityId",
+                        name: "FK_User_UserRole_UserRoleId",
+                        column: x => x.UserRoleId,
+                        principalTable: "UserRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAddress",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CityId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAddress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserAddress_City_CityId",
                         column: x => x.CityId,
                         principalTable: "City",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_User_State_StateId",
-                        column: x => x.StateId,
-                        principalTable: "State",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_User_UserRole_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "UserRole",
+                        name: "FK_UserAddress_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "PaymentDropDown",
+                columns: new[] { "Id", "Code", "Label", "Value" },
+                values: new object[,]
+                {
+                    { 1L, null, "Credit Card", "Credit Card" },
+                    { 2L, null, "UPI", "UPI" },
+                    { 3L, null, "Debit Card", "Debit Card" },
+                    { 4L, null, "Wallet", "Wallet" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -119,19 +157,19 @@ namespace Identity.MicroService.Migrations
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_CityId",
+                name: "IX_User_UserRoleId",
                 table: "User",
+                column: "UserRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAddress_CityId",
+                table: "UserAddress",
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_RoleId",
-                table: "User",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_StateId",
-                table: "User",
-                column: "StateId");
+                name: "IX_UserAddress_UserId",
+                table: "UserAddress",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -140,16 +178,22 @@ namespace Identity.MicroService.Migrations
                 name: "Log");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "PaymentDropDown");
+
+            migrationBuilder.DropTable(
+                name: "UserAddress");
 
             migrationBuilder.DropTable(
                 name: "City");
 
             migrationBuilder.DropTable(
-                name: "UserRole");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "State");
+
+            migrationBuilder.DropTable(
+                name: "UserRole");
         }
     }
 }

@@ -2,14 +2,19 @@
 {
     public class UserInfo
     {
-        public long Id { get; set; }
         public string UserName { get; set; }
         public string RoleName { get; set; }
-        public string Nickname { get; set; }
-        public string Address { get; set; }
-        public string CityName { get; set; }
-        public string StateName { get; set; }
+        public UserAddress Address { get; set; }
         public string PictureLocation { get; set; }
-        
+        public long Points { get; set; }
+        public double CartAmount { get; set; }
+
+    }
+
+    public class UserAddress
+    {
+        public string FullAddress { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using Identity.MicroService.Extensions;
 using Identity.MicroService.Installers;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
+using Identity.MicroService.Data.SeedData;
 
 namespace Identity.MicroService
 {
@@ -34,6 +35,9 @@ namespace Identity.MicroService
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.MicroService v1"));
+
+                //Seeding data for first time
+                MigrationSeedData.InitialDataSeed(app,Configuration.GetConnectionString("DBConnectionString1"));
             }
 
             app.UseHttpsRedirection();
