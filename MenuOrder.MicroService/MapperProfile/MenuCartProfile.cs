@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Common.Utility.Models.CartInformationModels;
+using Common.Utility.Models;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Response;
 
 namespace MenuOrder.MicroService.MapperProfile
@@ -8,7 +8,6 @@ namespace MenuOrder.MicroService.MapperProfile
     {
         public MenuCartProfile()
         {
-            //CreateMap<UserCartInformation, UserPaymentDetailsReponse>();
         }
     }
 }

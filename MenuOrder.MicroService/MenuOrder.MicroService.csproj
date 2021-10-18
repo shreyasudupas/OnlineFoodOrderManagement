@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Helper\MenuConfigurationService.cs" />
     <Compile Remove="Models\MongoDatabaseConfiguration.cs" />
   </ItemGroup>
 

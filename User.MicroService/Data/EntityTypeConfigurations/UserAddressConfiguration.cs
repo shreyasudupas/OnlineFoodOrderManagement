@@ -9,6 +9,7 @@ namespace Identity.MicroService.Data.EntityTypeConfigurations
         {
             builder.ToTable("UserAddress");
             builder.HasKey(e => e.Id);
+            builder.Property(e => e.IsActive).HasDefaultValue(false);
 
             //builder.HasData(
             //    new UserAddress { CityId = 1 , StateId = 1 , UserId = 1 , Address= "Citi Center Building, Balmatta" }

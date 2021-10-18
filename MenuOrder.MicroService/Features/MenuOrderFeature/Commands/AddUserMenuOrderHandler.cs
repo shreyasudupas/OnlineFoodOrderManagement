@@ -11,6 +11,7 @@ using MenuOrder.MicroService.Features.MenuOrderFeature.Response;
 using Common.Mongo.Database.Data.Context;
 using Common.Mongo.Database.Data.Models;
 using Common.Mongo.Database.Data.Enum;
+using AutoMapper;
 
 namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
 {
@@ -18,11 +19,13 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
     {
         private readonly OrderRepository orderRepository;
         private readonly IConnectionMultiplexer _connectionMultiplexer;
+        private readonly IMapper _mapper;
 
-        public AddUserMenuOrderHandler(OrderRepository orderRepository, IConnectionMultiplexer connectionMultiplexer)
+        public AddUserMenuOrderHandler(OrderRepository orderRepository, IConnectionMultiplexer connectionMultiplexer, IMapper mapper)
         {
             this.orderRepository = orderRepository;
             _connectionMultiplexer = connectionMultiplexer;
+            _mapper = mapper;
         }
 
         public async Task<MenuOrderResponse> Handle(AddUserMenuOrder request, CancellationToken cancellationToken)
@@ -47,15 +50,24 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
                         {
                             UserName = BasketUserInfo.UserName,
                             RoleName = BasketUserInfo.RoleName,
-                            Address = new Common.Mongo.Database.Data.Models.UserAddress
-                            {
-                                City = BasketUserInfo.Address.City,
-                                FullAddress = BasketUserInfo.Address.FullAddress,
-                                State = BasketUserInfo.Address.State
-                            },
+                            //Address = new Common.Mongo.Database.Data.Models.UserAddress
+                            //{
+                            //    City = BasketUserInfo.Address.City,
+                            //    FullAddress = BasketUserInfo.Address.FullAddress,
+                            //    State = BasketUserInfo.Address.State
+                            //},
                             
                             PictureLocation = BasketUserInfo.PictureLocation
                         };
+
+                        if(GetBasketUserItems.UserInfo.Address.Count>0)
+                        {
+                            GetBasketUserItems.UserInfo.Address.ForEach(e => {
+                                var MappedAddress = _mapper.Map<Common.Mongo.Database.Data.Models.UserAddress>(e);
+                                NewUser.UserInfo.Address.Add(MappedAddress);
+                            });
+                        }
+
                         await orderRepository.InsertUserOrders(NewUser);
 
                         //get the user Info once inserted

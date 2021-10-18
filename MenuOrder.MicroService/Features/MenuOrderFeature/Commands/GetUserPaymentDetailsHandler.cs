@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Mongo.Database.Helper;
 using Common.Utility.Models.CartInformationModels;
 using MediatR;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
@@ -62,7 +63,7 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
                     PaymentInfo.TotalAmount = TotalPrice;
                     PaymentInfo.UserInfo = CartResponse.UserInfo;
 
-                    //Also get if user has chosen a predefined choice of payment add that in Payment Info
+                    //Also get if user has chosen a predefined choice of payment during last payment add that in Payment Info
                 }
 
                 

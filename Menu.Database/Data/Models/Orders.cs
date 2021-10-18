@@ -20,7 +20,7 @@ namespace Common.Mongo.Database.Data.Models
         public long Id { get; set; }
         public string UserName { get; set; }
         public string RoleName { get; set; }
-        public UserAddress Address { get; set; }
+        public List<UserAddress> Address { get; set; }
         public string PictureLocation { get; set; }
 
     }

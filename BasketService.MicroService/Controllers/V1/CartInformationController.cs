@@ -72,5 +72,21 @@ namespace BasketService.MicroService.Controllers.V1
                 return new Response(HttpStatusCode.InternalServerError, null, "No user Header value was present");
             }
         }
+
+        [HttpGet]
+        public async Task<Response> GetCartItem()
+        {
+            var Userheader = HttpContext.Request.Headers["UserInfo"];
+            if (Userheader.Count > 0)
+            {
+                var UserInfo = JsonConvert.DeserializeObject<UserHeader>(Userheader);
+                var TotalCount = await cartService.GetCartItemCount(UserInfo.Username);
+                return new Response(HttpStatusCode.OK, TotalCount, null);
+            }
+            else
+            {
+                return new Response(HttpStatusCode.InternalServerError, null, "No user Header value was present");
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Utility.Tools.RedisCache.Interface;
+using System.Collections.Generic;
 
 namespace Identity.MicroService.Features.UserFeature.Commands
 {
@@ -42,7 +43,7 @@ namespace Identity.MicroService.Features.UserFeature.Commands
                 {
                     var UserAddress = await _userContext.UserAddresses
                         .Include(x=>x.CityEntityFK).ThenInclude(x=>x.StateEntityFK)
-                        .Where(ua => ua.UserId == GetUserProfile.Id).FirstOrDefaultAsync();
+                        .Where(ua => ua.UserId == GetUserProfile.Id ).ToListAsync();
                     
                     UserCartInformation UserCartInfo = new UserCartInformation();
                     UserCartInfo.UserInfo = _mapper.Map<UserInfo>(GetUserProfile);
@@ -50,14 +51,21 @@ namespace Identity.MicroService.Features.UserFeature.Commands
                     UserCartInfo.Items = null;
 
                     //If Address is present or else save without address
-                    if (UserAddress != null)
+                    if (UserAddress.Count > 0)
                     {
-                        UserCartInfo.UserInfo.Address = new UserAddress
-                        {
-                            City = UserAddress.CityEntityFK.CityNames,
-                            FullAddress = UserAddress.Address,
-                            State = UserAddress.CityEntityFK.StateEntityFK.StateNames
-                        };
+                        //Initilize or else will get error
+                        UserCartInfo.UserInfo.Address = new List<UserAddress>();
+
+                        UserAddress.ForEach(element=> {
+
+                            UserCartInfo.UserInfo.Address.Add(new UserAddress
+                            {
+                                City = element.CityEntityFK.CityNames,
+                                FullAddress = element.Address,
+                                State = element.CityEntityFK.StateEntityFK.StateNames,
+                                IsActive = element.IsActive
+                            });
+                        });
 
                     }
 

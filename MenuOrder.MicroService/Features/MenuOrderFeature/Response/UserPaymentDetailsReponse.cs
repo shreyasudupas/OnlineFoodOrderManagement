@@ -6,5 +6,7 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Response
     {
         public UserInfo UserInfo { get; set; }
         public int TotalAmount { get; set; }
+        public string LastSelectedPaymentMode { get; set; }
     }
+
 }
