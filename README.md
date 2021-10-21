@@ -34,9 +34,9 @@ fails consecutively for the configured number of times, you just open the circui
  
  <p>In the Project <b>MenuOrder.MenuService</b> HttpClientFactoryInstaller File the HttpClient is registered with client name as shown in the diagram
  </p>
- ![](Documents/ServiceInstaller_Polly_CB_Register.png)
+ ![](Documents/ServiceInstallerPollyCBRegister.png)
  
  <p>Http client will call the named instance of httpClient i.e Basket MicroService and will try to call the url configured. If the 
  service is not up and running then circuit breaker comes into play and tries to call the API 5 times if success then result is 
  given or else it will not process and inform the user that server is busy.</p>
- ![](Documents/HttpClient_Service.png)
+ ![](Documents/HttpClientService.png)
