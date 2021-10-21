@@ -60,6 +60,7 @@ namespace Identity.MicroService.Features.UserFeature.Commands
 
                             UserCartInfo.UserInfo.Address.Add(new UserAddress
                             {
+                                UserAddressId = element.Id,
                                 City = element.CityEntityFK.CityNames,
                                 FullAddress = element.Address,
                                 State = element.CityEntityFK.StateEntityFK.StateNames,

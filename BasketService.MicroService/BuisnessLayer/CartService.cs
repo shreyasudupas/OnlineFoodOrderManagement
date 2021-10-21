@@ -189,6 +189,7 @@ namespace BasketService.MicroService.BuisnessLayer
             _logger.LogInformation("GetCartItems called for user {0}",Username);
 
             var UserInfoInCache = await _getCacheBasketService.GetBasketItems(Username);
+            if(UserInfoInCache.Items != null)
             if(UserInfoInCache.Items.Count>0)
             {
                 response.TotalItems = UserInfoInCache.Items.Select(x => Convert.ToInt32(x["quantity"])).Sum(x => x);

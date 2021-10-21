@@ -33,7 +33,7 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
         {
             UserPaymentDetailsReponse PaymentInfo = new UserPaymentDetailsReponse();
 
-            var UserBasketInfo = await _httpClientCrud.GetItemsAsync(_configuration["BaseApiUrls:BasketBaseUrl"], 
+            var UserBasketInfo = await _httpClientCrud.GetItemsAsync( 
                 _configuration["BaseApiUrls:BasketActionUrl"] + "GetUserBasketInfoFromCache",
                 request.Token ,
                 request.UserInfo);

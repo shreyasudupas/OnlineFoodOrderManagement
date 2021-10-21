@@ -15,6 +15,7 @@ namespace Common.Utility.Models
 
     public class UserAddress
     {
+        public long UserAddressId { get; set; }
         public string FullAddress { get; set; }
         public string City { get; set; }
         public string State { get; set; }

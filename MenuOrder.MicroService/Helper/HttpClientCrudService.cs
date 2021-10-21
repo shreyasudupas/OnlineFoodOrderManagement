@@ -11,17 +11,16 @@ namespace MenuOrder.MicroService.Helper
 {
     public class HttpClientCrudService
     {
-        private readonly HttpClient _httpClient;
+        private IHttpClientFactory _httpClientFactory;
 
-        public HttpClientCrudService()
+        public HttpClientCrudService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = new HttpClient();
-            _httpClient.Timeout = new TimeSpan(0, 0, 30);
+            _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<string> GetItemsAsync(string BaseUrl,string Action, string token ,UserHeaderInfo UserInfo)
+        public async Task<string> GetItemsAsync(string Action, string token ,UserHeaderInfo UserInfo)
         {
-            _httpClient.BaseAddress = new Uri(BaseUrl);
+            var _httpClient = _httpClientFactory.CreateClient("Basket MicroService");
             _httpClient.DefaultRequestHeaders.Add("UserInfo",JsonConvert.SerializeObject(UserInfo));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
