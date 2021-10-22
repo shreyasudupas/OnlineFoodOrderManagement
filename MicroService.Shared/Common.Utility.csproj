@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BuisnessLayer\IBuisnessLayer\IUser.cs" />
+    <Compile Remove="BuisnessLayer\UserBuisness.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="BuisnessLayer\IBuisnessLayer\" />
   </ItemGroup>
 
@@ -17,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Menu.Database\MenuDatabase.csproj" />
+    <ProjectReference Include="..\Menu.Database\Common.Mongo.Database.csproj" />
   </ItemGroup>
 
 </Project>

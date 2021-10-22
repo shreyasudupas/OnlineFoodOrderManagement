@@ -1,13 +1,8 @@
-﻿using MediatR;
-using MenuInventory.Microservice.Data.Context;
-using MenuInventory.Microservice.Data.MenuRepository;
+﻿using Common.Mongo.Database.Data.Context;
+using MediatR;
 using MenuInventory.Microservice.Features.MenuFeature.Querries;
-using MenuInventory.Microservice.Models;
 using MenuInventory.Microservice.Models.Menu;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -14,7 +14,7 @@ namespace MenuInventory.Microservice.Installers
             //     .AllowAnyMethod()
             //    );
             //});
-            services.AddCors();
+            //services.AddCors();
         }
     }
 }

@@ -39,14 +39,14 @@ namespace MenuOrder.MicroService
             app.UseRouting();
             app.UseAuthentication();
 
-            app.UseCors(builder =>
-            {
-                builder
-                .WithOrigins(Configuration["AllowOrigins"])
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder
+            //    .WithOrigins(Configuration["AllowOrigins"])
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .AllowCredentials();
+            //});
 
             app.UseAuthorization();
 

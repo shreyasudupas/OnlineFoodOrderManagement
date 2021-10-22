@@ -1,7 +1,6 @@
-﻿using MenuInventory.Microservice.Data.Context;
-using MenuInventory.Microservice.Data.MenuRepository;
-using MenuInventory.Microservice.Data.VendorCartConfigurationRepository;
-using MenuOrder.MicroService.Models;
+﻿using Common.Mongo.Database.Data.BaseContext;
+using Common.Mongo.Database.Data.Context;
+using Common.Mongo.Database.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

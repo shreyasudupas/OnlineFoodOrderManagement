@@ -7,9 +7,17 @@
 
   <ItemGroup>
     <Compile Remove="BuisnessLayer\**" />
+    <Compile Remove="Data\**" />
+    <Compile Remove="Models\MongoConfiguration\**" />
     <Content Remove="BuisnessLayer\**" />
+    <Content Remove="Data\**" />
+    <Content Remove="Models\MongoConfiguration\**" />
     <EmbeddedResource Remove="BuisnessLayer\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Models\MongoConfiguration\**" />
     <None Remove="BuisnessLayer\**" />
+    <None Remove="Data\**" />
+    <None Remove="Models\MongoConfiguration\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,19 +32,20 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\V2\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Security\Handlers\" />
     <Folder Include="Security\Middlewares\" />
     <Folder Include="Security\Requirements\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Menu.Database\Common.Mongo.Database.csproj" />
     <ProjectReference Include="..\MicroService.Shared\Common.Utility.csproj" />
   </ItemGroup>
 

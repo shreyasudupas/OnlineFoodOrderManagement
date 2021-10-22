@@ -7,6 +7,7 @@ using Identity.MicroService.Extensions;
 using Identity.MicroService.Installers;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
+using Identity.MicroService.Data.SeedData;
 
 namespace Identity.MicroService
 {
@@ -22,7 +23,7 @@ namespace Identity.MicroService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            //services.AddCors();
             services.InstallServiceAssembly(Configuration);
         }
 
@@ -34,6 +35,9 @@ namespace Identity.MicroService
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.MicroService v1"));
+
+                //Seeding data for first time
+                MigrationSeedData.InitialDataSeed(app,Configuration.GetConnectionString("DBConnectionString1"));
             }
 
             app.UseHttpsRedirection();
@@ -62,13 +66,13 @@ namespace Identity.MicroService
             //}) ;
 
 
-            app.UseCors(builder =>
-            {
-                builder.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder.WithOrigins("http://localhost:4200")
+            //    .AllowAnyHeader()
+            //    .AllowAnyMethod()
+            //    .AllowCredentials();
+            //});
 
             app.UseRouting();
 

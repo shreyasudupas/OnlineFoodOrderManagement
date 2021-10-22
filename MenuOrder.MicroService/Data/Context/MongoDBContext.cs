@@ -1,7 +1,6 @@
 ﻿using MenuOrder.MicroService.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System;
 
 namespace MenuOrder.MicroService.Data.Context
 {

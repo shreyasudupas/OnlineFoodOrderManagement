@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MenuInventory.Microservice.Data;
 using MenuInventory.Microservice.Models.Vendor;
 using System.Collections.Generic;
 

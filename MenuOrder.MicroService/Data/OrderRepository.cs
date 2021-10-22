@@ -32,5 +32,6 @@ namespace MenuOrder.MicroService.Data
         {
            await mongoCollection.InsertOneAsync(orders);
         }
+
     }
 }

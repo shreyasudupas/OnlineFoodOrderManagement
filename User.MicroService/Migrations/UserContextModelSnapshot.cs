@@ -151,14 +151,8 @@ namespace Identity.MicroService.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("CartAmount")
-                        .HasColumnType("float");
-
-                    b.Property<long?>("CityId")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("CartAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
@@ -174,14 +168,8 @@ namespace Identity.MicroService.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<long>("Points")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("StateId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -191,15 +179,44 @@ namespace Identity.MicroService.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<long>("UserRoleId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserRoleId");
+
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Identity.MicroService.Data.UserAddress", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("UserId");
 
-                    b.HasIndex("StateId");
-
-                    b.ToTable("User");
+                    b.ToTable("UserAddress");
                 });
 
             modelBuilder.Entity("Identity.MicroService.Data.UserRole", b =>
@@ -221,52 +238,41 @@ namespace Identity.MicroService.Migrations
 
             modelBuilder.Entity("Identity.MicroService.Data.City", b =>
                 {
-                    b.HasOne("Identity.MicroService.Data.State", "State")
-                        .WithMany("Cities")
+                    b.HasOne("Identity.MicroService.Data.State", "StateEntityFK")
+                        .WithMany()
                         .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("State");
+                    b.Navigation("StateEntityFK");
                 });
 
             modelBuilder.Entity("Identity.MicroService.Data.User", b =>
                 {
-                    b.HasOne("Identity.MicroService.Data.City", "City")
-                        .WithMany("Users")
-                        .HasForeignKey("CityId");
-
-                    b.HasOne("Identity.MicroService.Data.UserRole", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
+                    b.HasOne("Identity.MicroService.Data.UserRole", "UserRoleEntityFK")
+                        .WithMany()
+                        .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Identity.MicroService.Data.State", "State")
-                        .WithMany("Users")
-                        .HasForeignKey("StateId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("State");
+                    b.Navigation("UserRoleEntityFK");
                 });
 
-            modelBuilder.Entity("Identity.MicroService.Data.City", b =>
+            modelBuilder.Entity("Identity.MicroService.Data.UserAddress", b =>
                 {
-                    b.Navigation("Users");
-                });
+                    b.HasOne("Identity.MicroService.Data.City", "CityEntityFK")
+                        .WithMany()
+                        .HasForeignKey("CityId");
 
-            modelBuilder.Entity("Identity.MicroService.Data.State", b =>
-                {
-                    b.Navigation("Cities");
+                    b.HasOne("Identity.MicroService.Data.User", "UserEntityFK")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Users");
-                });
+                    b.Navigation("CityEntityFK");
 
-            modelBuilder.Entity("Identity.MicroService.Data.UserRole", b =>
-                {
-                    b.Navigation("Users");
+                    b.Navigation("UserEntityFK");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,16 +1,17 @@
 ﻿using MediatR;
-using MenuOrder.MicroService.Data;
 using MenuOrder.MicroService.Features.MenuOrderFeature.Querries;
-using MenuOrder.MicroService.Models;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Common.Utility.Models;
-using MenuOrder.MicroService.Data.Enum;
+using MenuOrder.MicroService.Features.MenuOrderFeature.Response;
+using Common.Mongo.Database.Data.Context;
+using Common.Mongo.Database.Data.Models;
+using Common.Mongo.Database.Data.Enum;
+using AutoMapper;
 
 namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
 {
@@ -18,11 +19,13 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
     {
         private readonly OrderRepository orderRepository;
         private readonly IConnectionMultiplexer _connectionMultiplexer;
+        private readonly IMapper _mapper;
 
-        public AddUserMenuOrderHandler(OrderRepository orderRepository, IConnectionMultiplexer connectionMultiplexer)
+        public AddUserMenuOrderHandler(OrderRepository orderRepository, IConnectionMultiplexer connectionMultiplexer, IMapper mapper)
         {
             this.orderRepository = orderRepository;
             _connectionMultiplexer = connectionMultiplexer;
+            _mapper = mapper;
         }
 
         public async Task<MenuOrderResponse> Handle(AddUserMenuOrder request, CancellationToken cancellationToken)
@@ -43,17 +46,28 @@ namespace MenuOrder.MicroService.Features.MenuOrderFeature.Commands
                         //Then insert the user into the database
                         Orders NewUser = new Orders();
                         var BasketUserInfo = GetBasketUserItems.UserInfo;
-                        NewUser.UserInfo = new Data.UserInfo
+                        NewUser.UserInfo = new Common.Mongo.Database.Data.Models.UserInfo
                         {
-                            Id = BasketUserInfo.Id,
                             UserName = BasketUserInfo.UserName,
                             RoleName = BasketUserInfo.RoleName,
-                            FullName = BasketUserInfo.Nickname,
-                            Address = BasketUserInfo.Address,
-                            CityName = BasketUserInfo.CityName,
-                            StateName = BasketUserInfo.StateName,
+                            //Address = new Common.Mongo.Database.Data.Models.UserAddress
+                            //{
+                            //    City = BasketUserInfo.Address.City,
+                            //    FullAddress = BasketUserInfo.Address.FullAddress,
+                            //    State = BasketUserInfo.Address.State
+                            //},
+                            
                             PictureLocation = BasketUserInfo.PictureLocation
                         };
+
+                        if(GetBasketUserItems.UserInfo.Address.Count>0)
+                        {
+                            GetBasketUserItems.UserInfo.Address.ForEach(e => {
+                                var MappedAddress = _mapper.Map<Common.Mongo.Database.Data.Models.UserAddress>(e);
+                                NewUser.UserInfo.Address.Add(MappedAddress);
+                            });
+                        }
+
                         await orderRepository.InsertUserOrders(NewUser);
 
                         //get the user Info once inserted

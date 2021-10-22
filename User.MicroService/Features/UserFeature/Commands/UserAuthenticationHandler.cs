@@ -33,7 +33,7 @@ namespace Identity.MicroService.Features.UserFeature.Commands
         public async Task<AuthenticationResponse> Handle(GetAuthorizationTokenForUser request, CancellationToken cancellationToken)
         {
             //check if the user name is present in the database
-            var UserExists = await _dbContext.Users.Include(x=>x.Role).Where(x => x.UserName.Contains(request.UserName)).FirstOrDefaultAsync();
+            var UserExists = await _dbContext.Users.Include(x=>x.UserRoleEntityFK).Where(x => x.UserName.Contains(request.UserName)).FirstOrDefaultAsync();
 
             if(UserExists == null)
             {
@@ -44,7 +44,7 @@ namespace Identity.MicroService.Features.UserFeature.Commands
             return new AuthenticationResponse 
             { 
                 Id = UserExists.Id,
-                RoleName = UserExists.Role.Rolename,
+                RoleName = UserExists.UserRoleEntityFK.Rolename,
                 Username = UserExists.UserName,
                 Nickname = UserExists.FullName,
                 PictureLocation = UserExists.PictureLocation,
@@ -54,7 +54,7 @@ namespace Identity.MicroService.Features.UserFeature.Commands
 
         private string generateJwtToken(User user)
         {
-            var scope = "openid profile email profile:" + user.Role.Rolename;
+            var scope = "openid profile email profile:" + user.UserRoleEntityFK.Rolename;
 
             var key = _configuration["Jwt:Secret"]??"This is a test secret";
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -64,7 +64,7 @@ namespace Identity.MicroService.Features.UserFeature.Commands
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("scope", scope),
-                    new Claim("permissions", "profile:"+user.Role.Rolename)
+                    new Claim("permissions", "profile:"+user.UserRoleEntityFK.Rolename)
                 }),
                 Expires = DateTime.UtcNow.AddHours(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature),

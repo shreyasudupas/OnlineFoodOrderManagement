@@ -55,6 +55,10 @@ namespace Identity.MicroService.Security.Handlers
                             context.Succeed(requirement);
                             _logger.LogInformation("Identity {0} success",_profile.GetUserDetails().Item1);
                         }
+                        else
+                        {
+                            _logger.LogInformation("user {0} not present", request.UserName);
+                        }
                             
                     }
                     else

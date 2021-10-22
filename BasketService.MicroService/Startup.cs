@@ -29,7 +29,7 @@ namespace BasketService.MicroService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            //services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -76,14 +76,14 @@ namespace BasketService.MicroService
 
             app.UseHttpsRedirection();
 
-            app.UseCors(builder =>
-            {
-                builder
-                .WithOrigins("http://localhost:4200")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder
+            //    .WithOrigins("http://localhost:4200")
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .AllowCredentials();
+            //});
 
             app.UseRouting();
 
