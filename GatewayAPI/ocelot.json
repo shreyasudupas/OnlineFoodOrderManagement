@@ -1,5 +1,6 @@
 {
   "Routes": [
+    //Identity MicroService Server
     {
       "DownstreamPathTemplate": "/api/v1/user/{everything}",
       "DownstreamScheme": "https",
@@ -13,6 +14,7 @@
       "UpstreamPathTemplate": "/api/gateway/user/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get" ]
     },
+    //Menu Inventory MicroService
     {
       "DownstreamPathTemplate": "/api/v1/menu/{everything}",
       "DownstreamScheme": "https",
@@ -24,7 +26,15 @@
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/inventory/menu/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get" ]
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/vendor/{everything}",
@@ -37,9 +47,17 @@
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/inventory/vendor/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get" ]
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
     },
-
+    //Basket MicroService
     {
       "DownstreamPathTemplate": "/api/v1/Basket/{everything}",
       "DownstreamScheme": "https",
@@ -64,8 +82,17 @@
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/cart-information/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ]
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
     },
+    //Order MicroService
     {
       "DownstreamPathTemplate": "/api/v1/order/{everything}",
       "DownstreamScheme": "https",
@@ -76,7 +103,15 @@
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/orders/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ]
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/VendorCartConfiguration/{everything}",
@@ -89,7 +124,15 @@
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/cart-configuration/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ]
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
     }
 
   ],
