@@ -39,14 +39,14 @@ namespace MenuInventory.Microservice
 
             app.UseRouting();
 
-            app.UseCors(builder =>
-            {
-                builder
-                .WithOrigins("http://localhost:4200")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder
+            //    .WithOrigins("http://localhost:4200")
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .AllowCredentials();
+            //});
 
             //middleware
             app.ConfigureCustomExceptionMiddleware();
