@@ -1,0 +1,50 @@
+﻿@model LoginViewModel
+
+<p>Login Form</p>
+
+<div class="row">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-controller="Authorization" asp-action="Login" method="post" autocomplete="off">
+            <input type="hidden" name="returnUrl" asp-for="ReturnUrl" />
+            <div class="form-outline mb-4">
+                <input type="text" id="form1Example1" class="form-control" asp-for="Username" />
+                <label class="form-label" for="formAddress">Username</label>
+                <span class="text-danger" asp-validation-for="Username"></span>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="password" id="typePassword" class="form-control" asp-for="Password" />
+                <label class="form-label" for="formPassword">Password input</label>
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+            <!-- 2 column grid layout for inline styling -->
+            <div class="row mb-4">
+                <div class="col d-flex justify-content-center">
+                    <!-- Checkbox -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="RememberMe" id="rembermeCheckBox"/>
+                        <label class="form-check-label" for="form1Example3"> Remember me </label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <!-- Simple link -->
+                    <a href="#!">Forgot password?</a>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+
+            <div class="text-center">
+                <p>Not a member?<a asp-controller="Authorization" asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">Register</a></p>
+            </div>
+    </form>
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
