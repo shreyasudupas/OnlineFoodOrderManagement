@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.MicroService", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck.API.MicroService", "HealthCheck.API.MicroService\HealthCheck.API.MicroService.csproj", "{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDS_MVC_Client", "IDS_MVC_Client\IDS_MVC_Client.csproj", "{8FE87393-AF0E-4A3E-BD6A-0787BA6BBEC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE87393-AF0E-4A3E-BD6A-0787BA6BBEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE87393-AF0E-4A3E-BD6A-0787BA6BBEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE87393-AF0E-4A3E-BD6A-0787BA6BBEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE87393-AF0E-4A3E-BD6A-0787BA6BBEC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{5D3671CC-9471-4312-9BCD-1DF6E25193D6} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 		{B735B7CE-AF78-4E3A-AF3D-301AF67B1005} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 		{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
+		{8FE87393-AF0E-4A3E-BD6A-0787BA6BBEC4} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9205ABE5-5F68-4004-8637-2E366D0E7280}
