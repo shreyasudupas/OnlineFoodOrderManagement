@@ -1,0 +1,82 @@
+﻿@model List<AddUserRoleModel>
+@{ 
+    
+}
+
+<div class="modal fade" id="addUserRole" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- modal header-->
+            <div class="modal-header">
+                <h4>Add User</h4>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- modal body-->
+            <div class="modal-body">
+                <form action="AddUserRole">
+                    <!--Any Errors that matches all the keys will be displayed here -->
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <!--check if the users are present-->
+                    @if (Model.Count < 1)
+                    {
+                        <div>
+                            No users found
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th class="columnHide">UserId</th>
+                                    <th>Username</th>
+                                    <th class="columnHide">Get Username in input field</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr id="row@(i+1)">
+                                        <td class="columnHide">
+                                            <input type="hidden" asp-for="@Model[i].UserId" />
+                                        </td>
+                                        <td>
+                                            <input class="form-check-input" type="checkbox" asp-for="@Model[i].IsSelected" />
+                                        </td>
+                                        <td>
+                                            <label class="form-label" for="formRoleName">@Model[i].Username</label>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" asp-for="@Model[i].Username" /> <!--use this field only to construct dynamic object since label property is not recognized-->
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @*foreach (var user in Model)
+            {
+                <!-- View user list -->
+                <div class="form-check">
+                    <input type="hidden" asp-for="@user.Username" />
+                    <input class="form-check-input" type="checkbox" asp-for="@user.IsSelected"/>
+                    <label class="form-label" for="formRoleName">@user.Username</label>
+                </div>
+            }*@
+
+                    }
+
+                </form>
+            </div>
+
+            <!-- modal footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

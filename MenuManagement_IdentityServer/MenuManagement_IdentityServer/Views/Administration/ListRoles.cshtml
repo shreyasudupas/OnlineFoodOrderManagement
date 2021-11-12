@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@{ 
+    ViewBag.Title = "List of Roles";
+    Layout = "_LoginLayout";
+
+    int index = 1;
+}
+
+<h1>List of Roles</h1>
+<br />
+<div class="d-inline">
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddRole", "Administration")'">Create Roles</button>
+</div>
+
+<table class="table table-striped mt-2">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Role Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            foreach (var role in Model)
+            {
+                <tr>
+                    <td> @(index++)</td>
+                    <td> @role.Name</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <button type="button" class="btn btn-primary btn-floating" onclick="location.href = '@Url.Action("EditRole", "Administration")' + '?RoleId=' + '@role.Id'">
+                                <i class="fas fa-edit"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-floating">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">
+                    <div class="card">
+                        <div class="card-header">
+                            No Roles Present
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

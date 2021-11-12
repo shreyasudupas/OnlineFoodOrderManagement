@@ -1,0 +1,19 @@
+﻿@model AddRoleViewModel
+@{ 
+    Layout = "_LoginLayout";
+}
+<br/>
+<div>
+    <h2> Add Role</h2>
+
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+
+        <div class="form-outline mb-4">
+            <input type="text" asp-for="RoleName" class="form-control" />
+            <label class="form-label" for="formRoleName">Role Name</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mb-4">Add Role</button>
+    </form>
+</div>
