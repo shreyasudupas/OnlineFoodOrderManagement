@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@using MenuManagement_IdentityServer.Data.Models;
+
+@inject SignInManager<ApplicationUser> signInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +12,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/mbd/css/mdb.min.css" rel="stylesheet" />
     <link href="~/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/datatable/DataTables-1.11.3/css/dataTables.dataTables.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -37,15 +43,13 @@
                     </a>
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                        {
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Dashboard</a>
+                            <a class="nav-link" asp-controller="Administration" asp-action="ListRoles">Create Roles</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Team</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Projects</a>
-                        </li>
+                        }
+                            
                     </ul>
                     <!-- Left links -->
                 </div>
@@ -124,6 +128,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/datatable/DataTables-1.11.3/js/dataTables.dataTables.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/mbd/js/mdb.min.js"></script>
     <script src="~/font-awesome/js/all.js"></script>

@@ -12,20 +12,21 @@ $(function () {
         var url = $(this).data('url');
         $.get(url).done(function (data) {
             placeHolderElement.html(data);
+
+            //find table under the modal body and asiign to JQuery dataTable
+            //$('.modal-body #modalDataTableId').DataTable();
+
             placeHolderElement.find('.modal').modal('show');
 
         });
     });
 
     placeHolderElement.on('click', '[data-save="modal"]', function (event) {
-        debugger;
+        //debugger;
         event.preventDefault();
 
         var form = $(this).parents('.modal').find('form');
         var actionUrl = form.attr('action');
-
-        //to serialize if we have object in modal body
-        //var dataToSend = form.serialize();
 
         var finalData = [];
         //get particular value from each table row and construct a object
@@ -48,20 +49,11 @@ $(function () {
 
             finalData.push(obj);
 
-
         });
 
         var dataToSend = finalData;
         //console.log(finalData);
 
-        //placeHolderElement.find('.modal').modal('hide');
-
-        //$.post(actionUrl, dataToSend).done(function (data) {
-        //    placeHolderElement.find('.modal').modal('hide');
-        //}).fail(function (error) {
-        //    console.log(error);
-        //    placeHolderElement.find('.modal').modal('hide');
-        //});
         $.ajax({
             url: actionUrl,
             type: 'POST',
@@ -77,6 +69,8 @@ $(function () {
                 var isValid = newBody.find('[name="IsValid"]').val() == 'True';
                 if (isValid) {
                     placeHolderElement.find('.modal').modal('hide');
+                    //then reload the main page to get refeshed data
+                    location.reload();
                 }
             },
             error: function (err) {
@@ -85,16 +79,5 @@ $(function () {
             }
         });
     });
-
-    function objectifyForm(formArray) {
-        //serialize data function
-        var returnList = [];
-        for (var i = 0; i < formArray.length; i++) {
-            var returnArray = {};
-            returnArray[formArray[i]['name']] = formArray[i]['value'];
-            returnList.push(returnArray);
-        }
-        return returnList;
-    }
 
 });

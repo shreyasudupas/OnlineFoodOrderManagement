@@ -179,5 +179,11 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
             // is automatically signed out by another malicious web page.
             return vm;
         }
+
+        public IActionResult AccessDenied(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
     }
 }

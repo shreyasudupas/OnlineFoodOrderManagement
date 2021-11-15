@@ -4,12 +4,17 @@
     Layout = "_LoginLayout";
 
     int index = 1;
+
+    TempData["PreviousUrl"] = TempData["CurrentUrl"];
+    TempData["CurrentUrl"] = Url.Action("ListRoles", "Administration");
+    var backurl = TempData["PreviousUrl"].ToString();
 }
 
 <h1>List of Roles</h1>
 <br />
 <div class="d-inline">
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddRole", "Administration")'">Create Roles</button>
+    <button type="button" class="btn btn-primary" onclick="location.href ='@Url.Action("AddRole", "Administration")'">Create Roles</button>
+    <button type="button" class="btn btn-primary" onclick="location.href ='@Url.Content(backurl)'">Back</button>
 </div>
 
 <table class="table table-striped mt-2">

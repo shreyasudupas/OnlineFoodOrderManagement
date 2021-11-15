@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Controllers.Administration
 {
-    [Authorize]
+    //[Authorize]
+    [Authorize(Roles = "admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -29,12 +30,14 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpGet]
+        //[Authorize(Roles = "admin")]
         public IActionResult AddRole()
         {
             return View(new AddRoleViewModel());
         }
 
         [HttpPost]
+        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> AddRole(AddRoleViewModel model)
         {
             if(ModelState.IsValid)

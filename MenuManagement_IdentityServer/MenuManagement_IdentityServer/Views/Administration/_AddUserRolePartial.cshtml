@@ -28,7 +28,7 @@
                     }
                     else
                     {
-                        <table class="table">
+                        <table id="#modalDataTableId" class="table">
                             <thead class="table-light">
                                 <tr>
                                     <th>#</th>
@@ -50,7 +50,7 @@
                                         <td>
                                             <label class="form-label" for="formRoleName">@Model[i].Username</label>
                                         </td>
-                                        <td>
+                                        <td class="columnHide">
                                             <input type="hidden" asp-for="@Model[i].Username" /> <!--use this field only to construct dynamic object since label property is not recognized-->
                                         </td>
                                     </tr>

@@ -36,6 +36,7 @@ namespace MenuManagement_IdentityServer.Installers
                 config.Cookie.Name = "Identity.Cookie";
                 config.LoginPath = "/Authorization/Login";
                 config.LogoutPath = "/Authorization/Logout";
+                config.AccessDeniedPath = "/Authorization/AccessDenied";
             });
 
             services.AddIdentityServer()
