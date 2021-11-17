@@ -1,4 +1,7 @@
-﻿@model RegisterViewModel
+﻿@{
+    Layout = "_LoginLayout";
+}
+@model RegisterViewModel
 
 <div class="row">
     <h2>Register Form</h2>
@@ -56,17 +59,17 @@
 
         </form>
         @*@if (Model.ErrorList.Count > 0)
-        {
-        <ul>
-            @foreach (var error in Model.ErrorList)
             {
-                <li>
-                    @error.ToString()
-                </li>
-            }
-        </ul>
-                
-        }*@
+            <ul>
+                @foreach (var error in Model.ErrorList)
+                {
+                    <li>
+                        @error.ToString()
+                    </li>
+                }
+            </ul>
+
+            }*@
     </div>
 </div>
 

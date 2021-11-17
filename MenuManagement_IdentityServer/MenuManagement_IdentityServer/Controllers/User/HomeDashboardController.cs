@@ -28,9 +28,6 @@ namespace MenuManagement_IdentityServer.Controllers.User
 
         public async Task<IActionResult> Index()
         {
-            //Only u will get in client machine
-            //var accessToken = await HttpContext.GetTokenAsync("access_token");
-            //var idToken = await HttpContext.GetTokenAsync("id_token");
             var sub = User.GetSubjectId();
            
             

@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/mbd/css/mdb.min.css" rel="stylesheet" />
     <link href="~/font-awesome/css/all.css" rel="stylesheet" />
-    <link href="~/datatable/DataTables-1.11.3/css/dataTables.dataTables.min.css" rel="stylesheet" />
+    <link href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+    @*<link href="~/datatable/DataTables-1.11.3/css/dataTables.dataTables.min.css" rel="stylesheet" />*@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -41,16 +42,44 @@
                              alt=""
                              loading="lazy" />
                     </a>
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <!--Adminstration Dropdown -->
+                    <a class="text-reset dropdown-toggle hidden-arrow"
+                       href="#"
+                       id="navbarDropdownAdminLink"
+                       role="button"
+                       data-mdb-toggle="dropdown"
+                       aria-expanded="false">
+                        Task
+                    </a>
+                    <ul class="dropdown-menu"
+                        aria-labelledby="navbarDropdownAdminLink">
                         @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
                         {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Administration" asp-action="ListRoles">Create Roles</a>
-                        </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Administration" asp-action="ListRoles">Create Roles</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Administration" asp-action="GetUserList">List Users</a>
+                            </li>
                         }
-                            
                     </ul>
+                    <!-- Left links -->
+                    @*<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Administration" asp-action="ListRoles">Create Roles</a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </li>
+
+        </ul>*@
                     <!-- Left links -->
                 </div>
                 <!-- Collapsible wrapper -->
@@ -105,9 +134,21 @@
                         <li>
                             <a class="dropdown-item" href="#">Settings</a>
                         </li>
-                        <li>
-                            <a class="dropdown-item" asp-controller="Authorization" asp-action="Logout">Logout</a>
-                        </li>
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Logout">Logout @User.Identity.Name</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <!-- Right elements -->
@@ -128,10 +169,11 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/datatable/DataTables-1.11.3/js/dataTables.dataTables.min.js"></script>
+    @*<script src="~/datatable/DataTables-1.11.3/js/dataTables.dataTables.min.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/mbd/js/mdb.min.js"></script>
     <script src="~/font-awesome/js/all.js"></script>
+    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

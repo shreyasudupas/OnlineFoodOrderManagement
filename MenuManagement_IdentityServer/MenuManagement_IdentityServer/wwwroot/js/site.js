@@ -14,7 +14,9 @@ $(function () {
             placeHolderElement.html(data);
 
             //find table under the modal body and asiign to JQuery dataTable
-            //$('.modal-body #modalDataTableId').DataTable();
+            $('.modal-body #modalDataTableId').dataTable({
+                'dom': 'Rlfrtip'
+            });
 
             placeHolderElement.find('.modal').modal('show');
 

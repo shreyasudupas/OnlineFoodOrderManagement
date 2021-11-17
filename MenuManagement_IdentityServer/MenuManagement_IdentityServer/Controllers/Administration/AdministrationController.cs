@@ -232,5 +232,18 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
              return PartialView("_AddUserRolePartial", models);
 
          }
+
+        [HttpGet]
+        public IActionResult GetUserList()
+        {
+            var Users = _userManager.Users;
+            return View("UserList",Users);
+        }
+        [HttpGet]
+        public IActionResult EditUser(string UserId)
+        {
+            var User = _userManager.Users.Where(x => x.Id == UserId).FirstOrDefault();
+            return View(User);
+        }
     }
 }
