@@ -1,4 +1,5 @@
 ﻿using MenuManagement_IdentityServer.Data.Models;
+using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,16 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserAdministration _userAdministration;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, 
-            UserManager<ApplicationUser> userManager)
+        public AdministrationController(
+            RoleManager<IdentityRole> roleManager
+            ,UserManager<ApplicationUser> userManager
+            ,IUserAdministration userAdministration)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _userAdministration = userAdministration;
         }
 
         [HttpGet]
@@ -243,7 +248,38 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         public IActionResult EditUser(string UserId)
         {
             var User = _userManager.Users.Where(x => x.Id == UserId).FirstOrDefault();
-            return View(User);
+            if(User!= null)
+            {
+                return View(User);
+            }
+            else
+            {
+                return View("Not Found");
+            }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(ApplicationUser model)
+        {
+            if(ModelState.IsValid)
+            {
+
+                var result = await _userAdministration.EditUserInfo(model);
+
+                if (result.ErrorDescription.Count > 0)
+                {
+                    result.ErrorDescription.ForEach(element =>
+                    {
+                        ModelState.AddModelError("", element);
+                    });
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Error in Form Details Please correct it and resubmit the form");
+            }
+            return View(model);
         }
     }
 }

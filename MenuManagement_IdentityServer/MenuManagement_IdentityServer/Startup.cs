@@ -1,4 +1,6 @@
 using MenuManagement_IdentityServer.Installers;
+using MenuManagement_IdentityServer.Service;
+using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +27,8 @@ namespace MenuManagement_IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.InstallServiceAssembly(Configuration);
+            //Register service
+            services.AddScoped<IUserAdministration,UserAdministration>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
