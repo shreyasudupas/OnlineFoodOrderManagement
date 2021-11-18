@@ -1,4 +1,6 @@
-﻿using MenuManagement_IdentityServer.Data.Models;
+﻿using AutoMapper;
+using MenuManagement_IdentityServer.Data.Models;
+using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,23 +17,29 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserAdministration _userAdministration;
+        private readonly IUserAdministrationManager _userAdministration;
+        private readonly IUserRoleManager _userRoleManager;
+        private readonly IMapper _mapper;
 
         public AdministrationController(
             RoleManager<IdentityRole> roleManager
-            ,UserManager<ApplicationUser> userManager
-            ,IUserAdministration userAdministration)
+            , UserManager<ApplicationUser> userManager
+            , IUserAdministrationManager userAdministration
+            , IUserRoleManager userRoleManager
+            , IMapper mapper)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _userAdministration = userAdministration;
+            _userRoleManager = userRoleManager;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult ListRoles()
         {
-            var roles = _roleManager.Roles;
-            return View(roles);
+            var result = _userRoleManager.ListAllRoles();
+            return View(result);
         }
 
         [HttpGet]
@@ -47,130 +55,81 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         {
             if(ModelState.IsValid)
             {
-                IdentityRole identityRole = new IdentityRole { Name = model.RoleName };
+                var result = await _userRoleManager.AddRole(model);
 
-                var result = await _roleManager.CreateAsync(identityRole);
-
-                if(result.Succeeded)
+                result.ErrorDescription.ForEach(error => 
                 {
-                    return RedirectToAction("ListRoles");
-                }
-
-                foreach(var error in result.Errors)
-                {
-                    ModelState.AddModelError("",error.Description);
-                }
+                    ModelState.AddModelError("", error);
+                });
             }
-
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> EditRole(string RoleId)
-        {
-            var role = await _roleManager.FindByIdAsync(RoleId);
-
-            if(role == null)
+            else
             {
-                //not found
-                return Redirect("ListRoles");
-            }
-
-            var model = new EditRoleViewModel
-            {
-                Id = RoleId,
-                RoleName = role.Name
-            };
-
-            //Find all users under the role
-            foreach (var user in _userManager.Users.ToList())
-            {
-                var isRolePresent = _userManager.IsInRoleAsync(user, role.Name).Result;
-                if (isRolePresent)
-                {
-                    model.UserNames.Add(user.UserName);
-                }
+                ModelState.AddModelError("", "Error in body, Please check");
             }
 
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditRole(EditRoleViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> EditRole(string RoleId)
         {
-            var role = await _roleManager.FindByIdAsync(model.Id);
-
-            if (role == null)
+            var result = await _userRoleManager.GetUserByNameRoleInformatation(RoleId);
+            if(result.status == CrudEnumStatus.redirect)
             {
                 //not found
-                //return Redirect("ListRoles");
-                ModelState.AddModelError("NotFound", $"Role with {model.RoleName} not found in the database. Please try another role name");
-                return View(model);
+                return Redirect("ListRoles");
             }
             else
             {
-                //update new role name
-                role.Name = model.RoleName;
-
-                var result = await _roleManager.UpdateAsync(role);
-
-                if(result.Succeeded)
-                {
-                    return RedirectToAction("ListRoles");
-                }
-
-                foreach(var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+                EditRoleViewModel model = new EditRoleViewModel();
+                model = _mapper.Map<EditRoleViewModel>(result);
 
                 return View(model);
             }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(EditRoleViewModel model)
+        {
+            var result = await _userRoleManager.EditRole(model);
+            if(result.status == CrudEnumStatus.redirect)
+            {
+                //in this case its success
+                return RedirectToAction("ListRoles");
+            }
+            else if (result.status == CrudEnumStatus.NotFound)
+            {
+                ModelState.AddModelError("NotFound", $"Role with {model.RoleName} not found in the database. Please try another role name");
+            }
+            else if(result.status == CrudEnumStatus.failure)
+            {
+                //failure
+                result.ErrorDescription.ForEach(err =>
+                {
+                    ModelState.AddModelError("", err);
+                });
+            }
+
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> AddUserRole(string RoleId)
         {
-            List<AddUserRoleModel> model = new List<AddUserRoleModel>();
             TempData["RoleId"] = RoleId;
 
-            //Find if the RoleId belongs in Role table
-            var role = await _roleManager.FindByIdAsync(RoleId);
-
-            if (role == null)
+            var result = await _userRoleManager.GetUserRoleInformation(RoleId);
+            if (result.Status == CrudEnumStatus.NotFound)
             {
-                //not found
-                //return Redirect("ListRoles");
-                ModelState.AddModelError("NotFound", $"Role with {RoleId} Id is not found in the database. Please try another role name");
-                return PartialView("_AddUserRolePartial", model);
+                ModelState.AddModelError("NotFound", result.ErrorDescription);
+
+                return PartialView("_AddUserRolePartial", result.ListUsersRole);
             }
             else
             {
-                foreach(var user in _userManager.Users.ToList())
-                {
-                    //if user is found with this role name then select the checkbox with this user
-                    if(await _userManager.IsInRoleAsync(user,role.Name))
-                    {
-                        model.Add(new AddUserRoleModel
-                        {
-                            IsSelected = true,
-                            UserId = user.Id,
-                            Username = user.UserName
-                        });
-                    }else
-                    {
-                        //if user is not found with this role name then select do not select checkbox with this user
-                        model.Add(new AddUserRoleModel
-                        {
-                            IsSelected = false,
-                            UserId = user.Id,
-                            Username = user.UserName
-                        });
-                    }
-                }
-                return PartialView("_AddUserRolePartial", model);
+                return PartialView("_AddUserRolePartial", result.ListUsersRole);
             }
-            
         }
 
         [HttpPost]
@@ -184,79 +143,38 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
 
             TempData.Keep("RoleId");
 
-            if(!string.IsNullOrEmpty(RoleId))
+            var result = await _userRoleManager.EditUserRoleInformation(RoleId,models);
+            if(result.status == CrudEnumStatus.failure)
             {
-                var role = await _roleManager.FindByIdAsync(RoleId);
-                if(role != null)
-                {
-                    //get all users under this role
-                    var UsersInRole = await _userManager.GetUsersInRoleAsync(role.Name);
-
-                    //itertate through all the user got from modal
-                    foreach (var model in models)
-                    {
-                        //find the user is present in db
-                        var UserFromModal = await _userManager.FindByIdAsync(model.UserId);
-
-                        if (UserFromModal == null)
-                        {
-                            ModelState.AddModelError("NotFound", $"User with {model.UserId} Id not found in the database. Please try another role name");
-                        }
-                        else
-                        {
-                            var UserWithExistingRole = UsersInRole.FirstOrDefault(user => user.Id == UserFromModal.Id);
-
-                            //If the UserRole is not present in UserWithExistingRole and is selected then add
-                            if ((UserWithExistingRole == null) && (model.IsSelected == true))
-                            {
-                                await _userManager.AddToRoleAsync(UserFromModal, role.Name);
-                            }
-                            //If the UserRole is present in UserWithExistingRole and the selection is false ,Remove the user with that role
-                            else if ((UserWithExistingRole != null) && (model.IsSelected == false))
-                            {
-                                await _userManager.RemoveFromRoleAsync(UserFromModal, role.Name);
-                            }
-                            //If the UserRole is present in UserWithExistingRole and the selection is true ,Then do nothing or if nor user is found with that role and user is not selected
-                            else if (((UserWithExistingRole != null) && (model.IsSelected == true) ) || ((UserWithExistingRole == null) && (model.IsSelected == false))) 
-                            {
-                                continue;
-                            }
-
-                        }
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("NotFound", $"Role with {RoleId} Id not found in the database. Please try another role name");
-                    return PartialView("_AddUserRolePartial", models);
-                }
-                
+                ModelState.AddModelError("", result.ErrorDescription);
             }
 
-            
-             return PartialView("_AddUserRolePartial", models);
+            return PartialView("_AddUserRolePartial", models);
 
          }
 
         [HttpGet]
         public IActionResult GetUserList()
         {
-            var Users = _userManager.Users;
-            return View("UserList",Users);
+            var result = _userAdministration.GetAllApplicationUsers();
+            return View("UserList",result);
         }
         [HttpGet]
-        public IActionResult EditUser(string UserId)
+        public async Task<IActionResult> EditUser(string UserId)
         {
-            var User = _userManager.Users.Where(x => x.Id == UserId).FirstOrDefault();
-            if(User!= null)
+            var result = await _userAdministration.GetApplicationUserInfo(UserId);
+
+            if(result.ErrorDescription != null)
             {
-                return View(User);
+                return View(result.Users);
             }
             else
             {
+                ModelState.AddModelError("", result.ErrorDescription);
                 return View("Not Found");
             }
-            
+
+
         }
 
         [HttpPost]

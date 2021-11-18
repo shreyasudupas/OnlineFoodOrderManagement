@@ -27,8 +27,13 @@ namespace MenuManagement_IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.InstallServiceAssembly(Configuration);
+
+            //Register Auto mapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             //Register service
-            services.AddScoped<IUserAdministration,UserAdministration>();
+            services.AddScoped<IUserAdministrationManager,UserAdministrationManager>();
+            services.AddScoped<IUserRoleManager, UserRoleManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
