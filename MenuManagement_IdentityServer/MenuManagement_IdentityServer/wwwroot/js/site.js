@@ -10,16 +10,41 @@ $(function () {
     $('button[data-toggle="ajax-modal"]').click(function (event) {
 
         var url = $(this).data('url');
-        $.get(url).done(function (data) {
-            placeHolderElement.html(data);
+        //$.get(url).done(function (data) {
+        //    placeHolderElement.html(data);
 
-            //find table under the modal body and asiign to JQuery dataTable
-            $('.modal-body #modalDataTableId').dataTable({
-                'dom': 'Rlfrtip'
-            });
+        //    //check if the element is present
+        //    if ($('.modal-body #modalDataTableId').length > 0) {
+        //        //find table under the modal body and asiign to JQuery dataTable
+        //        $('.modal-body #modalDataTableId').dataTable({
+        //            'dom': 'Rlfrtip'
+        //        });
+        //    }
+        //    placeHolderElement.find('.modal').modal('show');
 
-            placeHolderElement.find('.modal').modal('show');
+        //});
 
+        $.ajax({
+            url: url,
+            type: 'GET',
+            async: true,
+            dataType:'html',
+            success: function (data) {
+                placeHolderElement.html(data);
+
+                //check if the element is present
+                if ($('.modal-body #modalDataTableId').length > 0) {
+                    //find table under the modal body and asiign to JQuery dataTable
+                    $('.modal-body #modalDataTableId').dataTable({
+                        'dom': 'Rlfrtip'
+                    });
+                }
+                placeHolderElement.find('.modal').modal('show');
+            },
+            error: function (err, xhr) {
+                console.log("Error: ", err);
+                console.log("Xhr: ", xhr);
+            }
         });
     });
 

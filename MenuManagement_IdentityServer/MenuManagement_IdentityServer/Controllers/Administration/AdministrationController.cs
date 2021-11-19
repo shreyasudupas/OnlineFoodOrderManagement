@@ -3,10 +3,8 @@ using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Controllers.Administration
@@ -15,21 +13,15 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
     [Authorize(Roles = "admin")]
     public class AdministrationController : Controller
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserAdministrationManager _userAdministration;
         private readonly IUserRoleManager _userRoleManager;
         private readonly IMapper _mapper;
 
         public AdministrationController(
-            RoleManager<IdentityRole> roleManager
-            , UserManager<ApplicationUser> userManager
-            , IUserAdministrationManager userAdministration
+            IUserAdministrationManager userAdministration
             , IUserRoleManager userRoleManager
             , IMapper mapper)
         {
-            _roleManager = roleManager;
-            _userManager = userManager;
             _userAdministration = userAdministration;
             _userRoleManager = userRoleManager;
             _mapper = mapper;
@@ -164,9 +156,9 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         {
             var result = await _userAdministration.GetApplicationUserInfo(UserId);
 
-            if(result.ErrorDescription != null)
+            if(result.ErrorDescription == null)
             {
-                return View(result.Users);
+                return View(result);
             }
             else
             {
@@ -198,6 +190,29 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
                 ModelState.AddModelError("", "Error in Form Details Please correct it and resubmit the form");
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageUserRoles(string UserId)
+        {
+            ManagerUserRole result = new ManagerUserRole();
+            if (!string.IsNullOrEmpty(UserId))
+            {
+                result = await _userAdministration.GetManageRoleInformation(UserId);
+
+                if(result.status == CrudEnumStatus.failure)
+                {
+                    result.ErrorDescription.ForEach(err => {
+                        ModelState.AddModelError("", err);
+                    });
+                    
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "User is not present");
+            }
+            return PartialView("_ManageUserRolesPartial",result);
         }
     }
 }

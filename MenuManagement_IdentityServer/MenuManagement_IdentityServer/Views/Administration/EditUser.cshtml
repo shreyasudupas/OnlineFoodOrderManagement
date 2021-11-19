@@ -1,49 +1,53 @@
-﻿@using MenuManagement_IdentityServer.Data.Models;
-@model ApplicationUser
+﻿@using MenuManagement_IdentityServer.Models;
+@model EditUserGet
 @{
     ViewData["Title"] = "Edit User";
+    var User = Model.Users;
+    var UserRoles = Model.Roles;
+    var UserClaims = Model.Claims;
 }
 
+<div id="modal-placeholder"></div>
 <div class="mt-3">
     <div class="card">
         <form method="post">
             <div class="card-header">
-                <h4><b>UserId:</b> @Model.Id</h4>
+                <h4><b>UserId:</b> @User.Id</h4>
             </div>
             <div class="card-body">
                 <div class="card-text">
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <input type="hidden" asp-for="@Model.Id"/>
+                    <input type="hidden" asp-for="@User.Id"/>
                     <div class="form-outline mb-4">
-                        <input type="text" id="formUserName" class="form-control" asp-for="@Model.UserName" required />
+                        <input type="text" id="formUserName" class="form-control" asp-for="@User.UserName" required />
                         <label class="form-label" for="formUserName">Username</label>
                     </div>
                     <div class="form-outline mb-4">
-                        <input type="text" id="formEmail" class="form-control" asp-for="@Model.Email" required />
+                        <input type="text" id="formEmail" class="form-control" asp-for="@User.Email" required />
                         <label class="form-label" for="formEmail">Email</label>
                     </div>
                     <div class="form-outline mb-4">
-                        <input type="number" id="formPhone" class="form-control" asp-for="@Model.PhoneNumber" />
+                        <input type="number" id="formPhone" class="form-control" asp-for="@User.PhoneNumber" />
                         <label class="form-label" for="formPhone">Phone Number</label>
                     </div>
                     <div class="form-outline mb-4">
-                        <input type="text" id="formAddress" class="form-control" asp-for="@Model.Address" required />
+                        <input type="text" id="formAddress" class="form-control" asp-for="@User.Address" required />
                         <label class="form-label" for="formAddress">Address</label>
                     </div>
                     <div class="form-outline mb-4">
-                        <input type="text" id="formCity" class="form-control" asp-for="@Model.City" required />
+                        <input type="text" id="formCity" class="form-control" asp-for="@User.City" required />
                         <label class="form-label" for="formCity">City</label>
                     </div>
                     <div class="form-check form-check-inline mb-4">
-                        <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@Model.IsAdmin" />
+                        <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@User.IsAdmin" />
                         <label class="form-check-label" for="formCheckBox">IsAdmin</label>
                     </div>
                     <div class="form-check form-check-inline mb-4">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@Model.PhoneNumberConfirmed" disabled />
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@User.PhoneNumberConfirmed" disabled />
                         <label class="form-check-label" for="inlineCheckbox2">Phone Number Confirmed</label>
                     </div>
                     <div class="form-check form-check-inline mb-4">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" asp-for="@Model.EmailConfirmed" disabled />
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" asp-for="@User.EmailConfirmed" disabled />
                         <label class="form-check-label" for="inlineCheckbox3">Email Confirmed</label>
                     </div>
                 </div>
@@ -54,4 +58,62 @@
             </div>
         </form>
     </div>
+
+    <!-- card for Roles-->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Roles</h4>
+            </div>
+            <div class="card-body">
+                @if (!UserRoles.Any())
+                {
+                    <div class="mt-3">
+                        <h5>No Roles at the moment.</h5>
+                    </div>
+                }
+                else
+                {
+                    <ul>
+                        @foreach (var role in UserRoles)
+                        {
+                            <li>@role</li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserRole"
+                        data-url="@Url.Action("ManageUserRoles","Administration",new { UserId = User.Id })">Manage Roles</button>
+            </div>
+        </div>
+    </div>
+    
+    <!--card for claims-->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Claims</h4>
+            </div>
+            <div class="card-body">
+                @if (!UserClaims.Any())
+                {
+                    <h5>No Claims at this moment</h5>
+                }
+                else
+                {
+                    <ul>
+                        @foreach (var claim in UserClaims)
+                        {
+                            <li>@claim</li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary">Manage Claims</button>
+            </div>
+        </div>
+    </div>
+    
 </div>
