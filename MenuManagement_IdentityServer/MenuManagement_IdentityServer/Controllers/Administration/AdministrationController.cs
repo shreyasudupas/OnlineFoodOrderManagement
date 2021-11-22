@@ -214,5 +214,20 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
             }
             return PartialView("_ManageUserRolesPartial",result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ManageUserRoles([FromBody]List<ManageUserPost> model)
+        {
+            var result = await _userAdministration.SaveManageRoleInformation(model);
+            if(result.ErrorDescription.Count > 0 )
+            {
+                result.ErrorDescription.ForEach(err =>
+                {
+                    ModelState.AddModelError("",err);
+                });
+                
+            }
+            return PartialView("_ManageUserRolesPartial", result);
+        }
     }
 }

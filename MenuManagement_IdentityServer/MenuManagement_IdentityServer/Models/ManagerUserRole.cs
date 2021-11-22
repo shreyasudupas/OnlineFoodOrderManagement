@@ -18,6 +18,7 @@ namespace MenuManagement_IdentityServer.Models
 
     public class UserRoleSelection
     {
+        public string RoleId { get; set; }
         public string RoleName { get; set; }
         public bool IsSelected { get; set; }
     }

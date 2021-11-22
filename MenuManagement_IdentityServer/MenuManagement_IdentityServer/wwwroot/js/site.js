@@ -10,19 +10,6 @@ $(function () {
     $('button[data-toggle="ajax-modal"]').click(function (event) {
 
         var url = $(this).data('url');
-        //$.get(url).done(function (data) {
-        //    placeHolderElement.html(data);
-
-        //    //check if the element is present
-        //    if ($('.modal-body #modalDataTableId').length > 0) {
-        //        //find table under the modal body and asiign to JQuery dataTable
-        //        $('.modal-body #modalDataTableId').dataTable({
-        //            'dom': 'Rlfrtip'
-        //        });
-        //    }
-        //    placeHolderElement.find('.modal').modal('show');
-
-        //});
 
         $.ajax({
             url: url,
@@ -66,7 +53,13 @@ $(function () {
             //dynamically create object
             var obj = {};
             arrayElementList.forEach(function (value) {
-                obj[value["name"].split('.')[1]] = value["value"];
+                var name = '';
+                if (value["name"].split('.').length > 1) {
+                    name = value["name"].split('.')[1];
+                } else {
+                    name = value["name"];
+                }
+                obj[name] = value["value"];
             });
 
             //Add checkbox property in the row

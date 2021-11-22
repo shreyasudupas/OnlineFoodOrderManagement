@@ -110,7 +110,8 @@ namespace MenuManagement_IdentityServer.Service
 
                     managerUser.Role.Add(new UserRoleSelection { 
                         RoleName = role.Name,
-                        IsSelected = isRolePresent
+                        IsSelected = isRolePresent,
+                        RoleId = role.Id
                     });
                 });
 
@@ -118,6 +119,71 @@ namespace MenuManagement_IdentityServer.Service
             }
 
             return managerUser;
+        }
+
+        public async Task<ManagerUserRole> SaveManageRoleInformation(List<ManageUserPost> model)
+        {
+            ManagerUserRole managerUserRole = new ManagerUserRole();
+
+            //rebuid the View Model
+            model.ForEach(item => 
+            {
+                managerUserRole.Role.Add(new UserRoleSelection
+                {
+                    RoleName = item.RoleName,
+                    IsSelected = item.IsSelected
+                });
+            });
+
+            var UserId = model.Select(x => x.UserId).First();
+            var GetUser = await _userManager.FindByIdAsync(UserId);
+
+            if(GetUser != null)
+            {
+                //Get User in existing role
+                var UserInRole = await _userManager.GetRolesAsync(GetUser);
+
+                //check if the role is present
+                var RoleAddedName = model.Where(role=>role.IsSelected).Select(x => x.RoleName).Except(UserInRole);
+                var RoleRemovedName = UserInRole.Except(model.Where(role => role.IsSelected).Select(x => x.RoleName));
+
+                if (RoleAddedName.Any())
+                {
+                    var result = await _userManager.AddToRolesAsync(GetUser, RoleAddedName);
+                    if (result.Succeeded)
+                    {
+                        managerUserRole.status = CrudEnumStatus.success;
+                    }
+                    else
+                    {
+                        managerUserRole.status = CrudEnumStatus.failure;
+                        result.Errors.ToList().ForEach(err=> {
+                            managerUserRole.ErrorDescription.Add(err.Description);
+                        });
+                        
+                        return managerUserRole;
+                    }
+                }
+
+                if (RoleRemovedName.Any())
+                {
+                    var result = await _userManager.RemoveFromRolesAsync(GetUser, RoleRemovedName);
+                    if (result.Succeeded)
+                    {
+                        managerUserRole.status = CrudEnumStatus.success;
+                    }
+                    else
+                    {
+                        managerUserRole.status = CrudEnumStatus.failure;
+                        result.Errors.ToList().ForEach(err => {
+                            managerUserRole.ErrorDescription.Add(err.Description);
+                        });
+
+                        return managerUserRole;
+                    }
+                }
+            }
+            return managerUserRole;
         }
     }
 }
