@@ -1,9 +1,11 @@
-﻿using MenuManagement_IdentityServer.Data.Models;
+﻿using MenuManagement_IdentityServer.Data;
+using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Service
@@ -12,12 +14,15 @@ namespace MenuManagement_IdentityServer.Service
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
         public UserAdministrationManager(UserManager<ApplicationUser> userManager
-            , RoleManager<IdentityRole> roleManager)
+            , RoleManager<IdentityRole> roleManager
+            , ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
 
@@ -184,6 +189,57 @@ namespace MenuManagement_IdentityServer.Service
                 }
             }
             return managerUserRole;
+        }
+
+        public ManagerUserClaim ManageUserClaimGet(string UserId)
+        {
+            ManagerUserClaim managerUser = new ManagerUserClaim();
+
+            var DropdownValues = _context.ClaimDropDowns.Select(x=> new KeyValuePair<string,string>(x.Name,x.Value)).ToDictionary(x=>x.Key,l=>l.Value);
+
+            if(DropdownValues.Count >0)
+            {
+                managerUser.status = CrudEnumStatus.success;
+                managerUser.UserClaims = DropdownValues;
+            }
+            else
+            {
+                managerUser.ErrorDescription = "DropeDown No values";
+                managerUser.status = CrudEnumStatus.success;
+            }
+            return managerUser;
+        }
+
+        public async Task<ManagerUserClaimViewModel> ManageUserClaimPost(ManagerUserClaimViewModelPost model)
+        {
+            ManagerUserClaimViewModel resultModel = new ManagerUserClaimViewModel();
+
+            var DropdownValues = _context.ClaimDropDowns.Select(x => new KeyValuePair<string, string>(x.Name, x.Value)).ToDictionary(x => x.Key, l => l.Value);
+
+            resultModel.UserClaimsSelectOptionList = DropdownValues;
+            resultModel.UserClaimValue = model.UserClaimValue;
+
+            var GetClaimValue = DropdownValues.Where(x => x.Key == model.UserClaimsSelectOptionList).Select(claim=>claim.Value).FirstOrDefault();
+
+            //store the values in the database
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var UserClaim = new Claim(model.UserClaimValue, GetClaimValue);
+
+            var result = await _userManager.AddClaimAsync(user,UserClaim);
+            if(result.Succeeded)
+            {
+                resultModel.status = CrudEnumStatus.success;
+            }
+            else
+            {
+                resultModel.status = CrudEnumStatus.failure;
+                result.Errors.ToList().ForEach(ele=>
+                {
+                    resultModel.ErrorDescription.Add(ele.Description);
+                });
+            }
+            
+            return resultModel;
         }
     }
 }

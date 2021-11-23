@@ -229,5 +229,56 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
             }
             return PartialView("_ManageUserRolesPartial", result);
         }
+
+        [HttpGet]
+        public IActionResult ManageUserClaim(string UserId)
+        {
+            ManagerUserClaimViewModel model = new ManagerUserClaimViewModel();
+            if (!string.IsNullOrEmpty(UserId))
+            {
+                var result = _userAdministration.ManageUserClaimGet(UserId);
+
+                model.UserClaimsSelectOptionList = result.UserClaims;
+                model.UserClaimValue = "";
+                model.UserId = UserId;
+
+                if (result.status == CrudEnumStatus.failure)
+                {
+                    ModelState.AddModelError("", result.ErrorDescription);  
+
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "User is not present");
+            }
+            return PartialView("_ManageManageUserClaimPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ManageUserClaim(ManagerUserClaimViewModelPost model)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = await _userAdministration.ManageUserClaimPost(model);
+                if(result.ErrorDescription.Count > 0)
+                {
+                    result.ErrorDescription.ForEach(error=>
+                    {
+                        ModelState.AddModelError("",error);
+                    });
+                    
+                }
+                return PartialView("_ManageManageUserClaimPartial", result);
+            }
+            else
+            {
+                ManagerUserClaimViewModel Mucm = new ManagerUserClaimViewModel();
+                ModelState.AddModelError("","Error in modal");
+                return PartialView("_ManageManageUserClaimPartial", Mucm);
+            }
+
+            
+        }
     }
 }

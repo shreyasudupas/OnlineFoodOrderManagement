@@ -12,5 +12,7 @@ namespace MenuManagement_IdentityServer.Service.Interface
         public Task<EditUser> EditUserInfo(ApplicationUser user);
         Task<ManagerUserRole> GetManageRoleInformation(string UserId);
         Task<ManagerUserRole> SaveManageRoleInformation(List<ManageUserPost> model);
+        ManagerUserClaim ManageUserClaimGet(string UserId);
+        Task<ManagerUserClaimViewModel> ManageUserClaimPost(ManagerUserClaimViewModelPost model);
     }
 }

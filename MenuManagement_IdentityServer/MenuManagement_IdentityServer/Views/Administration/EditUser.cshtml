@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <input type="hidden" asp-for="@User.Id"/>
+                    <input type="hidden" asp-for="@User.Id" />
                     <div class="form-outline mb-4">
                         <input type="text" id="formUserName" class="form-control" asp-for="@User.UserName" required />
                         <label class="form-label" for="formUserName">Username</label>
@@ -84,11 +84,13 @@
             </div>
             <div class="card-footer">
                 <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserRole"
-                        data-url="@Url.Action("ManageUserRoles","Administration",new { UserId = User.Id })">Manage Roles</button>
+                        data-url="@Url.Action("ManageUserRoles","Administration",new { UserId = User.Id })">
+                    Manage Roles
+                </button>
             </div>
         </div>
     </div>
-    
+
     <!--card for claims-->
     <div class="mt-3">
         <div class="card">
@@ -111,9 +113,59 @@
                 }
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Manage Claims</button>
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserClaims"
+                        data-url="@Url.Action("ManageUserClaim","Administration",new { UserId = User.Id })">
+                    Manage User Claims
+                </button>
             </div>
         </div>
     </div>
-    
+
 </div>
+@section Scripts
+{
+    <script>
+        $(function () {
+            var placeHolderElement = $('#modal-placeholder');
+
+            placeHolderElement.on('click', '[data-save="custom-modal"]', function (event) {
+                //alert('clicked');
+                event.preventDefault();
+
+                var form = $(this).parents('.modal').find('form[id="ManageUserClaimForm"]');
+                var myform = $("form#ManageUserClaimForm")[0];
+                var actionUrl = form.attr('action');
+
+                var fd = new FormData(myform);
+
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: actionUrl,
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (data) {
+                        //replace with new body
+                        var newBody = $('.modal-body', data);
+                        placeHolderElement.find('.modal-body').replaceWith(newBody);
+
+                        // find IsValid input field and check it's value
+                        // if it's valid then hide modal window
+                        var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                        if (isValid) {
+                            placeHolderElement.find('.modal').modal('hide');
+                            //then reload the main page to get refeshed data
+                            location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        placeHolderElement.find('.modal').modal('hide');
+                    }
+                });
+            });
+        });
+    </script>
+}
