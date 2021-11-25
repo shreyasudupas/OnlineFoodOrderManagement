@@ -238,7 +238,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
             {
                 var result = _userAdministration.ManageUserClaimGet(UserId);
 
-                model.UserClaimsSelectOptionList = result.UserClaims;
+                model.SelectionUserClaims = result.UserClaims;
                 model.UserClaimValue = "";
                 model.UserId = UserId;
 
@@ -277,8 +277,47 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
                 ModelState.AddModelError("","Error in modal");
                 return PartialView("_ManageManageUserClaimPartial", Mucm);
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> DeleteUserClaim(string UserId)
+        {
+            List<DeleteUserClaimViewModel> model = new List<DeleteUserClaimViewModel>();
+            //Send this Id to Post method
+            TempData["UserId"] = UserId;
 
-            
+            var result = await _userAdministration.GetDeleteUserClaimInfo(UserId);
+
+            if(result.ErrorDescription.Count > 0)
+            {
+                result.ErrorDescription.ForEach(err=>
+                {
+                    ModelState.AddModelError("",err);
+                });
+            }
+            else
+            {
+                var UserClaimsMap = _mapper.Map<List<DeleteUserClaimViewModel>>(result.UserClaims);
+                model = UserClaimsMap;
+            }
+
+            return PartialView("_DeleteUserClaim",model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserClaim([FromBody]List<DeleteUserClaimViewModel> model)
+        {
+            var UserId = TempData["UserId"].ToString();
+            var result = await _userAdministration.DeleteUserClaimInfo(model,UserId);
+
+            if (result.status == CrudEnumStatus.failure)
+            {
+                result.ErrorDescription.ForEach(err =>
+                {
+                    ModelState.AddModelError("", err);
+                });
+            }
+
+            return PartialView("_DeleteUserClaim", model);
         }
     }
 }

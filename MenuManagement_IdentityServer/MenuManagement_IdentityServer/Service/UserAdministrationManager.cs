@@ -1,8 +1,10 @@
-﻿using MenuManagement_IdentityServer.Data;
+﻿using AutoMapper;
+using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -15,14 +17,17 @@ namespace MenuManagement_IdentityServer.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
+        private readonly IMapper mapper;
 
         public UserAdministrationManager(UserManager<ApplicationUser> userManager
             , RoleManager<IdentityRole> roleManager
-            , ApplicationDbContext context)
+            , ApplicationDbContext context
+            , IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            this.mapper = mapper;
         }
 
 
@@ -195,12 +200,27 @@ namespace MenuManagement_IdentityServer.Service
         {
             ManagerUserClaim managerUser = new ManagerUserClaim();
 
-            var DropdownValues = _context.ClaimDropDowns.Select(x=> new KeyValuePair<string,string>(x.Name,x.Value)).ToDictionary(x=>x.Key,l=>l.Value);
+            //var DropdownValues = _context.ClaimDropDowns.Select(x=> new KeyValuePair<string,string>(x.Name,x.Value)).ToDictionary(x=>x.Key,l=>l.Value);
 
-            if(DropdownValues.Count >0)
+            //check if the user has already has the similar claim
+            var User = _userManager.FindByIdAsync(UserId).GetAwaiter().GetResult();
+            var UserClaims = _userManager.GetClaimsAsync(User).GetAwaiter().GetResult();
+            var UserClaimsTypes = UserClaims.Select(x => x.Type).ToArray();
+
+            //Filter the drop down claim if it already present in db
+            //var DropdownValues = _context.ClaimDropDowns.Where(c=> !UserClaimsTypes.Contains(c.Value))
+            //    .Select(x => new KeyValuePair<string, string>(x.Name, x.Value)).ToDictionary(x => x.Key, l => l.Value);
+            var DropdownValues = _context.ClaimDropDowns.Where(c => !UserClaimsTypes.Contains(c.Value))
+                .Select(x => new ClaimModel
+                {
+                    ClaimType = x.Name,
+                    ClaimValue = x.Value
+                }).ToList();
+
+            if (DropdownValues.Count >0)
             {
                 managerUser.status = CrudEnumStatus.success;
-                managerUser.UserClaims = DropdownValues;
+                managerUser.UserClaims = new SelectList(DropdownValues, nameof(ClaimModel.ClaimType),nameof(ClaimModel.ClaimValue));
             }
             else
             {
@@ -214,16 +234,21 @@ namespace MenuManagement_IdentityServer.Service
         {
             ManagerUserClaimViewModel resultModel = new ManagerUserClaimViewModel();
 
-            var DropdownValues = _context.ClaimDropDowns.Select(x => new KeyValuePair<string, string>(x.Name, x.Value)).ToDictionary(x => x.Key, l => l.Value);
+            var DropdownValues = _context.ClaimDropDowns.Select(x => new ClaimModel
+            {
+                ClaimType = x.Name,
+                ClaimValue = x.Value
+            }).ToList();
 
-            resultModel.UserClaimsSelectOptionList = DropdownValues;
+            resultModel.SelectionUserClaims = new SelectList(DropdownValues, nameof(ClaimModel.ClaimType), nameof(ClaimModel.ClaimValue)); ;
             resultModel.UserClaimValue = model.UserClaimValue;
 
-            var GetClaimValue = DropdownValues.Where(x => x.Key == model.UserClaimsSelectOptionList).Select(claim=>claim.Value).FirstOrDefault();
+            //Here getting claim value is the actual claim type on AspNetUSerClaim table
+            var GetClaimType = DropdownValues.Where(x => x.ClaimValue == model.ClaimTypeSelected).Select(claim=>claim.ClaimValue).FirstOrDefault();
 
             //store the values in the database
             var user = await _userManager.FindByIdAsync(model.UserId);
-            var UserClaim = new Claim(model.UserClaimValue, GetClaimValue);
+            var UserClaim = new Claim(GetClaimType,model.UserClaimValue);
 
             var result = await _userManager.AddClaimAsync(user,UserClaim);
             if(result.Succeeded)
@@ -240,6 +265,78 @@ namespace MenuManagement_IdentityServer.Service
             }
             
             return resultModel;
+        }
+
+        public async Task<DeleteUserClaimGet> GetDeleteUserClaimInfo(string UserId)
+        {
+            DeleteUserClaimGet deleteUserClaimGet = new DeleteUserClaimGet();
+            deleteUserClaimGet.UserId = UserId;
+
+            var user = await _userManager.FindByIdAsync(UserId);
+
+            if(user != null)
+            {
+                //get all user claims
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                if(claims.Count > 0)
+                {
+                    //map the UserClaim List
+                    var MapUserClaim = mapper.Map<List<UserClaimList>>(claims);
+
+                    deleteUserClaimGet.UserClaims = MapUserClaim;
+
+                    deleteUserClaimGet.status = CrudEnumStatus.success;
+                }
+                else
+                {
+                    deleteUserClaimGet.ErrorDescription.Add($"User with {UserId} does not have any claims in database");
+                    deleteUserClaimGet.status = CrudEnumStatus.failure;
+                }
+                
+            }
+            else
+            {
+                deleteUserClaimGet.ErrorDescription.Add($"User with {UserId} not present in database");
+                deleteUserClaimGet.status = CrudEnumStatus.failure;
+            }
+
+            return deleteUserClaimGet;
+        }
+
+        public async Task<DeleteUserClaimGet> DeleteUserClaimInfo(List<DeleteUserClaimViewModel> model,string UserId)
+        {
+            DeleteUserClaimGet deleteUserClaimGet = new DeleteUserClaimGet();
+            deleteUserClaimGet.UserId = UserId;
+
+            if (!string.IsNullOrEmpty(UserId))
+            {
+                var user = await _userManager.FindByIdAsync(UserId);
+                if (user != null)
+                {
+                    var GetClaims = await _userManager.GetClaimsAsync(user);
+
+                    //First Remove All claims
+                    var resultClaimRemove = await _userManager.RemoveClaimsAsync(user,GetClaims);
+                    //Get all claim type which are remaining 
+                    var GetOnlyClaimType = model.Where(x=>!x.IsDeleteSelection).Select(x => x.ClaimType).ToArray();
+
+                    var RemainingClaims = GetClaims.Where(rc => GetOnlyClaimType.Contains(rc.Type));
+                    var AddRemainingClaims = await _userManager.AddClaimsAsync(user, RemainingClaims);
+                }
+                else
+                {
+                    deleteUserClaimGet.ErrorDescription.Add($"User with {UserId} does not have any claims in database");
+                    deleteUserClaimGet.status = CrudEnumStatus.failure;
+                }
+
+            }
+            else
+            {
+                deleteUserClaimGet.ErrorDescription.Add($"User with {UserId} not present in database");
+                deleteUserClaimGet.status = CrudEnumStatus.failure;
+            }
+            return deleteUserClaimGet;
         }
     }
 }

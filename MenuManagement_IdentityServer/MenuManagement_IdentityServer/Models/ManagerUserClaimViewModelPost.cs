@@ -1,9 +1,15 @@
-﻿namespace MenuManagement_IdentityServer.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MenuManagement_IdentityServer.Models
 {
     public class ManagerUserClaimViewModelPost
     {
+        [Required]
         public string UserId { get; set; }
-        public string UserClaimsSelectOptionList { get; set; }
+        //Selected Claim Item
+        [Required]
+        public string ClaimTypeSelected { get; set; }
+        [Required]
         public string UserClaimValue { get; set; }
 
     }

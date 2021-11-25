@@ -19,13 +19,11 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-outline mb-4">
                         <!--add name attribute to each html element or else serilize wont make this a object during form.serilize()-->
-                        <select name="UserClaimsSelectOptionList" class="form-select" aria-label="Claim drop down select">
-                            <option selected>Choose the Claim option</option>
-                            @foreach (var claimOption in Model.UserClaimsSelectOptionList)
-                            {
-                                <option value="@claimOption.Key">@claimOption.Key</option>
-                            }
-                        </select>
+                        
+                        @*<label asp-for="@Model.SelectedUserItem" class="control-lable"></label>*@  
+                        <select asp-for="@Model.ClaimTypeSelected" asp-items="Model.SelectionUserClaims" class="custom-select">  
+                            <option value="">Choose Claim Option</option>  
+                        </select>  
                     </div>
 
                     <div class="mb-3">

@@ -14,5 +14,7 @@ namespace MenuManagement_IdentityServer.Service.Interface
         Task<ManagerUserRole> SaveManageRoleInformation(List<ManageUserPost> model);
         ManagerUserClaim ManageUserClaimGet(string UserId);
         Task<ManagerUserClaimViewModel> ManageUserClaimPost(ManagerUserClaimViewModelPost model);
+        Task<DeleteUserClaimGet> GetDeleteUserClaimInfo(string UserId);
+        Task<DeleteUserClaimGet> DeleteUserClaimInfo(List<DeleteUserClaimViewModel> model, string UserId);
     }
 }

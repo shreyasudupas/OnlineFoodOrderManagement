@@ -8,6 +8,7 @@ namespace MenuManagement_IdentityServer.Models
         {
             ErrorDescription = new List<string>();
         }
+
         public List<string> ErrorDescription { get; set; }
         public CrudEnumStatus status { get; set; }
     }
