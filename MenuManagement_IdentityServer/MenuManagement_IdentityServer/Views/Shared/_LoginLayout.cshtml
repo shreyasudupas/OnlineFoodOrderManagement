@@ -44,50 +44,36 @@
                     </a>
 
                     <!--Adminstration Dropdown -->
-                    <a class="text-reset dropdown-toggle hidden-arrow"
-                       href="#"
-                       id="navbarDropdownAdminLink"
-                       role="button"
-                       data-mdb-toggle="dropdown"
-                       aria-expanded="false">
-                        Task
-                    </a>
-                    <ul class="dropdown-menu"
-                        aria-labelledby="navbarDropdownAdminLink">
-                        @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
-                        {
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                    {
+                        <a class="text-reset dropdown-toggle hidden-arrow"
+                           href="#"
+                           id="navbarDropdownAdminLink"
+                           role="button"
+                           data-mdb-toggle="dropdown"
+                           aria-expanded="false"
+                           style="text-decoration:none">
+                            Task
+                        </a>
+                        <ul class="dropdown-menu"
+                            aria-labelledby="navbarDropdownAdminLink">
                             <li>
                                 <a class="dropdown-item" asp-controller="Administration" asp-action="ListRoles">Create Roles</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" asp-controller="Administration" asp-action="GetUserList">List Users</a>
                             </li>
-                        }
-                    </ul>
-                    <!-- Left links -->
-                    @*<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            @if (signInManager.IsSignedIn(User) && User.IsInRole("admin"))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Administration" asp-action="ListRoles">Create Roles</a>
-                </li>
-            }
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </li>
+                        </ul>
+                    }
 
-        </ul>*@
                     <!-- Left links -->
                 </div>
                 <!-- Collapsible wrapper -->
                 <!-- Right elements -->
                 <div class="d-flex align-items-center">
                     <!-- Icon -->
-                    <a class="text-reset me-3" href="#">
-                        <i class="fas fa-shopping-cart"></i>
+                    <a class="text-reset me-3" asp-controller="HomeDashboard" asp-action="Index">
+                        <i class="fas fa-home"></i>
                     </a>
 
                     <!-- Notifications -->
@@ -136,17 +122,17 @@
                         </li>
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Logout">Logout @User.Identity.Name</a>
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Authorization" asp-action="Logout">Logout @User.Identity.Name</a>
                             </li>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Login">Login</a>
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Authorization" asp-action="Login">Login</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Register">Register</a>
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Authorization" asp-action="Register">Register</a>
                             </li>
                         }
                     </ul>

@@ -1,62 +1,71 @@
-﻿@using MenuManagement_IdentityServer.Models;
-@model EditUserGet
+﻿@model EditUserGet
 @{
     ViewData["Title"] = "Edit User";
     var User = Model.Users;
     var UserRoles = Model.Roles;
     var UserClaims = Model.Claims;
+
+    TempData["PreviousUrl"] = TempData["CurrentUrl"];
+    TempData["CurrentUrl"] = Url.Action("EditUser", "Administration", new { UserId = User.Id });
+    //var backurl = Model.ReturnUrl;
 }
 
 <div id="modal-placeholder"></div>
 <div class="mt-3">
     <div class="card">
-        <form method="post">
-            <div class="card-header">
-                <h4><b>UserId:</b> @User.Id</h4>
-            </div>
-            <div class="card-body">
-                <div class="card-text">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <input type="hidden" asp-for="@User.Id" />
-                    <div class="form-outline mb-4">
-                        <input type="text" id="formUserName" class="form-control" asp-for="@User.UserName" required />
-                        <label class="form-label" for="formUserName">Username</label>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input type="text" id="formEmail" class="form-control" asp-for="@User.Email" required />
-                        <label class="form-label" for="formEmail">Email</label>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input type="number" id="formPhone" class="form-control" asp-for="@User.PhoneNumber" />
-                        <label class="form-label" for="formPhone">Phone Number</label>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input type="text" id="formAddress" class="form-control" asp-for="@User.Address" required />
-                        <label class="form-label" for="formAddress">Address</label>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input type="text" id="formCity" class="form-control" asp-for="@User.City" required />
-                        <label class="form-label" for="formCity">City</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-4">
-                        <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@User.IsAdmin" />
-                        <label class="form-check-label" for="formCheckBox">IsAdmin</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-4">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@User.PhoneNumberConfirmed" disabled />
-                        <label class="form-check-label" for="inlineCheckbox2">Phone Number Confirmed</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-4">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" asp-for="@User.EmailConfirmed" disabled />
-                        <label class="form-check-label" for="inlineCheckbox3">Email Confirmed</label>
-                    </div>
+        <!--<form>
+        <div class="card-header">
+            <h4><b>UserId:</b> @User.Id</h4>
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="@User.Id" />
+                <div class="form-outline mb-4">
+                    <input type="text" id="formUserName" class="form-control" asp-for="@User.UserName" required />
+                    <label class="form-label" for="formUserName">Username</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="text" id="formEmail" class="form-control" asp-for="@User.Email" required />
+                    <label class="form-label" for="formEmail">Email</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="number" id="formPhone" class="form-control" asp-for="@User.PhoneNumber" />
+                    <label class="form-label" for="formPhone">Phone Number</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="text" id="formAddress" class="form-control" asp-for="@User.Address" required />
+                    <label class="form-label" for="formAddress">Address</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="text" id="formCity" class="form-control" asp-for="@User.City" required />
+                    <label class="form-label" for="formCity">City</label>
+                </div>
+                <div class="form-check form-check-inline mb-4">
+                    <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@User.IsAdmin" />
+                    <label class="form-check-label" for="formCheckBox">IsAdmin</label>
+                </div>
+                <div class="form-check form-check-inline mb-4">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@User.PhoneNumberConfirmed" disabled />
+                    <label class="form-check-label" for="inlineCheckbox2">Phone Number Confirmed</label>
+                </div>
+                <div class="form-check form-check-inline mb-4">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" asp-for="@User.EmailConfirmed" disabled />
+                    <label class="form-check-label" for="inlineCheckbox3">Email Confirmed</label>
                 </div>
             </div>
-            <div class="card-footer">
-                <button class="btn btn-success" type="submit">Save</button>
-                <a class="btn btn-secondary" asp-controller="Administration" asp-action="GetUserList">Cancel</a>
-            </div>
-        </form>
+        </div>
+        <div class="card-footer">
+            <input type="submit" name="save" value="Save" formaction="@Url.Action("EditUser")" formmethod="post" />-->
+        @*<a class="btn btn-secondary" asp-controller="Administration" asp-action="GetUserList">Cancel</a>*@
+        <!--<a class="btn btn-secondary" id="cancel" value="Cancel"></a>
+
+        </div>
+    </form>-->
+        <div class="card-header">
+            <h4><b>UserId:</b> @User.Id</h4>
+        </div>
+        @await Html.PartialAsync("_UserInformationEditPartial.cshtml",User)
     </div>
 
     <!-- card for Roles-->
@@ -83,10 +92,13 @@
                 }
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserRole"
+                @if(User.IsAdmin)
+                {
+                    <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserRole"
                         data-url="@Url.Action("ManageUserRoles","Administration",new { UserId = User.Id })">
-                    Manage Roles
-                </button>
+                        Manage Roles
+                    </button>
+                }
             </div>
         </div>
     </div>
@@ -113,14 +125,17 @@
                 }
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserClaims"
-                        data-url="@Url.Action("ManageUserClaim","Administration",new { UserId = User.Id })">
-                    Manage User Claims
-                </button>
-                <button class="btn btn-danger" data-toggle="ajax-modal" data-target="#deleteUserClaims"
-                        data-url="@Url.Action("DeleteUserClaim","Administration",new { UserId = User.Id })">
-                    Delete User Claims
-                </button>
+                @if (User.IsAdmin)
+                {
+                    <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserClaims"
+                            data-url="@Url.Action("ManageUserClaim","Administration",new { UserId = User.Id })">
+                        Manage User Claims
+                    </button>
+                    <button class="btn btn-danger" data-toggle="ajax-modal" data-target="#deleteUserClaims"
+                            data-url="@Url.Action("DeleteUserClaim","Administration",new { UserId = User.Id })">
+                        Delete User Claims
+                    </button>
+                }
             </div>
         </div>
     </div>
@@ -181,6 +196,11 @@
                     }
                 });
             });
+
+            //$("#save").click(function () {
+            //    alert('save clicked');
+            //});
+
         });
     </script>
 }

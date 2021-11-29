@@ -31,9 +31,11 @@ namespace MenuManagement_IdentityServer.Service
         }
 
 
-        public async Task<EditUser> EditUserInfo(ApplicationUser user)
+        public async Task<EditUserGet> EditUserInfo(ApplicationUser user)
         {
-            EditUser editUser = new EditUser();
+            //EditUser editUser = new EditUser();
+            EditUserGet editUser = new EditUserGet();
+
             var GetUser = await _userManager.FindByIdAsync(user.Id);
 
             if (GetUser == null)
@@ -49,12 +51,19 @@ namespace MenuManagement_IdentityServer.Service
                 GetUser.City = user.City;
                 GetUser.IsAdmin = user.IsAdmin;
 
-                editUser.User = GetUser;
+                editUser.Users = GetUser;
+
+                //Get Roles and claims as well
+                var roles = await _userManager.GetRolesAsync(GetUser);
+                var claims = await _userManager.GetClaimsAsync(GetUser);
+                editUser.Roles = roles.ToList();
+                editUser.Claims = claims.Select(x => x.Value).ToList();
 
                 var result = await _userManager.UpdateAsync(GetUser);
                 if (result.Succeeded)
                 {
-                    editUser.User = user;
+                    //editUser.User = user;
+                    //return editUser;
                     return editUser;
                 }
 
@@ -68,7 +77,7 @@ namespace MenuManagement_IdentityServer.Service
 
         public IEnumerable<ApplicationUser> GetAllApplicationUsers()
         {
-            var Users = _userManager.Users;
+            var Users = _userManager.Users.ToList();
             return Users;
         }
 
@@ -79,7 +88,7 @@ namespace MenuManagement_IdentityServer.Service
             var User = await _userManager.FindByIdAsync(Id);
             if(User == null)
             {
-                editUser.ErrorDescription = "User not found in database";
+                editUser.ErrorDescription.Add("User not found in database");
             }
             else
             {
@@ -87,7 +96,7 @@ namespace MenuManagement_IdentityServer.Service
                 var claims = await _userManager.GetClaimsAsync(User);
 
                 editUser.Claims = claims.Select(x=>x.Value).ToList();
-                editUser.Roles = roles;
+                editUser.Roles = roles.ToList();
 
                 editUser.Users = User;
             }
@@ -337,6 +346,44 @@ namespace MenuManagement_IdentityServer.Service
                 deleteUserClaimGet.status = CrudEnumStatus.failure;
             }
             return deleteUserClaimGet;
+        }
+
+        public async Task<UserDashboard> GetUserDashBoardInformation(string UserId)
+        {
+            UserDashboard userDashboard = new UserDashboard();
+            //get User
+            var User = await _userManager.FindByIdAsync(UserId);
+
+            if(User != null)
+            {
+                userDashboard.User = User;
+
+                //get all Roles of User
+                var Roles = await _userManager.GetRolesAsync(User);
+                if(Roles != null)
+                {
+                    userDashboard.Roles = Roles.ToList();
+                }
+
+                //Get All Claims
+                var GetClaims = await _userManager.GetClaimsAsync(User);
+                if(GetClaims != null)
+                {
+                    userDashboard.Claims = GetClaims.Select(claim => new UserClaim
+                    {
+                        ClaimType = claim.Type,
+                        ClaimValue = claim.Value
+                    }).ToList();
+                }
+                
+            }
+            else
+            {
+                userDashboard.ErrorDescription.Add($"No User with this Username: {UserId} is present in the database");
+                userDashboard.status = CrudEnumStatus.failure;
+            }
+
+            return userDashboard;
         }
     }
 }

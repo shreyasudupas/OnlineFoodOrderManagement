@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MenuManagement_IdentityServer.Models
 {
-    public class EditUserGet
+    public class EditUserGet : BaseStatusModel
     {
         public EditUserGet()
         {
@@ -11,8 +11,7 @@ namespace MenuManagement_IdentityServer.Models
             Claims = new List<string>();
         }
         public ApplicationUser Users { get; set; }
-        public IList<string> Roles { get; set; }
+        public List<string> Roles { get; set; }
         public List<string> Claims { get; set; }
-        public string ErrorDescription { get; set; }
     }
 }

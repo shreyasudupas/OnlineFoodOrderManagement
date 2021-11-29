@@ -1,26 +1,157 @@
-﻿@{
+﻿@model UserDashboard
+@{
     Layout = "_LoginLayout";
 
     var user = User?.Identity.Name;
+
     TempData["PreviousUrl"] = Url.Action("Login","Authorization");
     TempData["CurrentUrl"] = Url.Action("Index", "HomeDashboard");
-
     ViewData["Title"] = "Dashboard";
+    
 }
 
 <div class="welcome-message">
-    <div class="card mt-3">
-        <div class="card-title">
-            <h4>Welcome back @user </h4>
-        </div>
-        <div class="card-body">
-            <div class="form-outline">
-                <input type="text"  class="form-control" />
-                <label class="form-label" for="formControlDefault">Form control default</label>
+    <div class="mt-4">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <h2>User Dashboard</h2>
+        <div class="d-grid gap-3">
+            <div class="p-2 bg-light border">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <label>User:</label>
+                                    <label>@Model.User.Id</label>
+                                </h5>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.jpg"
+                                         alt="..."
+                                         class="img-fluid rounded-start" />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            <div class="grid">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Username</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>@Model.User.UserName</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Email</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>@Model.User.Email</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Phone number</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>@Model.User.PhoneNumber</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Username</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>@Model.User.UserName</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Address</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>@Model.User.Address</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>City</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>@Model.User.City</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-primary" asp-controller="Administration" asp-action="EditUser" asp-route-UserId="@Model.User.Id">Edit Information</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="p-2 bg-light border">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Roles</h5>
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (var i = 0; i < Model.Roles.Count; i++)
+                                        {
+                                            <tr>
+                                                <td><label>@(i+1)</label></td>
+                                                <td><label>@Model.Roles[i]</label></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Claims</h5>
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (var i = 0; i < Model.Claims.Count; i++)
+                                        {
+                                        <tr>
+                                            <td><label>@(i+1)</label></td>
+                                            <td><label>@Model.Claims[i].ClaimType</label></td>
+                                            <td><label>@Model.Claims[i].ClaimValue</label></td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-light border">Grid item 3</div>
         </div>
     </div>
-    
-
-    
 </div>

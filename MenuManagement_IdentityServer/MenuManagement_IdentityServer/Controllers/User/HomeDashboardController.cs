@@ -1,13 +1,7 @@
 ﻿using IdentityServer4.Extensions;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Controllers.User
@@ -15,24 +9,27 @@ namespace MenuManagement_IdentityServer.Controllers.User
     [Authorize]
     public class HomeDashboardController : Controller
     {
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _client;
-        private readonly IResourceStore _resources;
-
-        public HomeDashboardController(IIdentityServerInteractionService interaction, IClientStore client, IResourceStore resources)
+        private readonly IUserAdministrationManager userAdministration;
+        public HomeDashboardController(IUserAdministrationManager userAdministration)
         {
-            _interaction = interaction;
-            _client = client;
-            _resources = resources;
+            this.userAdministration = userAdministration;
         }
 
         public async Task<IActionResult> Index()
         {
-            var sub = User.GetSubjectId();
-           
-            
+            var UserId = User.GetSubjectId();
 
-            return View();
+            var result = await userAdministration.GetUserDashBoardInformation(UserId);
+
+            if(result.status == CrudEnumStatus.failure)
+            {
+                result.ErrorDescription.ForEach(err =>
+                {
+                    ModelState.AddModelError("", err);
+                });
+            }
+            
+            return View(result);
         }
     }
 }

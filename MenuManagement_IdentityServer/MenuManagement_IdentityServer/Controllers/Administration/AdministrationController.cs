@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace MenuManagement_IdentityServer.Controllers.Administration
 {
     //[Authorize]
-    [Authorize(Roles = "admin")]
     public class AdministrationController : Controller
     {
         private readonly IUserAdministrationManager _userAdministration;
@@ -28,6 +27,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult ListRoles()
         {
             var result = _userRoleManager.ListAllRoles();
@@ -35,14 +35,14 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpGet]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public IActionResult AddRole()
         {
             return View(new AddRoleViewModel());
         }
 
         [HttpPost]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddRole(AddRoleViewModel model)
         {
             if(ModelState.IsValid)
@@ -63,6 +63,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> EditRole(string RoleId)
         {
             var result = await _userRoleManager.GetUserByNameRoleInformatation(RoleId);
@@ -82,6 +83,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var result = await _userRoleManager.EditRole(model);
@@ -107,6 +109,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddUserRole(string RoleId)
         {
             TempData["RoleId"] = RoleId;
@@ -125,6 +128,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddUserRole([FromBody]List<AddUserRoleModel> models)
         {
             //var sample  = new List<AddUserRoleModel>();
@@ -146,23 +150,29 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
          }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult GetUserList()
         {
             var result = _userAdministration.GetAllApplicationUsers();
             return View("UserList",result);
         }
         [HttpGet]
+        [Authorize(Roles = "admin,appUser")]
         public async Task<IActionResult> EditUser(string UserId)
         {
             var result = await _userAdministration.GetApplicationUserInfo(UserId);
 
-            if(result.ErrorDescription == null)
+            if (result.ErrorDescription.Count == 0)
             {
                 return View(result);
             }
             else
             {
-                ModelState.AddModelError("", result.ErrorDescription);
+                result.ErrorDescription.ForEach(err =>
+                {
+                    ModelState.AddModelError("", err);
+                });
+                
                 return View("Not Found");
             }
 
@@ -170,29 +180,42 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUser(ApplicationUser model)
+        [Authorize(Roles = "admin,appUser")]
+        public async Task<IActionResult> EditUser(ApplicationUser model,string save,string cancel)
         {
+            EditUserGet editUserGetViewModel = new EditUserGet();
+            editUserGetViewModel.Users = model;
+
+            if(!string.IsNullOrEmpty(cancel))
+            {
+                var previosPageUrl = TempData.Peek("PreviousUrl").ToString();
+                return Redirect(Url.Content(previosPageUrl));
+
+            }
             if(ModelState.IsValid)
             {
-
-                var result = await _userAdministration.EditUserInfo(model);
-
-                if (result.ErrorDescription.Count > 0)
+                if(!string.IsNullOrEmpty(save))
                 {
-                    result.ErrorDescription.ForEach(element =>
+                    editUserGetViewModel = await _userAdministration.EditUserInfo(model);
+
+                    if (editUserGetViewModel.ErrorDescription.Count > 0)
                     {
-                        ModelState.AddModelError("", element);
-                    });
+                        editUserGetViewModel.ErrorDescription.ForEach(element =>
+                        {
+                            ModelState.AddModelError("", element);
+                        });
+                    }
                 }
             }
             else
             {
                 ModelState.AddModelError("", "Error in Form Details Please correct it and resubmit the form");
             }
-            return View(model);
+            return View(editUserGetViewModel);
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ManageUserRoles(string UserId)
         {
             ManagerUserRole result = new ManagerUserRole();
@@ -216,6 +239,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ManageUserRoles([FromBody]List<ManageUserPost> model)
         {
             var result = await _userAdministration.SaveManageRoleInformation(model);
@@ -231,6 +255,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult ManageUserClaim(string UserId)
         {
             ManagerUserClaimViewModel model = new ManagerUserClaimViewModel();
@@ -256,6 +281,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ManageUserClaim(ManagerUserClaimViewModelPost model)
         {
             if(ModelState.IsValid)
@@ -278,7 +304,9 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
                 return PartialView("_ManageManageUserClaimPartial", Mucm);
             }
         }
+
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUserClaim(string UserId)
         {
             List<DeleteUserClaimViewModel> model = new List<DeleteUserClaimViewModel>();
@@ -304,6 +332,7 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUserClaim([FromBody]List<DeleteUserClaimViewModel> model)
         {
             var UserId = TempData["UserId"].ToString();
@@ -319,5 +348,6 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
 
             return PartialView("_DeleteUserClaim", model);
         }
+        
     }
 }
