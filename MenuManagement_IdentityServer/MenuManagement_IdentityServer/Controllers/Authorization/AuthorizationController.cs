@@ -45,6 +45,10 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
 
                 if (result.Succeeded)
                 {
+                    var GetUser = await _userManager.FindByNameAsync(vm.Username);
+
+                    await  _signInManger.SignInAsync(GetUser, vm.RememberMe);
+
                     if (vm.ReturnUrl == null)
                     {
                         //go to User Dashboard of IDS server
@@ -180,10 +184,17 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
             return vm;
         }
 
-        public IActionResult AccessDenied(string returnUrl)
+        public IActionResult AccessDenied(string ReturnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrl = ReturnUrl;
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult RedirectLink(string ReturnUrl)
+        {
+            var SplitUrl = ReturnUrl.Split('/');
+            return RedirectToAction(SplitUrl[4],SplitUrl[3]);
         }
     }
 }

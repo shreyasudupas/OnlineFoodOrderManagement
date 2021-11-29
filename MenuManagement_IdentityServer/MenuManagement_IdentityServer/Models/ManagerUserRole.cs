@@ -2,7 +2,7 @@
 
 namespace MenuManagement_IdentityServer.Models
 {
-    public class ManagerUserRole
+    public class ManagerUserRole : BaseStatusModel
     {
         public ManagerUserRole()
         {
@@ -11,9 +11,6 @@ namespace MenuManagement_IdentityServer.Models
         }
         public string UserId { get; set; }
         public List<UserRoleSelection> Role { get; set; }
-        public CrudEnumStatus status { get; set; }
-
-        public List<string> ErrorDescription { get; set; }
     }
 
     public class UserRoleSelection
