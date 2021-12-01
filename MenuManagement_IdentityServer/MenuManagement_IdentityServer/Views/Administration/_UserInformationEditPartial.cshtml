@@ -1,5 +1,7 @@
 ﻿@using MenuManagement_IdentityServer.Data.Models;
+@using Microsoft.AspNetCore.Identity;
 @model ApplicationUser
+
 
 <form asp-controller="Administration" asp-action="EditUser" method="post">
     <div class="card-body">
@@ -27,14 +29,14 @@
                 <label class="form-label" for="formCity">City</label>
             </div>
             <div class="form-check form-check-inline mb-4">
-                @if (Model.IsAdmin)
+                @if (User.IsInRole("admin"))
                 {
                     <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@Model.IsAdmin" />
                     <label class="form-check-label" for="formCheckBox">IsAdmin</label>
                 }
                 else
                 {
-                    <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@Model.IsAdmin" readonly/>
+                    <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@Model.IsAdmin" disabled />
                     <label class="form-check-label" for="formCheckBox">IsAdmin</label>
                 }
 
