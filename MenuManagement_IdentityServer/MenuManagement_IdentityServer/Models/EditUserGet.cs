@@ -10,7 +10,8 @@ namespace MenuManagement_IdentityServer.Models
             Roles = new List<string>();
             Claims = new List<string>();
         }
-        public ApplicationUser Users { get; set; }
+        //public ApplicationUser Users { get; set; }
+        public UserInfomationModel Users { get; set; }
         public List<string> Roles { get; set; }
         public List<string> Claims { get; set; }
     }

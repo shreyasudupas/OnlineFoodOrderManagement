@@ -3,6 +3,7 @@ using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -181,10 +182,10 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
 
         [HttpPost]
         [Authorize(Roles = "admin,appUser")]
-        public async Task<IActionResult> EditUser(ApplicationUser model,string save,string cancel)
+        public async Task<IActionResult> EditUser(UserInfomationModel model,string save,string cancel)
         {
             EditUserGet editUserGetViewModel = new EditUserGet();
-            editUserGetViewModel.Users = model;
+            //editUserGetViewModel.Users = model;
 
             if(!string.IsNullOrEmpty(cancel))
             {
@@ -348,6 +349,17 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
 
             return PartialView("_DeleteUserClaim", model);
         }
-        
+
+        //[HttpPost]
+        //public async Task<IActionResult> Upload(IFormFile file)
+        //{
+        //    //using var image = Image.Load(file.OpenReadStream());
+        //    //image.Mutate(x => x.Resize(256, 256));
+        //    //image.Save("...");
+        //    var userId = TempData["UserId"].ToString();
+        //    //var response = await _userAdministration.ImageUpload(file,userId);
+        //    return RedirectToAction("EditUser",new { UserId = userId });
+        //}
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using MenuManagement_IdentityServer.Configurations;
+﻿using IdentityServer4.EntityFramework.DbContexts;
+using MenuManagement_IdentityServer.Configurations;
 using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +23,7 @@ namespace MenuManagement_IdentityServer.Installers
                     sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly));
             });
 
+
             services.AddIdentity<ApplicationUser, IdentityRole>(config=>
             {
                 config.Password.RequiredLength = 8;
@@ -41,21 +43,21 @@ namespace MenuManagement_IdentityServer.Installers
 
             services.AddIdentityServer()
                     .AddAspNetIdentity<ApplicationUser>()
-                    .AddInMemoryClients(IdentityServer_Config.GetClients())
-                    .AddInMemoryIdentityResources(IdentityServer_Config.GetIdentityResources())
-                    .AddInMemoryApiResources(IdentityServer_Config.GetApiResources())
-                    .AddInMemoryApiScopes(IdentityServer_Config.GetApiScopes())
+                    //.AddInMemoryClients(IdentityServer_Config.GetClients())
+                    //.AddInMemoryIdentityResources(IdentityServer_Config.GetIdentityResources())
+                    //.AddInMemoryApiResources(IdentityServer_Config.GetApiResources())
+                    //.AddInMemoryApiScopes(IdentityServer_Config.GetApiScopes())
                     //.AddDeveloperSigningCredential()
-                    //.AddConfigurationStore(opt =>
-                    //{
-                    //    opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
-                    //        sql => sql.MigrationsAssembly(migrationAssembly));
-                    //})
-                    //.AddOperationalStore(opt =>
-                    //{
-                    //    opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
-                    //        sql => sql.MigrationsAssembly(migrationAssembly));
-                    //})
+                    .AddConfigurationStore(opt =>
+                    {
+                        opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
+                            sql => sql.MigrationsAssembly(migrationAssembly));
+                    })
+                    .AddOperationalStore(opt =>
+                    {
+                        opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
+                            sql => sql.MigrationsAssembly(migrationAssembly));
+                    })
                     //.AddTestUsers(IdentityServer_Config.GetTestUsers())
                     ;
                     

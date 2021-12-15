@@ -21,11 +21,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Helper\" />
     <Folder Include="wwwroot\datatable\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

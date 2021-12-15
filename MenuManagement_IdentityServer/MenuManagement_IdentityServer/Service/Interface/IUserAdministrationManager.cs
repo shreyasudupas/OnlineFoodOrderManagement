@@ -1,5 +1,6 @@
 ﻿using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace MenuManagement_IdentityServer.Service.Interface
     {
         public IEnumerable<ApplicationUser> GetAllApplicationUsers();
         public Task<EditUserGet> GetApplicationUserInfo(string Id);
-        public Task<EditUserGet> EditUserInfo(ApplicationUser user);
+        public Task<EditUserGet> EditUserInfo(UserInfomationModel user);
         Task<ManagerUserRole> GetManageRoleInformation(string UserId);
         Task<ManagerUserRole> SaveManageRoleInformation(List<ManageUserPost> model);
         ManagerUserClaim ManageUserClaimGet(string UserId);

@@ -3,9 +3,15 @@ using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,23 +24,27 @@ namespace MenuManagement_IdentityServer.Service
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
         private readonly IMapper mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public UserAdministrationManager(UserManager<ApplicationUser> userManager
             , RoleManager<IdentityRole> roleManager
             , ApplicationDbContext context
-            , IMapper mapper)
+            , IMapper mapper,
+            IWebHostEnvironment hostingEnvironment)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             this.mapper = mapper;
+            _webHostEnvironment = hostingEnvironment;
         }
 
 
-        public async Task<EditUserGet> EditUserInfo(ApplicationUser user)
+        public async Task<EditUserGet> EditUserInfo(UserInfomationModel user)
         {
             //EditUser editUser = new EditUser();
             EditUserGet editUser = new EditUserGet();
+            string ImagePath = null;
 
             var GetUser = await _userManager.FindByIdAsync(user.Id);
 
@@ -51,7 +61,11 @@ namespace MenuManagement_IdentityServer.Service
                 GetUser.City = user.City;
                 GetUser.IsAdmin = user.IsAdmin;
 
-                editUser.Users = GetUser;
+                //Image upload the image path is got by ImagePath output variable
+                ImageUpload(user.Photo, out ImagePath);
+                GetUser.ImagePath = ImagePath;
+
+                editUser.Users = mapper.Map<UserInfomationModel>(GetUser);
 
                 //Get Roles and claims as well
                 var roles = await _userManager.GetRolesAsync(GetUser);
@@ -98,7 +112,7 @@ namespace MenuManagement_IdentityServer.Service
                 editUser.Claims = claims.Select(x=>x.Value).ToList();
                 editUser.Roles = roles.ToList();
 
-                editUser.Users = User;
+                editUser.Users = mapper.Map<UserInfomationModel>(User);
             }
             return editUser;
         }
@@ -384,6 +398,51 @@ namespace MenuManagement_IdentityServer.Service
             }
 
             return userDashboard;
+        }
+
+        public void ImageUpload(IFormFile uploadFile,out string filePath)
+        {
+            string uniqueFileName = null;
+            if (uploadFile != null)
+            {
+                string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadFile.FileName;
+
+                string uploadFolderPath = Path.Combine(uploadFolder, uniqueFileName);
+
+                //Resize the image
+                using(var image = Image.Load(uploadFile.OpenReadStream()))
+                {
+                    string newSize = Resize(image, 248, 142);
+                    string[] aSize = newSize.Split(',');
+                    image.Mutate(h=>h.Resize(Convert.ToInt32(aSize[1]),Convert.ToInt32(aSize[0])));
+                    image.Save(uploadFolderPath);
+                }
+
+                uploadFile.CopyTo(new FileStream(uploadFolderPath, FileMode.Create));
+                filePath = uniqueFileName;
+            }
+            else
+            {
+                filePath = string.Empty;
+            }
+        }
+
+        public string Resize(Image image,int maxWidth,int maxHeight)
+        {
+            if(image.Width > maxWidth || image.Height > maxHeight)
+            {
+                double widthRatio = (double)image.Width / (double)maxWidth;
+                double heightRatio = (double)image.Height / (double)maxHeight;
+                double ratio = Math.Max(widthRatio, heightRatio);
+                int newWidth = (int)(image.Width / ratio);
+                int newHeight = (int)(image.Height / ratio);
+                return newHeight.ToString() + "," + newWidth.ToString();
+            }
+            else
+            {
+                return image.Height.ToString() + "," + image.Width.ToString();
+            }
         }
     }
 }
