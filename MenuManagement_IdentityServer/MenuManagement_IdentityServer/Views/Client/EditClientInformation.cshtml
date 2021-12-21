@@ -3,20 +3,22 @@
     ViewData["Title"] = "ClientEdit";
     var Id = "sample";
     TempData["PreviousUrl"] = TempData["CurrentUrl"];
-    TempData["CurrentUrl"] = Url.Action("EditClientInformation", "Client",new { ClientId = Id });
+    TempData["CurrentUrl"] = Url.Action("EditClientInformation", "Client", new { ClientId = Id });
 }
 <h2>Client Information</h2>
 
-<from>
+<div id="modal-placeholder"></div>
+<form id="clientForm" enctype="multipart/form-data" asp-controller="Client" asp-action="EditClientInformation" method="post">
     <div class="card">
         <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-outline mb-4">
                 <input type="text" id="formClientId" class="form-control" asp-for="@Model.ClientId" />
                 <label class="form-label" for="formClientId">Client Id</label>
             </div>
             <div class="form-outline mb-4">
                 <input type="text" id="formClientName" class="form-control" asp-for="@Model.ClientName" />
-                <label class="form-label" for="formClientName">Client Id</label>
+                <label class="form-label" for="formClientName">Client Name</label>
             </div>
             <div class="form-outline mb-4">
                 <input type="text" id="formDescription" class="form-control" asp-for="@Model.Description" />
@@ -36,8 +38,8 @@
                 <label class="form-label" for="formControlDisabled">@Model.CreatedDate</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" asp-for="@Model.RequireClientSecret" />
-                <label class="form-check-label" for="inlineCheckbox1">Require Client Secret</label>
+                <input class="form-check-input" type="checkbox" id="RequireClientSecretId" asp-for="@Model.RequireClientSecret" />
+                <label class="form-check-label" for="RequireClientSecretId">Require Client Secret</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@Model.RequireConsent" />
@@ -45,8 +47,126 @@
             </div>
         </div>
         <div class="card-footer">
-            <a class="btn btn-primary">Save</a>
-            <a class="btn btn-secondary" asp-action="GetAllClients">Cancel</a>
+            <input class="btn btn-success" type="submit" name="save" value="Save" />
+            <input class="btn btn-secondary" type="submit" name="cancel" value="Cancel" />
         </div>
     </div>
-</from>
+</form>
+
+<div id="partialClientSecret">
+    @{
+        Html.RenderPartial("_ClientSecretPartial");
+    }
+</div>
+
+<div class="row mt-3">
+    <!-- List of Redirect urls-->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>List of Redirect Urls</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Urls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(var i = 0;i< Model.RedirectUrls.Count;i++)
+                        {
+                            <tr>
+                                <td>@(i+1)</td>
+                                <td>@Model.RedirectUrls[i]</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Allowed Cors origin-->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Allowed CORS Origin</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Urls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.AllowedCorsOrigins.Count; i++)
+                        {
+                            <tr>
+                                <td>@(i+1)</td>
+                                <td>@Model.AllowedCorsOrigins[i]</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--PostLogout Redirect Urls-->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Post Redirect Urls</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Urls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.PostRedirectUrls.Count; i++)
+                        {
+                            <tr>
+                                <td>@(i+1)</td>
+                                <td>@Model.PostRedirectUrls[i]</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+<script>
+    $(function(){
+
+        if ($('#RequireClientSecretId:checkbox:checked').length > 1) {
+            //alert('checked');
+        } else {
+            //alert('Not checked');
+            //hide 
+            $('#partialClientSecret').hide();
+        }
+
+        $('#RequireClientSecretId').on('click', function () {
+            //alert("selected");
+            if ($('#RequireClientSecretId:checkbox:checked').length >= 1) {
+                $('#partialClientSecret').show();
+            } else {
+                //alert('Not checked');
+                //hide 
+                $('#partialClientSecret').hide();
+            }
+        });
+    });
+</script>
+}

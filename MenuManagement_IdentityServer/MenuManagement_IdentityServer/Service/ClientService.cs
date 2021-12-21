@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Entities;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -54,25 +55,109 @@ namespace MenuManagement_IdentityServer.Service
         {
             ClientViewModel result = new ClientViewModel();
 
-            var Client = await ClientDbContext.Clients.Where(c => c.ClientId == ClientId).FirstOrDefaultAsync();
-            if(Client != null)
+            if (ClientId != null)
             {
-                result.status = CrudEnumStatus.success;
+                var GetClientId = await ClientDbContext.Clients.Where(c => c.ClientId == ClientId).Select(x => x.Id).FirstOrDefaultAsync();
+                var Client = await ClientDbContext.Clients
+                                    .Include(re => re.RedirectUris)
+                                    .Include(pos => pos.PostLogoutRedirectUris)
+                                    .Include(ac => ac.AllowedCorsOrigins)
+                                    .Where(c => c.Id == GetClientId).FirstOrDefaultAsync();
 
-                result.ClientId = Client.ClientId;
-                result.AccessTokenLifetime = Client.AccessTokenLifetime;
-                result.Description = Client.Description;
-                result.ClientName = Client.ClientName;
-                result.RequireClientSecret = Client.RequireClientSecret;
-                result.RequireConsent = Client.RequireConsent;
-                result.CreatedDate = Client.Created;
+                if (Client != null)
+                {
+                    result.status = CrudEnumStatus.success;
+
+                    result.ClientId = Client.ClientId;
+                    result.AccessTokenLifetime = Client.AccessTokenLifetime;
+                    result.Description = Client.Description;
+                    result.ClientName = Client.ClientName;
+                    result.RequireClientSecret = Client.RequireClientSecret;
+                    result.RequireConsent = Client.RequireConsent;
+                    result.CreatedDate = Client.Created;
+
+                    if (Client.RedirectUris != null)
+                    {
+                        foreach (var redirect in Client.RedirectUris)
+                        {
+                            result.RedirectUrls.Add(redirect.RedirectUri);
+                        }
+                    }
+
+                    if (Client.PostLogoutRedirectUris != null)
+                    {
+                        foreach (var postRedirect in Client.PostLogoutRedirectUris)
+                        {
+                            result.PostRedirectUrls.Add(postRedirect.PostLogoutRedirectUri);
+                        }
+                    }
+
+                    if (Client.AllowedCorsOrigins != null)
+                    {
+                        foreach (var allowedOrigin in Client.AllowedCorsOrigins)
+                        {
+                            result.AllowedCorsOrigins.Add(allowedOrigin.Origin);
+                        }
+                    }
+
+                }
+                else
+                {
+                    result.status = CrudEnumStatus.failure;
+                    result.ErrorDescription.Add("Client not present");
+                }
             }
-            else
-            {
-                result.status = CrudEnumStatus.failure;
-                result.ErrorDescription.Add("Client not present");
-            }
+            
             return result;
+        }
+
+        public async Task<ClientViewModel> SaveClientInformation(ClientViewModel model)
+        {
+            //remove previous errors
+            model.ErrorDescription = new List<string>();
+
+            try
+            {
+                var GetClient = await ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).FirstOrDefaultAsync();
+                if (GetClient != null)
+                {
+                    GetClient.ClientId = model.ClientId;
+                    GetClient.RequireClientSecret = model.RequireClientSecret;
+                    GetClient.ClientName = model.ClientName;
+                    GetClient.Description = model.Description;
+                    GetClient.RequireConsent = model.RequireConsent;
+                    GetClient.AccessTokenLifetime = model.AccessTokenLifetime;
+
+                    
+                    model.status = CrudEnumStatus.success;
+
+                }
+                else
+                {
+                    Client newClient = new Client
+                    {
+                        ClientId = model.ClientId,
+                        RequireClientSecret = model.RequireClientSecret,
+                        ClientName = model.ClientName,
+                        Description = model.Description,
+                        RequireConsent = model.RequireConsent,
+                        AccessTokenLifetime = model.AccessTokenLifetime,
+                        Created = DateTime.Now
+                    };
+
+                    await ClientDbContext.Clients.AddAsync(newClient);
+
+                    model.status = CrudEnumStatus.success;
+                }
+
+                await ClientDbContext.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                model.status = CrudEnumStatus.failure;
+                model.ErrorDescription.Add(ex.Message);
+            }
+            return model;
         }
     }
 }

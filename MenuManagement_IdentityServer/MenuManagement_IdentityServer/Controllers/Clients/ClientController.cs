@@ -57,5 +57,43 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
             }
             return View(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditClientInformation(ClientViewModel model,string save,string cancel)
+        {
+            logger.LogInformation("EditClientInformation all Client called");
+            //If button clicked is cancel
+            if(cancel != null)
+            {
+                logger.LogInformation("Redirect to All client page");
+                return RedirectToAction("GetAllClients");
+            }
+            if (ModelState.IsValid)
+            {
+                var result = await _clientService.SaveClientInformation(model);
+                if (result.status != CrudEnumStatus.success)
+                {
+                    result.ErrorDescription.ForEach(error =>
+                    {
+                        ModelState.AddModelError("", error);
+                    });
+
+                }
+                logger.LogInformation("EditClientInformation all Client ended");
+                return View(result);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Model error");
+                logger.LogInformation("EditClientInformation all Client ended");
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult ManageClientSecret()
+        {
+            return PartialView("_ManageClientSecretPartial");
+        }
     }
 }

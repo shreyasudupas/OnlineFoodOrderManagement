@@ -7,5 +7,6 @@ namespace MenuManagement_IdentityServer.Service.Interface
     {
         Task<DisplayAllClients> GetAllClient();
         Task<ClientViewModel> GetClientInformation(string ClientId);
+        Task<ClientViewModel> SaveClientInformation(ClientViewModel model);
     }
 }
