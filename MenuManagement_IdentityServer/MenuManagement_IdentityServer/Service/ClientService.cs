@@ -98,7 +98,7 @@ namespace MenuManagement_IdentityServer.Service
                     {
                         foreach (var allowedOrigin in Client.AllowedCorsOrigins)
                         {
-                            result.AllowedCorsOrigins.Add(allowedOrigin.Origin);
+                            result.AllowedCorsOrigins.Add(allowedOrigin.Id,allowedOrigin.Origin);
                         }
                     }
 
@@ -266,6 +266,56 @@ namespace MenuManagement_IdentityServer.Service
                 var ClientRedirectUri = client.RedirectUris.Find(x => x.Id == model.RedirectUrlId);
 
                 client.RedirectUris.Remove(ClientRedirectUri);
+
+                ClientDbContext.SaveChanges();
+                result = true;
+
+            }
+            return result;
+        }
+        public AddCorsAllowedOriginViewModel AddClientOriginUrl(AddCorsAllowedOriginViewModel model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(model.ClientId))
+                {
+                    var clientId = ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).Select(c => c.Id).FirstOrDefault();
+                    if(clientId>0)
+                    {
+                        var ClientDetails = ClientDbContext.Clients.Include(x => x.AllowedCorsOrigins).Where(x => x.Id == clientId).FirstOrDefault();
+
+                        ClientDetails.AllowedCorsOrigins.Add(new ClientCorsOrigin
+                        {
+                            Origin = model.ClientOriginUrl
+                        });
+
+                        ClientDbContext.SaveChanges();
+                        model.status = CrudEnumStatus.success;
+                    }
+                }
+                else
+                {
+                    model.ErrorDescription.Add("Client Id is empty");
+                    model.status = CrudEnumStatus.failure;
+                }
+            }catch(Exception ex)
+            {
+                model.ErrorDescription.Add(ex.Message);
+                model.status = CrudEnumStatus.failure;
+            }
+            return model;
+        }
+
+        public bool DeleteClientAllowedOrigin(DeleteClientAllowedOrigin model)
+        {
+            var result = false;
+
+            var client = ClientDbContext.Clients.Include(secret => secret.AllowedCorsOrigins).Where(c => c.ClientId == model.ClientId).FirstOrDefault();
+            if (client != null)
+            {
+                var ClientAllowedOrigin = client.AllowedCorsOrigins.Find(x => x.Id == model.AllowedClientOriginId);
+
+                client.AllowedCorsOrigins.Remove(ClientAllowedOrigin);
 
                 ClientDbContext.SaveChanges();
                 result = true;

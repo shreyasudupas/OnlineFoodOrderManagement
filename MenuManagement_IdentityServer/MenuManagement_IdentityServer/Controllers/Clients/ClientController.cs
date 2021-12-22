@@ -146,5 +146,27 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
             }
             return PartialView("_RedirectUrlPartial", model);
         }
+        [HttpGet]
+        public IActionResult AddCorsAllowedOrigin(string ClientId)
+        {
+            return PartialView("_AddCorsAllowedOriginPartial", new AddCorsAllowedOriginViewModel { ClientId = ClientId });
+        }
+        [HttpPost]
+        public IActionResult AddCorsAllowedOrigin(AddCorsAllowedOriginViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = _clientService.AddClientOriginUrl(model);
+                if(result.status == CrudEnumStatus.failure)
+                {
+                    result.ErrorDescription.ForEach(error => ModelState.AddModelError("", error));
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Enter Required Fields");
+            }
+            return PartialView("_AddCorsAllowedOriginPartial", model);
+        }
     }
 }

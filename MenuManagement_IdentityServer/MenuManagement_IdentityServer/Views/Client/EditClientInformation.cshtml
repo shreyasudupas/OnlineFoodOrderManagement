@@ -6,6 +6,7 @@
     TempData["CurrentUrl"] = Url.Action("EditClientInformation", "Client", new { ClientId = Id });
     int index = 1;
     int redirectIndex = 1;
+    int allowedCorsIndex = 1;
 }
 <h2>Client Information</h2>
 
@@ -153,18 +154,32 @@
                         <tr>
                             <th>#</th>
                             <th>Urls</th>
+                            <th>Action</th>
+                            <th class="columnHide">ID</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for (var i = 0; i < Model.AllowedCorsOrigins.Count; i++)
+                        @foreach (var cors in Model.AllowedCorsOrigins)
                         {
                             <tr>
-                                <td>@(i+1)</td>
-                                <td>@Model.AllowedCorsOrigins[i]</td>
+                                <td>@(index)</td>
+                                <td>@cors.Value</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-floating deleteAllowedOrigin">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td class="columnHide">@cors.Key</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#addAllowedOriginUrl"
+                        data-url="@Url.Action("AddCorsAllowedOrigin","Client",new { ClientId = Model.ClientId })">
+                    Add Allowed Origin
+                </button>
             </div>
         </div>
     </div>
@@ -260,6 +275,34 @@
 
             $.ajax({
                 url:'@Url.Action("DeleteClientRedirectUrl", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
+        $('.deleteAllowedOrigin').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var allowedClientOriginId = getCurrentRow.find('td:eq(3)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["AllowedClientOriginId"] = parseInt(allowedClientOriginId);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientAllowedOrigin", "ClientApi")',
                 type: 'post',
                 data: JSON.stringify(data),
                 contentType: 'application/json; charset=utf-8',

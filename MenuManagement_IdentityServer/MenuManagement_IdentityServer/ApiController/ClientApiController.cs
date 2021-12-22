@@ -28,5 +28,11 @@ namespace MenuManagement_IdentityServer.ApiController
             var result = _clientService.DeleteClientRedirectUrl(model);
             return result;
         }
+        [HttpPost]
+        public bool DeleteClientAllowedOrigin(DeleteClientAllowedOrigin model)
+        {
+            var result = _clientService.DeleteClientAllowedOrigin(model);
+            return result;
+        }
     }
 }

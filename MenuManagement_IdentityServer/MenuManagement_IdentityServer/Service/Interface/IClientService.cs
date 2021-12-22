@@ -12,5 +12,7 @@ namespace MenuManagement_IdentityServer.Service.Interface
         RedirectUrlViewModel AddClientRedirect(RedirectUrlViewModel model);
         ClientSecretViewModel SaveClientSecret(ClientSecretViewModel model);
         bool DeleteClientRedirectUrl(DeleteRedirectUrl model);
+        AddCorsAllowedOriginViewModel AddClientOriginUrl(AddCorsAllowedOriginViewModel model);
+        bool DeleteClientAllowedOrigin(DeleteClientAllowedOrigin model);
     }
 }

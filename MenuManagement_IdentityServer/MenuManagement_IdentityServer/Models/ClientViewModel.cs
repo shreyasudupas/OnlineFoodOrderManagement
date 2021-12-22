@@ -9,7 +9,7 @@ namespace MenuManagement_IdentityServer.Models
         public ClientViewModel()
         {
             RedirectUrls = new Dictionary<int, string>();
-            AllowedCorsOrigins = new List<string>();
+            AllowedCorsOrigins = new Dictionary<int, string>();
             PostRedirectUrls = new List<string>();
             ClientSecrets = new Dictionary<int, string>();
         }
@@ -25,7 +25,7 @@ namespace MenuManagement_IdentityServer.Models
         public DateTime CreatedDate { get; set; }
 
         public Dictionary<int, string> RedirectUrls { get; set; }
-        public List<string> AllowedCorsOrigins { get; set; }
+        public Dictionary<int, string> AllowedCorsOrigins { get; set; }
         public List<string> PostRedirectUrls { get; set; }
         public Dictionary<int,string> ClientSecrets { get; set; }
     }
