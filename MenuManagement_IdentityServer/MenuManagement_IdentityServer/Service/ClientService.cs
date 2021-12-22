@@ -82,7 +82,7 @@ namespace MenuManagement_IdentityServer.Service
                     {
                         foreach (var redirect in Client.RedirectUris)
                         {
-                            result.RedirectUrls.Add(redirect.RedirectUri);
+                            result.RedirectUrls.Add(redirect.Id,redirect.RedirectUri);
                         }
                     }
 
@@ -215,6 +215,57 @@ namespace MenuManagement_IdentityServer.Service
                 var ClientSecrets = client.ClientSecrets.Find(x=>x.Id == ClientSecret.ClientSecretId);
 
                 client.ClientSecrets.Remove(ClientSecrets);
+
+                ClientDbContext.SaveChanges();
+                result = true;
+
+            }
+            return result;
+        }
+
+        public RedirectUrlViewModel AddClientRedirect(RedirectUrlViewModel model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(model.ClientId))
+                {
+                    var ClientId = ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).Select(x => x.Id).FirstOrDefault();
+                    if (ClientId > 0)
+                    {
+                        var ClientDetail = ClientDbContext.Clients.Include(red => red.RedirectUris).Where(x => x.Id == ClientId).FirstOrDefault();
+                        //add redirect url
+                        ClientDetail.RedirectUris.Add(new ClientRedirectUri
+                        {
+                            RedirectUri = model.ClientRedirectUrl
+                        });
+
+                        ClientDbContext.SaveChanges();
+                        model.status = CrudEnumStatus.success;
+                    }
+                }
+                else
+                {
+                    model.ErrorDescription.Add("Client Id is empty");
+                }
+            }
+            catch(Exception ex)
+            {
+                model.ErrorDescription.Add(ex.Message);
+                model.status = CrudEnumStatus.failure;
+            }
+            return model;
+        }
+
+        public bool DeleteClientRedirectUrl(DeleteRedirectUrl model)
+        {
+            var result = false;
+
+            var client = ClientDbContext.Clients.Include(secret => secret.RedirectUris).Where(c => c.ClientId == model.ClientId).FirstOrDefault();
+            if (client != null)
+            {
+                var ClientRedirectUri = client.RedirectUris.Find(x => x.Id == model.RedirectUrlId);
+
+                client.RedirectUris.Remove(ClientRedirectUri);
 
                 ClientDbContext.SaveChanges();
                 result = true;

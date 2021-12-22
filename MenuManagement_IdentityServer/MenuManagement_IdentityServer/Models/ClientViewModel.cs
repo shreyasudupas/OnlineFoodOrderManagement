@@ -8,7 +8,7 @@ namespace MenuManagement_IdentityServer.Models
     {
         public ClientViewModel()
         {
-            RedirectUrls = new List<string>();
+            RedirectUrls = new Dictionary<int, string>();
             AllowedCorsOrigins = new List<string>();
             PostRedirectUrls = new List<string>();
             ClientSecrets = new Dictionary<int, string>();
@@ -24,7 +24,7 @@ namespace MenuManagement_IdentityServer.Models
         public int AccessTokenLifetime { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public List<string> RedirectUrls { get; set; }
+        public Dictionary<int, string> RedirectUrls { get; set; }
         public List<string> AllowedCorsOrigins { get; set; }
         public List<string> PostRedirectUrls { get; set; }
         public Dictionary<int,string> ClientSecrets { get; set; }

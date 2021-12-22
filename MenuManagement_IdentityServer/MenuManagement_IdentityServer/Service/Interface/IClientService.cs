@@ -9,6 +9,8 @@ namespace MenuManagement_IdentityServer.Service.Interface
         Task<DisplayAllClients> GetAllClient();
         Task<ClientViewModel> GetClientInformation(string ClientId);
         Task<ClientViewModel> SaveClientInformation(ClientViewModel model);
+        RedirectUrlViewModel AddClientRedirect(RedirectUrlViewModel model);
         ClientSecretViewModel SaveClientSecret(ClientSecretViewModel model);
+        bool DeleteClientRedirectUrl(DeleteRedirectUrl model);
     }
 }

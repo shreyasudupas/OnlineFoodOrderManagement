@@ -5,6 +5,7 @@
     TempData["PreviousUrl"] = TempData["CurrentUrl"];
     TempData["CurrentUrl"] = Url.Action("EditClientInformation", "Client", new { ClientId = Id });
     int index = 1;
+    int redirectIndex = 1;
 }
 <h2>Client Information</h2>
 
@@ -84,7 +85,10 @@
                                 <td class="columnHide">@secret.Key</td>
                                 <td>@secret.Value</td>
                                 <td>
-                                    <a class="btn btn-danger btn-rounded callDelete">Delete</a>
+                                    <button type="button" class="btn btn-danger btn-floating callDeleteSecret">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    
                                 </td>
                             </tr>
                         }
@@ -108,14 +112,22 @@
                         <tr>
                             <th>#</th>
                             <th>Urls</th>
+                            <th>Action</th>
+                            <th class="columnHide">RedirectId</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for(var i = 0;i< Model.RedirectUrls.Count;i++)
+                        @foreach (var redirect in Model.RedirectUrls)
                         {
                             <tr>
-                                <td>@(i+1)</td>
-                                <td>@Model.RedirectUrls[i]</td>
+                                <td>@(redirectIndex++)</td>
+                                <td>@redirect.Value</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-floating deleteRedirect">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td class="columnHide">@redirect.Key</td>
                             </tr>
                         }
                     </tbody>
@@ -124,7 +136,7 @@
 
             <div class="card-footer">
                 <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#addRedirectUrl"
-                        data-url="">Add Redirect Urls</button>
+                        data-url="@Url.Action("AddRedirectUrl","Client",new { ClientId = Model.ClientId })">Add Redirect Urls</button>
             </div>
         </div>
     </div>
@@ -209,7 +221,7 @@
             }
         });
 
-        $('.callDelete').click(function () {
+        $('.callDeleteSecret').click(function () {
             var getCurrentRow = $(this).closest("tr");
             var clientSecretID = getCurrentRow.find('td:eq(1)').text();
             //alert(id);
@@ -229,7 +241,35 @@
                     if (data == true) {
                         getCurrentRow.remove();
                     }
-                    
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
+        $('.deleteRedirect').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var clientRedirectID = getCurrentRow.find('td:eq(3)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["RedirectUrlId"] = parseInt(clientRedirectID);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientRedirectUrl", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+
                 },
                 error: function (err) {
                     console.log(err);

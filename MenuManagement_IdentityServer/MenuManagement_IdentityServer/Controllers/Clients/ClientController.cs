@@ -119,5 +119,32 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
             logger.LogInformation("ManageClientSecret API end");
             return PartialView("_ManageClientSecretPartial",model);
         }
+
+        [HttpGet]
+        public IActionResult AddRedirectUrl(string ClientId)
+        {
+            return PartialView("_RedirectUrlPartial",new RedirectUrlViewModel { ClientId =ClientId });
+        }
+
+        [HttpPost]
+        public IActionResult AddRedirectUrl(RedirectUrlViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = _clientService.AddClientRedirect(model);
+                if(result.status == CrudEnumStatus.failure)
+                {
+                    result.ErrorDescription.ForEach(err =>
+                    {
+                        ModelState.AddModelError("", err);
+                    });
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Enter Reqired Fields");
+            }
+            return PartialView("_RedirectUrlPartial", model);
+        }
     }
 }

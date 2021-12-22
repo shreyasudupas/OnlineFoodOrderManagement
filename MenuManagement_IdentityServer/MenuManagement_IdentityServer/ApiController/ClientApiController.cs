@@ -21,5 +21,12 @@ namespace MenuManagement_IdentityServer.ApiController
             var result = _clientService.DeleteClientSecret(deleteClient);
             return result;
         }
+
+        [HttpPost]
+        public bool DeleteClientRedirectUrl(DeleteRedirectUrl model)
+        {
+            var result = _clientService.DeleteClientRedirectUrl(model);
+            return result;
+        }
     }
 }
