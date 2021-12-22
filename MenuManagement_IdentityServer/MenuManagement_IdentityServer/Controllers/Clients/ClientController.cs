@@ -91,9 +91,33 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
         }
 
         [HttpGet]
-        public IActionResult ManageClientSecret()
+        public IActionResult ManageClientSecret(string ClientId)
         {
-            return PartialView("_ManageClientSecretPartial");
+            return PartialView("_ManageClientSecretPartial",new ClientSecretViewModel {  ClientId = ClientId});
+        }
+
+        [HttpPost]
+        public IActionResult ManageClientSecret(ClientSecretViewModel model)
+        {
+            logger.LogInformation("ManageClientSecret API called");
+            if (ModelState.IsValid)
+            {
+                var result = _clientService.SaveClientSecret(model);
+                if(result.status == CrudEnumStatus.failure)
+                {
+                    result.ErrorDescription.ForEach(error =>
+                    {
+                        ModelState.AddModelError("", error);
+                    });
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Enter the Required Fields");
+            }
+
+            logger.LogInformation("ManageClientSecret API end");
+            return PartialView("_ManageClientSecretPartial",model);
         }
     }
 }

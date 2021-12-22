@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,7 @@ namespace MenuManagement_IdentityServer.Service
                                     .Include(re => re.RedirectUris)
                                     .Include(pos => pos.PostLogoutRedirectUris)
                                     .Include(ac => ac.AllowedCorsOrigins)
+                                    .Include(s=>s.ClientSecrets)
                                     .Where(c => c.Id == GetClientId).FirstOrDefaultAsync();
 
                 if (Client != null)
@@ -100,6 +102,14 @@ namespace MenuManagement_IdentityServer.Service
                         }
                     }
 
+                    if(Client.ClientSecrets != null)
+                    {
+                        for (int i= 0;i < Client.ClientSecrets.Count;i++)
+                        {
+                            result.ClientSecrets.Add((i+1), Client.ClientSecrets[i].Description);
+                        }
+                    }
+
                 }
                 else
                 {
@@ -134,7 +144,7 @@ namespace MenuManagement_IdentityServer.Service
                 }
                 else
                 {
-                    Client newClient = new Client
+                    IdentityServer4.EntityFramework.Entities.Client newClient = new IdentityServer4.EntityFramework.Entities.Client
                     {
                         ClientId = model.ClientId,
                         RequireClientSecret = model.RequireClientSecret,
@@ -158,6 +168,59 @@ namespace MenuManagement_IdentityServer.Service
                 model.ErrorDescription.Add(ex.Message);
             }
             return model;
+        }
+
+        public ClientSecretViewModel SaveClientSecret(ClientSecretViewModel model)
+        {
+            try
+            {
+                var Id = ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).Select(x => x.Id).FirstOrDefault();
+                if(Id > 0)
+                {
+                    var clientDetails = ClientDbContext.Clients.Include(s => s.ClientSecrets).Where(x => x.Id == Id).FirstOrDefault();
+                    clientDetails.ClientSecrets.Add(new ClientSecret
+                    {
+                        Description = model.Description,
+                        Expiration = (string.IsNullOrEmpty(model.ExpirationDate))?null: Convert.ToDateTime(model.ExpirationDate),
+                        Value = model.ClientSecret.Sha256()
+                    });
+
+                    //This is done is checkbox is not selected
+                    clientDetails.RequireClientSecret = true;
+
+                    ClientDbContext.SaveChanges();
+                    model.status = CrudEnumStatus.success;
+                }
+                else
+                {
+                    model.ErrorDescription.Add($"No Client Found with Id {model.ClientId}");
+                    model.status = CrudEnumStatus.failure;
+                }
+                
+            }catch(Exception ex)
+            {
+                model.ErrorDescription.Add(ex.Message);
+                model.status = CrudEnumStatus.failure;
+            }
+            return model;
+        }
+
+        public bool DeleteClientSecret(DeleteClientSecret ClientSecret)
+        {
+            var result = false;
+
+            var client = ClientDbContext.Clients.Include(secret=>secret.ClientSecrets).Where(c => c.ClientId == ClientSecret.ClientId).FirstOrDefault();
+            if(client != null)
+            {
+                var ClientSecrets = client.ClientSecrets.Find(x=>x.Id == ClientSecret.ClientSecretId);
+
+                client.ClientSecrets.Remove(ClientSecrets);
+
+                ClientDbContext.SaveChanges();
+                result = true;
+
+            }
+            return result;
         }
     }
 }

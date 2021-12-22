@@ -8,6 +8,7 @@ namespace MenuManagement_IdentityServer.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllersWithViews();
+            services.AddControllers();
         }
     }
 }

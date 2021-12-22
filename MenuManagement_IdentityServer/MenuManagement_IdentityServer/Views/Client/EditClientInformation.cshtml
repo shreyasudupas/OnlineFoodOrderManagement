@@ -1,9 +1,10 @@
 ﻿@model ClientViewModel
 @{
     ViewData["Title"] = "ClientEdit";
-    var Id = "sample";
+    var Id = Model.ClientId;
     TempData["PreviousUrl"] = TempData["CurrentUrl"];
     TempData["CurrentUrl"] = Url.Action("EditClientInformation", "Client", new { ClientId = Id });
+    int index = 1;
 }
 <h2>Client Information</h2>
 
@@ -53,10 +54,45 @@
     </div>
 </form>
 
+<!-- Client Secret List-->
 <div id="partialClientSecret">
-    @{
-        Html.RenderPartial("_ClientSecretPartial");
-    }
+    <div class="mt-3 client-secret">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageClientSecret"
+                            data-url="@Url.Action("ManageClientSecret","Client",new { ClientId = Model.ClientId })">
+                        Manage Client Secret
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="columnHide">ClientId</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var secret in Model.ClientSecrets)
+                        {
+                            <tr>
+                                <td>@(index++)</td>
+                                <td class="columnHide">@secret.Key</td>
+                                <td>@secret.Value</td>
+                                <td>
+                                    <a class="btn btn-danger btn-rounded callDelete">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row mt-3">
@@ -84,6 +120,11 @@
                         }
                     </tbody>
                 </table>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#addRedirectUrl"
+                        data-url="">Add Redirect Urls</button>
             </div>
         </div>
     </div>
@@ -146,14 +187,14 @@
 </div>
 
 @section Scripts{ 
-<script>
+    <script>
     $(function(){
 
-        if ($('#RequireClientSecretId:checkbox:checked').length > 1) {
+        if ($('#RequireClientSecretId:checkbox:checked').length >= 1) {
             //alert('checked');
         } else {
             //alert('Not checked');
-            //hide 
+            //hide
             $('#partialClientSecret').hide();
         }
 
@@ -163,10 +204,39 @@
                 $('#partialClientSecret').show();
             } else {
                 //alert('Not checked');
-                //hide 
+                //hide
                 $('#partialClientSecret').hide();
             }
         });
+
+        $('.callDelete').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var clientSecretID = getCurrentRow.find('td:eq(1)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["ClientSecretId"] = parseInt(clientSecretID);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientSecret", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+                    
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
     });
-</script>
+    </script>
 }

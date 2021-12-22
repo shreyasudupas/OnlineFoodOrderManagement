@@ -11,6 +11,7 @@ namespace MenuManagement_IdentityServer.Models
             RedirectUrls = new List<string>();
             AllowedCorsOrigins = new List<string>();
             PostRedirectUrls = new List<string>();
+            ClientSecrets = new Dictionary<int, string>();
         }
         [Required]
         public string ClientId { get; set; }
@@ -26,5 +27,6 @@ namespace MenuManagement_IdentityServer.Models
         public List<string> RedirectUrls { get; set; }
         public List<string> AllowedCorsOrigins { get; set; }
         public List<string> PostRedirectUrls { get; set; }
+        public Dictionary<int,string> ClientSecrets { get; set; }
     }
 }
