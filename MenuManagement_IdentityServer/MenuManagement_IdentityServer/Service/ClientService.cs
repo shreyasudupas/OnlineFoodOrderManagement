@@ -90,7 +90,7 @@ namespace MenuManagement_IdentityServer.Service
                     {
                         foreach (var postRedirect in Client.PostLogoutRedirectUris)
                         {
-                            result.PostRedirectUrls.Add(postRedirect.PostLogoutRedirectUri);
+                            result.PostRedirectUrls.Add(postRedirect.Id,postRedirect.PostLogoutRedirectUri);
                         }
                     }
 
@@ -316,6 +316,56 @@ namespace MenuManagement_IdentityServer.Service
                 var ClientAllowedOrigin = client.AllowedCorsOrigins.Find(x => x.Id == model.AllowedClientOriginId);
 
                 client.AllowedCorsOrigins.Remove(ClientAllowedOrigin);
+
+                ClientDbContext.SaveChanges();
+                result = true;
+
+            }
+            return result;
+        }
+        public AddPostLogoutRedirectUriViewModel AddPostLogoutRedirectUrl(AddPostLogoutRedirectUriViewModel model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(model.ClientId))
+                {
+                    var clientId = ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).Select(c => c.Id).FirstOrDefault();
+                    if (clientId > 0)
+                    {
+                        var ClientDetails = ClientDbContext.Clients.Include(x => x.PostLogoutRedirectUris).Where(x => x.Id == clientId).FirstOrDefault();
+
+                        ClientDetails.PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
+                        {
+                            PostLogoutRedirectUri = model.PostRedirectUri
+                        });
+
+                        ClientDbContext.SaveChanges();
+                        model.status = CrudEnumStatus.success;
+                    }
+                }
+                else
+                {
+                    model.ErrorDescription.Add("Client Id is empty");
+                    model.status = CrudEnumStatus.failure;
+                }
+            }
+            catch (Exception ex)
+            {
+                model.ErrorDescription.Add(ex.Message);
+                model.status = CrudEnumStatus.failure;
+            }
+            return model;
+        }
+        public bool DeletePostLogoutUri(DeletePostLogoutRedirectUri model)
+        {
+            var result = false;
+
+            var client = ClientDbContext.Clients.Include(secret => secret.PostLogoutRedirectUris).Where(c => c.ClientId == model.ClientId).FirstOrDefault();
+            if (client != null)
+            {
+                var ClientPostLogoutUriToBeDeleted = client.PostLogoutRedirectUris.Find(x => x.Id == model.CLientPostLogoutId);
+
+                client.PostLogoutRedirectUris.Remove(ClientPostLogoutUriToBeDeleted);
 
                 ClientDbContext.SaveChanges();
                 result = true;

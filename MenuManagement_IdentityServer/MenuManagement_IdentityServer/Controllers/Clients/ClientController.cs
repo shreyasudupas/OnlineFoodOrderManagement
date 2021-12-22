@@ -168,5 +168,28 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
             }
             return PartialView("_AddCorsAllowedOriginPartial", model);
         }
+
+        [HttpGet]
+        public IActionResult AddPostLogoutRedirectUri(string ClientId)
+        {
+            return PartialView("_AddPostLogoutRedirectUriPartial", new AddPostLogoutRedirectUriViewModel { ClientId = ClientId });
+        }
+        [HttpPost]
+        public IActionResult AddPostLogoutRedirectUri(AddPostLogoutRedirectUriViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _clientService.AddPostLogoutRedirectUrl(model);
+                if (result.status == CrudEnumStatus.failure)
+                {
+                    result.ErrorDescription.ForEach(error => ModelState.AddModelError("", error));
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Enter Required Fields");
+            }
+            return PartialView("_AddPostLogoutRedirectUriPartial", model);
+        }
     }
 }
