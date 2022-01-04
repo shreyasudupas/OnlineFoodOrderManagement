@@ -64,6 +64,7 @@ namespace MenuManagement_IdentityServer.Service
                                     .Include(pos => pos.PostLogoutRedirectUris)
                                     .Include(ac => ac.AllowedCorsOrigins)
                                     .Include(s=>s.ClientSecrets)
+                                    .Include(gt=>gt.AllowedGrantTypes)
                                     .Where(c => c.Id == GetClientId).FirstOrDefaultAsync();
 
                 if (Client != null)
@@ -128,9 +129,12 @@ namespace MenuManagement_IdentityServer.Service
 
             try
             {
-                var GetClient = await ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).FirstOrDefaultAsync();
-                if (GetClient != null)
+                var GetClientId = await ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).Select(c=>c.Id).FirstOrDefaultAsync();
+                if (GetClientId > 0)
                 {
+                    var GetClient = await ClientDbContext.Clients.Include(x=>x.AllowedGrantTypes)
+                        .Where(x => x.Id == GetClientId).FirstOrDefaultAsync();
+
                     GetClient.ClientId = model.ClientId;
                     GetClient.RequireClientSecret = model.RequireClientSecret;
                     GetClient.ClientName = model.ClientName;
@@ -138,7 +142,18 @@ namespace MenuManagement_IdentityServer.Service
                     GetClient.RequireConsent = model.RequireConsent;
                     GetClient.AccessTokenLifetime = model.AccessTokenLifetime;
 
+                    GetClient.AllowedGrantTypes = new List<ClientGrantType>();
+
+                    //Adding Client Grant Type
+                    foreach (var gtpye in model.GrantTypesSelected)
+                    {
+                        GetClient.AllowedGrantTypes.Add(new ClientGrantType
+                        {
+                            GrantType = gtpye
+                        });
+                    }
                     
+
                     model.status = CrudEnumStatus.success;
 
                 }
@@ -372,6 +387,38 @@ namespace MenuManagement_IdentityServer.Service
 
             }
             return result;
+        }
+
+        public DeleteClientViewModel DeleteClient(string ClientId)
+        {
+            DeleteClientViewModel model = new DeleteClientViewModel();
+            try
+            {
+                var GetClientId = ClientDbContext.Clients.Where(c => c.ClientId == ClientId).Select(c => c.Id).FirstOrDefault();
+                if (GetClientId > 0)
+                {
+                    var ClientDetails = ClientDbContext.Clients.Where(x => x.Id == GetClientId).FirstOrDefault();
+
+                    var result = ClientDbContext.Clients.Remove(ClientDetails);
+
+                    ClientDbContext.SaveChanges();
+
+                    model.status = CrudEnumStatus.success;
+                }
+                else
+                {
+                    model.status = CrudEnumStatus.failure;
+                    model.ErrorDescription.Add("ClientId not found");
+                }
+            }
+            catch(Exception ex)
+            {
+                model.status = CrudEnumStatus.failure;
+                model.ErrorDescription.Add(ex.Message);
+            }
+            
+
+            return model;
         }
     }
 }

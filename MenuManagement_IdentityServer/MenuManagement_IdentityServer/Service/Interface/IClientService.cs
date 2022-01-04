@@ -16,5 +16,6 @@ namespace MenuManagement_IdentityServer.Service.Interface
         bool DeleteClientAllowedOrigin(DeleteClientAllowedOrigin model);
         AddPostLogoutRedirectUriViewModel AddPostLogoutRedirectUrl(AddPostLogoutRedirectUriViewModel model);
         bool DeletePostLogoutUri(DeletePostLogoutRedirectUri model);
+        DeleteClientViewModel DeleteClient(string ClientId);
     }
 }

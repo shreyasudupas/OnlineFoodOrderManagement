@@ -191,5 +191,23 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
             }
             return PartialView("_AddPostLogoutRedirectUriPartial", model);
         }
+
+        public IActionResult DeleteClient(string ClientId)
+        {
+            logger.LogInformation($"DeleteClient API called :{ClientId}");
+            var result = _clientService.DeleteClient(ClientId);
+            if(result.status == CrudEnumStatus.success)
+            {
+                logger.LogInformation("DeleteClient API end");
+                return RedirectToAction("GetAllClients", "Client");
+
+            }
+            else
+            {
+                logger.LogInformation("DeleteClient API end");
+                return RedirectToAction("EditClientInformation", "Client", new { ClientId = ClientId });
+            }
+            
+        }
     }
 }
