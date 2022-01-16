@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
 
 namespace MenuManagement_IdentityServer.Installers
@@ -39,6 +40,7 @@ namespace MenuManagement_IdentityServer.Installers
                 config.LoginPath = "/Authorization/Login";
                 config.LogoutPath = "/Authorization/Logout";
                 config.AccessDeniedPath = "/Authorization/AccessDenied";
+                config.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
 
             services.AddIdentityServer()
@@ -47,7 +49,7 @@ namespace MenuManagement_IdentityServer.Installers
                     //.AddInMemoryIdentityResources(IdentityServer_Config.GetIdentityResources())
                     //.AddInMemoryApiResources(IdentityServer_Config.GetApiResources())
                     //.AddInMemoryApiScopes(IdentityServer_Config.GetApiScopes())
-                    //.AddDeveloperSigningCredential()
+                    .AddDeveloperSigningCredential()
                     .AddConfigurationStore(opt =>
                     {
                         opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
