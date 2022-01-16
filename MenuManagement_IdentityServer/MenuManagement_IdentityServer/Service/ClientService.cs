@@ -63,8 +63,9 @@ namespace MenuManagement_IdentityServer.Service
                                     .Include(re => re.RedirectUris)
                                     .Include(pos => pos.PostLogoutRedirectUris)
                                     .Include(ac => ac.AllowedCorsOrigins)
-                                    .Include(s=>s.ClientSecrets)
-                                    .Include(gt=>gt.AllowedGrantTypes)
+                                    .Include(s => s.ClientSecrets)
+                                    .Include(gt => gt.AllowedGrantTypes)
+                                    .Include(scope => scope.AllowedScopes)
                                     .Where(c => c.Id == GetClientId).FirstOrDefaultAsync();
 
                 if (Client != null)
@@ -111,6 +112,16 @@ namespace MenuManagement_IdentityServer.Service
                         }
                     }
 
+                    foreach(var type in Client.AllowedGrantTypes)
+                    {
+                        result.GrantTypesSelected.Add(type.GrantType);
+                    }
+
+                    foreach (var scope in Client.AllowedScopes)
+                    {
+                        result.AllowedScopeSelected.Add(scope.Scope);
+                    }
+
                 }
                 else
                 {
@@ -132,7 +143,9 @@ namespace MenuManagement_IdentityServer.Service
                 var GetClientId = await ClientDbContext.Clients.Where(c => c.ClientId == model.ClientId).Select(c=>c.Id).FirstOrDefaultAsync();
                 if (GetClientId > 0)
                 {
-                    var GetClient = await ClientDbContext.Clients.Include(x=>x.AllowedGrantTypes)
+                    var GetClient = await ClientDbContext.Clients
+                        .Include(x => x.AllowedGrantTypes)
+                        .Include(x => x.AllowedScopes)
                         .Where(x => x.Id == GetClientId).FirstOrDefaultAsync();
 
                     GetClient.ClientId = model.ClientId;
@@ -152,7 +165,16 @@ namespace MenuManagement_IdentityServer.Service
                             GrantType = gtpye
                         });
                     }
-                    
+
+                    //Adding allowed scope
+                    foreach (var scope in model.AllowedScopeSelected)
+                    {
+                        GetClient.AllowedScopes.Add(new ClientScope
+                        {
+                            Scope = scope
+                        });
+                    }
+
 
                     model.status = CrudEnumStatus.success;
 

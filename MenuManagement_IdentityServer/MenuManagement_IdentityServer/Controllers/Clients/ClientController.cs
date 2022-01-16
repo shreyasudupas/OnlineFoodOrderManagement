@@ -80,7 +80,8 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
 
                 }
                 logger.LogInformation("EditClientInformation all Client ended");
-                return View(result);
+                //return View(result);
+                return RedirectToAction("EditClientInformation",new { ClientId = model.ClientId});
             }
             else
             {

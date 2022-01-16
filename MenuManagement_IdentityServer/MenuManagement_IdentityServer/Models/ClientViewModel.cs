@@ -14,6 +14,7 @@ namespace MenuManagement_IdentityServer.Models
             PostRedirectUrls = new Dictionary<int, string>();
             ClientSecrets = new Dictionary<int, string>();
             GrantTypesSelected = new List<string>();
+            AllowedScopeSelected = new List<string>();
         }
         [Required]
         public string ClientId { get; set; }
@@ -31,11 +32,19 @@ namespace MenuManagement_IdentityServer.Models
         public Dictionary<int, string> PostRedirectUrls { get; set; }
         public Dictionary<int,string> ClientSecrets { get; set; }
         public List<string> GrantTypesSelected { get; set; }
+        public List<string> AllowedScopeSelected { get; set; }
         public List<SelectListItem> GrantTypes { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value="password" ,Text="Password" },
             new SelectListItem { Value="authorization_code" ,Text="Authorization Code" },
             new SelectListItem { Value="client_credentials" ,Text="Client Credentials" },
+        };
+        public List<SelectListItem> AllowedScopeList { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value="userRole" ,Text="Role" },
+            new SelectListItem { Value="office" ,Text="Office" },
+            new SelectListItem { Value="profile" ,Text="Profile" },
+            new SelectListItem { Value="openid" ,Text="OpenId" },
         };
     }
 }
