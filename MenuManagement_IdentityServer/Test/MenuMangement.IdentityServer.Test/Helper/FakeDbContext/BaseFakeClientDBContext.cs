@@ -14,7 +14,7 @@ namespace MenuMangement.IdentityServer.Test.Helper.FakeDbContext
             dbClientContext = CreateDatabaseContext();
         }
 
-        public ConfigurationDbContext CreateDatabaseContext()
+        private ConfigurationDbContext CreateDatabaseContext()
         {
             var options = new DbContextOptionsBuilder<ConfigurationDbContext>()
                             .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
