@@ -1,22 +1,27 @@
-﻿using AutoMapper;
+﻿using Moq;
+using System.Collections.Generic;
 using IdentityServer4.EntityFramework.Entities;
 using MenuManagement_IdentityServer.Service;
-using MenuMangement.IdentityServer.Test.Helper.FakeDbContext;
-using Moq;
-using System.Collections.Generic;
 using Xunit;
+using AutoMapper;
+using MenuMangement.IdentityServer.Test.Helper.FakeDbContext;
 
-namespace MenuMangement.IdentityServer.Test.UnitCase.ClientFeature
+namespace MenuMangement.IdentityServer.Test.UnitCase.ClientFeatureUnitTests
 {
-    public class EditDeleteFeatureClientServiceTest : BaseFakeClientDBContext
+    public class GetClientInformationTest: BaseFakeClientDBContext
     {
-        public EditDeleteFeatureClientServiceTest()
+        public GetClientInformationTest()
         {
-            SeedClientData();
         }
-
-        private void SeedClientData()
+        
+        [Fact]
+        public void TestGetAllClient_Service_Contains_MoreThanOneClient()
         {
+            //arrange
+            Mock<IMapper> mockMapper = new Mock<IMapper>();
+            var ClientServiceMock = new ClientService(dbClientContext, mockMapper.Object);
+
+            //add all clients
             var Clients = new List<Client>
             {
                 new Client
@@ -40,19 +45,12 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.ClientFeature
 
             dbClientContext.Clients.AddRange(Clients);
             dbClientContext.SaveChanges();
-        }
 
-        [Theory]
-        [InlineData("m2m.client")]
-        public void Test_Delete_Client_When_Passing_ClientId(string clientId)
-        {
-            //Arrange
-            var MockMapper = new Mock<IMapper>();
-            var mockService = new ClientService(dbClientContext,MockMapper.Object);
-            //Act
-            var result = mockService.DeleteClient(clientId);
-            //Assert
-            Assert.True(result.status == MenuManagement_IdentityServer.CrudEnumStatus.success);
+            //act
+            var result =  ClientServiceMock.GetAllClient().GetAwaiter().GetResult();
+
+            //assert
+            Assert.True(result.Data.Count > 0);
         }
     }
 }
