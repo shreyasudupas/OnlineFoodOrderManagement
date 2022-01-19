@@ -5,8 +5,10 @@ using IdentityServer4.Stores;
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Controllers.Authorization
@@ -256,6 +258,21 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
         {
             var SplitUrl = ReturnUrl.Split('/');
             return RedirectToAction(SplitUrl[4],SplitUrl[3]);
+        }
+
+        [HttpGet("Privacy")]
+        [Authorize]
+        public IActionResult Privacy()
+        {
+            var claims = User.Claims
+                .Select(c => new PrivacyViewModel 
+                { 
+                    Type = c.Type, 
+                    Value = c.Value 
+                })
+                .ToList();
+
+            return View(claims);
         }
     }
 }
