@@ -14,67 +14,39 @@ namespace MenuManagement_IdentityServer.Configurations
         {
             new Client
             {
-                ClientId = "BasketServiceClient",
-                ClientName = "Basket MicroService",
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                ClientSecrets =
-                {
-                    new Secret("basketServiceMicroservice".Sha256())
-                },
-                AllowedScopes = { "openid", "userRole", "office", "profile" } //gets IdentityResource
-            },
+                ClientId = "m2m.client",
+                ClientName = "Client Credentials Client",
+                ClientSecrets = new [] { new Secret("supersecret".Sha512()) },
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                AllowedScopes = {  "basketApi" } //cannot have openId for client credential flow
+             },
             new Client
             {
-                ClientId = "AngularMenuClient",
-                ClientName = "User Menu Client",
+                ClientId = "interactive",
                 AllowedGrantTypes = GrantTypes.Code,
-                ClientSecrets =
-                {
-                    new Secret("angularUIClient".Sha256())
-                },
-                AllowedScopes = { "openid", "userRole", "office", "profile" },
-                AllowedCorsOrigins = { "http://localhost:4200" },
                 RequireClientSecret = false,
-                RedirectUris =new List<string>{ "http://localhost:4200/signin-callback", "http://localhost:4200/assets/silent-callback.html" },
+                RequireConsent = false,
+                RedirectUris = new List<string> { "http://localhost:4200/signin-callback" },
                 PostLogoutRedirectUris = new List<string> { "http://localhost:4200/signout-callback" },
-                RequireConsent = false,
-                AccessTokenLifetime = 600
-            },
-            new Client
-            {
-                ClientId = "client_id_mvc",
-                ClientName = "Client MVC",
-                AllowedGrantTypes = GrantTypes.Code,
-                ClientSecrets =
-                {
-                    new Secret("client_secret_mvc".Sha256())
+                AllowedScopes = new List<string>{ 
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "GetUserRole"
                 },
-                AllowedScopes = { "openid", "office", "profile" },
-                RedirectUris =new List<string>{ "https://localhost:5006/signin-oidc" },
-                PostLogoutRedirectUris = new List<string> { "https://localhost:5006/Home/Index" },
-                RequireConsent = false,
-                AccessTokenLifetime = 3600
-            },
-            new Client
-            {
-                ClientId = "client_ids_UI",
-                ClientName = "Client IDS UI",
-                AllowedGrantTypes = GrantTypes.Code,
-                ClientSecrets =
+                AllowedCorsOrigins = new List<string>
                 {
-                    new Secret("client_ids_UI".Sha256())
+                    "http://localhost:4200",
                 },
-                AllowedScopes = { "openid", "office", "profile" },
-                RedirectUris =new List<string>{ "https://localhost:5005/signin-oidc" },
-                PostLogoutRedirectUris = new List<string> { "https://localhost:5005/Authorization/Login" },
-                RequireConsent = false,
-                AccessTokenLifetime = 3600
+                AccessTokenLifetime = 86400,
+                AllowAccessTokensViaBrowser = true,
+                AlwaysIncludeUserClaimsInIdToken = true
             }
+
         };
         public static IEnumerable<ApiScope> GetApiScopes() =>
          new ApiScope[]
          {
-                new ApiScope("basketApi","Basket MicroService APIs")
+                //new ApiScope("basketApi","Basket MicroService API read")
                 
          };
         public static IEnumerable<ApiResource> GetApiResources() =>
@@ -85,21 +57,20 @@ namespace MenuManagement_IdentityServer.Configurations
                  Scopes = {"basketApi"}
              }
          };
+
+        //An identity resource has meaning as long as it has a claim.Therefore there is a requirement that an identity resource must have minimum 1 claim in the claims list.
+        //In the example below we define an identityresource with the scope name role having a custom claim called my_pet_name.
         public static IEnumerable<IdentityResource> GetIdentityResources() =>
          new IdentityResource[]
          {
              new IdentityResources.OpenId(),
              new IdentityResources.Profile(),
-             new IdentityResource
-             {
-                 Name = "userRole",
-                 UserClaims = {"role"}
-             },
-             new IdentityResource
-             {
-                 Name = "office",
-                 UserClaims = {"office_number"}
-             }
+             new IdentityResource("GetUserRole",
+                 new List<string>
+                 {
+                     //claims
+                     "role"
+                 })
          };
         public static List<TestUser> GetTestUsers() =>
          new List<TestUser>

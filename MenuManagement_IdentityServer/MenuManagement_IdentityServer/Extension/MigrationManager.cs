@@ -65,6 +65,8 @@ namespace MenuManagement_IdentityServer.Extension
                             context.SaveChanges();
                         }
 
+                        MigrateApplicationDbContextDatabase(host);
+
                         //use this to remove the clients
                         //var getAllClients = context.Clients.ToList();
                         //var getAllApiScopes = IdentityServer_Config.GetApiScopes();
@@ -82,7 +84,7 @@ namespace MenuManagement_IdentityServer.Extension
                     }
                 }
             }
-            MigrateApplicationDbContextDatabase(host);
+            
             return host;
         }
 
@@ -98,7 +100,7 @@ namespace MenuManagement_IdentityServer.Extension
 
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
-                    var transaction = context.Database.BeginTransaction();
+                    var transaction1 = context.Database.BeginTransaction();
                     try
                     {
                         //Fill the application user
@@ -113,9 +115,9 @@ namespace MenuManagement_IdentityServer.Extension
                                 City = "sample city",
                                 IsAdmin = true
                             };
-                            var Password = "admin";
+                            var Password = "password";
 
-                            UserManager.CreateAsync(NewUser,Password).GetAwaiter().GetResult();
+                            var result = UserManager.CreateAsync(NewUser,Password).GetAwaiter().GetResult();
 
                             context.SaveChanges();
                         }
@@ -183,13 +185,13 @@ namespace MenuManagement_IdentityServer.Extension
                             context.SaveChanges();
                         }
 
-                        transaction.Commit();
+                        transaction1.Commit();
                         
 
                     }catch(Exception ex)
                     {
-                        transaction.Rollback();
-                        throw;
+                        transaction1.Rollback();
+                        throw ex;
                     }
                 }
             }
