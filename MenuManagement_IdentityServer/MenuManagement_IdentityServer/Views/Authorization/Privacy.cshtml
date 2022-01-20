@@ -1,0 +1,25 @@
+﻿@model IEnumerable<PrivacyViewModel>
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Privacy";
+}
+
+<div>
+    <h2>Claim List</h2>
+    <ul>
+        @if (!Model.Any())
+        {
+            <li><h5>No Claims Present</h5></li>
+        }
+        else
+        {
+            @foreach (var claim in Model)
+            {
+                <li>@claim.Type : @claim.Value</li>
+
+            }
+        }
+
+    </ul>
+</div>
+

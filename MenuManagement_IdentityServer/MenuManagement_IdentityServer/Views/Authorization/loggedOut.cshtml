@@ -1,0 +1,11 @@
+﻿@model LoggedOutViewModel
+@{ 
+    Layout = "_LoginLayout";
+}
+
+<div class="loggedOff-page">
+    @if (Model.LogoutId == null)
+    {
+        <small>You are now Logged out of the Application</small>
+    }
+</div>

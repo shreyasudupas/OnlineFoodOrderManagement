@@ -1,0 +1,60 @@
+﻿@model EditRoleViewModel
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Edit Role";
+}
+
+<div id="modal-placeholder"></div>
+<div class="card mt-3">
+    <div class="card-header">
+        <h2>Edit Role</h2>
+    </div>
+    <div class="card-body">
+        <form class="mt-3" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-outline mb-4">
+                <input type="text" asp-for="Id" class="form-control" readonly />
+                <label class="form-label" for="formRoleName">Id</label>
+            </div>
+
+            <div class="form-outline mb-4">
+                <input type="text" asp-for="RoleName" class="form-control" />
+                <label class="form-label" for="formRoleName">Role Name</label>
+            </div>
+         @*Button grouping*@
+        <div class="d-grid gap-2 d-md-block">
+                <button type="submit" class="btn btn-primary">EditRole</button>
+                <a class="btn btn-primary" asp-action="ListRoles">Cancel</a>
+            </div>
+
+        </form>
+        <!-- Listing user details-->
+        <div class="card mt-2">
+            <div class="card-header">
+                <h4>List of Users Assigned:</h4>
+            </div>
+            <div class="card-body">
+                @if (!Model.UserNames.Any())
+                {
+                    <div class="card-text">
+                        No Users Assigned to this role
+                    </div>
+                }
+                else
+                {
+                    @foreach (var user in Model.UserNames)
+                    {
+                        <label>@user</label>
+                    }
+                }
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserRole" 
+                        data-url="@Url.Action("AddUserRole","Administration",new { RoleId = Model.Id })">
+                    Add User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

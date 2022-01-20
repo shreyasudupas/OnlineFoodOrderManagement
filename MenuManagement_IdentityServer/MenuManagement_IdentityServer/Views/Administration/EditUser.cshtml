@@ -1,0 +1,172 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using MenuManagement_IdentityServer.Data.Models;
+
+@model EditUserGet
+@inject UserManager<ApplicationUser> userManager;
+
+@{
+    ViewData["Title"] = "Edit User";
+    var ModelUser = Model.Users;
+    var UserRoles = Model.Roles;
+    var UserClaims = Model.Claims;
+
+    TempData["PreviousUrl"] = TempData["CurrentUrl"];
+    TempData["CurrentUrl"] = Url.Action("EditUser", "Administration", new { UserId = ModelUser.Id });
+    //var backurl = Model.ReturnUrl;
+
+    var GetUser = await userManager.FindByNameAsync(User.Identity.Name);
+}
+
+<div id="modal-placeholder"></div>
+<div class="mt-3">
+    <div class="card">
+        <div class="card-header">
+            <h4><b>UserId:</b> @ModelUser.Id</h4>
+        </div>
+        @await Html.PartialAsync("_UserInformationEditPartial.cshtml", ModelUser)
+    </div>
+
+    <!-- card for Roles-->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Roles</h4>
+            </div>
+            <div class="card-body">
+                @if (!UserRoles.Any())
+                {
+                    <div class="mt-3">
+                        <h5>No Roles at the moment.</h5>
+                    </div>
+                }
+                else
+                {
+                    <ul>
+                        @foreach (var role in UserRoles)
+                        {
+                            <li>@role</li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="card-footer">
+                @if (User.IsInRole("admin"))
+                {
+                    @if (GetUser.IsAdmin)
+                    {
+                        <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserRole"
+                                data-url="@Url.Action("ManageUserRoles","Administration",new { UserId = ModelUser.Id })">
+                            Manage Roles
+                        </button>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <!--card for claims-->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Claims</h4>
+            </div>
+            <div class="card-body">
+                @if (!UserClaims.Any())
+                {
+                    <h5>No Claims at this moment</h5>
+                }
+                else
+                {
+                    <ul>
+                        @foreach (var claim in UserClaims)
+                        {
+                            <li>@claim</li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="card-footer">
+                @if (User.IsInRole("admin"))
+                {
+                    @if (GetUser.IsAdmin)
+                    {
+                        <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageUserClaims"
+                                data-url="@Url.Action("ManageUserClaim","Administration",new { UserId = ModelUser.Id })">
+                            Manage User Claims
+                        </button>
+                        <button class="btn btn-danger" data-toggle="ajax-modal" data-target="#deleteUserClaims"
+                                data-url="@Url.Action("DeleteUserClaim","Administration",new { UserId = ModelUser.Id })">
+                            Delete User Claims
+                        </button>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts
+{
+    <script>
+        $(function () {
+            var placeHolderElement = $('#modal-placeholder');
+
+            placeHolderElement.on('click', '[data-save="custom-modal"]', function (event) {
+                //alert('clicked');
+                event.preventDefault();
+
+                var FormSelector = '';
+                var myFormSelector = '';
+                //find if the id is present
+                if ($(this).parents('.modal').find('form[id="ManageUserClaimForm"]').length > 0) {
+                    FormSelector = 'form[id="ManageUserClaimForm"]';
+                    myFormSelector = "form#ManageUserClaimForm";
+                }
+                //else if ($(this).parents('.modal').find('form[id="manageDeleteClaimsForm"]').length > 0) {
+                //    FormSelector = 'form[id="manageDeleteClaimsForm"]';
+                //    myFormSelector = "form#manageDeleteClaimsForm";
+                //}
+                var form = $(this).parents('.modal').find(FormSelector);
+                var myform = $(myFormSelector)[0];
+                var actionUrl = form.attr('action');
+
+                var fd = new FormData(myform);
+
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: actionUrl,
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (data) {
+                        //replace with new body
+                        var newBody = $('.modal-body', data);
+                        placeHolderElement.find('.modal-body').replaceWith(newBody);
+
+                        // find IsValid input field and check it's value
+                        // if it's valid then hide modal window
+                        var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                        if (isValid) {
+                            placeHolderElement.find('.modal').modal('hide');
+                            //then reload the main page to get refeshed data
+                            location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        placeHolderElement.find('.modal').modal('hide');
+                    }
+                });
+            });
+
+            //$("#save").click(function () {
+            //    alert('save clicked');
+            //});
+
+        });
+    </script>
+}

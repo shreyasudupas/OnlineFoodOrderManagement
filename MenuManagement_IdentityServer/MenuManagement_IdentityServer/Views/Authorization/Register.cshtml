@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "_LoginLayout";
+}
+@model RegisterViewModel
+
+<div class="row">
+    <h2>Register Form</h2>
+    <div class="col-md-8">
+        <form asp-controller="Authorization" asp-action="Register" autocomplete="off">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="text" id="registerFirstName" class="form-control" asp-for="Username" />
+                    <label class="form-label" for="formUsername">Username</label>
+                    <span class="text-danger" asp-validation-for="Username"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="password" id="registerPassword" class="form-control" asp-for="Password" />
+                    <label class="form-label" for="formPassword">Password</label>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="password" id="registerConfirmPassword" class="form-control" asp-for="ConfirmPassword" />
+                    <label class="form-label" for="formConfirmPassword">ConfirmPassword</label>
+                    <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="email" id="registerEmail" class="form-control" asp-for="Email" />
+                    <label class="form-label" for="formEmail">Email</label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="text" id="registerAddress" class="form-control" asp-for="Address" />
+                    <label class="form-label" for="formEmail">Address</label>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="text" id="registerCity" class="form-control" asp-for="City" />
+                    <label class="form-label" for="formEmail">City</label>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+
+            <div class="text-center">
+                <p>Already a member? <a asp-controller="Authorization" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Login</a></p>
+            </div>
+
+        </form>
+        @*@if (Model.ErrorList.Count > 0)
+            {
+            <ul>
+                @foreach (var error in Model.ErrorList)
+                {
+                    <li>
+                        @error.ToString()
+                    </li>
+                }
+            </ul>
+
+            }*@
+    </div>
+</div>
+
+<script type="text/javascript">
+    (() => {
+        'use strict';
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation');
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>

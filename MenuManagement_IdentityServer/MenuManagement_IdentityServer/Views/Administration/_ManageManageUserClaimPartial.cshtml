@@ -1,0 +1,46 @@
+﻿@model ManagerUserClaimViewModel
+@{
+}
+
+<div class="modal fade" id="manageUserClaims" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- header-->
+            <div class="modal-header">
+                <h4>Manage User Claim</h4>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+               <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                <form id="ManageUserClaimForm" action="ManageUserClaim">
+                    <input type="hidden" asp-for="@Model.UserId" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-outline mb-4">
+                        <!--add name attribute to each html element or else serilize wont make this a object during form.serilize()-->
+                        
+                        @*<label asp-for="@Model.SelectedUserItem" class="control-lable"></label>*@  
+                        <select asp-for="@Model.ClaimTypeSelected" asp-items="Model.SelectionUserClaims" class="custom-select">  
+                            <option value="">Choose Claim Option</option>  
+                        </select>  
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="formValue" class="form-label">Form Value</label>
+                        <input type="text" class="form-control" id="formValue" aria-describedby="formValueHelp" name="UserClaimValue"
+                               asp-for="@Model.UserClaimValue">
+                        <div id="formValueHelp" class="form-text">@Html.Raw("Example: Name:Adam, Email: adam@xyz.com.")</div>
+                    </div>
+                </form>
+            </div>
+
+            <!--footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="custom-modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
