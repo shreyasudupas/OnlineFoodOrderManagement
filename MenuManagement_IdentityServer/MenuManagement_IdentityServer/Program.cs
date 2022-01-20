@@ -27,7 +27,8 @@ namespace MenuManagement_IdentityServer
             //    var user = new IdentityUser("shreyas@gmail.com");
             //    userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
             //}
-                //builder.MigrateDatabase().Run();
+            builder.MigrateConfigurationDbContextDatabase().Run();
+
             builder.Run();
         }
 
