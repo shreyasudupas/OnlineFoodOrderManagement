@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System;
@@ -25,18 +26,21 @@ namespace MenuManagement_IdentityServer.Service
         private readonly ApplicationDbContext _context;
         private readonly IMapper mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger _logger;
 
         public UserAdministrationManager(UserManager<ApplicationUser> userManager
             , RoleManager<IdentityRole> roleManager
             , ApplicationDbContext context
             , IMapper mapper,
-            IWebHostEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment,
+            ILogger<UserAdministrationManager> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             this.mapper = mapper;
             _webHostEnvironment = hostingEnvironment;
+            _logger = logger;
         }
 
 
@@ -443,6 +447,96 @@ namespace MenuManagement_IdentityServer.Service
             {
                 return image.Height.ToString() + "," + image.Width.ToString();
             }
+        }
+
+        public ClaimsViewModel GetAllDropDownClaims()
+        {
+            ClaimsViewModel model = new ClaimsViewModel();
+            //gets all the claims that can be used in the application
+            var GetAllClaimsInApp = _context.ClaimDropDowns.ToList();
+
+            foreach(var claim in GetAllClaimsInApp)
+            {
+                model.Claims.Add(claim);
+            }
+
+            return model;
+        }
+        public EditClaimViewModel EditClaim(EditClaimViewModel viewModel)
+        {
+            EditClaimViewModel model = new EditClaimViewModel();
+
+            try
+            {
+                if (viewModel.ClaimId != null)
+                {
+                    var ClaimData = _context.ClaimDropDowns.Where(c => c.Id == viewModel.ClaimId).FirstOrDefault();
+
+                    if (ClaimData != null)
+                    {
+                        ClaimData.Id = viewModel.ClaimId ?? 0;
+                        ClaimData.Name = viewModel.ClaimType;
+                        ClaimData.Value = viewModel.ClaimValue;
+
+                        _context.SaveChanges();
+
+                        model.status = CrudEnumStatus.success;
+                    }
+                    else
+                    {
+                        model.ErrorDescription.Add("Claim not present");
+                        model.status = CrudEnumStatus.failure;
+                    }
+                }
+                else if (viewModel.ClaimType != null && viewModel.ClaimValue != null)
+                {
+                    //new claim to be added
+                    var Claim = new ClaimDropDown
+                    {
+                        Name = viewModel.ClaimType,
+                        Value = viewModel.ClaimValue
+                    };
+
+                    _context.ClaimDropDowns.Add(Claim);
+                    _context.SaveChanges();
+
+                    model.status = CrudEnumStatus.success;
+
+                }
+                else
+                {
+                    model.ErrorDescription.Add("Claims not entered");
+                    model.status = CrudEnumStatus.failure;
+                }
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex, "error in EditClaim");
+            }
+            
+            return model;
+        }
+        public EditClaimViewModel GetClaimById(int? Id)
+        {
+            EditClaimViewModel model = new EditClaimViewModel();
+            if(Id != null)
+            {
+                var claim = _context.ClaimDropDowns.Where(x => x.Id == Id).FirstOrDefault();
+                if(claim != null)
+                {
+                    model.ClaimId = claim.Id;
+                    model.ClaimType = claim.Name;
+                    model.ClaimValue = claim.Value;
+
+                    model.status = CrudEnumStatus.success;
+                }
+                else
+                {
+                    model.ErrorDescription.Add("No Claim is present in database");
+                    model.status = CrudEnumStatus.failure;
+                }
+            }
+            
+            return model;
         }
     }
 }
