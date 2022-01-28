@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System;
@@ -65,9 +68,13 @@ namespace MenuManagement_IdentityServer.Service
                 GetUser.City = user.City;
                 GetUser.IsAdmin = user.IsAdmin;
 
+                var previousImageName = GetUser.ImagePath;
+
                 //Image upload the image path is got by ImagePath output variable
-                ImageUpload(user.Photo, out ImagePath);
+                ImageUpload(user.Photo, out ImagePath,previousImageName,GetUser);
                 GetUser.ImagePath = ImagePath;
+
+                //add phonenumber,image claim
 
                 editUser.Users = mapper.Map<UserInfomationModel>(GetUser);
 
@@ -227,27 +234,13 @@ namespace MenuManagement_IdentityServer.Service
         {
             ManagerUserClaim managerUser = new ManagerUserClaim();
 
-            //var DropdownValues = _context.ClaimDropDowns.Select(x=> new KeyValuePair<string,string>(x.Name,x.Value)).ToDictionary(x=>x.Key,l=>l.Value);
-
             //check if the user has already has the similar claim
-            var User = _userManager.FindByIdAsync(UserId).GetAwaiter().GetResult();
-            var UserClaims = _userManager.GetClaimsAsync(User).GetAwaiter().GetResult();
-            var UserClaimsTypes = UserClaims.Select(x => x.Type).ToArray();
+            List<ClaimModel> DropdownValues = GetDropDownListValue(UserId);
 
-            //Filter the drop down claim if it already present in db
-            //var DropdownValues = _context.ClaimDropDowns.Where(c=> !UserClaimsTypes.Contains(c.Value))
-            //    .Select(x => new KeyValuePair<string, string>(x.Name, x.Value)).ToDictionary(x => x.Key, l => l.Value);
-            var DropdownValues = _context.ClaimDropDowns.Where(c => !UserClaimsTypes.Contains(c.Value))
-                .Select(x => new ClaimModel
-                {
-                    ClaimType = x.Name,
-                    ClaimValue = x.Value
-                }).ToList();
-
-            if (DropdownValues.Count >0)
+            if (DropdownValues.Count > 0)
             {
                 managerUser.status = CrudEnumStatus.success;
-                managerUser.UserClaims = new SelectList(DropdownValues, nameof(ClaimModel.ClaimType),nameof(ClaimModel.ClaimValue));
+                managerUser.UserClaims = new SelectList(DropdownValues, nameof(ClaimModel.ClaimValue), nameof(ClaimModel.ClaimType));
             }
             else
             {
@@ -257,38 +250,71 @@ namespace MenuManagement_IdentityServer.Service
             return managerUser;
         }
 
+        private List<ClaimModel> GetDropDownListValue(string UserId)
+        {
+            var User = _userManager.FindByIdAsync(UserId).GetAwaiter().GetResult();
+            var UserClaims = _userManager.GetClaimsAsync(User).GetAwaiter().GetResult();
+            var UserClaimsTypes = UserClaims.Select(x => x.Type).ToArray();
+
+            //Filter the drop down claim if it already present in db
+            
+            var DropdownValues = _context.ClaimDropDowns.Where(c => !UserClaimsTypes.Contains(c.Value))
+                .Select(x => new ClaimModel
+                {
+                    ClaimType = x.Name,
+                    ClaimValue = x.Value
+                }).ToList();
+
+            return DropdownValues;
+        }
+
         public async Task<ManagerUserClaimViewModel> ManageUserClaimPost(ManagerUserClaimViewModelPost model)
         {
             ManagerUserClaimViewModel resultModel = new ManagerUserClaimViewModel();
 
-            var DropdownValues = _context.ClaimDropDowns.Select(x => new ClaimModel
-            {
-                ClaimType = x.Name,
-                ClaimValue = x.Value
-            }).ToList();
+            var DropdownValues = GetDropDownListValue(model.UserId);
 
-            resultModel.SelectionUserClaims = new SelectList(DropdownValues, nameof(ClaimModel.ClaimType), nameof(ClaimModel.ClaimValue)); ;
-            resultModel.UserClaimValue = model.UserClaimValue;
+            resultModel.SelectionUserClaims = new SelectList(DropdownValues, nameof(ClaimModel.ClaimValue), nameof(ClaimModel.ClaimType)); ;
+            //resultModel.UserClaimValue = model.UserClaimValue;
 
             //Here getting claim value is the actual claim type on AspNetUSerClaim table
-            var GetClaimType = DropdownValues.Where(x => x.ClaimValue == model.ClaimTypeSelected).Select(claim=>claim.ClaimValue).FirstOrDefault();
+            var GetClaimFromDropDown = DropdownValues.Where(x => x.ClaimValue == model.ClaimTypeSelected).FirstOrDefault();
 
             //store the values in the database
             var user = await _userManager.FindByIdAsync(model.UserId);
-            var UserClaim = new Claim(GetClaimType,model.UserClaimValue);
+            //var UserClaim = new Claim(GetClaimType,model.UserClaimValue);
 
-            var result = await _userManager.AddClaimAsync(user,UserClaim);
-            if(result.Succeeded)
+            //Get Claim value from AspNetUser table
+            //Convert to Json object to get specific column as key value pair
+            var Jobj = JObject.Parse(JsonConvert.SerializeObject(user));
+
+            var claimValue = (string)Jobj[GetClaimFromDropDown.ClaimType]; //ClaimType is the column name on aspNetUser table,Hence using claimType as key to search
+
+            if(claimValue != null)
             {
-                resultModel.status = CrudEnumStatus.success;
+                var UserClaim = new Claim(model.ClaimTypeSelected, claimValue);
+
+                var result = await _userManager.AddClaimAsync(user, UserClaim);
+
+                if (result.Succeeded)
+                {
+                    resultModel.status = CrudEnumStatus.success;
+                    //remove from dropdown 
+                    DropdownValues.Remove(GetClaimFromDropDown);
+                }
+                else
+                {
+                    resultModel.status = CrudEnumStatus.failure;
+                    result.Errors.ToList().ForEach(ele =>
+                    {
+                        resultModel.ErrorDescription.Add(ele.Description);
+                    });
+                }
             }
             else
             {
                 resultModel.status = CrudEnumStatus.failure;
-                result.Errors.ToList().ForEach(ele=>
-                {
-                    resultModel.ErrorDescription.Add(ele.Description);
-                });
+                resultModel.ErrorDescription.Add("Claim value is null, Please fill required field and then add the claim");
             }
             
             return resultModel;
@@ -404,12 +430,16 @@ namespace MenuManagement_IdentityServer.Service
             return userDashboard;
         }
 
-        public void ImageUpload(IFormFile uploadFile,out string filePath)
+        public void ImageUpload(IFormFile uploadFile,out string filePath,string PreviousImageName,ApplicationUser user)
         {
             string uniqueFileName = null;
             if (uploadFile != null)
             {
                 string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+
+                //Delete previous image from location
+                ImageDelete(uploadFolder, PreviousImageName,user);
+
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + uploadFile.FileName;
 
                 string uploadFolderPath = Path.Combine(uploadFolder, uniqueFileName);
@@ -446,6 +476,45 @@ namespace MenuManagement_IdentityServer.Service
             else
             {
                 return image.Height.ToString() + "," + image.Width.ToString();
+            }
+        }
+
+        public void ImageDelete(string ImagePath,string PreviousImageName,ApplicationUser user)
+        {
+            if(!string.IsNullOrEmpty(PreviousImageName))
+            {
+                if (File.Exists(Path.Combine(ImagePath, PreviousImageName)))
+                {
+                    //create a claim so that old claim will be removed
+                    Claim imageclaim = new Claim("picture", PreviousImageName);
+                    ClaimDelete(imageclaim, user);
+
+                    //delete the file from location
+                    File.Delete(Path.Combine(ImagePath, PreviousImageName));
+                    _logger.LogInformation("File with {0} filename is deleted successfully", PreviousImageName);
+                }
+                else
+                {
+                    _logger.LogInformation("File with {0} filename is not present", PreviousImageName);
+                }
+            }
+            else
+            {
+                _logger.LogInformation("No image is present previously");
+            }
+            
+        }
+
+        public void ClaimDelete(Claim claim,ApplicationUser user)
+        {
+            var result = _userManager.RemoveClaimAsync(user, claim).GetAwaiter().GetResult();
+            if(result.Succeeded)
+            {
+                _logger.LogInformation("Claim successfully removed");
+            }
+            else
+            {
+                _logger.LogInformation("Claim error when removing");
             }
         }
 

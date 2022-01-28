@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Controllers.Authorization
@@ -94,7 +95,18 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
 
                 if (result.Succeeded)
                 {
-                    if(vm.ReturnUrl == null)
+                    //add claims
+                    var usernameClaim = new Claim("userName", vm.Username);
+                    var emailClaim = new Claim("email", vm.Email);
+                    var addressClaim = new Claim("address", vm.Address);
+                    var cityClaim = new Claim("city", vm.City);
+
+                    var result1 = _userManager.AddClaimAsync(user, usernameClaim).GetAwaiter().GetResult();
+                    var result2 = _userManager.AddClaimAsync(user, emailClaim).GetAwaiter().GetResult();
+                    var result3 = _userManager.AddClaimAsync(user, addressClaim).GetAwaiter().GetResult();
+                    var result4 = _userManager.AddClaimAsync(user, cityClaim).GetAwaiter().GetResult();
+
+                    if (vm.ReturnUrl == null)
                     {
                         //if registering from Identity Server then go back to login
                         return RedirectToAction("Login", "Authorization");

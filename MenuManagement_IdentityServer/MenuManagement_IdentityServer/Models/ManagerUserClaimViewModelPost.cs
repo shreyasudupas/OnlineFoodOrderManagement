@@ -9,8 +9,8 @@ namespace MenuManagement_IdentityServer.Models
         //Selected Claim Item
         [Required]
         public string ClaimTypeSelected { get; set; }
-        [Required]
-        public string UserClaimValue { get; set; }
+        //[Required]
+        //public string UserClaimValue { get; set; }
 
     }
 }
