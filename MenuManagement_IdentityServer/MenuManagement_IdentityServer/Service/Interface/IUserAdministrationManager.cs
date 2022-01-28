@@ -18,5 +18,8 @@ namespace MenuManagement_IdentityServer.Service.Interface
         Task<DeleteUserClaimGet> GetDeleteUserClaimInfo(string UserId);
         Task<DeleteUserClaimGet> DeleteUserClaimInfo(List<DeleteUserClaimViewModel> model, string UserId);
         Task<UserDashboard> GetUserDashBoardInformation(string UserId);
+        ClaimsViewModel GetAllDropDownClaims();
+        EditClaimViewModel EditClaim(EditClaimViewModel viewModel);
+        EditClaimViewModel GetClaimById(int? Id);
     }
 }

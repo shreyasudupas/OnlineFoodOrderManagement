@@ -1,0 +1,28 @@
+﻿@model EditClaimViewModel
+@{
+    ViewData["Title"] = "Edit Claims";
+}
+
+<div class="card mt-4">
+    <form enctype="multipart/form-data" asp-action="EditClaimInSelectionDropDown" asp-controller="Claim" method="post">
+        <div class="card-title">
+            <h4>Edit User Claim</h4>
+        </div>
+        <div class="card-body">
+            <div asp-validation-summary="All"></div>
+            <div><input type="hidden" asp-for="@Model.ClaimId" /></div>
+            <div class="form-outline mb-3">
+                <input type="text" class="form-control" id="formEditClaimName" asp-for="@Model.ClaimType" />
+                <label class="form-label" for="formEditClaimName">Enter Claim Name</label>
+            </div>
+            <div class="form-outline mb-3">
+                <input type="text" class="form-control" id="formEditClaimName" asp-for="@Model.ClaimValue" />
+                <label class="form-label" for="formEditClaimName">Enter Claim Value</label>
+            </div>
+        </div>
+        <div class="card-footer">
+            <input class="btn btn-primary" type="submit" name="save" value="Save"/>
+            <a class="btn btn-secondary" asp-action="GetListClaims">Cancel</a>
+        </div>
+    </form>
+</div>
