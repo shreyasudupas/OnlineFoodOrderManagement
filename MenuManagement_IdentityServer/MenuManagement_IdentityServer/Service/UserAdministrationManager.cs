@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Service
@@ -191,8 +192,11 @@ namespace MenuManagement_IdentityServer.Service
                 var RoleAddedName = model.Where(role=>role.IsSelected).Select(x => x.RoleName).Except(UserInRole);
                 var RoleRemovedName = UserInRole.Except(model.Where(role => role.IsSelected).Select(x => x.RoleName));
 
+                //If any Role added any
                 if (RoleAddedName.Any())
                 {
+                    ManageRoleClaim(RoleAddedName.ToList(),true,false,GetUser, UserInRole.ToList());
+
                     var result = await _userManager.AddToRolesAsync(GetUser, RoleAddedName);
                     if (result.Succeeded)
                     {
@@ -209,8 +213,11 @@ namespace MenuManagement_IdentityServer.Service
                     }
                 }
 
+                //If any Role is removed
                 if (RoleRemovedName.Any())
                 {
+                    ManageRoleClaim(RoleRemovedName.ToList(), false, true, GetUser, UserInRole.ToList());
+
                     var result = await _userManager.RemoveFromRolesAsync(GetUser, RoleRemovedName);
                     if (result.Succeeded)
                     {
@@ -228,6 +235,80 @@ namespace MenuManagement_IdentityServer.Service
                 }
             }
             return managerUserRole;
+        }
+
+        public void ManageRoleClaim(List<string> NewOrRemoveRoles,bool Add,bool Remove,ApplicationUser user,List<string> UserExsitingRole)
+        {
+            //If add then add roles in claim, for mvp one role per customer id
+            if(Add)
+            {
+                var roleValue = new StringBuilder();
+                foreach (var role in NewOrRemoveRoles)
+                {
+                    if (UserExsitingRole.Count < 1)
+                    {
+                        roleValue.Append(role);
+                        continue;
+                    }
+
+                    roleValue.Append("," + role);
+                }
+
+                var roleClaim = new Claim("role", roleValue.ToString());
+
+                var result = _userManager.AddClaimAsync(user,roleClaim).GetAwaiter().GetResult();
+                if(result.Succeeded)
+                {
+                    _logger.LogInformation("role claim updated");
+                }
+                else
+                {
+                    _logger.LogInformation("role claim not uodated");
+                }
+               
+            }
+
+            if(Remove)
+            {
+                var ClaimOfUser = _userManager.GetClaimsAsync(user).GetAwaiter().GetResult();
+
+                var RoleClaim = ClaimOfUser.Where(x => x.Type == "role").FirstOrDefault();
+
+                if(RoleClaim != null)
+                {
+                    var RemoveRoleClaim = _userManager.RemoveClaimAsync(user, RoleClaim).GetAwaiter().GetResult();
+
+                    if (RemoveRoleClaim.Succeeded)
+                    {
+                        //If any roles are present only then add
+                        if (NewOrRemoveRoles.Count > 0)
+                        {
+                            var roleValue = new StringBuilder();
+                            foreach (var role in NewOrRemoveRoles)
+                            {
+                                if (UserExsitingRole.Count < 1)
+                                {
+                                    roleValue.Append(role);
+                                    continue;
+                                }
+
+                                roleValue.Append("," + role);
+                            }
+
+                            var roleClaim = new Claim("role", roleValue.ToString());
+                            var result = _userManager.AddClaimAsync(user, roleClaim).GetAwaiter().GetResult();
+                            if (result.Succeeded)
+                            {
+                                _logger.LogInformation("role claim updated");
+                            }
+                            else
+                            {
+                                _logger.LogInformation("role claim not uodated");
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public ManagerUserClaim ManageUserClaimGet(string UserId)

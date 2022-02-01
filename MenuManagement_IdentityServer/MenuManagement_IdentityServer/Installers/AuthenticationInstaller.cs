@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -34,6 +35,14 @@ namespace MenuManagement_IdentityServer.Installers
             //    //    jwtOptions.SaveToken = true;
             //    //})
             //    ;
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", opt =>
+                {
+                    opt.Authority = "https://localhost:5005";
+                    opt.Audience = "userIDSApi";
+                });
+
+            services.AddLocalApiAuthentication();
         }
     }
 }

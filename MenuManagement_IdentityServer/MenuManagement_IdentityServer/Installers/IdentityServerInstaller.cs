@@ -2,6 +2,7 @@
 using MenuManagement_IdentityServer.Configurations;
 using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
+using MenuManagement_IdentityServer.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +46,7 @@ namespace MenuManagement_IdentityServer.Installers
 
             services.AddIdentityServer()
                     .AddAspNetIdentity<ApplicationUser>()
+                    .AddProfileService<CustomProfileService>()
                     //.AddInMemoryClients(IdentityServer_Config.GetClients())
                     //.AddInMemoryIdentityResources(IdentityServer_Config.GetIdentityResources())
                     //.AddInMemoryApiResources(IdentityServer_Config.GetApiResources())
