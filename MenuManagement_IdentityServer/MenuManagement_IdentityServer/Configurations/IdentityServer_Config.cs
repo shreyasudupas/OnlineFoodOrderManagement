@@ -32,8 +32,7 @@ namespace MenuManagement_IdentityServer.Configurations
                 AllowedScopes = new List<string>{ 
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "GetUserRole",
-                    IdentityServerConstants.LocalApi.AuthenticationScheme, //This is used to call API within the IDS server when client that doesnt have cookie can access
+                    IdentityServerConstants.LocalApi.AuthenticationScheme, //This is used to call API within the IDS server API when client that doesnt have cookie and can access API
                     "userIDSApi" //this is as audience
                 },
                 AllowedCorsOrigins = new List<string>
@@ -42,7 +41,12 @@ namespace MenuManagement_IdentityServer.Configurations
                 },
                 AccessTokenLifetime = 86400,
                 AllowAccessTokensViaBrowser = true,
-                AlwaysIncludeUserClaimsInIdToken = true
+                AlwaysIncludeUserClaimsInIdToken = true,
+                Claims = new List<ClientClaim>
+                {
+                    new ClientClaim(JwtClaimTypes.Role,"admin"),
+                    new ClientClaim(JwtClaimTypes.Role,"appUser")
+                }
             }
 
         };
@@ -61,7 +65,8 @@ namespace MenuManagement_IdentityServer.Configurations
              {
                  Scopes = {"basketApi"}
              },
-             new ApiResource("userIDSApi","User Controller API in IDS")
+             //name,Description,claims
+             new ApiResource("userIDSApi","User Controller API in IDS",new List<string>() { ClaimTypes.Role })
              {
                  Scopes = { "userIDSApi" }
              }

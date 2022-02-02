@@ -12,11 +12,14 @@ namespace MenuManagement_IdentityServer.ApiController
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize(LocalApi.PolicyName)]
+    [Authorize(Policy = "CommonRoleAccess")]
     public class UserController : ControllerBase
     {
         [HttpGet]
         public IActionResult GetUserInformation()
         {
+            var userId = User.Claims.Where(x => x.Type == "sub").Select(x=>x.Value).FirstOrDefault();
+
             return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
         }
     }

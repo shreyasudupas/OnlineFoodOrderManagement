@@ -1,4 +1,5 @@
-﻿using IdentityServer4.EntityFramework.DbContexts;
+﻿using IdentityModel;
+using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using MenuManagement_IdentityServer.Configurations;
 using MenuManagement_IdentityServer.Data;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using static IdentityModel.JwtClaimTypes;
 
 namespace MenuManagement_IdentityServer.Extension
 {
@@ -128,8 +130,8 @@ namespace MenuManagement_IdentityServer.Extension
                             var ListClaimsSelections = new List<ClaimDropDown>
                             {
                                 new ClaimDropDown { Name = "Username", Value="userName"},
-                                new ClaimDropDown { Name = "Email", Value="email" },
-                                new ClaimDropDown { Name = "Role",Value="role"}
+                                new ClaimDropDown { Name = "Email", Value=JwtClaimTypes.Email },
+                                new ClaimDropDown { Name = "Role",Value=JwtClaimTypes.Role}
                             };
 
                             context.ClaimDropDowns.AddRange(ListClaimsSelections);

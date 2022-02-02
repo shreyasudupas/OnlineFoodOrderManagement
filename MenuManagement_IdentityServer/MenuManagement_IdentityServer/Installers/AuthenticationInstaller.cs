@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -43,6 +44,12 @@ namespace MenuManagement_IdentityServer.Installers
                 });
 
             services.AddLocalApiAuthentication();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CommonRoleAccess",
+                    policy => policy.RequireClaim(JwtClaimTypes.Role, "appUser","admin"));
+            });
         }
     }
 }
