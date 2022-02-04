@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -118,6 +119,7 @@ namespace MenuManagement_IdentityServer.Service
             }
             else
             {
+                var Image = GetImagePath();
                 var roles = await _userManager.GetRolesAsync(User);
                 var claims = await _userManager.GetClaimsAsync(User);
 
@@ -127,6 +129,15 @@ namespace MenuManagement_IdentityServer.Service
                 editUser.Users = mapper.Map<UserInfomationModel>(User);
             }
             return editUser;
+        }
+
+        public string GetImagePath()
+        {
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            var ImagePath = "\\images\\";
+            string ImagePathLocation = Path.Join(webRootPath, ImagePath);
+            
+            return ImagePathLocation;
         }
 
         public async Task<ManagerUserRole> GetManageRoleInformation(string UserId)
@@ -686,6 +697,33 @@ namespace MenuManagement_IdentityServer.Service
                 }
             }
             
+            return model;
+        }
+
+        public UserInformationModel GetUserInformationDetail(string UserId)
+        {
+            UserInformationModel model = new UserInformationModel();
+
+            var User = _context.Users.Where(u => u.Id == UserId).FirstOrDefault();
+            if(User != null)
+            {
+                var ModelMap = mapper.Map<UserInformationModel>(User);
+
+                if(ModelMap!=null)
+                {
+                    model = ModelMap;
+                    model.status = CrudEnumStatus.success;
+                }
+                else
+                {
+                    model.status = CrudEnumStatus.failure;
+                    model.ErrorDescription.Add("Mapping Failed");
+                }
+            }else
+            {
+                model.status = CrudEnumStatus.NotFound;
+                model.ErrorDescription.Add("user not found in database");
+            }
             return model;
         }
     }

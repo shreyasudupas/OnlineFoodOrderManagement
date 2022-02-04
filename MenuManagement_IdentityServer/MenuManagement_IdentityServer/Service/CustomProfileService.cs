@@ -33,7 +33,7 @@ namespace MenuManagement_IdentityServer.Service
             claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
 
             // Add custom claims in token here based on user properties or any other source
-            claims.Add(new Claim("username", user.UserName));
+            //claims.Add(new Claim("username", user.UserName));
 
             context.IssuedClaims = claims;
         }
