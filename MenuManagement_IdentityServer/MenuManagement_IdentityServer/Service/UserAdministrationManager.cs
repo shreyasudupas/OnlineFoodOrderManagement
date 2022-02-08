@@ -3,6 +3,7 @@ using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
+using MenuManagement_IdentityServer.Utilities.DropdownItems;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -67,7 +68,6 @@ namespace MenuManagement_IdentityServer.Service
                 GetUser.Email = user.Email;
                 GetUser.PhoneNumber = user.PhoneNumber;
                 GetUser.Address = user.Address;
-                GetUser.City = user.City;
                 GetUser.IsAdmin = user.IsAdmin;
 
                 var previousImageName = GetUser.ImagePath;
@@ -112,7 +112,7 @@ namespace MenuManagement_IdentityServer.Service
         {
             EditUserGet editUser = new EditUserGet();
 
-            var User = await _userManager.FindByIdAsync(Id);
+            var User = await _context.Users.Include(x=>x.Address).Where(u=>u.Id == Id).FirstOrDefaultAsync();
             if(User == null)
             {
                 editUser.ErrorDescription.Add("User not found in database");
@@ -725,6 +725,144 @@ namespace MenuManagement_IdentityServer.Service
                 model.ErrorDescription.Add("user not found in database");
             }
             return model;
+        }
+
+        public UserAddressPartialViewModel SaveUserAddress(UserAddressPartialViewModel viewModel)
+        {
+            var User = _context.Users.Include(x=>x.Address).Where(u => u.Id == viewModel.UserId).FirstOrDefault();
+            viewModel.States = SelectListUtility.GetStateItems();
+            viewModel.Cities = SelectListUtility.GetCityItems();
+
+            //Add opertaion
+            if (User!=null && viewModel.UserAddressId < 1)
+            {
+                if (User.Address == null)
+                    User.Address = new List<UserAddress>();
+                
+                User.Address.Add(new UserAddress
+                {
+                   FullAddress = viewModel.FullAddress,
+                   City = viewModel.City,
+                   State = viewModel.State,
+                   IsActive = viewModel.IsActive
+                });
+
+                //Find if there is any active address present
+                if (User.Address.Where(x=>x.IsActive == true).Select(x=>x.Id).Count() > 1)
+                {
+                    viewModel.ErrorDescription.Add("User has more than two active address");
+                    viewModel.status = CrudEnumStatus.failure;
+                    return viewModel;
+                }
+
+                _context.SaveChanges();
+
+                //Add new claim
+                ManageUserAddressClaim(User);
+
+                viewModel.status = CrudEnumStatus.success;
+
+            }
+            else if(viewModel.UserAddressId>0 && User!=null)
+            {
+                
+                var UserAddress = _context.UserAddresses.Where(ua => ua.Id == viewModel.UserAddressId).FirstOrDefault();
+
+                if(UserAddress != null)
+                {
+                    UserAddress.FullAddress = viewModel.FullAddress;
+                    UserAddress.City = viewModel.City;
+                    UserAddress.State = viewModel.State;
+                    UserAddress.IsActive = viewModel.IsActive;
+
+                    //Check if there are more than one active addresses
+                    if (User.Address.Where(x => x.IsActive == true).Select(x => x.Id).Count() > 1)
+                    {
+                        viewModel.ErrorDescription.Add("User has more than two active address");
+                        viewModel.status = CrudEnumStatus.failure;
+                        return viewModel;
+                    }
+                    _context.SaveChanges();
+
+                    //Edit new claim
+                    ManageUserAddressClaim(User);
+
+                    viewModel.status = CrudEnumStatus.success;
+                }
+                else
+                {
+                    viewModel.ErrorDescription.Add("UserAddress not found");
+                    viewModel.status = CrudEnumStatus.NotFound;
+                }
+            }
+            else
+            {
+                _logger.LogInformation("User not found");
+                viewModel.ErrorDescription.Add("User not found");
+                viewModel.status = CrudEnumStatus.NotFound;
+            }
+            return viewModel;
+        }
+
+        public UserAddressPartialViewModel GetUserAddressInformation(GetUserAddressModel request)
+        {
+            var UserAddress = _context.UserAddresses.Where(u => u.Id == request.UserAddressId).FirstOrDefault();
+            return new UserAddressPartialViewModel
+            {
+                Cities = SelectListUtility.GetCityItems(),
+                States = SelectListUtility.GetStateItems(),
+                FullAddress = UserAddress.FullAddress,
+                City = UserAddress.City,
+                State = UserAddress.State,
+                IsActive = UserAddress.IsActive
+            };
+        }
+
+        public void ManageUserAddressClaim(ApplicationUser user)
+        {
+            _logger.LogInformation("ManageUserAddressClaim started");
+
+            var userClaim = _userManager.GetClaimsAsync(user).GetAwaiter().GetResult();
+
+            var GetUserAddress = userClaim.Where(x => x.Type == "address").FirstOrDefault();
+
+            if(GetUserAddress != null)
+            {
+                _logger.LogInformation("User address Claim found");
+
+                var deleteUserAddressClaim = _userManager.RemoveClaimsAsync(user, new List<Claim> { GetUserAddress }).GetAwaiter().GetResult();
+
+                if(deleteUserAddressClaim.Succeeded)
+                {
+                    _logger.LogInformation("User address Claim succesfully deleted");
+
+                    //add new address claim
+                    var NewClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
+                    
+                    var newAddressClaim = _userManager.AddClaimAsync(user, NewClaim).GetAwaiter().GetResult();
+
+                    if(newAddressClaim.Succeeded)
+                    {
+                        _logger.LogInformation("New User address Claim add succeed");
+                    }
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Add new Address claim started");
+
+                //add new address claim
+                var NewClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
+
+                var newAddressClaim = _userManager.AddClaimAsync(user, NewClaim).GetAwaiter().GetResult();
+
+                if (newAddressClaim.Succeeded)
+                {
+                    _logger.LogInformation("Add new Address claim ended");
+                }
+            }
+
+            _logger.LogInformation("ManageUserAddressClaim ended");
         }
     }
 }

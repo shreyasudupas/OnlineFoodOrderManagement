@@ -2,6 +2,7 @@
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
+using MenuManagement_IdentityServer.Utilities.DropdownItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -213,6 +214,48 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
                 ModelState.AddModelError("", "Error in Form Details Please correct it and resubmit the form");
             }
             return View(editUserGetViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult UserAddressPartialView(GetUserAddressModel model)
+        {
+            
+            if (!string.IsNullOrEmpty(model.UserId) && model.UserAddressId < 1)
+            {
+                return PartialView("_UserAddressPartialView", new UserAddressPartialViewModel
+                {
+                    Cities = SelectListUtility.GetCityItems(),
+                    States = SelectListUtility.GetStateItems(),
+                    UserId = model.UserId
+                });
+            }
+            else
+            {
+                var result = _userAdministration.GetUserAddressInformation(model);
+                return PartialView("_UserAddressPartialView", result);
+            }
+            
+        }
+
+        [HttpPost]
+        public IActionResult UserAddressPartialView(UserAddressPartialViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = _userAdministration.SaveUserAddress(model);
+                if(result.status != CrudEnumStatus.success)
+                {
+                    result.ErrorDescription.ForEach(e =>
+                    {
+                        ModelState.AddModelError("",e);
+                    });
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Enter Required Fields");
+            }
+            return PartialView("_UserAddressPartialView", model);
         }
 
         [HttpGet]

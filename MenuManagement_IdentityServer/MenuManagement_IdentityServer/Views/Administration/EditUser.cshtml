@@ -11,7 +11,7 @@
     var UserClaims = Model.Claims;
 
     TempData["PreviousUrl"] = TempData["CurrentUrl"];
-    TempData["CurrentUrl"] = Url.Action("EditUser", "Administration", new { UserId = ModelUser.Id });
+    TempData["CurrentUrl"] = Url.Action("EditUser", "Administration", new { UserId = ModelUser?.Id });
     //var backurl = Model.ReturnUrl;
 
     var GetUser = await userManager.FindByNameAsync(User.Identity.Name);

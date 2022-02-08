@@ -113,8 +113,16 @@ namespace MenuManagement_IdentityServer.Extension
                             {
                                 UserName = "admin",
                                 Email = "admin@test.com",
-                                Address = "sample address , sample address",
-                                City = "sample city",
+                                Address = new List<UserAddress>
+                                {
+                                    new UserAddress
+                                    {
+                                        FullAddress = "sample address 1, sample address 1",
+                                        City = "sample city",
+                                        State = "sample State",
+                                        IsActive = true
+                                    }
+                                },
                                 IsAdmin = true
                             };
                             var Password = "password";

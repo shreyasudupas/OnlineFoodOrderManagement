@@ -44,9 +44,17 @@
                 </div>
             </div>
             <div class="row mb-4">
-                <div class="form-outline">
-                    <input type="text" id="registerCity" class="form-control" asp-for="City" />
-                    <label class="form-label" for="formEmail">City</label>
+                <div class="form-group">
+                    <select asp-for="City" asp-items="@Model.Cities" class="custom-select">
+                        <option value="">Select City</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-group">
+                    <select asp-for="State" asp-items="@Model.States" class="custom-select">
+                        <option value="">Select State</option>
+                    </select>
                 </div>
             </div>
 

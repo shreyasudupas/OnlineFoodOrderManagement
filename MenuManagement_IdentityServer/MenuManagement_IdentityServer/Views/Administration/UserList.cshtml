@@ -46,7 +46,7 @@
                                         @user.PhoneNumber
                                     </div>
                                 </div>
-                                <div class="row">
+                                @*<div class="row">
                                     <div class="col-md-4">
                                         <b>Address:</b>
                                     </div>
@@ -61,7 +61,7 @@
                                     <div class="col-md-8">
                                         @user.City
                                     </div>
-                                </div>
+                                </div>*@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <b>User a Admin</b>
@@ -74,54 +74,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<div id="@user.Id" class="edit">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>Username:</b>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" asp-for="@user.UserName" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>Email:</b>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" asp-for="@user.Email" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>Phone Number:</b>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="number" class="form-control" asp-for="@user.PhoneNumber" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>Address:</b>
-                                    </div>
-                                    <div class="col-md-8">
-                                       <input type="text" class="form-control" asp-for="@user.Address" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>City:</b>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" asp-for="@user.City" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>User a Admin</b>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="isAdmincheck" />-->
+                            
                                             @*<label class="form-check-label" for="isAdmincheck">IsAdmin</label>*@
                                         <!--</div>
                                     </div>
@@ -165,7 +118,7 @@
             @:newObj["Email"] = "@us.Email";
             @:newObj["PhoneNumber"] = "@us.PhoneNumber";
             @:newObj["Address"] = "@us.Address";
-            @:newObj["City"] = "@us.City";
+            @:newObj["City"] = "";
             @:newObj["IsAdmin"] = "@us.IsAdmin";
             @:UserList.push(newObj);
         }

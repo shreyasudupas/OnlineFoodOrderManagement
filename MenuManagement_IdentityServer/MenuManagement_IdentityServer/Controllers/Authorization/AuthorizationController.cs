@@ -4,10 +4,14 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
+using MenuManagement_IdentityServer.Utilities.DropdownItems;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -22,10 +26,13 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private readonly ILogger _logger;
 
         public AuthorizationController(SignInManager<ApplicationUser> signInManger,
             UserManager<ApplicationUser> userManager,
-            IIdentityServerInteractionService interaction, IClientStore clientStore, IAuthenticationSchemeProvider schemeProvider, IEventService events)
+            IIdentityServerInteractionService interaction, IClientStore clientStore, IAuthenticationSchemeProvider schemeProvider,
+            IEventService events,
+            ILogger<AuthorizationController> logger)
         {
             _signInManger = signInManger;
             _userManager = userManager;
@@ -33,6 +40,7 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -75,7 +83,12 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
         [HttpGet]
         public IActionResult Register(string returnUrl)
         {
-            return View(new RegisterViewModel { ReturnUrl = returnUrl });
+            return View(new RegisterViewModel 
+            { 
+                ReturnUrl = returnUrl,
+                Cities = SelectListUtility.GetCityItems(),
+                States = SelectListUtility.GetStateItems()
+            });
         }
 
         [HttpPost]
@@ -87,9 +100,17 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
                 {
                     UserName = vm.Username,
                     Email = vm.Email,
-                    Address = vm.Address,
-                    City = vm.City
-                };
+                    Address = new List<UserAddress>
+                    {
+                        new UserAddress
+                        {
+                            FullAddress = vm.Address,
+                            City = vm.City,
+                            State = vm.State,
+                            IsActive = true
+                        }
+                    }
+                };  
                 
                 var result = await _userManager.CreateAsync(user, vm.Password);
 
@@ -98,14 +119,14 @@ namespace MenuManagement_IdentityServer.Controllers.Authorization
                     //add claims
                     var usernameClaim = new Claim("userName", vm.Username);
                     var emailClaim = new Claim("email", vm.Email);
-                    var addressClaim = new Claim("address", vm.Address);
-                    var cityClaim = new Claim("city", vm.City);
+                    var addressClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
+                    
 
                     var result1 = _userManager.AddClaimAsync(user, usernameClaim).GetAwaiter().GetResult();
                     var result2 = _userManager.AddClaimAsync(user, emailClaim).GetAwaiter().GetResult();
                     var result3 = _userManager.AddClaimAsync(user, addressClaim).GetAwaiter().GetResult();
-                    var result4 = _userManager.AddClaimAsync(user, cityClaim).GetAwaiter().GetResult();
 
+                    _logger.LogInformation("Claim for username: {0}, Claim for email: {1}, Claim for address: {2}",result1,result2,result3);
                     if (vm.ReturnUrl == null)
                     {
                         //if registering from Identity Server then go back to login

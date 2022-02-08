@@ -22,5 +22,7 @@ namespace MenuManagement_IdentityServer.Service.Interface
         EditClaimViewModel EditClaim(EditClaimViewModel viewModel);
         EditClaimViewModel GetClaimById(int? Id);
         UserInformationModel GetUserInformationDetail(string UserId);
+        UserAddressPartialViewModel SaveUserAddress(UserAddressPartialViewModel viewModel);
+        UserAddressPartialViewModel GetUserAddressInformation(GetUserAddressModel request);
     }
 }
