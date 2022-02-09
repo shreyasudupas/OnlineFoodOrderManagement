@@ -13,6 +13,7 @@ using MenuManagement_IdentityServer.AutoMapperProfile;
 using Newtonsoft.Json;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer;
+using System.Security.Claims;
 
 namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
 {
@@ -56,7 +57,6 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
@@ -101,7 +101,6 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
@@ -140,7 +139,6 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
@@ -180,10 +178,9 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -191,9 +188,24 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
+            var GetClaimsList = new List<Claim>
+            {
+                new Claim("email","admin@test.com"),
+                new Claim("role","admin"),
+                new Claim("address","[{\"Id\": 1,\"FullAddress\": \"sample address , sample address 1\",\"City\": \"sample city\",\"State:\"sample State\",\"IsActive\": true},{\"Id\": 2,\"FullAddress\": \"sample address , sample address 2\",\"City\": \"sample city 2\",\"State\": \"sample State 2\",\"IsActive\": false}]")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimsAsync(It.IsAny<ApplicationUser>(), It.IsAny<List<Claim>>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             //
             var model = new UserAddressPartialViewModel
@@ -216,10 +228,9 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -227,9 +238,24 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
+            var GetClaimsList = new List<Claim>
+            {
+                new Claim("email","admin@test.com"),
+                new Claim("role","admin"),
+                new Claim("address","[{\"Id\": 1,\"FullAddress\": \"sample address , sample address 1\",\"City\": \"sample city\",\"State:\"sample State\",\"IsActive\": true},{\"Id\": 2,\"FullAddress\": \"sample address , sample address 2\",\"City\": \"sample city 2\",\"State\": \"sample State 2\",\"IsActive\": false}]")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             //
             var model = new UserAddressPartialViewModel
@@ -251,10 +277,9 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -262,9 +287,24 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
+            var GetClaimsList = new List<Claim>
+            {
+                new Claim("email","admin@test.com"),
+                new Claim("role","admin"),
+                new Claim("address","[{\"Id\": 1,\"FullAddress\": \"sample address , sample address 1\",\"City\": \"sample city\",\"State:\"sample State\",\"IsActive\": true},{\"Id\": 2,\"FullAddress\": \"sample address , sample address 2\",\"City\": \"sample city 2\",\"State\": \"sample State 2\",\"IsActive\": false}]")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             //
             var model = new UserAddressPartialViewModel
@@ -289,7 +329,7 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -297,9 +337,24 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
+            var GetClaimsList = new List<Claim>
+            {
+                new Claim("email","admin@test.com"),
+                new Claim("role","admin"),
+                new Claim("address","[{\"Id\": 1,\"FullAddress\": \"sample address , sample address 1\",\"City\": \"sample city\",\"State:\"sample State\",\"IsActive\": true},{\"Id\": 2,\"FullAddress\": \"sample address , sample address 2\",\"City\": \"sample city 2\",\"State\": \"sample State 2\",\"IsActive\": false}]")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimsAsync(It.IsAny<ApplicationUser>(), It.IsAny<List<Claim>>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             //
             var model = new UserAddressPartialViewModel
@@ -323,10 +378,9 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
         {
             //Arrange
             SeedData();
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -334,9 +388,24 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
+            var GetClaimsList = new List<Claim>
+            {
+                new Claim("email","admin@test.com"),
+                new Claim("role","admin"),
+                new Claim("address","[{\"Id\": 1,\"FullAddress\": \"sample address , sample address 1\",\"City\": \"sample city\",\"State:\"sample State\",\"IsActive\": true},{\"Id\": 2,\"FullAddress\": \"sample address , sample address 2\",\"City\": \"sample city 2\",\"State\": \"sample State 2\",\"IsActive\": false}]")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             //
             var model = new UserAddressPartialViewModel
@@ -378,10 +447,8 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             appContext.Users.Add(newUser);
             appContext.SaveChanges();
 
-            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
-
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -389,9 +456,24 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
+            var GetClaimsList = new List<Claim>
+            {
+                new Claim("email","admin@test.com"),
+                new Claim("role","admin"),
+                new Claim("address","[{\"Id\": 1,\"FullAddress\": \"sample address , sample address 1\",\"City\": \"sample city\",\"State:\"sample State\",\"IsActive\": true},{\"Id\": 2,\"FullAddress\": \"sample address , sample address 2\",\"City\": \"sample city 2\",\"State\": \"sample State 2\",\"IsActive\": false}]")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             //
             var model = new UserAddressPartialViewModel
