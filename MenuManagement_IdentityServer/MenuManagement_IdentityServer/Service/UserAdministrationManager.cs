@@ -119,7 +119,6 @@ namespace MenuManagement_IdentityServer.Service
             }
             else
             {
-                var Image = GetImagePath();
                 var roles = await _userManager.GetRolesAsync(User);
                 var claims = await _userManager.GetClaimsAsync(User);
 
@@ -131,13 +130,19 @@ namespace MenuManagement_IdentityServer.Service
             return editUser;
         }
 
-        public string GetImagePath()
+        public string GetImagePath(string ImageName)
         {
-            string webRootPath = _webHostEnvironment.WebRootPath;
-            var ImagePath = "\\images\\";
-            string ImagePathLocation = Path.Join(webRootPath, ImagePath);
+            if (!string.IsNullOrEmpty(ImageName))
+            {
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                var ImagePath = "\\images\\" + ImageName;
+                string ImagePathLocation = Path.Join(webRootPath, ImagePath);
+
+                return ImagePathLocation;
+            }
+            else
+                return null;
             
-            return ImagePathLocation;
         }
 
         public async Task<ManagerUserRole> GetManageRoleInformation(string UserId)
@@ -715,12 +720,13 @@ namespace MenuManagement_IdentityServer.Service
         {
             UserInformationModel model = new UserInformationModel();
 
-            var User = _context.Users.Where(u => u.Id == UserId).FirstOrDefault();
+            var User = _context.Users.Include(u=>u.Address).Where(u => u.Id == UserId).FirstOrDefault();
             if(User != null)
             {
                 var ModelMap = mapper.Map<UserInformationModel>(User);
+                ModelMap.ImagePath = GetImagePath(ModelMap.ImagePath).Replace(@"\\",@"\");
 
-                if(ModelMap!=null)
+                if (ModelMap!=null)
                 {
                     model = ModelMap;
                     model.status = CrudEnumStatus.success;
