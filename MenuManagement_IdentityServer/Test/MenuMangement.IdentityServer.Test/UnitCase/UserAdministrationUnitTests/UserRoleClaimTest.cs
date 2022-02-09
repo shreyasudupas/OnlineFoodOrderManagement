@@ -5,15 +5,10 @@ using MenuMangement.IdentityServer.Test.Helper.FakeDbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
@@ -26,8 +21,10 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             {
                 UserName = "admin",
                 Email = "admin@test.com",
-                Address = "sample address , sample address",
-                City = "sample city",
+                Address = new List<UserAddress>
+                {
+                    new UserAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
+                },
                 IsAdmin = true
             };
 
@@ -42,8 +39,7 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             SeedData();
             var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
 
-            var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStoreClaim.Object, null, null, null, null, null, null, null, null);
 
             var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
             var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
@@ -51,19 +47,180 @@ namespace MenuMangement.IdentityServer.Test.UnitCase.UserAdministrationUnitTests
             var mockWebHostEnv = new Mock<IWebHostEnvironment>();
             var logMock = new Mock<ILogger<UserAdministrationManager>>();
 
-            var mockService = new UserAdministrationManager(mockUserManager, mockRoleManager, appContext, mockIMapper.Object
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
                 , mockWebHostEnv.Object, logMock.Object);
 
             var NewRoles = new List<string> { "admin" };
             var ExistingRoles = new List<string>();
 
             var user = appContext.Users.FirstOrDefault();
-            var claim = new Claim("test","test");
 
-            mockUserStoreClaim.Setup(x => x.AddClaimsAsync(It.IsAny<ApplicationUser>(), It.IsAny<List<Claim>>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(IdentityResult.Success));
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
 
              mockService.ManageRoleClaim(NewRoles,true,false, user, ExistingRoles);
+        }
+
+        [Fact]
+        public void ManageRoleClaim_Should_Be_True_If_multiple_Role_is_Added()
+        {
+            //Arrange
+            SeedData();
+
+            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStoreClaim.Object, null, null, null, null, null, null, null, null);
+
+            var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
+            var mockIMapper = new Mock<IMapper>();
+            var mockWebHostEnv = new Mock<IWebHostEnvironment>();
+            var logMock = new Mock<ILogger<UserAdministrationManager>>();
+
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
+                , mockWebHostEnv.Object, logMock.Object);
+
+            var NewRoles = new List<string> { "appUser" };
+            var ExistingRoles = new List<string> { "admin" };
+
+            var user = appContext.Users.FirstOrDefault();
+
+            var GetClaimsList = new List<Claim>
+            {
+               new Claim("role","admin")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+
+            mockService.ManageRoleClaim(NewRoles, true, false, user, ExistingRoles);
+        }
+
+        [Fact]
+        public void ManageRoleClaim_Remove_OnlyRole_With_The_User()
+        {
+            //Arrange
+            SeedData();
+
+            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStoreClaim.Object, null, null, null, null, null, null, null, null);
+
+            var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
+            var mockIMapper = new Mock<IMapper>();
+            var mockWebHostEnv = new Mock<IWebHostEnvironment>();
+            var logMock = new Mock<ILogger<UserAdministrationManager>>();
+
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
+                , mockWebHostEnv.Object, logMock.Object);
+
+            var NewRoles = new List<string> ();
+            var ExistingRoles = new List<string> { "admin" };
+
+            var user = appContext.Users.FirstOrDefault();
+
+            var GetClaimsList = new List<Claim>
+            {
+               new Claim("role","admin")
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockService.ManageRoleClaim(NewRoles, false, true, user, ExistingRoles);
+
+        }
+
+        [Fact]
+        public void ManageRoleClaim_Remove_OneOf_the_Role_Of_The_User()
+        {
+            //Arrange
+            SeedData();
+
+            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStoreClaim.Object, null, null, null, null, null, null, null, null);
+
+            var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
+            var mockIMapper = new Mock<IMapper>();
+            var mockWebHostEnv = new Mock<IWebHostEnvironment>();
+            var logMock = new Mock<ILogger<UserAdministrationManager>>();
+
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
+                , mockWebHostEnv.Object, logMock.Object);
+
+            var RemoveRoles = new List<string> { "appUser" };
+            var ExistingRoles = new List<string> { "admin","appUser" };
+
+            var user = appContext.Users.FirstOrDefault();
+
+            var GetClaimsList = new List<Claim>
+            {
+               new Claim("role","admin,appUser"),
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockService.ManageRoleClaim(RemoveRoles, false, true, user, ExistingRoles);
+
+        }
+
+        [Fact]
+        public void ManageRoleClaim_Remove_OneOf_the_Role_Of_The_User_From_List_of_Roles()
+        {
+            //Arrange
+            SeedData();
+
+            var mockUserStoreClaim = new Mock<IUserClaimStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(mockUserStoreClaim.Object, null, null, null, null, null, null, null, null);
+
+            var mockRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new RoleManager<IdentityRole>(mockRoleStore.Object, null, null, null, null);
+            var mockIMapper = new Mock<IMapper>();
+            var mockWebHostEnv = new Mock<IWebHostEnvironment>();
+            var logMock = new Mock<ILogger<UserAdministrationManager>>();
+
+            var mockService = new UserAdministrationManager(mockUserManager.Object, mockRoleManager, appContext, mockIMapper.Object
+                , mockWebHostEnv.Object, logMock.Object);
+
+            var RemoveRoles = new List<string> { "appUser" };
+            var ExistingRoles = new List<string> { "admin", "appUser" ,"testUsers"};
+
+            var user = appContext.Users.FirstOrDefault();
+
+            var GetClaimsList = new List<Claim>
+            {
+               new Claim("role","admin,appUser,testUsers"),
+            };
+
+            mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(GetClaimsList);
+
+            mockUserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            mockService.ManageRoleClaim(RemoveRoles, false, true, user, ExistingRoles);
+
         }
     }
 }

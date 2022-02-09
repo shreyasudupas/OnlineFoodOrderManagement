@@ -261,6 +261,15 @@ namespace MenuManagement_IdentityServer.Service
                         roleValue.Append(role);
                         continue;
                     }
+                    else
+                    {
+                        //Add Existing roles to roleValue
+                        foreach (var r in UserExsitingRole)
+                            if (UserExsitingRole.Count >= 1)
+                                roleValue.Append(r);
+                            else
+                                roleValue.Append(","+r);
+                    }
 
                     roleValue.Append("," + role);
                 }
@@ -291,32 +300,34 @@ namespace MenuManagement_IdentityServer.Service
 
                     if (RemoveRoleClaim.Succeeded)
                     {
-                        //If any roles are present only then add
-                        if (NewOrRemoveRoles.Count > 0)
+                        //Remove Role if more than one ExistingRole
+                        var RemaingRoleToBeAdded = UserExsitingRole.Except(NewOrRemoveRoles).ToArray();
+
+                        var roleValue = new StringBuilder();
+
+                        for(var r= 0;r< RemaingRoleToBeAdded.Count();r++)
                         {
-                            var roleValue = new StringBuilder();
-                            foreach (var role in NewOrRemoveRoles)
+                            if (r==0)
                             {
-                                if (UserExsitingRole.Count < 1)
-                                {
-                                    roleValue.Append(role);
-                                    continue;
-                                }
-
-                                roleValue.Append("," + role);
-                            }
-
-                            var roleClaim = new Claim("role", roleValue.ToString());
-                            var result = _userManager.AddClaimAsync(user, roleClaim).GetAwaiter().GetResult();
-                            if (result.Succeeded)
+                                roleValue.Append(RemaingRoleToBeAdded[r]);
+                            }else
                             {
-                                _logger.LogInformation("role claim updated");
-                            }
-                            else
-                            {
-                                _logger.LogInformation("role claim not uodated");
+                                roleValue.Append("," + RemaingRoleToBeAdded[r]);
                             }
                         }
+
+                        var roleClaim = new Claim("role", roleValue.ToString());
+
+                        var result = _userManager.AddClaimAsync(user, roleClaim).GetAwaiter().GetResult();
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("role claim updated");
+                        }
+                        else
+                        {
+                            _logger.LogInformation("role claim not uodated");
+                        }
+
                     }
                 }
             }
