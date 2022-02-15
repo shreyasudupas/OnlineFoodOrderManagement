@@ -724,7 +724,6 @@ namespace MenuManagement_IdentityServer.Service
             if(User != null)
             {
                 var ModelMap = mapper.Map<UserInformationModel>(User);
-                ModelMap.ImagePath = GetImagePath(ModelMap.ImagePath).Replace(@"\\",@"\");
 
                 if (ModelMap!=null)
                 {

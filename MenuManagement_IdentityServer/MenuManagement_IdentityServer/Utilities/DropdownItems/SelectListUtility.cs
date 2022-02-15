@@ -26,5 +26,26 @@ namespace MenuManagement_IdentityServer.Utilities.DropdownItems
                 new SelectListItem { Text = "Telangana", Value = "Telangana" }
             };
         }
+
+        //
+        public static List<SelectListItem> GetGrantTypes()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value="authorization_code" ,Text="Authorization Code" }
+            };
+        }
+
+        //This will be shown in access_token
+        public static List<SelectListItem> GetAllowedScopeList()
+        {
+            return new List<SelectListItem> 
+            {
+                new SelectListItem { Value = "userRole", Text = "Role" },
+                new SelectListItem { Value = "office", Text = "Office" },
+                new SelectListItem { Value = "profile", Text = "Profile" },
+                new SelectListItem { Value = "openid", Text = "OpenId" },
+            };
+        }
     }
 }
