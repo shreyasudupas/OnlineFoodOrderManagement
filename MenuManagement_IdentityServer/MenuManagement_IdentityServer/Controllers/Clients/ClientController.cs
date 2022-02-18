@@ -210,5 +210,40 @@ namespace MenuManagement_IdentityServer.Controllers.Clients
             }
             
         }
+
+        [HttpGet]
+        public IActionResult GetApiScopes()
+        {
+            var result = _clientService.GetAllApiScopes();
+
+            return View(result);
+        }
+
+        [HttpGet]
+        public IActionResult ManageApiScopes(int? Id)
+        {
+            if(Id == null)
+                return PartialView("_ManageApiScopes",new GetApiScopeModel());
+            else
+            {
+                var result = _clientService.GetApiScopeById(Id);
+                return PartialView("_ManageApiScopes", result);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ManageApiScopes(GetApiScopeModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = _clientService.ManageApiScope(viewModel);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Error in model");
+            }
+            return PartialView("_ManageApiScopes", viewModel);
+            
+        }
     }
 }

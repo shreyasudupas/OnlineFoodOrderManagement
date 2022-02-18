@@ -133,8 +133,8 @@
         "Limit": 1,
         "HttpStatusCode": 429
       }
-    }
-
+    },
+    //IDS API Server
   ],
   "GlobalConfiguration": {
     //"BaseUrl": "http://localhost:18459",

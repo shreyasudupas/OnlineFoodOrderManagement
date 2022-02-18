@@ -525,5 +525,64 @@ namespace MenuManagement_IdentityServer.Service
                 ClientDbContext.SaveChanges();
             }
         }
+
+        public GetApiScopesViewModel GetAllApiScopes()
+        {
+            var result = new GetApiScopesViewModel();
+            var ApiScopes = ClientDbContext.ApiScopes.ToList();
+
+            if(ApiScopes.Count > 0)
+            {
+                result.ApiScopes = _mapper.Map<List<GetApiScopeModel>>(ApiScopes);
+
+            }
+
+            return result;
+        }
+
+        public GetApiScopeModel GetApiScopeById(int? Id)
+        {
+            GetApiScopeModel model = new GetApiScopeModel();
+            if (Id != null)
+            {
+                var GetApiScope = ClientDbContext.ApiScopes.Where(api => api.Id == Id).FirstOrDefault();
+
+                model.Id = GetApiScope.Id;
+                model.Name = GetApiScope.Name;
+                model.DisplayName = GetApiScope.DisplayName;
+                model.Description = GetApiScope.Description;
+
+            }
+            return model;
+        }
+
+        public GetApiScopeModel ManageApiScope(GetApiScopeModel model)
+        {
+            var GetApiScope = ClientDbContext.ApiScopes.Where(api => api.Id == model.Id).FirstOrDefault();
+
+            if(GetApiScope != null)
+            {
+                //Edit
+                GetApiScope.Name = model.Name;
+                GetApiScope.DisplayName = model.DisplayName;
+                GetApiScope.Description = model.Description;
+
+                ClientDbContext.SaveChanges();
+            }
+            else
+            {
+                //Add new Item
+                ClientDbContext.ApiScopes.Add(new IdentityServer4.EntityFramework.Entities.ApiScope
+                {
+                    Name = model.Name,
+                    DisplayName = model.DisplayName,
+                    Description = model.Description
+                });
+
+                ClientDbContext.SaveChanges();
+            }
+
+            return model;
+        }
     }
 }
