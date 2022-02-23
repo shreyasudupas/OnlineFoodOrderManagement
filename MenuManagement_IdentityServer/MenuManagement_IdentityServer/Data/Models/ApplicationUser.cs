@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace MenuManagement_IdentityServer.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public string Address { get; set; }
-        public string City { get; set; }
+        public List<UserAddress> Address { get; set; }
         public bool IsAdmin { get; set; }
         public string ImagePath { get; set; }
+        public int CartAmount { get; set; }
+        public double Points { get; set; }
     }
 }

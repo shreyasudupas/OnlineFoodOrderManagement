@@ -4,6 +4,7 @@ using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Models;
 using MenuManagement_IdentityServer.Models;
 using MenuManagement_IdentityServer.Service.Interface;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,14 @@ namespace MenuManagement_IdentityServer.Service
                     result.RequireClientSecret = Client.RequireClientSecret;
                     result.RequireConsent = Client.RequireConsent;
                     result.CreatedDate = Client.Created;
+                    result.RequirePkce = Client.RequirePkce;
+
+                    //Add all the scopes from GetApI
+                    result.AllowedScopeList.AddRange(ClientDbContext.ApiScopes.Select(ac => new SelectListItem
+                    {
+                        Text = ac.DisplayName,
+                        Value = ac.Name
+                    }).ToList());
 
                     if (Client.RedirectUris != null)
                     {
@@ -158,22 +167,10 @@ namespace MenuManagement_IdentityServer.Service
                     GetClient.AllowedGrantTypes = new List<ClientGrantType>();
 
                     //Adding Client Grant Type
-                    foreach (var gtpye in model.GrantTypesSelected)
-                    {
-                        GetClient.AllowedGrantTypes.Add(new ClientGrantType
-                        {
-                            GrantType = gtpye
-                        });
-                    }
+                    ManageGrantType(model, model.ClientId);
 
-                    //Adding allowed scope
-                    foreach (var scope in model.AllowedScopeSelected)
-                    {
-                        GetClient.AllowedScopes.Add(new ClientScope
-                        {
-                            Scope = scope
-                        });
-                    }
+                    //Manage allowed scope
+                    ManageAllowedScope(model, model.ClientId);
 
 
                     model.status = CrudEnumStatus.success;
@@ -439,6 +436,151 @@ namespace MenuManagement_IdentityServer.Service
                 model.ErrorDescription.Add(ex.Message);
             }
             
+
+            return model;
+        }
+
+        public void ManageAllowedScope(ClientViewModel model,string ClientId)
+        {
+            var Client = ClientDbContext.Clients.Include(x=>x.AllowedScopes).Where(c => c.ClientId == ClientId).FirstOrDefault();
+
+            if(Client.AllowedScopes != null)
+            {
+                var ExistingScope = Client.AllowedScopes.Select(cas => cas.Scope).ToList();
+
+                //if new scope is added to the existing list
+                //var AddedNewScope = ExistingScope.Intersect(model.AllowedScopeSelected);
+                var AddedNewScope = model.AllowedScopeSelected.Except(ExistingScope);
+
+                if (AddedNewScope.Count() > 0)
+                {
+                    foreach (var scope in AddedNewScope)
+                    {
+                        Client.AllowedScopes.Add(new ClientScope
+                        {
+                            Scope = scope
+                        });
+                    }
+
+                }
+
+                //var RemovedScopes = model.AllowedScopeSelected.Intersect(ExistingScope.Where(x=> model.AllowedScopeSelected.Contains(x)));
+                var RemovedScopes = ExistingScope.Except(model.AllowedScopeSelected);
+
+                if (RemovedScopes.Count() > 0 )
+                {
+                    foreach(var ac in RemovedScopes)
+                    {
+                        //select the scopes
+                        var addRemainingScopes = Client.AllowedScopes.Where(s => s.Scope == ac).FirstOrDefault();
+
+                        Client.AllowedScopes.Remove(addRemainingScopes);
+                    }
+                    
+                }
+
+                ClientDbContext.SaveChanges();
+            }
+        }
+
+        public void ManageGrantType(ClientViewModel model, string ClientId)
+        {
+            var Client = ClientDbContext.Clients.Include(x => x.AllowedGrantTypes).Where(c => c.ClientId == ClientId).FirstOrDefault();
+
+            if (Client.AllowedGrantTypes != null)
+            {
+                var ExistingScope = Client.AllowedGrantTypes.Select(cas => cas.GrantType).ToList();
+
+                //if new scope is added to the existing list
+                //var AddedNewScope = ExistingScope.Intersect(model.AllowedScopeSelected);
+                var AddedNewGrantType = model.GrantTypesSelected.Except(ExistingScope);
+
+                if (AddedNewGrantType.Count() > 0)
+                {
+                    foreach (var grant in AddedNewGrantType)
+                    {
+                        Client.AllowedGrantTypes.Add(new ClientGrantType
+                        {
+                            GrantType = grant
+                        });
+                    }
+
+                }
+
+                //var RemovedScopes = model.AllowedScopeSelected.Intersect(ExistingScope.Where(x=> model.AllowedScopeSelected.Contains(x)));
+                var RemovedGrantType = ExistingScope.Except(model.GrantTypesSelected);
+
+                if (RemovedGrantType.Count() > 0)
+                {
+                    foreach (var grant in RemovedGrantType)
+                    {
+                        //select the scopes
+                        var getGrantTypeToBeRemoved = Client.AllowedGrantTypes.Where(s => s.GrantType == grant).FirstOrDefault();
+
+                        Client.AllowedGrantTypes.Remove(getGrantTypeToBeRemoved);
+                    }
+
+                }
+
+                ClientDbContext.SaveChanges();
+            }
+        }
+
+        public GetApiScopesViewModel GetAllApiScopes()
+        {
+            var result = new GetApiScopesViewModel();
+            var ApiScopes = ClientDbContext.ApiScopes.ToList();
+
+            if(ApiScopes.Count > 0)
+            {
+                result.ApiScopes = _mapper.Map<List<GetApiScopeModel>>(ApiScopes);
+
+            }
+
+            return result;
+        }
+
+        public GetApiScopeModel GetApiScopeById(int? Id)
+        {
+            GetApiScopeModel model = new GetApiScopeModel();
+            if (Id != null)
+            {
+                var GetApiScope = ClientDbContext.ApiScopes.Where(api => api.Id == Id).FirstOrDefault();
+
+                model.Id = GetApiScope.Id;
+                model.Name = GetApiScope.Name;
+                model.DisplayName = GetApiScope.DisplayName;
+                model.Description = GetApiScope.Description;
+
+            }
+            return model;
+        }
+
+        public GetApiScopeModel ManageApiScope(GetApiScopeModel model)
+        {
+            var GetApiScope = ClientDbContext.ApiScopes.Where(api => api.Id == model.Id).FirstOrDefault();
+
+            if(GetApiScope != null)
+            {
+                //Edit
+                GetApiScope.Name = model.Name;
+                GetApiScope.DisplayName = model.DisplayName;
+                GetApiScope.Description = model.Description;
+
+                ClientDbContext.SaveChanges();
+            }
+            else
+            {
+                //Add new Item
+                ClientDbContext.ApiScopes.Add(new IdentityServer4.EntityFramework.Entities.ApiScope
+                {
+                    Name = model.Name,
+                    DisplayName = model.DisplayName,
+                    Description = model.Description
+                });
+
+                ClientDbContext.SaveChanges();
+            }
 
             return model;
         }

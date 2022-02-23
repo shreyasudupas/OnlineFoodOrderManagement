@@ -54,7 +54,7 @@
                            data-mdb-toggle="dropdown"
                            aria-expanded="false"
                            style="text-decoration:none">
-                            Task
+                            Operations
                         </a>
                         <ul class="dropdown-menu"
                             aria-labelledby="navbarDropdownAdminLink">
@@ -72,6 +72,9 @@
                             </li>
                             <li>
                                 <a class="dropdown-item" asp-controller="Claim" asp-action="GetListClaims">Get All Claims</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Client" asp-action="GetApiScopes">API Scopes</a>
                             </li>
                         </ul>
                     }

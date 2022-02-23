@@ -17,5 +17,8 @@ namespace MenuManagement_IdentityServer.Service.Interface
         AddPostLogoutRedirectUriViewModel AddPostLogoutRedirectUrl(AddPostLogoutRedirectUriViewModel model);
         bool DeletePostLogoutUri(DeletePostLogoutRedirectUri model);
         DeleteClientViewModel DeleteClient(string ClientId);
+        GetApiScopesViewModel GetAllApiScopes();
+        GetApiScopeModel GetApiScopeById(int? Id);
+        GetApiScopeModel ManageApiScope(GetApiScopeModel model);
     }
 }

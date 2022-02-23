@@ -2,6 +2,7 @@
 using MenuManagement_IdentityServer.Configurations;
 using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
+using MenuManagement_IdentityServer.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,11 +41,12 @@ namespace MenuManagement_IdentityServer.Installers
                 config.LoginPath = "/Authorization/Login";
                 config.LogoutPath = "/Authorization/Logout";
                 config.AccessDeniedPath = "/Authorization/AccessDenied";
-                config.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                config.ExpireTimeSpan = TimeSpan.FromMinutes(120);
             });
 
             services.AddIdentityServer()
                     .AddAspNetIdentity<ApplicationUser>()
+                    .AddProfileService<CustomProfileService>()
                     //.AddInMemoryClients(IdentityServer_Config.GetClients())
                     //.AddInMemoryIdentityResources(IdentityServer_Config.GetIdentityResources())
                     //.AddInMemoryApiResources(IdentityServer_Config.GetApiResources())
