@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menuids-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: menuidsservice
+  template:
+    metadata:
+      labels:
+        app: menuidsservice
+    spec:
+      containers:
+      - name: menuidsservice
+        image: udupashreyas/menuidsservice:latest
+---
+# This is used to communicate with other micro service
+apiVersion: v1
+kind: Service
+metadata:
+  name: menuids-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: menuidsservice
+  ports:
+  - name: menuidsservice
+    protocol: TCP
+    port: 80
+    targetPort: 80

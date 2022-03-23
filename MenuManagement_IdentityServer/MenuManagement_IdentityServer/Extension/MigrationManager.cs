@@ -4,6 +4,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using MenuManagement_IdentityServer.Configurations;
 using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +27,12 @@ namespace MenuManagement_IdentityServer.Extension
 
                 using (var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>())
                 {
+                    var web = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+
                     try
                     {
+                        Console.WriteLine($">> Seeding for {web.EnvironmentName} started");
+
                         context.Database.Migrate();
 
                         if (!context.Clients.Any())
@@ -37,6 +42,10 @@ namespace MenuManagement_IdentityServer.Extension
                                 context.Clients.Add(client.ToEntity());
                             }
                             context.SaveChanges();
+                        }
+                        else
+                        {
+                            Console.WriteLine($">> Data already Present in {web.EnvironmentName}");
                         }
 
                         if (!context.IdentityResources.Any())
@@ -69,6 +78,7 @@ namespace MenuManagement_IdentityServer.Extension
 
                         MigrateApplicationDbContextDatabase(host);
 
+                        Console.WriteLine($">> Seeding for {web.EnvironmentName} ended");
                         //use this to remove the clients
                         //var getAllClients = context.Clients.ToList();
                         //var getAllApiScopes = IdentityServer_Config.GetApiScopes();
@@ -79,7 +89,7 @@ namespace MenuManagement_IdentityServer.Extension
 
                         //context.SaveChanges();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //Log errors or do anything you think it's needed
                         throw;

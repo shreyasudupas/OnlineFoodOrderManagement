@@ -728,6 +728,7 @@ namespace MenuManagement_IdentityServer.Service
                 if (ModelMap!=null)
                 {
                     model = ModelMap;
+                    model.ImagePath = (string.IsNullOrEmpty(model.ImagePath)) ? "default_profile_pic.jpg" : model.ImagePath; //default image name
                     model.status = CrudEnumStatus.success;
                 }
                 else

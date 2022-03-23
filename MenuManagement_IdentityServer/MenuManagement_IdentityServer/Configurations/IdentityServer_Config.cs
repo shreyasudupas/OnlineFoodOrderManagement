@@ -32,7 +32,7 @@ namespace MenuManagement_IdentityServer.Configurations
                 AllowedScopes = new List<string>{ 
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    IdentityServerConstants.LocalApi.AuthenticationScheme, //This is used to call API within the IDS server API when client that doesnt have cookie and can access API
+                    IdentityServerConstants.LocalApi.ScopeName, //This is used to call API within the IDS server API when client that doesnt have cookie and can access API
                     "userIDSApi", //this is as audience,
                     "GetUserRole" //This is used to get role in id_token
                 },

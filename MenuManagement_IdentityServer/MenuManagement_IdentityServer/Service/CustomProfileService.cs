@@ -4,12 +4,16 @@ using IdentityServer4.Services;
 using MenuManagement_IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Service
 {
+    /// <summary>
+    /// This is used to add custom properties on access token, so that external client can access API that belongs to IDS
+    /// </summary>
     public class CustomProfileService : IProfileService
     {
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _claimsFactory;
@@ -27,15 +31,24 @@ namespace MenuManagement_IdentityServer.Service
         {
             var sub = context.Subject.GetSubjectId();
             var user = await _userManager.FindByIdAsync(sub);
-            var principal = await _claimsFactory.CreateAsync(user);
+            //var principal = await _claimsFactory.CreateAsync(user);
 
-            var claims = principal.Claims.ToList();
-            claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
+            //var claims = principal.Claims.ToList();
+            //claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
 
             // Add custom claims in token here based on user properties or any other source
-            //claims.Add(new Claim("username", user.UserName));
+            //Find user role claims
+            var claims = await _userManager.GetClaimsAsync(user);
+            var claimList = claims.ToList();
+            var customClaimList = new List<Claim>();
 
-            context.IssuedClaims = claims;
+            if(claimList.Any(x=>x.Type == "role"))
+            {
+                var role = claimList.Find(x => x.Type == "role");
+                customClaimList.Add(new Claim("role", role.Value));
+            }
+
+            context.IssuedClaims = customClaimList;
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
