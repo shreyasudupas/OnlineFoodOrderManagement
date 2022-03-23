@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 
-namespace User.MicroService.Installers
+namespace Identity.MicroService.Installers
 {
     public class SwaggerInstaller : IInstaller
     {
@@ -12,7 +12,7 @@ namespace User.MicroService.Installers
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "User.MicroService", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity.MicroService", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",

@@ -1,8 +1,8 @@
-﻿namespace MicroService.Shared.Models
+﻿namespace Common.Utility.Models
 {
     public class Users
     {
-        public long UserId { get; set; }
+        public long Id { get; set; }
         public string UserName { get; set; }
         public int RoleId { get; set; }
         public string FullName { get; set; }

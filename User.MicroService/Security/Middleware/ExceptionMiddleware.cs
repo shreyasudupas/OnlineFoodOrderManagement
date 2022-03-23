@@ -1,11 +1,11 @@
-﻿using MicroService.Shared.Models;
+﻿using Common.Utility.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace User.MicroService.Security.Middleware
+namespace Identity.MicroService.Security.Middleware
 {
     public class ExceptionMiddleware
     {
@@ -35,7 +35,7 @@ namespace User.MicroService.Security.Middleware
             await context.Response.WriteAsync(new ErrorDetails()
             {
                 Response = context.Response.StatusCode,
-                Exception = exception.Message
+                Exception = new ExceptionDetails { Message=exception.Message,StackTrace=exception.StackTrace }
             }.ToString());
         }
     }

@@ -1,28 +1,40 @@
 {
   "Routes": [
-    {
-      "DownstreamPathTemplate": "/api/user/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5000
-        }
-      ],
-      "UpstreamPathTemplate": "/api/gateway/usertest/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get" ]
-    },
+    //Identity MicroService Server
     {
       "DownstreamPathTemplate": "/api/v1/user/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          //"Port": 44301
+          "Port": 5002
         }
       ],
       "UpstreamPathTemplate": "/api/gateway/user/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get" ]
+    },
+    //Menu Inventory MicroService
+    {
+      "DownstreamPathTemplate": "/api/v1/menu/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          //"Port": 44353
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/gateway/inventory/menu/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/vendor/{everything}",
@@ -30,14 +42,102 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44353
+          //"Port": 44353
+          "Port": 5003
         }
       ],
-      "UpstreamPathTemplate": "/api/gateway/inventory/{everything}",
-      "UpstreamHttpMethod": [ "Post", "Get" ]
-    }
+      "UpstreamPathTemplate": "/api/gateway/inventory/vendor/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
+    },
+    //Basket MicroService
+    {
+      "DownstreamPathTemplate": "/api/v1/Basket/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          //"Port": 44357
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/gateway/basketservice/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/CartInformation/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          //"Port": 44357
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/gateway/cart-information/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
+    },
+    //Order MicroService
+    {
+      "DownstreamPathTemplate": "/api/v1/order/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/api/gateway/orders/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/VendorCartConfiguration/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          //"Port": 44353
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/gateway/cart-configuration/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "5s",
+        "PeriodTimespan": 1,
+        "Limit": 1,
+        "HttpStatusCode": 429
+      }
+    },
+    //IDS API Server
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:18459"
+    //"BaseUrl": "http://localhost:18459",
+    "BaseUrl": "https://localhost:5000"
   }
 }

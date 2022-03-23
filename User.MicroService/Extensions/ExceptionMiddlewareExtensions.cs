@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using User.MicroService.Security.Middleware;
+using Identity.MicroService.Security.Middleware;
 
-namespace User.MicroService.Extensions
+namespace Identity.MicroService.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
@@ -14,6 +14,11 @@ namespace User.MicroService.Extensions
         public static void ConfigureAuthoriziationMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<GetUserMiddleware>();
+        }
+
+        public static void CallRequestLoggingMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<RequestLoggingMiddleware>();
         }
     }
 

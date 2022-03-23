@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
-namespace User.MicroService.Installers
+namespace Identity.MicroService.Installers
 {
     public static class InstallerExtension
     {

@@ -1,0 +1,401 @@
+﻿@model ClientViewModel
+@{
+    ViewData["Title"] = "ClientEdit";
+    var Id = Model.ClientId;
+    TempData["PreviousUrl"] = TempData["CurrentUrl"];
+    TempData["CurrentUrl"] = Url.Action("EditClientInformation", "Client", new { ClientId = Id });
+    int index = 1;
+    int redirectIndex = 1;
+    int allowedCorsIndex = 1;
+    int postLogoutIndex = 1;
+}
+<h2>Client Information</h2>
+
+<div id="modal-placeholder"></div>
+<form id="clientForm" enctype="multipart/form-data" asp-controller="Client" asp-action="EditClientInformation" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-outline mb-4">
+                <input type="text" id="formClientId" class="form-control" asp-for="@Model.ClientId" />
+                <label class="form-label" for="formClientId">Client Id</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" id="formClientName" class="form-control" asp-for="@Model.ClientName" />
+                <label class="form-label" for="formClientName">Client Name</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" id="formDescription" class="form-control" asp-for="@Model.Description" />
+                <label class="form-label" for="formDescription">Description</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="number" id="formAccessToken" class="form-control" asp-for="@Model.AccessTokenLifetime" />
+                <label class="form-label" for="formAccessToken">Access Token LifeTime</label>
+            </div>
+            <div class="form-outline mb-3" style="width: 22rem;">
+                <input class="form-control"
+                       id="formControlDisabled"
+                       type="text"
+                       placeholder="Disabled input"
+                       aria-label="disabled input example"
+                       disabled />
+                <label class="form-label" for="formControlDisabled">@Model.CreatedDate</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="RequireClientSecretId" asp-for="@Model.RequireClientSecret" />
+                <label class="form-check-label" for="RequireClientSecretId">Require Client Secret</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@Model.RequireConsent" />
+                <label class="form-check-label" for="inlineCheckbox2">Require Consent</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineRequirePkce" asp-for="@Model.RequirePkce" />
+                <label class="form-check-label" for="inlineRequirePkce">Require PKCE</label>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ClientId))
+            {
+                <div class="form-group col-md-4">
+                    <select asp-for="@Model.GrantTypesSelected" asp-items="@Model.GrantTypes" class="custom-select">
+                        <option value="">Choose Grant Types</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <select asp-for="@Model.AllowedScopeSelected" asp-items="@Model.AllowedScopeList" class="custom-select">
+                        <option value="">Choose Scopes</option>
+                    </select>
+                </div>
+            }
+
+        </div>
+        <div class="card-footer">
+            <input class="btn btn-success" type="submit" name="save" value="Save" />
+            <input class="btn btn-secondary" type="submit" name="cancel" value="Cancel" />
+        </div>
+    </div>
+</form>
+
+<!-- Client Secret List-->
+<div id="partialClientSecret">
+    <div class="mt-3 client-secret">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageClientSecret"
+                            data-url="@Url.Action("ManageClientSecret","Client",new { ClientId = Model.ClientId })">
+                        Manage Client Secret
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="columnHide">ClientId</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var secret in Model.ClientSecrets)
+                        {
+                            <tr>
+                                <td>@(index++)</td>
+                                <td class="columnHide">@secret.Key</td>
+                                <td>@secret.Value</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-floating callDeleteSecret">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <!-- List of Redirect urls-->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>List of Redirect Urls</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Urls</th>
+                            <th>Action</th>
+                            <th class="columnHide">RedirectId</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var redirect in Model.RedirectUrls)
+                        {
+                            <tr>
+                                <td>@(redirectIndex++)</td>
+                                <td>@redirect.Value</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-floating deleteRedirect">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td class="columnHide">@redirect.Key</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#addRedirectUrl"
+                        data-url="@Url.Action("AddRedirectUrl","Client",new { ClientId = Model.ClientId })">Add Redirect Urls</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Allowed Cors origin-->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Allowed CORS Origin</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Urls</th>
+                            <th>Action</th>
+                            <th class="columnHide">ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cors in Model.AllowedCorsOrigins)
+                        {
+                            <tr>
+                                <td>@(allowedCorsIndex++)</td>
+                                <td>@cors.Value</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-floating deleteAllowedOrigin">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td class="columnHide">@cors.Key</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#addAllowedOriginUrl"
+                        data-url="@Url.Action("AddCorsAllowedOrigin","Client",new { ClientId = Model.ClientId })">
+                    Add Allowed Origin
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--PostLogout Redirect Urls-->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>PostLogout Redirect Urls</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Urls</th>
+                            <th>Action</th>
+                            <th class="columnHide">Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var postLogout in Model.PostRedirectUrls)
+                        {
+                            <tr>
+                                <td>@(postLogoutIndex++)</td>
+                                <td>@postLogout.Value</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-floating deletePostLogout">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td class="columnHide">
+                                    @postLogout.Key
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#addPostLogoutUrl"
+                        data-url="@Url.Action("AddPostLogoutRedirectUri","Client",new { ClientId = Model.ClientId })">
+                    Add Allowed Origin
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h4>Delete Client</h4>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" asp-action="DeleteClient" asp-route-ClientId="@Model.ClientId">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+    $(function(){
+
+        if ($('#RequireClientSecretId:checkbox:checked').length >= 1) {
+            //alert('checked');
+        } else {
+            //alert('Not checked');
+            //hide
+            $('#partialClientSecret').hide();
+        }
+
+        $('#RequireClientSecretId').on('click', function () {
+            //alert("selected");
+            if ($('#RequireClientSecretId:checkbox:checked').length >= 1) {
+                $('#partialClientSecret').show();
+            } else {
+                //alert('Not checked');
+                //hide
+                $('#partialClientSecret').hide();
+            }
+        });
+
+        $('.callDeleteSecret').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var clientSecretID = getCurrentRow.find('td:eq(1)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["ClientSecretId"] = parseInt(clientSecretID);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientSecret", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
+        $('.deleteRedirect').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var clientRedirectID = getCurrentRow.find('td:eq(3)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["RedirectUrlId"] = parseInt(clientRedirectID);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientRedirectUrl", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
+        $('.deleteAllowedOrigin').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var allowedClientOriginId = getCurrentRow.find('td:eq(3)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["AllowedClientOriginId"] = parseInt(allowedClientOriginId);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientAllowedOrigin", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
+        $('.deletePostLogout').click(function () {
+            var getCurrentRow = $(this).closest("tr");
+            var PostLogoutId = getCurrentRow.find('td:eq(3)').text();
+            //alert(id);
+            var ClientId = $('#formClientId').val();
+            var data = {};
+            data["ClientId"] = ClientId;
+            data["CLientPostLogoutId"] = parseInt(PostLogoutId);
+
+            $.ajax({
+                url:'@Url.Action("DeleteClientPostLogoutUri", "ClientApi")',
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType:'json',
+                success: function (data) {
+                    //alert(data)
+                    if (data == true) {
+                        getCurrentRow.remove();
+                    }
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+
+    });
+    </script>
+}

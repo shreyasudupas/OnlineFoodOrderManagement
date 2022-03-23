@@ -1,0 +1,68 @@
+﻿@model List<DeleteUserClaimViewModel>
+@{
+    var i = 0;
+}
+
+<div class="modal fade" id="deleteUserClaims" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- header-->
+            <div class="modal-header">
+                <h4>Delete User Claim</h4>
+                <button class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!--body-->
+            <div class="modal-body">
+                @if(Model.Any())
+                {
+                <form action="DeleteUserClaim">
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <table id="modalDataTableId">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Claim Type</th>
+                                <th>Claim Value</th>
+                                <th>Selection</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model)
+                            {
+                                <tr id="row@(++i)">
+                                    <td>@(i)</td>
+                                    <td>
+                                        <label class="form-label">@claim.ClaimType</label>
+                                        <input type="hidden" asp-for="@claim.ClaimType" />
+                                    </td>
+                                    <td>
+                                        <label class="form-label">@claim.ClaimValue</label>
+                                        <input type="hidden" asp-for="@claim.ClaimValue" />
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" asp-for="@claim.IsDeleteSelection" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+                }
+                else
+                {
+                    <div class="text-info">
+                        No Claims to Display
+                    </div>
+                }
+            </div>
+
+            <!--footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

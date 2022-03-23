@@ -1,43 +1,69 @@
-﻿using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
-using MicroService.Shared.Models;
+﻿using Identity.MicroService.Features.UserFeature.Queries;
+using Identity.MicroService.Models.APIResponse;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
-namespace User.MicroService.Controllers.V1
+namespace Identity.MicroService.Controllers.V1
 {
-    [Route("api/v1/[controller]/[action]")]
     [ApiController]
+    [Route("api/v1/[controller]/[action]")]
+    [Authorize(Policy = "AllowUserAccess")]
     public class UserController : ControllerBase
     {
-        private readonly IUser _user;
-        public UserController(IUser user)
+        private readonly IMediator _mediator;
+
+        public UserController(IMediator mediator)
         {
-            _user = user;
+            _mediator = mediator;
         }
+
         /// <summary>
         /// Gets the user details and if not present then adds it
         /// </summary>
         /// <returns>User Profile Details</returns>
         /// <response code="200">success userDetails</response>
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetOrUpdateUserDetails(UserProfile userProfile)
+        //[AllowAnonymous]
+        public async Task<Response> GetOrUpdateUserDetails(GetUserRequestModel Username)
         {
-            APIResponse response = new APIResponse();
-            
-            var res = await _user.AddOrGetUserDetails(userProfile);
+            var res = await _mediator.Send(Username);
             if (res != null)
             {
-                response.Content = res;
-                response.Response = 200;
+                return new Response(System.Net.HttpStatusCode.OK, res, null);
             }
             else
             {
-                response.Response = 404;
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
             }
-            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get the dropdown values
+        /// </summary>
+        /// <returns>List of drop down value if ok</returns>
+        [HttpGet]
+        //[AllowAnonymous]
+        public async Task<Response> GetPaymentDropDown()
+        {
+            var res = await _mediator.Send(new GetPaymentDropdownValue());
+            if (res.Count> 0)
+            {
+                return new Response(System.Net.HttpStatusCode.OK, res, null);
+            }
+            else
+            {
+                return new Response(System.Net.HttpStatusCode.NotFound, null, null);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<Response> Authenticate(GetAuthorizationTokenForUser User)
+        {
+            var result = await _mediator.Send(User);
+            return new Response(System.Net.HttpStatusCode.OK, result, null);
         }
     }
 }

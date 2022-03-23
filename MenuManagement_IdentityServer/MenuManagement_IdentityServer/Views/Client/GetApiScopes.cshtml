@@ -1,0 +1,50 @@
+﻿@model GetApiScopesViewModel
+@{
+    ViewData["Title"] = "APIScopes";
+}
+
+<div id="modal-placeholder"></div>
+<div class="mt-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <h4>API Scopes List</h4>
+            </div>
+
+            <div>
+                <div class="m-3 float-end">
+                    <button class="btn btn-primary" data-toggle="ajax-modal" data-target="#manageApiScope" data-url="@Url.Action("ManageApiScopes","Client")">
+                    New</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>DisplayName</th>
+                            <th>Description</th>
+                            <th>Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(var i = 0; i< Model.ApiScopes.Count; i++)
+                        {
+                            <tr>
+                                <td> @(i+1)</td>
+                                <td> @Model.ApiScopes[i].Name </td>
+                                <td> @Model.ApiScopes[i].DisplayName </td>
+                                <td> @Model.ApiScopes[i].Description </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-floating" data-toggle="ajax-modal" data-target="#manageApiScope"
+                                        data-url="@Url.Action("ManageApiScopes","Client",new { Id = Model.ApiScopes[i].Id })">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

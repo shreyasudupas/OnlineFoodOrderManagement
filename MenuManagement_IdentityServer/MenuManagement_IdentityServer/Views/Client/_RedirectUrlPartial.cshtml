@@ -1,0 +1,88 @@
+﻿@model RedirectUrlViewModel
+@{
+}
+
+<div id="addRedirectUrl" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header">
+                <h4>Add Redirect Url</h4>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!--body-->
+            <div class="modal-body">
+                <form id="formRedirectUrl" action="AddRedirectUrl">
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="@Model.ClientId" />
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="secretName" asp-for="@Model.ClientRedirectUrl"
+                               aria-describedby="redirectHelp" placeholder="Enter Redirect Url*">
+                        <small id="redirectHelp" class="form-text text-muted">Enter url eg:https://test.com</small>
+                    </div>
+
+                </form>
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="custom-modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var placeHolderElement = $('#modal-placeholder');
+
+        //call api on save
+        placeHolderElement.on('click', '[data-save="custom-modal"]', function (event) {
+            event.preventDefault();
+            debugger;
+
+            var FormSelector = '';
+            var myFormSelector = '';
+            //find if the id is present
+            if ($(this).parents('.modal').find('form[id="formRedirectUrl"]').length > 0) {
+                FormSelector = 'form[id="formRedirectUrl"]';
+                myFormSelector = "form#formRedirectUrl";
+            }
+
+            var form = $(this).parents('.modal').find(FormSelector);
+            var myform = $(myFormSelector)[0];
+            var actionUrl = form.attr('action');
+
+            var fd = new FormData(myform);
+
+            $.ajax({
+                type: "POST",
+                enctype: "multipart/form-data",
+                url: actionUrl,
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (data) {
+                    var newBody = $('.modal-body', data);
+                    placeHolderElement.find('.modal-body').replaceWith(newBody);
+
+                    var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+
+                    if (isValid) {
+                        placeHolderElement.find('.modal').modal('hide');
+                        //then reload the main page to get refeshed data
+                        location.reload();
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+    });
+</script>

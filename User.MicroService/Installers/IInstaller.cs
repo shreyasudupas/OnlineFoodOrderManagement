@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace User.MicroService.Installers
+namespace Identity.MicroService.Installers
 {
     public interface IInstaller
     {

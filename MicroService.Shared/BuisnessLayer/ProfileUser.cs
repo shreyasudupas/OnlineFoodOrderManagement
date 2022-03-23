@@ -1,7 +1,7 @@
 ﻿
-using MicroService.Shared.BuisnessLayer.IBuisnessLayer;
+using Common.Utility.BuisnessLayer.IBuisnessLayer;
 
-namespace MicroService.Shared.BuisnessLayer
+namespace Common.Utility.BuisnessLayer
 {
     /// <summary>
     /// This is used to send the Email Id across the diffrent layers in Scopped Lifetime from Middleware to Authorization to Controller the value Email Id can be read

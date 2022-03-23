@@ -1,0 +1,95 @@
+﻿@model ClaimsViewModel 
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Claim List";
+
+    TempData["PreviousUrl"] = TempData["CurrentUrl"];
+    TempData["CurrentUrl"] = Url.Action("GetListClaims", "Claim");
+    var index = 1;
+    int? defaultId = null;
+}
+
+@if (Model.Claims.Count < 0)
+{
+     <div>
+         No Claims at the moment
+     </div>
+}
+else
+{
+    <div class="card mt-3">
+        <div class="card-title">
+            <h2>List of Claims present in Application</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="columnHide">Id</th>
+                        <th>Type</th>
+                        <th>Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var claim in Model.Claims)
+                    { 
+                        <tr>
+                            <td>@(index++)</td>
+                            <td class="columnHide">@claim.Id</td>
+                            <td>@claim.Name</td>
+                            <td>@claim.Value</td>
+                            <td>
+                                <a class="btn btn-primary btn-lg btn-floating" asp-action="EditClaimInSelectionDropDown" 
+                                   asp-controller="Claim" asp-route-id="@claim.Id">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" asp-action="EditClaimInSelectionDropDown" asp-controller="Claim"
+               asp-route-id="@defaultId">Add Claims</a>
+        </div>
+    </div>
+}
+@section Scripts{
+    <script>
+
+        $(function () {
+
+            //get edit button click event
+            $('.callEditClaim').click(function () {
+                alert('button clicked');
+                var getCurretnRow = $(this).closest("tr");
+                var getClaimId = getCurretnRow.find('td:eq(1)');
+                var getClaimName = getCurretnRow.find('td:eq(2)');
+                var getClaimValue = getCurretnRow.find('td:eq(3)');
+
+                //create a object
+                var data = {};
+                data['ClaimId'] = getClaimId;
+                data['ClaimType'] = getClaimName;
+                data['ClaimValue'] = getClaimValue;
+
+                $.ajax({
+                    url:'@Url.Action("EditClaimInSelectionDropDown", "Claim")',
+                    type: 'POST',
+                    dataType:'json',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function () {
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+    </script>
+}

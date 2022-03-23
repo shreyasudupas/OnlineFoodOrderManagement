@@ -1,4 +1,4 @@
-﻿namespace MicroService.Shared.BuisnessLayer.IBuisnessLayer
+﻿namespace Common.Utility.BuisnessLayer.IBuisnessLayer
 {
     public interface IProfileUser
     {
