@@ -7,6 +7,7 @@ namespace MenuOrder.Shared.Extension
     {
         public static void RegisterMiddleware(this IApplicationBuilder applicationBuilder)
         {
+            applicationBuilder.UseMiddleware<ExceptionMiddleware>();
             applicationBuilder.UseMiddleware<UserMiddleware>();
         }
     }

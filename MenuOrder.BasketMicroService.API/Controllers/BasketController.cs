@@ -1,5 +1,6 @@
 ﻿using MenuManagement.Core.Services.BasketService.Query;
 using MenuOrder.Shared.Controller;
+using MenuOrder.Shared.Models;
 using MenuOrder.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MenuOrder.BasketMicroService.API.Controllers
 {
+    [Authorize]
     public class BasketController : BaseController
     {
         private readonly IProfileUser _profileUser;
@@ -18,18 +20,18 @@ namespace MenuOrder.BasketMicroService.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<string> GetBasketInformation([FromQuery]GetBasketInformationQuery query)
+        public async Task<string> GetBasketInformation()
         {
-            return await Mediator.Send(query);
+            return await Mediator.Send(new GetBasketInformationQuery { Username = _profileUser.Username });
         }
 
-        [Authorize]
+        
         [HttpGet("/api/basket/getbasketcount")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public string GetBasketCount()
+        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(ExceptionResponse))]
+        public async Task<int> GetBasketCount()
         {
-            var r = _profileUser.UserId;
-            return "true";
+            return await Mediator.Send(new GetUserBasketItemCountQuery { Username = _profileUser.Username });
         }
     }
 }
