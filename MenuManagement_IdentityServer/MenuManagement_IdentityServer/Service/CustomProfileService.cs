@@ -48,6 +48,14 @@ namespace MenuManagement_IdentityServer.Service
                 customClaimList.Add(new Claim("role", role.Value));
             }
 
+            if (claimList.Any(x => x.Type == "userName"))
+            {
+                var role = claimList.Find(x => x.Type == "userName");
+                customClaimList.Add(new Claim("Username", role.Value));
+            }
+
+            customClaimList.Add(new Claim("UserId", user.Id));
+
             context.IssuedClaims = customClaimList;
         }
 

@@ -23,7 +23,7 @@
 
             <!--body-->
             <div class="modal-body">
-                <form id="ManageApiScope" action="AddRedirectUrl">
+                <form id="ManageApiScopeForm" action="ManageApiScopes">
                     <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
                     <div class="form-group">
                         <label for="NameControlInput">Name</label>
@@ -58,9 +58,9 @@
             var FormSelector = '';
             var myFormSelector = '';
             //find if the id is present
-            if ($(this).parents('.modal').find('form[id="ManageApiScope"]').length > 0) {
-                FormSelector = 'form[id="ManageApiScope"]';
-                myFormSelector = "form#ManageApiScope";
+            if ($(this).parents('.modal').find('form[id="ManageApiScopeForm"]').length > 0) {
+                FormSelector = 'form[id="ManageApiScopeForm"]';
+                myFormSelector = "form#ManageApiScopeForm";
             }
 
             var form = $(this).parents('.modal').find(FormSelector);
