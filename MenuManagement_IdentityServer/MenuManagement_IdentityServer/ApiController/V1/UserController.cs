@@ -21,29 +21,13 @@ namespace MenuManagement_IdentityServer.ApiController.V1
         }
 
         [HttpGet]
-        public APIResponse GetUserInformation()
+        public UserInformationModel GetUserInformation()
         {
-            APIResponse response = new APIResponse();
             var userId = User.Claims.Where(x => x.Type == "sub").Select(x=>x.Value).FirstOrDefault();
 
             var result = _UserService.GetUserInformationDetail(userId);
-            if(result.status == CrudEnumStatus.success)
-            {
-                response.StatusCode = 200;
-                response.Content = result;
-            }
-            else if(result.status == CrudEnumStatus.NotFound)
-            {
-                response.Exception = result.ErrorDescription;
-                response.StatusCode = 404;
-            }
-            else
-            {
-                response.Exception = result.ErrorDescription;
-                response.StatusCode = 500;
-            }
 
-            return response;
+            return result;
         }
     }
 }

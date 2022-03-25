@@ -23,6 +23,22 @@ namespace MenuOrder.BasketMicroService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Cors
+            services.AddCors(options=>
+            {
+                var origin = Configuration.GetValue<string>("BasketApiCors:ORIGIN_URL");
+                var headers = Configuration.GetValue<string>("BasketApiCors:HEADERS");
+                var methods = Configuration.GetValue<string>("BasketApiCors:METHODS");
+
+                options.AddPolicy(name: "BasketAPI.MicroService.Cors",
+                    builder=>
+                    {
+                        builder.WithOrigins(origin)
+                                .WithHeaders(headers.Split(','))
+                                .WithMethods(methods.Split(','));
+                    });
+            });
+
             services.AddCore();
             services.AddInfratructure(Configuration);
             services.AddSharedInjection();
@@ -30,8 +46,8 @@ namespace MenuOrder.BasketMicroService.API
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", opt =>
                 {
-                    opt.Authority = "https://localhost:5005";
-                    opt.Audience = "basketApi";
+                    opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
+                    opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
                     //opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                     //{
                     //    ValidateAudience = false
@@ -56,6 +72,8 @@ namespace MenuOrder.BasketMicroService.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("BasketAPI.MicroService.Cors");
 
             app.UseRouting();
 
