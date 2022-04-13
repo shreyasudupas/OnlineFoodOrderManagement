@@ -15,7 +15,6 @@
   <ItemGroup>
     <Folder Include="Common\Models\Interface\" />
     <Folder Include="Common\Services\Interface\" />
-    <Folder Include="Services\BasketService\Command\" />
   </ItemGroup>
 
 </Project>

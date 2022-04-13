@@ -1,10 +1,12 @@
-﻿using MenuManagement.Core.Services.BasketService.Query;
+﻿using MenuManagement.Core.Services.BasketService.Command;
+using MenuManagement.Core.Services.BasketService.Query;
 using MenuOrder.Shared.Controller;
 using MenuOrder.Shared.Models;
 using MenuOrder.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace MenuOrder.BasketMicroService.API.Controllers
@@ -32,6 +34,14 @@ namespace MenuOrder.BasketMicroService.API.Controllers
         public async Task<int> GetBasketCount()
         {
             return await Mediator.Send(new GetUserBasketItemCountQuery { Username = _profileUser.Username });
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponse))]
+        public async Task<bool> AddBasket([FromBody]JObject request)
+        {
+            return await Mediator.Send(new ManageUserBasketItemCommand { CartInformation = request , Username = _profileUser.Username });
         }
     }
 }

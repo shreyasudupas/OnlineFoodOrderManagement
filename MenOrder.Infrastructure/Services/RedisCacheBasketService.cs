@@ -37,5 +37,21 @@ namespace MenOrder.Infrastructure.Services
                 return new UserCartInformation();
             }
         }
+
+        public async Task<bool> UpdateBasketItems(string Username, UserCartInformation userCartInformation)
+        {
+            bool IsSuccess;
+            _logger.LogInformation("User: {0} UpdateBasketItems started", Username);
+
+            //remove the current value from cache
+            await _database.KeyDeleteAsync(Username);
+
+            //add the updated value
+            var serilizeItem = JsonConvert.SerializeObject(userCartInformation);
+            IsSuccess = await _database.StringSetAsync(Username, serilizeItem);
+
+            _logger.LogInformation("User: {0} UpdateBasketItems ended with success {1}", Username, IsSuccess);
+            return IsSuccess;
+        }
     }
 }
