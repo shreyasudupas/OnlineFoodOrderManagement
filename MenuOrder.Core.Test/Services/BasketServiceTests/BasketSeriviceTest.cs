@@ -3,6 +3,7 @@ using MenuManagement.Core.Common.Interfaces;
 using MenuManagement.Core.Common.Models.BasketService;
 using MenuManagement.Core.Common.Models.Common;
 using MenuManagement.Core.Services.BasketService.Command;
+using MenuManagement.Core.Services.BasketService.Command.AddUserInformationCommand;
 using MenuManagement.Core.Services.BasketService.Query;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -178,6 +179,66 @@ namespace MenuOrder.Core.Test.Services.BasketServiceTests
                 Username = "test",
                 CartInformation = cartInfo
             }, It.IsAny<CancellationToken>())).Should().ThrowAsync<ArgumentException>();
+        }
+
+        [Fact]
+        public async Task AddUserInformationInBasketCommandHandler_Must_Return_True_Success()
+        {
+            var mockLog = new Mock<ILogger<AddUserInformationInBasketCommandHandler>>();
+            var mockCacheService = new Mock<IRedisCacheBasketService>();
+
+            mockCacheService.Setup(_ => _.ManageUserInformationInBasket(It.IsAny<UserInformationModel>()))
+                .Returns(Task.FromResult(true));
+
+            var handler = new AddUserInformationInBasketCommandHandler(mockCacheService.Object, mockLog.Object);
+
+            var actual = await handler.Handle(new AddUserInformationInBasketCommand
+            {
+                UserId = "e56ad6b2-210a-4ac0-b7c2-418b4eda9eed",
+                Username = "test",
+                CartAmount = 10,
+                Email = "test@test.com",
+                ImagePath = "test.png",
+                Points = 100,
+                PhoneNumber = "122121",
+                Address = new List<UserAdressModel>
+                    {
+                        new UserAdressModel { FullAddress = "sample", City = "bangalore", State = "Karnataka", IsActive = true }
+                    }
+            }, It.IsAny<CancellationToken>());
+
+            actual.Should().BeTrue();
+
+        }
+
+        [Fact]
+        public async Task AddUserInformationInBasketCommandHandler_Must_Return_False_IfError()
+        {
+            var mockLog = new Mock<ILogger<AddUserInformationInBasketCommandHandler>>();
+            var mockCacheService = new Mock<IRedisCacheBasketService>();
+
+            mockCacheService.Setup(_ => _.ManageUserInformationInBasket(It.IsAny<UserInformationModel>()))
+                .Returns(Task.FromResult(false));
+
+            var handler = new AddUserInformationInBasketCommandHandler(mockCacheService.Object, mockLog.Object);
+
+            var actual = await handler.Handle(new AddUserInformationInBasketCommand
+            {
+                UserId = "e56ad6b2-210a-4ac0-b7c2-418b4eda9eed",
+                Username = "test",
+                CartAmount = 10,
+                Email = "test@test.com",
+                ImagePath = "test.png",
+                Points = 100,
+                PhoneNumber = "122121",
+                Address = new List<UserAdressModel>
+                    {
+                        new UserAdressModel { FullAddress = "sample", City = "bangalore", State = "Karnataka", IsActive = true }
+                    }
+            }, It.IsAny<CancellationToken>());
+
+            actual.Should().BeFalse();
+
         }
     }
 }

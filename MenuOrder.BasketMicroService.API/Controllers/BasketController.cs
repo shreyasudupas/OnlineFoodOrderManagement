@@ -1,4 +1,5 @@
 ﻿using MenuManagement.Core.Services.BasketService.Command;
+using MenuManagement.Core.Services.BasketService.Command.AddUserInformationCommand;
 using MenuManagement.Core.Services.BasketService.Query;
 using MenuOrder.Shared.Controller;
 using MenuOrder.Shared.Models;
@@ -42,6 +43,14 @@ namespace MenuOrder.BasketMicroService.API.Controllers
         public async Task<bool> AddBasket([FromBody]JObject request)
         {
             return await Mediator.Send(new ManageUserBasketItemCommand { CartInformation = request , Username = _profileUser.Username });
+        }
+
+        [HttpPost("/api/basket/personalInfo")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponse))]
+        public async Task<bool> AddUserInformationInCart([FromBody] AddUserInformationInBasketCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }
