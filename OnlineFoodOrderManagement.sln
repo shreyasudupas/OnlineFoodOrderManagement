@@ -29,13 +29,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuMangement.IdentityServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Core", "MenuManagement.Core\MenuManagement.Core.csproj", "{5FC6A043-BC44-4796-86AC-9361197BB2EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenOrder.Infrastructure", "MenOrder.Infrastructure\MenOrder.Infrastructure.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Infrastructure", "MenOrder.Infrastructure\MenuManagement.Infrastructure.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.Core.Test", "MenuOrder.Core.Test\MenuOrder.Core.Test.csproj", "{99E6D8E4-607E-433A-8012-BF57FE51A09B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Core.Test", "MenuOrder.Core.Test\MenuManagement.Core.Test.csproj", "{99E6D8E4-607E-433A-8012-BF57FE51A09B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuOrder.BasketMicroService.API", "MenuOrder.BasketMicroService.API\MenuOrder.BasketMicroService.API.csproj", "{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.BasketMicroService.API", "MenuOrder.BasketMicroService.API\MenuManagement.BasketMicroService.API.csproj", "{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuOrder.Shared", "MenuOrder.Shared\MenuOrder.Shared.csproj", "{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.Shared", "MenuOrder.Shared\MenuOrder.Shared.csproj", "{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

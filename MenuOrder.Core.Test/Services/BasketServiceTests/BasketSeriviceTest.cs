@@ -14,7 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MenuOrder.Core.Test.Services.BasketServiceTests
+namespace MenuManagement.Core.Test.Services.BasketServiceTests
 {
     public class BasketSeriviceTest
     {
