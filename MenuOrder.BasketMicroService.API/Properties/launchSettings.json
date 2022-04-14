@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MenuOrder.BasketMicroService.API": {
+    "MenuManagement.BasketMicroService.API": {
       "commandName": "Project",
       "launchUrl": "swagger",
       "environmentVariables": {

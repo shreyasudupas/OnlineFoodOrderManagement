@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Threading.Tasks;
 
-namespace MenOrder.Infrastructure.Services
+namespace MenuManagement.Infrastructure.Services
 {
     public class RedisCacheBasketService : IRedisCacheBasketService
     {

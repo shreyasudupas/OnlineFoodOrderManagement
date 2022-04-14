@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
-namespace MenuOrder.BasketMicroService.API.Controllers
+namespace MenuManagement.BasketMicroService.API.Controllers
 {
     [Authorize]
     public class BasketController : BaseController

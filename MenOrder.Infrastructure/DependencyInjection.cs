@@ -1,11 +1,13 @@
-﻿using MenOrder.Infrastructure.Services;
+﻿using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
+using MenuManagement.Infrastructure.Services;
 using MenuManagement.Core.Common.Interfaces;
+using MenuManagement.Core.Common.Models.MongoDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
 
-namespace MenOrder.Infrastructure
+namespace MenuManagement.Infrastructure
 {
     public static class DependencyInjection
     {
@@ -24,9 +26,12 @@ namespace MenOrder.Infrastructure
             //var redis = ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection"));
             var redis = ConnectionMultiplexer.Connect(config);
 
+            services.Configure<MongoDatabaseConfiguration>(configuration.GetSection("MongoOrderDBSettings"));
+
             //register services
             services.AddSingleton<IConnectionMultiplexer>(redis);
             services.AddScoped<IRedisCacheBasketService, RedisCacheBasketService>();
+            services.AddScoped<IMongoDBContext, MongoDBContext>();
 
             return services;
         }

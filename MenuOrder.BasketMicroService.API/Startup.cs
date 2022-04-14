@@ -1,5 +1,5 @@
-using MenOrder.Infrastructure;
 using MenuManagement.Core;
+using MenuManagement.Infrastructure;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace MenuOrder.BasketMicroService.API
+namespace MenuManagement.BasketMicroService.API
 {
     public class Startup
     {
@@ -57,7 +57,7 @@ namespace MenuOrder.BasketMicroService.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MenuOrder.BasketMicroService.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MenuManagement.BasketMicroService.API", Version = "v1" });
             });
         }
 
@@ -68,7 +68,7 @@ namespace MenuOrder.BasketMicroService.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MenuOrder.BasketMicroService.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MenuManagement.BasketMicroService.API v1"));
             }
 
             app.UseHttpsRedirection();
