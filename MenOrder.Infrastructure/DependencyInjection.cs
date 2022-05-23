@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
+using MenuManagment.Domain.Mongo.Interfaces;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository;
 
 namespace MenuManagement.Infrastructure
 {
@@ -13,6 +15,8 @@ namespace MenuManagement.Infrastructure
     {
         public static IServiceCollection AddInfratructure(this IServiceCollection services,IConfiguration configuration)
         {
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             //Redis Cache configuration
             ConfigurationOptions config = new ConfigurationOptions()
             {
@@ -31,7 +35,11 @@ namespace MenuManagement.Infrastructure
             //register services
             services.AddSingleton<IConnectionMultiplexer>(redis);
             services.AddScoped<IRedisCacheBasketService, RedisCacheBasketService>();
+
+            //Database registration
             services.AddScoped<IMongoDBContext, MongoDBContext>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IVendorCartRepository, VendorCartRepository>();
 
             return services;
         }

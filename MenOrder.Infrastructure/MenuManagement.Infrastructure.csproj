@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.5.43" />
@@ -12,10 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MenuManagement.Core\MenuManagement.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Persistance\MongoDatabase\Repository\" />
+    <ProjectReference Include="..\MenuManagment.Domain\MenuManagment.Domain.csproj" />
   </ItemGroup>
 
 </Project>
