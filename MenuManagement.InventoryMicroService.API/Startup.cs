@@ -54,6 +54,27 @@ namespace MenuManagement.InventoryMicroService.API
             services.AddCore();
             services.AddInfratructure(Configuration);
             services.AddSharedInjection();
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", opt =>
+                {
+                    var audienceList = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                    var splitAudienceList = audienceList.Split(',');
+                    var audenceNames = new List<string>();
+
+                    foreach (var a in splitAudienceList)
+                    {
+                        audenceNames.Add(a);
+                    }
+
+                    opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
+                    //opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        //ValidateAudience = false
+                        ValidAudiences = audenceNames
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,12 +87,13 @@ namespace MenuManagement.InventoryMicroService.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MenuManagement.InventoryMicroService.API v1"));
             }
 
-            app.UseCors("Inventory.MicroService.Cors");
-
             app.UseHttpsRedirection();
+
+            app.UseCors("Inventory.MicroService.Cors");
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             //Adding Custom Middleware

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace MenuManagement.BasketMicroService.API
 {
@@ -46,12 +47,22 @@ namespace MenuManagement.BasketMicroService.API
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", opt =>
                 {
+                    var audienceList = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                    var splitAudienceList = audienceList.Split(',');
+                    var audenceNames = new List<string>();
+
+                    foreach (var a in splitAudienceList)
+                    {
+                        audenceNames.Add(a);
+                    }
+
                     opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
-                    opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
-                    //opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    //{
-                    //    ValidateAudience = false
-                    //};
+                    //opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        //ValidateAudience = false
+                        ValidAudiences = audenceNames
+                    };
                 });
 
             services.AddControllers();
