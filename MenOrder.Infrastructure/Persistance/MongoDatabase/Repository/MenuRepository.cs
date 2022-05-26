@@ -33,9 +33,9 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
         }
 
-        public async Task<List<MenuManagment.Domain.Mongo.Entities.VendorDetail>> ListAllVendorDetails()
+        public async Task<List<MenuManagment.Domain.Mongo.Entities.VendorDetail>> ListAllVendorDetails(string Locality)
         {
-            var result = await mongoCollection.Find(_ => true).ToListAsync();
+            var result = await mongoCollection.Find(x => x.VendorArea == Locality).ToListAsync();
             var modelList = new List<MenuManagment.Domain.Mongo.Entities.VendorDetail>();
 
             foreach(var item in result)

@@ -7,6 +7,6 @@ namespace MenuManagment.Domain.Mongo.Interfaces
     public interface IMenuRepository
     {
         Task<string> GetVendorDetails_DisplayName(string VendorId, string SearchColumnName);
-        Task<List<VendorDetail>> ListAllVendorDetails();
+        Task<List<VendorDetail>> ListAllVendorDetails(string Locality);
     }
 }

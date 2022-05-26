@@ -10,6 +10,7 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.
 {
     public class GetVendorDetailsQuery : IRequest<List<VendorDetailsResponseDto>>
     {
+        public string Locality { get; set; }
     }
 
     public class GetVendorDetailsQueryHandler : IRequestHandler<GetVendorDetailsQuery, List<VendorDetailsResponseDto>>
@@ -25,7 +26,7 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.
 
         public async Task<List<VendorDetailsResponseDto>> Handle(GetVendorDetailsQuery request, CancellationToken cancellationToken)
         {
-            var vendorDetail = await _menuRepository.ListAllVendorDetails();
+            var vendorDetail = await _menuRepository.ListAllVendorDetails(request.Locality);
 
             //var resultConvertToDto = _mapper.Map<List<VendorDetailsResponseDto>>(vendorDetail);
             var resultConvertToDto = vendorDetail.Select(x=> new VendorDetailsResponseDto

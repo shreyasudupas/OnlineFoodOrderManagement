@@ -14,14 +14,21 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonElement("vendor name")]
         public string VendorName { get; set; }
 
+        [BsonElement("vendor area")]
+        public string VendorArea { get; set; }
+
+
         [BsonElement("description")]
         public string Description { get; set; }
+
 
         [BsonElement("vendor location")]
         public string Location { get; set; }
 
+
         [BsonElement("rating")]
         public int Rating { get; set; }
+
 
         [BsonElement("vendor details")]
         public VendorDetail VendorDetails { get; set; }
@@ -31,6 +38,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
     {
         [BsonElement("column details")]
         public List<ColumnDetail> ColumnDetails { get; set; }
+
 
         [BsonElement("data")]
         public List<object> Data { get; set; }
@@ -42,11 +50,14 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         public string ColumnName { get; set; }
 
 
+
         [BsonElement("column description")]
         public string ColumnDescription { get; set; }
 
+
         [BsonElement("display name")]
         public string DisplayName { get; set; }
+
 
         [BsonElement("display screen")]
         public string Display { get; set; }
