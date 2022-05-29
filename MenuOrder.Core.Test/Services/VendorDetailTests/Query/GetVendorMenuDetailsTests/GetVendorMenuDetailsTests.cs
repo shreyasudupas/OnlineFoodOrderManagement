@@ -71,7 +71,6 @@ namespace MenuManagement.Core.Test.Services.VendorDetailTests.Query.GetVendorMen
         {
             Setup();
 
-
             var actual = await handler.Handle(new GetVendorMenuDetailsQuery { Location = "testlocation", VendorId = "vendorid" }
             ,It.IsAny<CancellationToken>() );
 
