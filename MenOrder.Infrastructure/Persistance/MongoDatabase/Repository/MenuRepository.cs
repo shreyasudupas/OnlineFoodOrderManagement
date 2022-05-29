@@ -1,8 +1,10 @@
 ﻿using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
+using MenuManagment.Domain.Mongo.Entities;
 using MenuManagment.Domain.Mongo.Interfaces;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
@@ -50,6 +52,23 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 });
             }
             return modelList;
+        }
+
+        public async Task<VendorMenuDetail> ListVendorMenuDetails(string VendorId, string Location)
+        {
+            VendorMenuDetail vendorMenuDetail = new VendorMenuDetail();
+
+            var result = await mongoCollection.Find(x => x.Id == VendorId && x.VendorArea == Location).FirstOrDefaultAsync();
+            vendorMenuDetail.ColumnDetail = result.VendorDetails.ColumnDetails.Select(x => new MenuColumnDetail
+            {
+                Field = x.ColumnName,
+                DisplayOnScreen = x.Display,
+                Header = x.DisplayName
+            }).ToList();
+
+            vendorMenuDetail.Data = result.VendorDetails.Data;
+
+            return vendorMenuDetail;
         }
     }
 }

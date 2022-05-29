@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\Services\**" />
+    <Compile Remove="Services\MenuInventoryService\Query\**" />
+    <EmbeddedResource Remove="Common\Services\**" />
+    <EmbeddedResource Remove="Services\MenuInventoryService\Query\**" />
+    <None Remove="Common\Services\**" />
+    <None Remove="Services\MenuInventoryService\Query\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
@@ -15,8 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Models\Interface\" />
-    <Folder Include="Common\Services\Interface\" />
-    <Folder Include="Services\MenuInventoryService\Query\" />
   </ItemGroup>
 
   <ItemGroup>
