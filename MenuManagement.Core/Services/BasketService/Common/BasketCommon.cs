@@ -25,7 +25,7 @@ namespace MenuManagement.Core.Services.BasketService.Common
                 menuObject[cartObject.Keys.ElementAt(i).ToString()] = cartObject.Values.ElementAt(i);
             }
             //for vendor object
-            menuObject[cartObject.Keys.ElementAt(ColumnsList.Count()).ToString()] = cartObject.Values.ElementAt(ColumnsList.Count());
+            //menuObject[cartObject.Keys.ElementAt(ColumnsList.Count()).ToString()] = cartObject.Values.ElementAt(ColumnsList.Count());
             vendorDetail = CartInfoFromUI["vendor details"].ToObject<VendorDetail>();
         }
 

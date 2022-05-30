@@ -65,7 +65,7 @@ namespace MenuManagement.BasketMicroService.API
                     };
                 });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MenuManagement.BasketMicroService.API", Version = "v1" });
