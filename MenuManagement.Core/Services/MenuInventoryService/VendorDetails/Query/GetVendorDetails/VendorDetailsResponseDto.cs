@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MenuManagement.Core.Common.Mapping;
+﻿using MenuManagement.Core.Common.Mapping;
 using MenuManagment.Domain.Mongo.Entities;
 
 namespace MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.GetVendorDetails
@@ -12,6 +11,7 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.
         public string Description { get; set; }
 
         public string Location { get; set; }
+        public string VendorArea { get; set; }
 
         public int Rating { get; set; }
         

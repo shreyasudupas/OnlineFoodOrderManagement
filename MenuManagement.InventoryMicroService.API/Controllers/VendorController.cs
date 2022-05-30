@@ -23,9 +23,9 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         [HttpGet("/api/vendor/menudetails")]
         [ProducesResponseType(StatusCodes.Status200OK
             , Type = typeof(VendorMenuDetailDto))]
-        public async Task<VendorMenuDetailDto> GetVendorMenuDetails(GetVendorMenuDetailsQuery getVendorMenuDetailsQuery)
+        public async Task<VendorMenuDetailDto> GetVendorMenuDetails(string locality, string vendorId)
         {
-            return await Mediator.Send(getVendorMenuDetailsQuery);
+            return await Mediator.Send(new GetVendorMenuDetailsQuery { Location = locality , VendorId = vendorId });
         }
     }
 }

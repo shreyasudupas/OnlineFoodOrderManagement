@@ -48,7 +48,8 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                     Description = item.Description,
                     Location = item.Location,
                     Rating = item.Rating,
-                    VendorName = item.VendorName
+                    VendorName = item.VendorName,
+                    VendorArea = item.VendorArea
                 });
             }
             return modelList;

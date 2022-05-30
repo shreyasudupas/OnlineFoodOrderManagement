@@ -9,6 +9,8 @@
 
         public string Location { get; set; }
 
+        public string VendorArea { get; set; }
+
         public int Rating { get; set; }
     }
 }
