@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MenuManagement_IdentityServer.ApiController.Models;
 using MenuManagement_IdentityServer.Data;
 using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
@@ -747,8 +748,11 @@ namespace MenuManagement_IdentityServer.Service
         public UserAddressPartialViewModel SaveUserAddress(UserAddressPartialViewModel viewModel)
         {
             var User = _context.Users.Include(x=>x.Address).Where(u => u.Id == viewModel.UserId).FirstOrDefault();
-            viewModel.States = SelectListUtility.GetStateItems();
-            viewModel.Cities = SelectListUtility.GetCityItems();
+            //viewModel.States = SelectListUtility.GetStateItems();
+            //viewModel.Cities = SelectListUtility.GetCityItems();
+            viewModel.States = GetCity().Select(x => new SelectListItem { Text = x.Name, Value = x.Name }).ToList();
+            viewModel.Cities = GetStates().Select(x => new SelectListItem { Text = x.Name, Value = x.Name }).ToList();
+            viewModel.LocationArea = GetLocation().Select(x => new SelectListItem { Text = x.AreaName, Value = x.AreaName }).ToList();
 
             //Add opertaion
             if (User!=null && viewModel.UserAddressId < 1)
@@ -761,7 +765,8 @@ namespace MenuManagement_IdentityServer.Service
                    FullAddress = viewModel.FullAddress,
                    City = viewModel.City,
                    State = viewModel.State,
-                   IsActive = viewModel.IsActive
+                   IsActive = viewModel.IsActive,
+                   Area = viewModel.Area
                 });
 
                 //Find if there is any active address present
@@ -791,6 +796,7 @@ namespace MenuManagement_IdentityServer.Service
                     UserAddress.City = viewModel.City;
                     UserAddress.State = viewModel.State;
                     UserAddress.IsActive = viewModel.IsActive;
+                    UserAddress.Area = viewModel.Area;
 
                     //Check if there are more than one active addresses
                     if (User.Address.Where(x => x.IsActive == true).Select(x => x.Id).Count() > 1)
@@ -826,8 +832,10 @@ namespace MenuManagement_IdentityServer.Service
             var UserAddress = _context.UserAddresses.Where(u => u.Id == request.UserAddressId).FirstOrDefault();
             return new UserAddressPartialViewModel
             {
-                Cities = SelectListUtility.GetCityItems(),
-                States = SelectListUtility.GetStateItems(),
+                Cities = GetCity().Select(x => new SelectListItem { Text = x.Name, Value = x.Name }).ToList(),
+                States = GetStates().Select(x => new SelectListItem { Text = x.Name, Value = x.Name }).ToList(),
+                LocationArea = GetLocation().Select(x => new SelectListItem { Text = x.AreaName, Value = x.AreaName }).ToList(),
+                Area = UserAddress.Area,
                 FullAddress = UserAddress.FullAddress,
                 City = UserAddress.City,
                 State = UserAddress.State,
@@ -880,6 +888,43 @@ namespace MenuManagement_IdentityServer.Service
             }
 
             _logger.LogInformation("ManageUserAddressClaim ended");
+        }
+
+        public List<State> GetStates()
+        {
+            return _context.States.ToList();
+        }
+
+        public List<City> GetCity()
+        {
+            return _context.Cities.ToList();
+        }
+
+        public List<LocationArea> GetLocation()
+        {
+            return _context.LocationAreas.ToList();
+        }
+
+        public List<LocationDropDown> GetLocationDropDownForUi(string userId)
+        {
+            var userDetails = _context.Users.Include(x=>x.Address).Where(u => u.Id == userId).FirstOrDefault();
+
+            var userState = userDetails.Address.Where(x => x.IsActive == true).Select(x=>x.State).FirstOrDefault();
+
+            var states = _context.States.Include(user => user.Cities)
+                .ThenInclude(u=>u.Areas).Where(x => x.Name == userState).FirstOrDefault();
+
+            var dropdown = new List<LocationDropDown>();
+            return states.Cities.Select(x => new LocationDropDown
+            {
+                Label = x.Name,
+                Value = x.Name,
+                Items = x.Areas.Select(a => new LocationBase
+                {
+                    Label = a.AreaName,
+                    Value = a.AreaName
+                }).ToList()
+            }).ToList();
         }
     }
 }

@@ -4,14 +4,16 @@ using MenuManagement_IdentityServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MenuManagement_IdentityServer.Migrations.IdentityServer.ApplicationDb
+namespace MenuManagement_IdentityServer.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220531084607_Adding_Location_UserAddress")]
+    partial class Adding_Location_UserAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,26 +98,6 @@ namespace MenuManagement_IdentityServer.Migrations.IdentityServer.ApplicationDb
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("StateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StateId");
-
-                    b.ToTable("Cities");
-                });
-
             modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.ClaimDropDown", b =>
                 {
                     b.Property<int>("Id")
@@ -132,41 +114,6 @@ namespace MenuManagement_IdentityServer.Migrations.IdentityServer.ApplicationDb
                     b.HasKey("Id");
 
                     b.ToTable("ClaimDropDowns");
-                });
-
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.LocationArea", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AreaName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("LocationAreas");
-                });
-
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.State", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.UserAddress", b =>
@@ -332,20 +279,6 @@ namespace MenuManagement_IdentityServer.Migrations.IdentityServer.ApplicationDb
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.City", b =>
-                {
-                    b.HasOne("MenuManagement_IdentityServer.Data.Models.State", null)
-                        .WithMany("Cities")
-                        .HasForeignKey("StateId");
-                });
-
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.LocationArea", b =>
-                {
-                    b.HasOne("MenuManagement_IdentityServer.Data.Models.City", null)
-                        .WithMany("Areas")
-                        .HasForeignKey("CityId");
-                });
-
             modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.UserAddress", b =>
                 {
                     b.HasOne("MenuManagement_IdentityServer.Data.Models.ApplicationUser", null)
@@ -407,16 +340,6 @@ namespace MenuManagement_IdentityServer.Migrations.IdentityServer.ApplicationDb
             modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.City", b =>
-                {
-                    b.Navigation("Areas");
-                });
-
-            modelBuilder.Entity("MenuManagement_IdentityServer.Data.Models.State", b =>
-                {
-                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

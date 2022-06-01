@@ -205,6 +205,68 @@ namespace MenuManagement_IdentityServer.Extension
                             context.SaveChanges();
                         }
 
+                        //States master values
+                        if (!context.States.Any() && !context.Cities.Any() && !context.LocationAreas.Any())
+                        {
+                            var states = new List<State>()
+                            {
+                                new State { 
+                                    Name="Karnataka",
+                                    Cities = new List<City>
+                                    {
+                                        new City
+                                        {
+                                            Name="Bengaluru",
+                                            Areas = new List<LocationArea>
+                                            {
+                                                new LocationArea { AreaName="Kathreguppe" },
+                                                new LocationArea { AreaName="JP Nagar" },
+                                                new LocationArea { AreaName="Jayanagar" },
+                                                new LocationArea { AreaName="Uttrahalli" },
+                                                new LocationArea { AreaName="Banashankari 2nd Stage" }
+                                            }
+                                        }
+                                    }
+                                },
+                                new State { 
+                                    Name="Maharastra" ,
+                                    Cities = new List<City>
+                                    {
+                                        new City
+                                        {
+                                            Name="Mumbai",
+                                            Areas = new List<LocationArea>
+                                            {
+                                                new LocationArea { AreaName="Kalwa" },
+                                                new LocationArea { AreaName="Thane" },
+                                                new LocationArea { AreaName="Kurla" },
+                                                new LocationArea { AreaName="Juhu" }
+                                            }
+                                        }
+                                    }
+                                },
+                                new State { 
+                                    Name="Tamil Nadu",
+                                    Cities = new List<City>
+                                    {
+                                        new City
+                                        {
+                                            Name="Chennai",
+                                            Areas = new List<LocationArea>
+                                            {
+                                                new LocationArea { AreaName="RR Nagar" }
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+
+
+                            context.States.AddRange(states);
+
+                            context.SaveChanges();
+                        }
+
                         transaction1.Commit();
                         
 

@@ -8,6 +8,9 @@ namespace MenuManagement_IdentityServer.Data
     {
         public DbSet<ClaimDropDown> ClaimDropDowns { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<LocationArea> LocationAreas { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
         { }
     }

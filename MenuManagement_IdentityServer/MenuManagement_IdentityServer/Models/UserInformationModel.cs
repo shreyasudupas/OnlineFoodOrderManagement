@@ -21,5 +21,6 @@ namespace MenuManagement_IdentityServer.Models
         public string City { get; set; }
         public string State { get; set; }
         public bool IsActive { get; set; }
+        public string Area { get; set; }
     }
 }

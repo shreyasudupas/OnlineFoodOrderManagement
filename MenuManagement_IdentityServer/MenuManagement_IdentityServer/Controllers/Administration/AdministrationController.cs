@@ -6,7 +6,9 @@ using MenuManagement_IdentityServer.Utilities.DropdownItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement_IdentityServer.Controllers.Administration
@@ -224,8 +226,11 @@ namespace MenuManagement_IdentityServer.Controllers.Administration
             {
                 return PartialView("_UserAddressPartialView", new UserAddressPartialViewModel
                 {
-                    Cities = SelectListUtility.GetCityItems(),
-                    States = SelectListUtility.GetStateItems(),
+                    //Cities = SelectListUtility.GetCityItems(),
+                    //States = SelectListUtility.GetStateItems(),
+                    Cities = _userAdministration.GetCity().Select(x=>new SelectListItem { Text = x.Name , Value = x.Name }).ToList(),
+                    States = _userAdministration.GetStates().Select(x => new SelectListItem { Text = x.Name, Value = x.Name }).ToList(),
+                    LocationArea = _userAdministration.GetLocation().Select(x => new SelectListItem { Text = x.AreaName, Value = x.AreaName }).ToList(),
                     UserId = model.UserId
                 });
             }

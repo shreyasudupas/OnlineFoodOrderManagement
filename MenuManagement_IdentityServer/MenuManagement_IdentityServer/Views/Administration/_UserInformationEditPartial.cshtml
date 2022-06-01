@@ -43,15 +43,18 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="col-12">
+                                    @add.Area
+                                </div>
+                                <div class="col-12">
                                     @add.City
                                 </div>
                                 <div class="col-12">
                                     @add.State
                                 </div>
                                 <div class="col-12">
-                                    <input type="checkbox" id="formIsActiveAddress" class="form-check-input" asp-for="@add.IsActive" readonly/>
+                                    <input type="checkbox" id="formIsActiveAddress" class="form-check-input" asp-for="@add.IsActive" readonly />
                                     <label class="form-check-label" for="formIsActiveAddress">Address Active</label>
-                                    
+
                                 </div>
                             </div>
                         </div>

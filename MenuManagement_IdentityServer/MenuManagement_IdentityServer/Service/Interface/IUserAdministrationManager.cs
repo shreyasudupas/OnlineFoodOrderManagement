@@ -1,4 +1,5 @@
-﻿using MenuManagement_IdentityServer.Data.Models;
+﻿using MenuManagement_IdentityServer.ApiController.Models;
+using MenuManagement_IdentityServer.Data.Models;
 using MenuManagement_IdentityServer.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
@@ -24,5 +25,9 @@ namespace MenuManagement_IdentityServer.Service.Interface
         UserInformationModel GetUserInformationDetail(string UserId);
         UserAddressPartialViewModel SaveUserAddress(UserAddressPartialViewModel viewModel);
         UserAddressPartialViewModel GetUserAddressInformation(GetUserAddressModel request);
+        List<State> GetStates();
+        List<City> GetCity();
+        List<LocationArea> GetLocation();
+        List<LocationDropDown> GetLocationDropDownForUi(string userId);
     }
 }
