@@ -60,5 +60,13 @@ namespace MenuManagement.BasketMicroService.API.Controllers
         {
             return await Mediator.Send(new RemoveUserCartItemCommand { CartInformation = request, Username = _profileUser.Username });
         }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponse))]
+        public async Task<bool> DeleteBasket()
+        {
+            return await Mediator.Send(new DeleteUserCartItemCommand { Username = _profileUser.Username });
+        }
     }
 }
