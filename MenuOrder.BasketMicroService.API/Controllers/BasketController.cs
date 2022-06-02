@@ -42,7 +42,7 @@ namespace MenuManagement.BasketMicroService.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponse))]
         public async Task<bool> AddBasket([FromBody]JObject request)
         {
-            return await Mediator.Send(new ManageUserBasketCartInformationCommand { CartInformation = request , Username = _profileUser.Username });
+            return await Mediator.Send(new AddUserBasketCartInformationCommand { CartInformation = request , Username = _profileUser.Username });
         }
 
         [HttpPost("/api/basket/personalInfo")]
@@ -51,6 +51,14 @@ namespace MenuManagement.BasketMicroService.API.Controllers
         public async Task<bool> AddUserInformationInCart([FromBody] AddUserInformationInBasketCommand command)
         {
             return await Mediator.Send(command);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponse))]
+        public async Task<bool> UpdateBasket([FromBody] JObject request)
+        {
+            return await Mediator.Send(new RemoveUserCartItemCommand { CartInformation = request, Username = _profileUser.Username });
         }
     }
 }

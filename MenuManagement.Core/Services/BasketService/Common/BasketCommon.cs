@@ -19,8 +19,8 @@ namespace MenuManagement.Core.Services.BasketService.Common
             var ColumnsList = (from columns in CartInfoFromUI["ColumnData"]
                                select columns).ToList();
 
-            //prepare the object with column names and add the values of user selected item
-            for (int i = 0; i < ColumnsList.Count(); i++)
+            //prepare the object with column names and add the values of user selected item and add = to add quantity as well which is hardcoded in frontend
+            for (int i = 0; i <= ColumnsList.Count(); i++)
             {
                 menuObject[cartObject.Keys.ElementAt(i).ToString()] = cartObject.Values.ElementAt(i);
             }

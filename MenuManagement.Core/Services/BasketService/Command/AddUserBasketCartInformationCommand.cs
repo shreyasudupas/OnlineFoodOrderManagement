@@ -12,25 +12,25 @@ using System.Threading.Tasks;
 
 namespace MenuManagement.Core.Services.BasketService.Command
 {
-    public class ManageUserBasketCartInformationCommand : IRequest<bool>
+    public class AddUserBasketCartInformationCommand : IRequest<bool>
     {
         public string Username { get; set; }
         public JObject CartInformation { get; set; }
     }
 
-    public class ManageUserBasketCartInformationCommandHandler : IRequestHandler<ManageUserBasketCartInformationCommand, bool>
+    public class AddUserBasketCartInformationCommandHandler : IRequestHandler<AddUserBasketCartInformationCommand, bool>
     {
         private readonly IRedisCacheBasketService _redisCacheBasketService;
-        private readonly ILogger<ManageUserBasketCartInformationCommandHandler> _logger;
+        private readonly ILogger<AddUserBasketCartInformationCommandHandler> _logger;
 
-        public ManageUserBasketCartInformationCommandHandler(IRedisCacheBasketService redisCacheBasketService,
-            ILogger<ManageUserBasketCartInformationCommandHandler> logger)
+        public AddUserBasketCartInformationCommandHandler(IRedisCacheBasketService redisCacheBasketService,
+            ILogger<AddUserBasketCartInformationCommandHandler> logger)
         {
             _redisCacheBasketService = redisCacheBasketService;
             _logger = logger;
         }
 
-        public async Task<bool> Handle(ManageUserBasketCartInformationCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AddUserBasketCartInformationCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("ManageUserBasketCartInformationCommand for username: {0} started", request.Username);
 

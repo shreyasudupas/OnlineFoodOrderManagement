@@ -7,23 +7,24 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace MenuManagement.Core.Test.Services.BasketServiceTests
 {
-    public class ManageUserBasketCartInformationTests
+    public class AddUserBasketCartInformationTests
     {
-        public ManageUserBasketCartInformationTests()
+        public AddUserBasketCartInformationTests()
         {
 
         }
 
         [Fact]
-        public async Task ManageUserBasketCartInformation_AddMenuItem_In_Basket_For_The_FirstTime()
+        public async Task AddUserBasketCartInformation_AddMenuItem_In_Basket_For_The_FirstTime()
         {
-            var mockLog = new Mock<ILogger<ManageUserBasketCartInformationCommandHandler>>();
+            var mockLog = new Mock<ILogger<AddUserBasketCartInformationCommandHandler>>();
             var mockCacheService = new Mock<IRedisCacheBasketService>();
 
             //No items present
@@ -43,11 +44,11 @@ namespace MenuManagement.Core.Test.Services.BasketServiceTests
             mockCacheService.Setup(_ => _.UpdateBasketItems(It.IsAny<string>(),It.IsAny<UserCartInformation>()))
                 .Returns(Task.FromResult(true));
 
-            var handler = new ManageUserBasketCartInformationCommandHandler(mockCacheService.Object,mockLog.Object);
+            var handler = new AddUserBasketCartInformationCommandHandler(mockCacheService.Object,mockLog.Object);
 
             var cartInfo = JObject.Parse("{\"ColumnData\":[{\"column name\":\"id\",\"property type\":\"ID\",\"column description\":\"This is Primary key for the header\",\"display name\":\"ID\",\"display screen\":\"none\"},{\"column name\":\"menu name\",\"propertytype\":\"string\",\"column description\":\"This is name of the menu\",\"display name\":\"Menu\",\"display screen\":\"\"},{\"column name\":\"menu type\",\"property type\":\"string\",\"column description\":\"This is type of menu\",\"display name\":\"Menu Type\",\"display screen\":\"\"},{\"column name\":\"Price\",\"property type\":\"number\",\"column description\":\"This is cost of the Item\",\"display name\":\"Price\",\"display screen\":\"\"}],\"Data\":{\"id\":\"fb5ee2b1-b64f-40a2-8171-61e5b479b940\",\"menu name\":\"idly\",\"menu type\":\"breakfast\",\"Price\":20,\"quantity\":2},\"vendor details\":{\"id\":\"ab5ee2b1-b64f-40a2-8171-61e5b479b940\",\"name\":\"Sukh Sagar\"}}");
 
-            var actual = await handler.Handle(new ManageUserBasketCartInformationCommand 
+            var actual = await handler.Handle(new AddUserBasketCartInformationCommand 
             {
                 Username = "test",
                 CartInformation = cartInfo
@@ -58,9 +59,9 @@ namespace MenuManagement.Core.Test.Services.BasketServiceTests
         }
 
         [Fact]
-        public async Task ManageUserBasketCartInformation_AddMenuItem_In_Basket_ShouldThrowError_CartInfo_MenuDataObject_Is_InCorrect()
+        public async Task AddUserBasketCartInformation_AddMenuItem_In_Basket_ShouldThrowError_CartInfo_MenuDataObject_Is_InCorrect()
         {
-            var mockLog = new Mock<ILogger<ManageUserBasketCartInformationCommandHandler>>();
+            var mockLog = new Mock<ILogger<AddUserBasketCartInformationCommandHandler>>();
             var mockCacheService = new Mock<IRedisCacheBasketService>();
 
             //No items present
@@ -80,11 +81,11 @@ namespace MenuManagement.Core.Test.Services.BasketServiceTests
             mockCacheService.Setup(_ => _.UpdateBasketItems(It.IsAny<string>(), It.IsAny<UserCartInformation>()))
                 .Returns(Task.FromResult(true));
 
-            var handler = new ManageUserBasketCartInformationCommandHandler(mockCacheService.Object, mockLog.Object);
+            var handler = new AddUserBasketCartInformationCommandHandler(mockCacheService.Object, mockLog.Object);
 
             var cartInfo = JObject.Parse("{\"ColumnData\":[{\"column name\":\"id\",\"property type\":\"ID\",\"column description\":\"This is Primary key for the header\",\"display name\":\"ID\",\"display screen\":\"none\"},{\"column name\":\"menu name\",\"propertytype\":\"string\",\"column description\":\"This is name of the menu\",\"display name\":\"Menu\",\"display screen\":\"\"},{\"column name\":\"menu type\",\"property type\":\"string\",\"column description\":\"This is type of menu\",\"display name\":\"Menu Type\",\"display screen\":\"\"},{\"column name\":\"Price\",\"property type\":\"number\",\"column description\":\"This is cost of the Item\",\"display name\":\"Price\",\"display screen\":\"\"}],\"Data\":[{\"id\":\"fb5ee2b1-b64f-40a2-8171-61e5b479b940\",\"menu name\":\"idly\",\"menu type\":\"breakfast\",\"Price\":20,\"quantity\":2}],\"vendor details\":{\"id\":\"ab5ee2b1-b64f-40a2-8171-61e5b479b940\",\"name\":\"Sukh Sagar\"}}");
 
-            await FluentActions.Invoking(()=> handler.Handle(new ManageUserBasketCartInformationCommand
+            await FluentActions.Invoking(()=> handler.Handle(new AddUserBasketCartInformationCommand
             {
                 Username = "test",
                 CartInformation = cartInfo
