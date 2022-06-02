@@ -56,7 +56,8 @@ namespace MenuManagement_IdentityServer.Configurations
          {
                 new ApiScope("basketApi","Basket MicroService API read"),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName),
-                new ApiScope("userIDSApi","User Controller API in IDS")
+                new ApiScope("userIDSApi","User Controller API in IDS"),
+                new ApiScope("inventoryApi","Menu Inventory")
          };
         //For audience put in both ApiResource and GetApiScope so that in client machine can give audience as eg:basketApi
         public static IEnumerable<ApiResource> GetApiResources() =>
@@ -70,7 +71,11 @@ namespace MenuManagement_IdentityServer.Configurations
              new ApiResource("userIDSApi","User Controller API in IDS",new List<string>() { ClaimTypes.Role })
              {
                  Scopes = { "userIDSApi" }
-             }
+             },
+             new ApiResource("inventoryApi","Menu Inventory")
+             {
+                 Scopes = { "inventoryApi" }
+             },
          };
 
         //An identity resource has meaning as long as it has a claim.Therefore there is a requirement that an identity resource must have minimum 1 claim in the claims list.
