@@ -12,27 +12,27 @@ using System.Threading.Tasks;
 
 namespace MenuManagement.Core.Services.BasketService.Command
 {
-    public class ManageUserBasketItemCommand : IRequest<bool>
+    public class ManageUserBasketCartInformationCommand : IRequest<bool>
     {
         public string Username { get; set; }
         public JObject CartInformation { get; set; }
     }
 
-    public class ManageUserBasketItemCommandHandler : IRequestHandler<ManageUserBasketItemCommand, bool>
+    public class ManageUserBasketCartInformationCommandHandler : IRequestHandler<ManageUserBasketCartInformationCommand, bool>
     {
         private readonly IRedisCacheBasketService _redisCacheBasketService;
-        private readonly ILogger<ManageUserBasketItemCommandHandler> _logger;
+        private readonly ILogger<ManageUserBasketCartInformationCommandHandler> _logger;
 
-        public ManageUserBasketItemCommandHandler(IRedisCacheBasketService redisCacheBasketService,
-            ILogger<ManageUserBasketItemCommandHandler> logger)
+        public ManageUserBasketCartInformationCommandHandler(IRedisCacheBasketService redisCacheBasketService,
+            ILogger<ManageUserBasketCartInformationCommandHandler> logger)
         {
             _redisCacheBasketService = redisCacheBasketService;
             _logger = logger;
         }
 
-        public async Task<bool> Handle(ManageUserBasketItemCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(ManageUserBasketCartInformationCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ManageUserBasketItemCommand for username: {0} started", request.Username);
+            _logger.LogInformation("ManageUserBasketCartInformationCommand for username: {0} started", request.Username);
 
             var isSucess = false;
             string cartMenuId;
@@ -82,7 +82,7 @@ namespace MenuManagement.Core.Services.BasketService.Command
                 }
             }
 
-            _logger.LogInformation("ManageUserBasketItemCommand for username: {0} ended with success {1}", request.Username, isSucess);
+            _logger.LogInformation("ManageUserBasketCartInformationCommand for username: {0} ended with success {1}", request.Username, isSucess);
             return isSucess;
         }
     }

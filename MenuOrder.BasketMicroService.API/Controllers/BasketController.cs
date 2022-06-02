@@ -42,7 +42,7 @@ namespace MenuManagement.BasketMicroService.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ExceptionResponse))]
         public async Task<bool> AddBasket([FromBody]JObject request)
         {
-            return await Mediator.Send(new ManageUserBasketItemCommand { CartInformation = request , Username = _profileUser.Username });
+            return await Mediator.Send(new ManageUserBasketCartInformationCommand { CartInformation = request , Username = _profileUser.Username });
         }
 
         [HttpPost("/api/basket/personalInfo")]

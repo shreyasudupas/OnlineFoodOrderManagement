@@ -107,7 +107,8 @@ namespace MenuManagement.Core.Test.Services.VendorDetailTests.Query.GetVendorMen
             var actual = await handler.Handle(new GetVendorMenuDetailsQuery { Location = Location, VendorId = vendorId }
             , It.IsAny<CancellationToken>());
 
-            actual.Should().BeNull();
+            actual.Data.Should().BeNull();
+            actual.MenuColumnDetail.Should().BeNull();
         }
     }
 }

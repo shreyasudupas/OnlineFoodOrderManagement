@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MenuManagement.Core.Services.BasketService.Command.AddUserInformationCommand
 {
-    public class AddUserInformationInBasketCommand : UserInformationModel , IRequest<bool>
+    public class AddUserInformationInBasketCommand : UserInfoCart, IRequest<bool>
     {
     }
 
@@ -26,7 +26,7 @@ namespace MenuManagement.Core.Services.BasketService.Command.AddUserInformationC
 
         public async Task<bool> Handle(AddUserInformationInBasketCommand request, CancellationToken cancellationToken)
         {
-            var isSucces = await _redisCacheBasketService.ManageUserInformationInBasket(request);
+            var isSucces = await _redisCacheBasketService.AddUserInformationInBasket(request);
 
             _logger.LogInformation("AddUserInformationInBasketCommandHandler has added the userinformation: " + JsonConvert.SerializeObject(request) + " status: " + isSucces);
 

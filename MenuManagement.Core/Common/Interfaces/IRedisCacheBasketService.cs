@@ -9,6 +9,6 @@ namespace MenuManagement.Core.Common.Interfaces
         Task<UserCartInformation> GetBasketItems(string Username);
         Task<bool> UpdateBasketItems(string Username, UserCartInformation userCartInformation);
 
-        Task<bool> ManageUserInformationInBasket(UserInformationModel userInformation);
+        Task<bool> AddUserInformationInBasket(UserInfoCart userInformation);
     }
 }

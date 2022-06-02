@@ -55,33 +55,23 @@ namespace MenuManagement.Infrastructure.Services
             return IsSuccess;
         }
 
-        public async Task<bool> ManageUserInformationInBasket(UserInformationModel userInformation)
+        public async Task<bool> AddUserInformationInBasket(UserInfoCart userInfoCart)
         {
-            var username = userInformation.Username;
-            var userInfo = await _database.StringGetAsync(username);
-            if(userInfo.HasValue)
-            {
-                //update the userinfo details
-                var responseBody = JsonConvert.DeserializeObject<UserCartInformation>(userInfo);
+            var username = userInfoCart.Username;
 
-                var updatedUserInfo = responseBody.UserInfo;
-                updatedUserInfo.Address = userInformation.Address;
-                updatedUserInfo.CartAmount = userInformation.CartAmount;
-                updatedUserInfo.Email = userInformation.Email;
-                updatedUserInfo.ImagePath = userInformation.ImagePath;
-                updatedUserInfo.PhoneNumber = userInformation.PhoneNumber;
-                updatedUserInfo.Points = userInformation.Points;
-                
-                var isSuccess = await _database.StringSetAsync(username, JsonConvert.SerializeObject(responseBody));
+            var userInfo = await _database.StringGetAsync(username);
+            if(!userInfo.HasValue)      
+            {
+                var body = new UserCartInformation();
+                body.UserInfo = userInfoCart;
+
+                var isSuccess = await _database.StringSetAsync(username, JsonConvert.SerializeObject(body));
                 return isSuccess;
             }
             else
             {
-                var body = new UserCartInformation();
-                body.UserInfo = userInformation;
-
-                var isSuccess = await _database.StringSetAsync(username, JsonConvert.SerializeObject(body));
-                return isSuccess;
+                //no update operation here
+                return false;
             }
         }
     }

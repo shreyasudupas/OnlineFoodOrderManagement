@@ -29,7 +29,7 @@ namespace MenuManagement.Core.Services.BasketService.Query
             _logger.LogInformation("GetAllBasketUserMenuList called for user {0}", request.Username);
 
             var userInfoInCache = await _redisCacheBasketService.GetBasketItems(request.Username);
-            var items = JsonConvert.SerializeObject(new MenuCartResponse
+            var items = JsonConvert.SerializeObject(new UserCartInformation
             {
                 UserInfo = userInfoInCache.UserInfo,
                 Items = userInfoInCache.Items,

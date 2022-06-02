@@ -6,7 +6,8 @@ namespace MenuManagement.Core.Common.Models.BasketService
 {
     public class UserCartInformation
     {
-        public UserInformationModel UserInfo { get; set; }
+        //public UserInformationModel UserInfo { get; set; }
+        public UserInfoCart UserInfo { get; set; }
         public List<JObject> Items { get; set; }
         public VendorDetail VendorDetails { get; set; }
     }
