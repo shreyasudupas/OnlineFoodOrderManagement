@@ -34,4 +34,20 @@ fails consecutively for the configured number of times, you just open the circui
  <p>Http client will call the named instance of httpClient i.e Basket MicroService and will try to call the url configured. If the 
  service is not up and running then circuit breaker comes into play and tries to call the API 5 times if success then result is 
  given or else it will not process and inform the user that server is busy.</p>
+ 
+ <u><b>Basket Microservice</b></u><br/>
+ <p>Basket Microservice is MenuManagement.BasketMicroService.API project in the solution folder. It uses Redis cache to store the User Cart Information.
+ There are commands for POSTMAN collection for basket which are listed below
+ <ul>
+  <li>Initize User Cart : This will load the user cart with username</li>
+  <li>Get User Basket Info : This will get the user basket information</li>
+  <li>Add Item to Cart : This will add Item to cart</li>
+  <li>Edit Basket Item : This will edit user cart item</li>
+  <li>Delete Cart Item: This will delete user cart (full delete Items and Vendor Details)</li>
+  <li>Get User basket count: This will get the count of basket Items</li>
+ </ul>
+ 
+ In order to start Basket Micorservice, we need to call initilize the user cart and only then we can use the other operation.
+ </p>
+ 
 
