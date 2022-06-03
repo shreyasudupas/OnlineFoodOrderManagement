@@ -25,7 +25,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
                 if (VendorColumnDetail != null)
                 {
-                    return VendorColumnDetail.DisplayName;
+                    return VendorColumnDetail.DisplayNameOnMenu;
                 }
                 else
                     return string.Empty;
@@ -55,6 +55,24 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             return modelList;
         }
 
+        public async Task<List<VendorColumnDetailEntity>> ListVendorMenuColumnDetails(string VendorId)
+        {
+            var vendorColumnDetailEntity = new List<VendorColumnDetailEntity>();
+
+            var result = await mongoCollection.Find(x => x.Id == VendorId).FirstOrDefaultAsync();
+            result.VendorDetails.ColumnDetails.ForEach(e =>
+            {
+                vendorColumnDetailEntity.Add(new VendorColumnDetailEntity
+                {
+                    ColumnName = e.ColumnName,
+                    DisplayName = e.DisplayNameOnMenu,
+                    DisplayOnScreen = e.DisplayOnScreen
+                });
+            });
+
+            return vendorColumnDetailEntity;
+        }
+
         public async Task<VendorMenuDetail> ListVendorMenuDetails(string VendorId, string Location)
         {
             VendorMenuDetail vendorMenuDetail = new VendorMenuDetail();
@@ -63,8 +81,8 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             vendorMenuDetail.ColumnDetail = result.VendorDetails.ColumnDetails.Select(x => new MenuColumnDetail
             {
                 Field = x.ColumnName,
-                DisplayOnScreen = x.Display,
-                Header = x.DisplayName
+                DisplayOnScreen = x.DisplayOnScreen,
+                Header = x.DisplayNameOnMenu
             }).ToList();
 
             vendorMenuDetail.Data = result.VendorDetails.Data;

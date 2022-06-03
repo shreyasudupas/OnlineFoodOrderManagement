@@ -57,7 +57,7 @@ namespace MenuManagement.Core.Test.Services.BasketServiceTests
         [Fact]
         public async Task RemoveUserCartItemCommandHandler_RemoveCartItem_RemoveIdly_MustHaveOneItem_Success()
         {
-            var requestCartInfo = JObject.Parse("{\"ColumnData\":[{\"field\":\"id\",\"header\":\"ID\",\"display\":\"none\"},{\"field\":\"menu  name\",\"header\":\"Menu\",\"display\":\"\"},{\"field\":\"menu type\",\"header\":\"Menu Type\",\"display\":\"\"},{\"field\":\"Price\",\"header\":\"Price\",\"display\":\"\"},{\"field\":\"quantity\",\"header\":\"Quantity\",\"display\":\"\"}],\"Data\":{\"quantity\":0,\"id\":\"fb5ee2b1-b64f-40a2-8171-61e5b479b940\",\"menu name\":\"idly\",\"menu type\":\"breakfast\",\"Price\":20},\"vendor details\":{\"id\":\"628e32e932de9d36b1eedd8a\",\"name\":\"A2B\"}}");
+            var requestCartInfo = JObject.Parse("{\"menu columns\":[{\"field\":\"id\",\"header\":\"ID\",\"display\":\"none\"},{\"field\":\"menu  name\",\"header\":\"Menu\",\"display\":\"\"},{\"field\":\"menu type\",\"header\":\"Menu Type\",\"display\":\"\"},{\"field\":\"Price\",\"header\":\"Price\",\"display\":\"\"},{\"field\":\"quantity\",\"header\":\"Quantity\",\"display\":\"\"}],\"menu items\":{\"quantity\":0,\"id\":\"fb5ee2b1-b64f-40a2-8171-61e5b479b940\",\"menu name\":\"idly\",\"menu type\":\"breakfast\",\"Price\":20},\"vendor details\":{\"id\":\"628e32e932de9d36b1eedd8a\",\"name\":\"A2B\"}}");
             var actual = await handler.Handle(new RemoveUserCartItemCommand { Username = "user" , CartInformation = requestCartInfo }, It.IsAny<CancellationToken>());
 
             actual.Should().BeTrue();
@@ -67,7 +67,7 @@ namespace MenuManagement.Core.Test.Services.BasketServiceTests
         [Fact]
         public async Task RemoveUserCartItemCommandHandler_RemoveCartItem_RemoveDosa_HaveOneItemEach_Success()
         {
-            var requestCartInfo = JObject.Parse("{\"ColumnData\":[{\"field\":\"id\",\"header\":\"ID\",\"display\":\"none\"},{\"field\":\"menu  name\",\"header\":\"Menu\",\"display\":\"\"},{\"field\":\"menu type\",\"header\":\"Menu Type\",\"display\":\"\"},{\"field\":\"Price\",\"header\":\"Price\",\"display\":\"\"},{\"field\":\"quantity\",\"header\":\"Quantity\",\"display\":\"\"}],\"Data\":{\"quantity\":1,\"id\":\"fb5ee2b1-b64f-40a2-8171-61e5b479b940\",\"menu name\":\"dosa\",\"menu type\":\"breakfast\",\"Price\":30},\"vendor details\":{\"id\":\"628e32e932de9d36b1eedd8a\",\"name\":\"A2B\"}}");
+            var requestCartInfo = JObject.Parse("{\"menu columns\":[{\"field\":\"id\",\"header\":\"ID\",\"display\":\"none\"},{\"field\":\"menu  name\",\"header\":\"Menu\",\"display\":\"\"},{\"field\":\"menu type\",\"header\":\"Menu Type\",\"display\":\"\"},{\"field\":\"Price\",\"header\":\"Price\",\"display\":\"\"},{\"field\":\"quantity\",\"header\":\"Quantity\",\"display\":\"\"}],\"menu items\":{\"quantity\":1,\"id\":\"fb5ee2b1-b64f-40a2-8171-61e5b479b940\",\"menu name\":\"dosa\",\"menu type\":\"breakfast\",\"Price\":30},\"vendor details\":{\"id\":\"628e32e932de9d36b1eedd8a\",\"name\":\"A2B\"}}");
             var actual = await handler.Handle(new RemoveUserCartItemCommand { Username = "user", CartInformation = requestCartInfo }, It.IsAny<CancellationToken>());
 
             actual.Should().BeTrue();

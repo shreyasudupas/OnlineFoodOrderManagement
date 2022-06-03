@@ -55,12 +55,12 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         public string ColumnDescription { get; set; }
 
 
-        [BsonElement("display name")]
-        public string DisplayName { get; set; }
+        [BsonElement("display name on menu")]
+        public string DisplayNameOnMenu { get; set; }
 
 
-        [BsonElement("display screen")]
-        public string Display { get; set; }
+        [BsonElement("display on screen")]
+        public string DisplayOnScreen { get; set; }
     }
 
     public class CommonDetails

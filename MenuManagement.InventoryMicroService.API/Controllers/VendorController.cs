@@ -1,4 +1,5 @@
 ﻿using MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.GetVendorDetails;
+using MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.GetVendorMenuColumnDetails;
 using MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.GetVendorMenuDetails;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,14 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         public async Task<VendorMenuDetailDto> GetVendorMenuDetails(string locality, string vendorId)
         {
             return await Mediator.Send(new GetVendorMenuDetailsQuery { Location = locality , VendorId = vendorId });
+        }
+
+        [HttpGet("/api/vendor/menucolumnsdetails")]
+        [ProducesResponseType(StatusCodes.Status200OK
+            , Type = typeof(List<VendorColumnDetailDto>))]
+        public async Task<List<VendorColumnDetailDto>> GetVendorMenuColumnDetails(string vendorId)
+        {
+            return await Mediator.Send(new GetVendorMenuColumnDetailsQuery { VendorId = vendorId });
         }
     }
 }

@@ -9,5 +9,6 @@ namespace MenuManagment.Domain.Mongo.Interfaces
         Task<string> GetVendorDetails_DisplayName(string VendorId, string SearchColumnName);
         Task<List<VendorDetail>> ListAllVendorDetails(string Locality);
         Task<VendorMenuDetail> ListVendorMenuDetails(string VendorId,string Location);
+        Task<List<VendorColumnDetailEntity>> ListVendorMenuColumnDetails(string VendorId);
     }
 }

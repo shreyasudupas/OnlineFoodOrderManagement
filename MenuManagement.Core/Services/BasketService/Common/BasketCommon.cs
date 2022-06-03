@@ -12,11 +12,11 @@ namespace MenuManagement.Core.Services.BasketService.Common
         public static void CreateCartMenuObject(JObject CartInfoFromUI, out string cartMenuId, out Dictionary<string, object> menuObject, out VendorDetail vendorDetail)
         {
             //Get the menu id from the selected object of the user
-            cartMenuId = (string)CartInfoFromUI["Data"]["id"];
+            cartMenuId = (string)CartInfoFromUI["menu items"]["id"];
             //convert the item selected by user to object
-            var cartObject = CartInfoFromUI["Data"].ToObject<Dictionary<string, object>>();
+            var cartObject = CartInfoFromUI["menu items"].ToObject<Dictionary<string, object>>();
             menuObject = new Dictionary<string, object>();
-            var ColumnsList = (from columns in CartInfoFromUI["ColumnData"]
+            var ColumnsList = (from columns in CartInfoFromUI["menu columns"]
                                select columns).ToList();
 
             //prepare the object with column names and add the values of user selected item and add = to add quantity as well which is hardcoded in frontend
