@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.Shared", "MenuOrd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagment.Domain", "MenuManagment.Domain\MenuManagment.Domain.csproj", "{1DA48FC2-F890-4F6A-AC0D-286EAA2B9A10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuManagement.InventoryMicroService.API", "MenuManagement.InventoryMicroService.API\MenuManagement.InventoryMicroService.API.csproj", "{1FD07339-0306-476C-8A45-FDE1481BB53B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.InventoryMicroService.API", "MenuManagement.InventoryMicroService.API\MenuManagement.InventoryMicroService.API.csproj", "{1FD07339-0306-476C-8A45-FDE1481BB53B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{8E97A1DA-B00A-4D81-B05B-679B25FB6AB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +136,7 @@ Global
 		{8C4607E4-69AC-4BFA-800D-D5C8FEC36573} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 		{1DA48FC2-F890-4F6A-AC0D-286EAA2B9A10} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 		{1FD07339-0306-476C-8A45-FDE1481BB53B} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
+		{8E97A1DA-B00A-4D81-B05B-679B25FB6AB0} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9205ABE5-5F68-4004-8637-2E366D0E7280}
