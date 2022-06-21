@@ -4,7 +4,8 @@ import { Card } from 'primereact/card';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from './utilities/auth';
+import { useAuth } from '../hooks/useAuth';
+import { Constants } from '../utilities/Constants';
 
 function Login() {
 const [loginInfo,setLoginInfo] = useState({
@@ -15,6 +16,7 @@ const navigate = useNavigate()
 const auth = useAuth() 
 const location = useLocation()
 
+
 const redirectPath = location.state?.path || '/user'
 
 const loginHandler = (e) => {
@@ -23,6 +25,9 @@ const loginHandler = (e) => {
 
     if(loginInfo !== null && loginInfo !== undefined){
         auth.login(loginInfo.username)
+
+        localStorage.setItem( Constants.LOGIN_LOCAL_STORAGE_NAME,loginInfo.username)
+
         navigate(redirectPath,{ replace:true })
     }
 }

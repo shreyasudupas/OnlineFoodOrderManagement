@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuth } from '../utilities/auth'
+import { useAuth } from '../../hooks/useAuth'
 
 function UserProfileOverview() {
     const getUserContext = useAuth()

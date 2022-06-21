@@ -1,15 +1,15 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-function UserOutlet() {
-  console.log('User oulet called')
+function UserLayout() {
+  console.log('User Layout called')
   return (
     <>
-        <div>This is UserDashboard</div>
+        <div>This is User Layout</div>
         <Outlet/>
     </>
     
   )
 }
 
-export default UserOutlet
+export default UserLayout
