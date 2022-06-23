@@ -14,6 +14,16 @@ namespace IdentityServer.Infrastruture
         {
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("MenuIdentityDB"));
 
+            services.AddIdentity<ApplicationUser, IdentityRole>(config=> 
+            {
+                config.Password.RequiredLength = 8;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireDigit = false;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
             var builder = services.AddIdentityServer()
                                 //.AddInMemoryClients(InMemoryConfiguration.Clients)
                                 //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
@@ -31,8 +41,7 @@ namespace IdentityServer.Infrastruture
                                 })
                                 .AddDeveloperSigningCredential();
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //        .AddEntityFrameworkStores<ApplicationDbContext>();
+            
 
             //Register services
             services.AddScoped<IAuthService, AuthService>();
