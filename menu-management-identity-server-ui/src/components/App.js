@@ -5,9 +5,9 @@ import { AuthProvider } from '../hooks/useAuth';
 import HomeLayout from './HomeLayout';
 import Login from '../pages/Login';
 import ProtectedLayout from './ProtectedLayout';
-import UserLayout from './user/UserLayout';
-import UserProfileOverview from './user/UserProfileOverview';
-import { ListUser } from './user/ListUser';
+import UserLayout from './UserLayout';
+import UserProfileOverview from '../pages/user/UserProfileOverview';
+import { ListUser } from '../pages/user/ListUser';
 import PageNotFound from '../pages/PageNotFound';
 import Home from '../pages/Home';
 
@@ -29,7 +29,6 @@ function App() {
             </Route>
             <Route path='*' element={ <PageNotFound /> }/>
          </Route>
-         
       </Routes>
    </AuthProvider>
   );
