@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.Domain.Response;
+using IdenitityServer.Core.Mediators.Login;
 using IdentityServer.Infrastruture.Database;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace IdentityServer.Infrastruture.Services
             _signInManger = signInManger;
             _userManager = userManager;
         }
-        public async Task<LoginResponse> Login(LoginRequest login)
+        public async Task<LoginResponse> Login(LoginCommand login)
         {
             var response = new LoginResponse();
             var result = await _signInManger.PasswordSignInAsync(login.Username, login.Password, false, false);
@@ -32,6 +33,10 @@ namespace IdentityServer.Infrastruture.Services
                 {
                     response.RedirectRequired = true;
                 }
+            }
+            else
+            {
+                response.Error = "Incorrect Username/Password";
             }
             return response;
         }
