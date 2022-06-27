@@ -24,22 +24,27 @@ namespace IdentityServer.Infrastruture
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            var builder = services.AddIdentityServer()
-                                //.AddInMemoryClients(InMemoryConfiguration.Clients)
-                                //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
-                                //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources)
-                                //.AddInMemoryApiScopes(InMemoryConfiguration.ApiScopes)
-                                //.AddTestUsers(InMemoryConfiguration.TestUsers)
-                                .AddAspNetIdentity<ApplicationUser>()
-                                .AddConfigurationStore(opt =>
-                                {
-                                    opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
-                                })
-                                .AddOperationalStore(opt =>
-                                {
-                                    opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
-                                })
-                                .AddDeveloperSigningCredential();
+            var builder = services.AddIdentityServer(options=> 
+            {
+                options.UserInteraction.LoginUrl = "http://localhost:3000/login";
+                options.UserInteraction.ErrorUrl = "http://localhost:3000/error";
+                options.UserInteraction.LogoutUrl = "http://localhost:3000/logout";
+            })
+            //.AddInMemoryClients(InMemoryConfiguration.Clients)
+            //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
+            //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources)
+            //.AddInMemoryApiScopes(InMemoryConfiguration.ApiScopes)
+            //.AddTestUsers(InMemoryConfiguration.TestUsers)
+            .AddAspNetIdentity<ApplicationUser>()
+            .AddConfigurationStore(opt =>
+            {
+                opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
+            })
+            .AddOperationalStore(opt =>
+            {
+                opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
+            })
+            .AddDeveloperSigningCredential();
 
             
 

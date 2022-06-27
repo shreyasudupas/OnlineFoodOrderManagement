@@ -28,6 +28,21 @@ namespace IdentityServer.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Cors
+            services.AddCors(options =>
+            {
+                var origin = Configuration.GetValue<string>("IdentityReactSpaCors:ORIGIN_URL");
+                var headers = Configuration.GetValue<string>("IdentityReactSpaCors:HEADERS");
+                var methods = Configuration.GetValue<string>("IdentityReactSpaCors:METHODS");
+
+                options.AddPolicy(name: "IdentityReactSpa.Cors",
+                    builder =>
+                    {
+                        builder.WithOrigins(origin)
+                                .WithHeaders(headers.Split(','))
+                                .WithMethods(methods.Split(','));
+                    });
+            });
 
             services.AddControllers();
             services.AddCors(Configuration);
@@ -50,6 +65,8 @@ namespace IdentityServer.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("IdentityReactSpa.Cors");
 
             app.UseRouting();
 
