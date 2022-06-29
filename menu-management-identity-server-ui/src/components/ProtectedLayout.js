@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { InputText } from 'primereact/inputtext';
 import { Menubar } from 'primereact/menubar';
@@ -67,9 +67,12 @@ function ProtectedLayout() {
         }
      ];
 
-    if(!auth.user){
-        return <Navigate to='login'/>
-    }
+   //  if(!auth.user){
+   //      return <Navigate to='login'/>
+   //  }
+   if(!auth.isAuthenticated()){
+      auth.signinRedirect()
+   }
 
     const handleLogout = () => {
         auth.logout()

@@ -10,6 +10,8 @@ import UserProfileOverview from '../pages/user/UserProfileOverview';
 import { ListUser } from '../pages/user/ListUser';
 import PageNotFound from '../pages/PageNotFound';
 import Home from '../pages/Home';
+import Error from '../pages/Error';
+import Callback from './Callback';
 
 function App() {
   
@@ -19,7 +21,10 @@ function App() {
          <Route element={ <HomeLayout/> }>
             <Route path='/' element={ <Home/> }/>
             <Route path='login' element={ <Login/> }/>
+            <Route path='signin-callback' element={ <Callback/>}/>
          </Route>
+
+         <Route path='error' element={ <Error/> }></Route>
 
          <Route element={ <ProtectedLayout/> }>
             <Route path='user' element={ <UserLayout/> } >

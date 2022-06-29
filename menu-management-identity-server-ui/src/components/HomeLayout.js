@@ -13,19 +13,24 @@ function HomeLayout() {
         {
            label:'Home',
            icon:'pi pi-home',
-           command:()=>{ navigate('home') }
+           command:()=>{ navigate('') }
      
         },
         {
            label:'Login',
            icon:'pi pi-fw pi-unlock',
-           command:()=>{ navigate('login') }
+           command:()=>{ //navigate('login')
+            auth.signinRedirect() 
+          }
         }
    ]
 
-    if(auth.user){
-        return <Navigate to="user" />
-    }
+    // if(auth.user){
+    //     return <Navigate to="user" />
+    // }
+    if(auth.isAuthenticated()){
+      return <Navigate to="user" />
+   }
 
     const start = <img alt="logo" src="assets/menu/MenuLogo1.png" onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} 
      height="40" className="mr-2"></img>;

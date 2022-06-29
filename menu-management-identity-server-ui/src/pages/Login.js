@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
 import { Password } from 'primereact/password';
@@ -56,7 +56,7 @@ const navigate = useNavigate()
 const auth = useAuth() 
 const location = useLocation()
 const [searchParams] = useSearchParams()
-let returnUrl = searchParams.get('returnUrl')
+let returnUrl = searchParams.get('ReturnUrl')
 const LOGIN_URL = "https://localhost:5006/api/Authentication/Login"
 
 const redirectPath = location.state?.path || '/user'
@@ -69,26 +69,26 @@ const handleTextInput = (e) => {
     })
 }
 
-useEffect(()=>{
-    if(state.result.error !== undefined && state.result.redirectRequired !== null){
+// useEffect(()=>{
+//     if(state.result.error !== undefined && state.result.redirectRequired !== null){
 
-        if(state.result.error != null){
-            console.log(state.result.error)
-            return
-        }
+//         if(state.result.error != null){
+//             console.log(state.result.error)
+//             return
+//         }
 
-        auth.login(state.username)
-        localStorage.setItem( Constants.LOGIN_LOCAL_STORAGE_NAME,state.username)
+//         auth.login(state.username)
+//         localStorage.setItem( Constants.LOGIN_LOCAL_STORAGE_NAME,state.username)
 
-        if(state.result.redirectRequired === true)
-        {
-            window.location.replace(returnUrl)
-        }else{
-            navigate(redirectPath,{ replace:true })
-        }
-    }
+//         if(state.result.redirectRequired === true)
+//         {
+//             window.location.replace(returnUrl)
+//         }else{
+//             navigate(redirectPath,{ replace:true })
+//         }
+//     }
 
-},[state.result])
+// },[state.result])
 
 
 
@@ -101,7 +101,7 @@ const loginHandler = (e) => {
         const body = {
             'username':state.username,
             'password':state.password,
-            'redirectUrl':returnUrl
+            'returnUrl':returnUrl
         }
 
         dispatch({ type: 'CALL_LOGIN_API'})
