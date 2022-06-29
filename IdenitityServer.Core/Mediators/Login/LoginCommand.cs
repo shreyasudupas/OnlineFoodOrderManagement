@@ -11,6 +11,8 @@ namespace IdenitityServer.Core.Mediators.Login
         public string Username { get; set; }
         public string Password { get; set; }
         public string ReturnUrl { get; set; }
+        public bool RememberMe { get; set; }
+        public bool isSuccess { get; set; }
     }
 
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandDto>

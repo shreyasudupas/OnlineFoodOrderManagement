@@ -26,6 +26,31 @@ namespace IdentityServer.Infrastruture
                 ClientSecrets = new [] { new Secret("codemazesecret".Sha512()) },
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                 AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
+            },
+            new Client
+            {
+                ClientId = "react-spa-identityServer-ui",
+                ClientName = "React SPA IDS UI",
+                ClientUri = "http://localhost:3000",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RequireClientSecret = false,
+                RequireConsent = false,
+                RedirectUris = new List<string> { "http://localhost:3000/signin-callback" },
+                PostLogoutRedirectUris = new List<string> { "http://localhost:3000/signout-callback" },
+                AllowedScopes = new List<string>{
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.LocalApi.ScopeName, //This is used to call API within the IDS server API when client that doesnt have cookie and can access API
+                    "idsApi"
+                },
+                AccessTokenLifetime = 86400,
+                AllowAccessTokensViaBrowser = true,
+                AlwaysIncludeUserClaimsInIdToken = true,
+                AllowedCorsOrigins = new List<string>
+                {
+                    "http://localhost:3000",
+                }
             }
         };
 
@@ -34,6 +59,8 @@ namespace IdentityServer.Infrastruture
         {
             new ApiScope("myApi.read"),
             new ApiScope("myApi.write"),
+            new ApiScope(IdentityServerConstants.LocalApi.ScopeName),
+            new ApiScope("idsApi","IDS APIs")
         };
 
         public static List<TestUser> TestUsers =>
@@ -68,7 +95,11 @@ namespace IdentityServer.Infrastruture
             {
                 Scopes = new List<string>{ "myApi.read","myApi.write" },
                 ApiSecrets = new List<Secret>{ new Secret("supersecret".Sha256()) }
-            }
+            },
+            new ApiResource("idsAPI","Identity Service APIs")
+             {
+                 Scopes = { "idsApi" }
+             },
         };
     }
 }

@@ -1,10 +1,12 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer.Infrastruture.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace IdentityServer.Infrastruture
 {
@@ -24,12 +26,27 @@ namespace IdentityServer.Infrastruture
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            var builder = services.AddIdentityServer(options=> 
+            services.ConfigureApplicationCookie(config =>
             {
-                options.UserInteraction.LoginUrl = "http://localhost:3000/login";
-                options.UserInteraction.ErrorUrl = "http://localhost:3000/error";
-                options.UserInteraction.LogoutUrl = "http://localhost:3000/logout";
-            })
+                config.Cookie.Name = "Identity.React.SPA";
+                config.LoginPath = "/Authentication/Login";
+                config.LogoutPath = "/Authentication/Logout";
+                config.AccessDeniedPath = "/Authentication/AccessDenied";
+                config.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+
+                config.Cookie.HttpOnly = true;
+                config.Cookie.SameSite = SameSiteMode.None;
+                config.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
+            var builder = services.AddIdentityServer(
+            //    options=> 
+            //{
+            //    options.UserInteraction.LoginUrl = "http://localhost:3000/login";
+            //    options.UserInteraction.ErrorUrl = "http://localhost:3000/error";
+            //    options.UserInteraction.LogoutUrl = "http://localhost:3000/logout";
+            //}
+            )
             //.AddInMemoryClients(InMemoryConfiguration.Clients)
             //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
             //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources)

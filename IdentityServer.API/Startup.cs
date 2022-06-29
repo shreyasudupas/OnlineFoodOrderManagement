@@ -1,4 +1,5 @@
 using IdenitityServer.Core;
+using IdentityServer.API.Middleware;
 using IdentityServer.Infrastruture;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,12 +39,13 @@ namespace IdentityServer.API
                 options.AddPolicy(name: "IdentityReactSpa.Cors",
                     builder =>
                     {
-                        builder.WithOrigins(origin)
+                        builder.WithOrigins(origin.Split(','))
                                 .WithHeaders(headers.Split(','))
                                 .WithMethods(methods.Split(','));
                     });
             });
 
+            services.AddControllersWithViews();
             services.AddControllers();
             services.AddCors(Configuration);
             services.AddInfrastructure(Configuration);
@@ -57,6 +59,9 @@ namespace IdentityServer.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //custom OPTIONS CORS
+            //app.UseOptions();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,9 +69,9 @@ namespace IdentityServer.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IdentityServer.API v1"));
             }
 
-            app.UseHttpsRedirection();
-
             app.UseCors("IdentityReactSpa.Cors");
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -76,6 +81,10 @@ namespace IdentityServer.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapControllers();
             });
         }

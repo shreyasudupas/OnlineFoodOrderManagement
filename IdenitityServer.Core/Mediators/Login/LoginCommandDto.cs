@@ -8,11 +8,14 @@ namespace IdenitityServer.Core.Mediators.Login
     {
         public bool RedirectRequired { get; set; }
         public string Error { get; set; }
+        public bool isSuccess { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<LoginResponse, LoginCommandDto>()
+                .ForMember(dest => dest.isSuccess, act => act.MapFrom(src => string.IsNullOrEmpty(src.Error) ? true : false))
                 .ReverseMap();
+                
         }
     }
 }
