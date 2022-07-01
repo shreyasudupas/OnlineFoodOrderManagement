@@ -67,17 +67,11 @@ function ProtectedLayout() {
         }
      ];
 
-   //  if(!auth.user){
-   //      return <Navigate to='login'/>
-   //  }
    if(!auth.isAuthenticated()){
       auth.signinRedirect()
    }
 
     const handleLogout = () => {
-      //   auth.logout()
-      //   localStorage.clear();
-      //   navigate('')
       auth.logout()
     }
 
