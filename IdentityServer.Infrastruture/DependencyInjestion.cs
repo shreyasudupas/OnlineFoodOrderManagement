@@ -53,6 +53,7 @@ namespace IdentityServer.Infrastruture
             //.AddInMemoryApiScopes(InMemoryConfiguration.ApiScopes)
             //.AddTestUsers(InMemoryConfiguration.TestUsers)
             .AddAspNetIdentity<ApplicationUser>()
+            .AddProfileService<CustomProfileService>() //This is used for adding custom claims
             .AddConfigurationStore(opt =>
             {
                 opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
