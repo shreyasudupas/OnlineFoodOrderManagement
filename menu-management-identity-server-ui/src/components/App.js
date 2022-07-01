@@ -11,7 +11,8 @@ import { ListUser } from '../pages/user/ListUser';
 import PageNotFound from '../pages/PageNotFound';
 import Home from '../pages/Home';
 import Error from '../pages/Error';
-import Callback from './Callback';
+import LoginCallback from './LoginCallback';
+import LogoutCallback from './LogoutCallback';
 
 function App() {
   
@@ -21,7 +22,8 @@ function App() {
          <Route element={ <HomeLayout/> }>
             <Route path='/' element={ <Home/> }/>
             <Route path='login' element={ <Login/> }/>
-            <Route path='signin-callback' element={ <Callback/>}/>
+            <Route path='signin-callback' element={ <LoginCallback/>}/>
+            <Route path='signout-callback' element={ <LogoutCallback/>}/>
          </Route>
 
          <Route path='error' element={ <Error/> }></Route>

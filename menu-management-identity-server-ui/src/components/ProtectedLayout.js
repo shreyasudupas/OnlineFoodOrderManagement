@@ -75,9 +75,10 @@ function ProtectedLayout() {
    }
 
     const handleLogout = () => {
-        auth.logout()
-        localStorage.clear();
-        navigate('')
+      //   auth.logout()
+      //   localStorage.clear();
+      //   navigate('')
+      auth.logout()
     }
 
     const start = <img alt="logo" src="assets/menu/MenuLogo1.png" onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} 

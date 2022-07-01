@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../hooks/useAuth'
 
-function Callback() {
+function LoginCallback() {
     const auth = useAuth()
     const navigate = useNavigate()
     
@@ -12,7 +12,7 @@ function Callback() {
         console.log('Before callback')
         await auth.signinRedirectCallback()     
         console.log('After callback')
-        //navigate('user') 
+        navigate('/user') 
       }
       signinAsync()
       
@@ -25,4 +25,4 @@ function Callback() {
   )
 }
 
-export default Callback
+export default LoginCallback

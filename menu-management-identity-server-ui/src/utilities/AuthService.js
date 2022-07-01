@@ -31,8 +31,8 @@ export default class AuthService {
         });
     }
 
-    signinRedirectCallback = () => {
-        this.UserManager.signinRedirectCallback().then((user)=>{
+    signinRedirectCallback = async () => {
+        await this.UserManager.signinRedirectCallback().then((user)=>{
             if(user!== null && user!== undefined){
                 // redirect user to user page
                 console.log('callback successful')
@@ -97,8 +97,8 @@ export default class AuthService {
         this.UserManager.clearStaleState();
     };
 
-    signoutRedirectCallback = () => {
-        this.UserManager.signoutRedirectCallback().then(() => {
+    signoutRedirectCallback = async () => {
+        await this.UserManager.signoutRedirectCallback().then(() => {
             localStorage.clear();
             window.location.replace(process.env.REACT_APP_PUBLIC_URL);
         });
