@@ -1,4 +1,4 @@
-﻿using IdenitityServer.Core.Mediators.Login;
+﻿using IdenitityServer.Core.Features.Login;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

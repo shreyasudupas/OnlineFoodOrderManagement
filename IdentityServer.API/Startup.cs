@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace IdentityServer.API
@@ -45,6 +46,7 @@ namespace IdentityServer.API
                     });
             });
 
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddCors(Configuration);

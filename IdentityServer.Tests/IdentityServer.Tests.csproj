@@ -26,4 +26,8 @@
     <ProjectReference Include="..\IdentityServer.Infrastruture\IdentityServer.Infrastruture.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UnitTests\Infrastructure\UtilsService\" />
+  </ItemGroup>
+
 </Project>

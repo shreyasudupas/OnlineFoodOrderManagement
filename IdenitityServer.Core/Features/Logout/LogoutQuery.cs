@@ -4,7 +4,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IdenitityServer.Core.Mediators.Logout
+namespace IdenitityServer.Core.Features.Logout
 {
     public class LogoutQuery : IRequest<PreLogoutResponse>
     {

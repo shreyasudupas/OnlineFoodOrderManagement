@@ -4,7 +4,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IdenitityServer.Core.Mediators.Login
+namespace IdenitityServer.Core.Features.Login
 {
     public class LoginCommand : IRequest<LoginCommandDto>
     {

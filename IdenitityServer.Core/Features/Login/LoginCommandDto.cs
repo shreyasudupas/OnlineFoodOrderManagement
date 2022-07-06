@@ -2,7 +2,7 @@
 using IdenitityServer.Core.Common.Mapping;
 using IdenitityServer.Core.Domain.Response;
 
-namespace IdenitityServer.Core.Mediators.Login
+namespace IdenitityServer.Core.Features.Login
 {
     public class LoginCommandDto : IMapFrom<LoginResponse>
     {

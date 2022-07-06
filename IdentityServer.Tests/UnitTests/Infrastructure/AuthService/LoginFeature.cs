@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
 using IdenitityServer.Core.Domain.DBModel;
-using IdenitityServer.Core.Mediators.Login;
+using IdenitityServer.Core.Features.Login;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer.Tests.Helper;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +21,8 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
         Mock<SignInManager<ApplicationUser>> mockSignInManager;
         bool signInMethodCalled;
         Infrastruture.Services.AuthService sut;
+        Mock<IIdentityServerInteractionService> mockIdentityService;
+        Mock<ILogger<IdentityServer.Infrastruture.Services.AuthService>> mockLog;
 
         public LoginFeature()
         {
@@ -28,7 +32,11 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
             mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager.Object,new Mock<IHttpContextAccessor>().Object,
                 new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>().Object,null,null,null,null);
 
-            sut = new Infrastruture.Services.AuthService(mockSignInManager.Object, mockUserManager.Object);
+            mockIdentityService = new Mock<IIdentityServerInteractionService>();
+            mockLog = new Mock<ILogger<Infrastruture.Services.AuthService>>();
+
+            sut = new Infrastruture.Services.AuthService(mockSignInManager.Object, mockUserManager.Object, mockIdentityService.Object
+                ,mockLog.Object,appContext);
 
             ApplicationUser newUser = new ApplicationUser
             {

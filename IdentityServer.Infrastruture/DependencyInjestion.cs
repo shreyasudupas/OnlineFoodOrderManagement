@@ -68,6 +68,7 @@ namespace IdentityServer.Infrastruture
 
             //Register services
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUtilsService, UtilsService>();
 
             return services;
         }

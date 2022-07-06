@@ -1,5 +1,8 @@
-﻿using IdenitityServer.Core.Mediators.Login;
-using IdenitityServer.Core.Mediators.Logout;
+﻿using AutoMapper;
+using IdenitityServer.Core.Features.Login;
+using IdenitityServer.Core.Features.Logout;
+using IdenitityServer.Core.Features.Register;
+using IdenitityServer.Core.Features.Utility;
 using IdentityModel;
 using IdentityServer.API.Controllers.ViewModels;
 using IdentityServer.Infrastruture.Database;
@@ -19,14 +22,17 @@ namespace IdentityServer.API.Controllers
         private readonly IMediator _mediator;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IMapper _mapper;
 
         public AuthenticationController(IMediator mediator,
             IIdentityServerInteractionService interaction,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IMapper mapper)
         {
             _mediator = mediator;
             _interaction = interaction;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult Login(string returnUrl)
@@ -152,6 +158,47 @@ namespace IdentityServer.API.Controllers
                 .ToList();
 
             return View(claims);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Register(string returnUrl)
+        {
+            var result = await _mediator.Send(new RegisterQuery { ReturnUrl = returnUrl });
+            var response = _mapper.Map<RegisterViewModel>(result);
+            
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterCommand command)
+        {
+            if(ModelState.IsValid)
+            {
+                await _mediator.Send(command);
+
+                if(command.Errors.Any())
+                {
+                    command.Errors.ForEach(e=> ModelState.AddModelError("",e));
+                }
+                else if(!string.IsNullOrEmpty(command.ReturnUrl))
+                {
+                    return Redirect(command.ReturnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("login");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Property missing");
+                var (cities,states) = await _mediator.Send(new GetStateCityQuery());
+                command.Cities = cities;
+                command.States = states;
+            }
+            var response = _mapper.Map<RegisterViewModel>(command);
+
+            return View(response);
         }
     }
 }

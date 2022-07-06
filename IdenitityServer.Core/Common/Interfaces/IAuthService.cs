@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Domain.Response;
-using IdenitityServer.Core.Mediators.Login;
-using IdenitityServer.Core.Mediators.Logout;
+using IdenitityServer.Core.Features.Login;
+using IdenitityServer.Core.Features.Logout;
+using IdenitityServer.Core.Features.Register;
 using System.Threading.Tasks;
 
 namespace IdenitityServer.Core.Common.Interfaces
@@ -9,5 +10,6 @@ namespace IdenitityServer.Core.Common.Interfaces
     {
         Task<LoginResponse> Login(LoginCommand login);
         Task<PreLogoutResponse> PreLogout(LogoutQuery logoutCommand);
+        Task Register(RegisterCommand reqisterCommand);
     }
 }

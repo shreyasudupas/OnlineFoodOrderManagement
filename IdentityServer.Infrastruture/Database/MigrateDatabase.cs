@@ -108,7 +108,91 @@ namespace IdentityServer.Infrastruture.Database
                     AddMasterClaims(context);
                     AddMasterRoles(RoleManager, context);
                     AddMasterUserClaims(UserManager, context);
+                    MapUsersToRole(UserManager, context);
+
+                    MapAddressStateLocation(context);
                 }
+            }
+        }
+
+        public static void MapAddressStateLocation(ApplicationDbContext context)
+        {
+            //States master values
+            if (!context.States.Any() && !context.Cities.Any() && !context.LocationAreas.Any())
+            {
+                var states = new List<State>()
+                            {
+                                new State {
+                                    Name="Karnataka",
+                                    Cities = new List<City>
+                                    {
+                                        new City
+                                        {
+                                            Name="Bengaluru",
+                                            Areas = new List<LocationArea>
+                                            {
+                                                new LocationArea { AreaName="Kathreguppe" },
+                                                new LocationArea { AreaName="JP Nagar" },
+                                                new LocationArea { AreaName="Jayanagar" },
+                                                new LocationArea { AreaName="Uttrahalli" },
+                                                new LocationArea { AreaName="Banashankari 2nd Stage" }
+                                            }
+                                        }
+                                    }
+                                },
+                                new State {
+                                    Name="Maharastra" ,
+                                    Cities = new List<City>
+                                    {
+                                        new City
+                                        {
+                                            Name="Mumbai",
+                                            Areas = new List<LocationArea>
+                                            {
+                                                new LocationArea { AreaName="Kalwa" },
+                                                new LocationArea { AreaName="Thane" },
+                                                new LocationArea { AreaName="Kurla" },
+                                                new LocationArea { AreaName="Juhu" }
+                                            }
+                                        }
+                                    }
+                                },
+                                new State {
+                                    Name="Tamil Nadu",
+                                    Cities = new List<City>
+                                    {
+                                        new City
+                                        {
+                                            Name="Chennai",
+                                            Areas = new List<LocationArea>
+                                            {
+                                                new LocationArea { AreaName="RR Nagar" }
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+
+                context.States.AddRange(states);
+
+                context.SaveChanges();
+            }
+        }
+
+        private static void MapUsersToRole(UserManager<ApplicationUser> UserManager, ApplicationDbContext context)
+        {
+            //Map users with Role
+            if (!context.UserRoles.Any())
+            {
+                var users = context.Users.ToList();
+                var roles = context.Roles.ToList();
+
+                if (users.Count > 0 && roles.Count > 0)
+                {
+                    UserManager.AddToRoleAsync(users[0], roles[0].Name).GetAwaiter().GetResult();
+                    UserManager.AddToRoleAsync(users[1], roles[1].Name).GetAwaiter().GetResult();
+                }
+                context.SaveChanges();
             }
         }
 
