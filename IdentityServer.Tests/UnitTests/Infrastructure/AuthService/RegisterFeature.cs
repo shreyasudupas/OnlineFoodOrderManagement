@@ -46,6 +46,8 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
                 .ReturnsAsync(IdentityResult.Success);
             mockUserManager.Setup(_ => _.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
                 .ReturnsAsync(IdentityResult.Success);
+            mockUserManager.Setup(_ => _.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             var command = new RegisterCommand
             {
