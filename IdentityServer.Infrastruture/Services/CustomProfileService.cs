@@ -3,11 +3,9 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IdentityServer.Infrastruture.Services
@@ -52,10 +50,10 @@ namespace IdentityServer.Infrastruture.Services
             if (claimList.Any(x => x.Type == "userName"))
             {
                 var role = claimList.Find(x => x.Type == "userName");
-                customClaimList.Add(new Claim("Username", role.Value));
+                customClaimList.Add(new Claim("username", role.Value));
             }
 
-            customClaimList.Add(new Claim("UserId", user.Id));
+            customClaimList.Add(new Claim("userId", user.Id));
 
             context.IssuedClaims = customClaimList;
         }

@@ -121,13 +121,18 @@ namespace IdentityServer.Infrastruture.Services
                 var usernameClaim = new Claim("userName", reqisterCommand.Username);
                 var emailClaim = new Claim("email", reqisterCommand.Email);
                 var addressClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
+                var roleAddressClaim = new Claim("role", "appUser");
 
 
                 var result1 = _userManager.AddClaimAsync(user, usernameClaim).GetAwaiter().GetResult();
                 var result2 = _userManager.AddClaimAsync(user, emailClaim).GetAwaiter().GetResult();
                 var result3 = _userManager.AddClaimAsync(user, addressClaim).GetAwaiter().GetResult();
+                var resultRole = _userManager.AddClaimAsync(user, roleAddressClaim).GetAwaiter().GetResult();
 
                 _logger.LogInformation($"Claim for username: {result1.Succeeded}, Claim for email: {result2.Succeeded}, Claim for address: {result3.Succeeded}");
+
+                var roleUserResult = _userManager.AddToRoleAsync(user,"appUser").GetAwaiter().GetResult();
+                _logger.LogInformation($"Role appUser added to user {roleUserResult.Succeeded}");
             }
             else
             {
