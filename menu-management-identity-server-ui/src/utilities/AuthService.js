@@ -104,4 +104,14 @@ export default class AuthService {
         });
         this.UserManager.clearStaleState();
     };
+
+    userRoleIsAdmin = async () =>{
+        let role =''
+         await this.UserManager.getUser()
+         .then(user=> {
+            role = user.profile.role
+         } );
+
+         return role;
+    }
 }

@@ -13,6 +13,8 @@ import Home from '../pages/Home';
 import Error from '../pages/Error';
 import LoginCallback from './LoginCallback';
 import LogoutCallback from './LogoutCallback';
+import AccessDenied from '../pages/AccessDenied';
+import AccessDeniedLayout from './AccessDeniedLayout';
 
 function App() {
   
@@ -35,6 +37,9 @@ function App() {
                <Route path='lists' element={ <ListUser/> }/>
             </Route>
             <Route path='*' element={ <PageNotFound /> }/>
+         </Route>
+
+         <Route path='access-denied' element={ <AccessDeniedLayout/> }>
          </Route>
       </Routes>
    </AuthProvider>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { InputText } from 'primereact/inputtext';
@@ -8,6 +8,7 @@ import './App.css'
 function ProtectedLayout() {
     const auth = useAuth()
     const navigate = useNavigate()
+    let isAdmin = 'Loading'
 
     const items = [
        {
@@ -69,7 +70,22 @@ function ProtectedLayout() {
 
    if(!auth.isAuthenticated()){
       auth.signinRedirect()
+   }else{
+      //call the isAdminRole
+      isAdmin = auth.userRoleIsAdmin()
    }
+
+   //This will give the result once promise will finish giving its result
+   useEffect(()=>{
+      async function checkIfAdmin(){
+         let role = await auth.userRoleIsAdmin()
+
+         if(role!=="admin"){
+            navigate('/access-denied')
+         }
+      }
+      checkIfAdmin()
+   },[isAdmin])
 
     const handleLogout = () => {
       auth.logout()

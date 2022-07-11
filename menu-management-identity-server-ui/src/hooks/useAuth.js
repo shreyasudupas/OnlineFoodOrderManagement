@@ -7,7 +7,8 @@ const AuthContext = createContext({
     signoutRedirectCallback: () => ({}),
     isAuthenticated: () => ({}),
     signinRedirect: () => ({}),
-    createSigninRequest: () => ({})
+    createSigninRequest: () => ({}),
+    userRoleIsAdmin: () => ({})
 })
 
 // export const AuthProvider = ({ children }) => {
