@@ -1,6 +1,11 @@
+using AutoMapper;
 using IdenitityServer.Core;
+using IdenitityServer.Core.MapperProfiles;
+using IdentityServer.API.AutoMapperProfile;
+using IdentityServer.API.GraphQL.Query;
 using IdentityServer.API.Middleware;
 using IdentityServer.Infrastruture;
+using IdentityServer.Infrastruture.MapperProfiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -46,11 +51,25 @@ namespace IdentityServer.API
                     });
             });
 
-            services.AddAutoMapper(typeof(Startup));
+            //services.AddAutoMapper(typeof(Startup));
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new RegisterProfile());
+                mc.AddProfile(new UserProfileMapper());
+                mc.AddProfile(new UserInformationProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddCors(Configuration);
             services.AddInfrastructure(Configuration);
+
+            services.AddGraphQLServer()
+                .AddTypeExtension<UserInformationExtensionType>(); ;
 
             services.AddSwaggerGen(c =>
             {
@@ -86,6 +105,8 @@ namespace IdentityServer.API
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapGraphQL();
 
                 endpoints.MapControllers();
             });

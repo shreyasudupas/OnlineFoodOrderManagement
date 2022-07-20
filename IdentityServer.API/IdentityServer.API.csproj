@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="12.12.1" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
@@ -17,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="GraphQL\Mutation\" />
+    <Folder Include="GraphQL\Types\InputTypes\" />
+    <Folder Include="GraphQL\Types\OutputTypes\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
