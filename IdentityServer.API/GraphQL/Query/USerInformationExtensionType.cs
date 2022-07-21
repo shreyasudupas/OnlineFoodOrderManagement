@@ -1,24 +1,29 @@
 ﻿using HotChocolate.Types;
 using IdenitityServer.Core.QueryResolvers;
 using IdenitityServer.Core.Types.OutputTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace IdentityServer.API.GraphQL.Query
 {
-    public record UserInfo(int id);
-    public class UserInformationExtensionType : ObjectTypeExtension<UserInfo>
+    
+    public class UserInformationExtensionType : ObjectTypeExtension
     {
-        
-        protected override void Configure(IObjectTypeDescriptor<UserInfo> descriptor)
+        protected override void Configure(IObjectTypeDescriptor descriptor)
         {
+            descriptor.Name("Query");
 
-            descriptor.Field("getUserInformation")
-                .ResolveWith<GetUserInformationResolver>(_ => _.GetUserInfo(default))
+            descriptor.Field("getUserInfo")
+                .Argument("UserId", _ => _.Type<StringType>())
+                .Resolve(context =>
+                {
+                    CancellationToken ct = context.RequestAborted;
+                    var UserId = context.ArgumentValue<string>("UserId");
+
+                    GetUserInformationResolver service = context.Service<GetUserInformationResolver>();
+                    return service.GetUserInfo(UserId);
+                })
                 .Type<UserInformationOutputType>()
-                .Name("GetUserInformation");
+                .Name("UserInformation");
 
         }
     }

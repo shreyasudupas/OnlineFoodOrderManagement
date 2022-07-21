@@ -58,6 +58,7 @@ namespace IdentityServer.API
                 mc.AddProfile(new RegisterProfile());
                 mc.AddProfile(new UserProfileMapper());
                 mc.AddProfile(new UserInformationProfile());
+                mc.AddProfile(new LoginProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -69,6 +70,7 @@ namespace IdentityServer.API
             services.AddInfrastructure(Configuration);
 
             services.AddGraphQLServer()
+                .AddQueryType(q=>q.Name("Query"))
                 .AddTypeExtension<UserInformationExtensionType>(); ;
 
             services.AddSwaggerGen(c =>
