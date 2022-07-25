@@ -14,7 +14,7 @@ namespace IdentityServer.Infrastruture
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("MenuIdentityDB"));
+            
 
             services.AddIdentity<ApplicationUser, IdentityRole>(config=> 
             {
@@ -39,30 +39,63 @@ namespace IdentityServer.Infrastruture
                 config.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            var builder = services.AddIdentityServer(
-            //    options=> 
-            //{
-            //    options.UserInteraction.LoginUrl = "http://localhost:3000/login";
-            //    options.UserInteraction.ErrorUrl = "http://localhost:3000/error";
-            //    options.UserInteraction.LogoutUrl = "http://localhost:3000/logout";
-            //}
-            )
-            //.AddInMemoryClients(InMemoryConfiguration.Clients)
-            //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
-            //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources)
-            //.AddInMemoryApiScopes(InMemoryConfiguration.ApiScopes)
-            //.AddTestUsers(InMemoryConfiguration.TestUsers)
-            .AddAspNetIdentity<ApplicationUser>()
-            .AddProfileService<CustomProfileService>() //This is used for adding custom claims
-            .AddConfigurationStore(opt =>
+            var connectionString = configuration.GetConnectionString("sqlConnection");
+
+            if(string.IsNullOrEmpty(connectionString))
             {
-                opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
-            })
-            .AddOperationalStore(opt =>
+                services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("MenuIdentityDB"));
+
+                var builder = services.AddIdentityServer(
+                                //    options=> 
+                                //{
+                                //    options.UserInteraction.LoginUrl = "http://localhost:3000/login";
+                                //    options.UserInteraction.ErrorUrl = "http://localhost:3000/error";
+                                //    options.UserInteraction.LogoutUrl = "http://localhost:3000/logout";
+                                //}
+                                )
+                                //.AddInMemoryClients(InMemoryConfiguration.Clients)
+                                //.AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
+                                //.AddInMemoryApiResources(InMemoryConfiguration.ApiResources)
+                                //.AddInMemoryApiScopes(InMemoryConfiguration.ApiScopes)
+                                //.AddTestUsers(InMemoryConfiguration.TestUsers)
+                                .AddAspNetIdentity<ApplicationUser>()
+                                .AddProfileService<CustomProfileService>() //This is used for adding custom claims
+                                .AddConfigurationStore(opt =>
+                                {
+                                    opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
+                                })
+                                .AddOperationalStore(opt =>
+                                {
+                                    opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
+                                })
+                                .AddDeveloperSigningCredential();
+            }
+            else
             {
-                opt.ConfigureDbContext = c => c.UseInMemoryDatabase("SampleDB");
-            })
-            .AddDeveloperSigningCredential();
+                services.AddDbContext<ApplicationDbContext>(builder =>
+                {
+                    builder.UseSqlServer(connectionString, sql =>
+                                     sql.MigrationsAssembly("IdentityServer.Infrastruture"));
+                });
+
+                var builder = services.AddIdentityServer(
+                                )
+                                .AddAspNetIdentity<ApplicationUser>()
+                                .AddProfileService<CustomProfileService>() //This is used for adding custom claims
+                                .AddConfigurationStore(opt =>
+                                {
+                                    opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,sql=>
+                                    sql.MigrationsAssembly("IdentityServer.Infrastruture"));
+                                })
+                                .AddOperationalStore(opt =>
+                                {
+                                    opt.ConfigureDbContext = c => c.UseSqlServer(connectionString, sql =>
+                                     sql.MigrationsAssembly("IdentityServer.Infrastruture"));
+                                })
+                                .AddDeveloperSigningCredential();
+
+            }
+            
 
             
 

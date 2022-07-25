@@ -3,6 +3,7 @@ using IdenitityServer.Core;
 using IdenitityServer.Core.MapperProfiles;
 using IdentityServer.API.AutoMapperProfile;
 using IdentityServer.API.GraphQL.Query;
+using IdentityServer.API.GraphQL.Types.OutputTypes;
 using IdentityServer.API.Middleware;
 using IdentityServer.Infrastruture;
 using IdentityServer.Infrastruture.MapperProfiles;
@@ -57,7 +58,6 @@ namespace IdentityServer.API
             {
                 mc.AddProfile(new RegisterProfile());
                 mc.AddProfile(new UserProfileMapper());
-                mc.AddProfile(new UserInformationProfile());
                 mc.AddProfile(new LoginProfile());
             });
 
@@ -70,8 +70,10 @@ namespace IdentityServer.API
             services.AddInfrastructure(Configuration);
 
             services.AddGraphQLServer()
-                .AddQueryType(q=>q.Name("Query"))
-                .AddTypeExtension<UserInformationExtensionType>(); ;
+                .AddQueryType(q => q.Name("Query"))
+                .AddTypeExtension<UserInformationExtensionType>()
+                .AddTypeExtension<UserAddressType>();
+                //.AddType<UserInformationOutputType>();
 
             services.AddSwaggerGen(c =>
             {

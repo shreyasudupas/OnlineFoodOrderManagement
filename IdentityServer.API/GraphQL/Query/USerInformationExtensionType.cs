@@ -1,6 +1,6 @@
 ﻿using HotChocolate.Types;
+using IdenitityServer.API.Types.OutputTypes;
 using IdenitityServer.Core.QueryResolvers;
-using IdenitityServer.Core.Types.OutputTypes;
 using System.Threading;
 
 namespace IdentityServer.API.GraphQL.Query
@@ -13,6 +13,7 @@ namespace IdentityServer.API.GraphQL.Query
             descriptor.Name("Query");
 
             descriptor.Field("getUserInfo")
+                .Description("Gets all User Information by providing UserId")
                 .Argument("UserId", _ => _.Type<StringType>())
                 .Resolve(context =>
                 {

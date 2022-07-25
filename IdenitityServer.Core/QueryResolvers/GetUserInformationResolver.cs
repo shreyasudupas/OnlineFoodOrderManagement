@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using IdenitityServer.Core.Common.Interfaces;
-using IdenitityServer.Core.Types.OutputTypes;
+using IdenitityServer.Core.Domain.DBModel;
 using System.Threading.Tasks;
 
 namespace IdenitityServer.Core.QueryResolvers
@@ -8,21 +8,24 @@ namespace IdenitityServer.Core.QueryResolvers
     public class GetUserInformationResolver
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public GetUserInformationResolver(IUserService userService,IMapper mapper)
+        public GetUserInformationResolver(IUserService userService)
         {
             _userService = userService;
-            _mapper = mapper;
         }
 
-        public async Task<UserInformationOutputType> GetUserInfo(string UserId)
+        public async Task<UserProfile> GetUserInfo(string UserId)
         {
             var result = await _userService.GetUserInformationById(UserId);
 
-            var modelMapToOutputType = _mapper.Map<UserInformationOutputType>(result);
+            if(result!=null)
+            {
+                result = await _userService.GetUserClaims(result);
 
-            return modelMapToOutputType;
+                result = await _userService.GetUserRoles(result);
+            }
+
+            return result;
         }
     }
 }

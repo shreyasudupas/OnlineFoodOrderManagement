@@ -103,6 +103,11 @@ namespace IdentityServer.Infrastruture.Database
 
                 using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
+                    if (!context.Database.IsInMemory())
+                    {
+                        context.Database.Migrate();
+                    }
+
                     AddMasterUsers(UserManager, context);
 
                     AddMasterClaims(context);
@@ -206,25 +211,25 @@ namespace IdentityServer.Infrastruture.Database
                 if (GetClaimType != null)
                 {
                     //for admin users
-                    var adminClaimRole = new Claim(GetClaimType, "admin");
+                    //var adminClaimRole = new Claim(GetClaimType, "admin");
                     var adminClaimEmail = new Claim("email", "admin@test.com");
                     var adminClaimUserName = new Claim("username", "admin"); //username same as role
                     var adminRoleClaim = new Claim("role", "admin");
 
                     var users = context.Users.ToList();
 
-                    var result1 = UserManager.AddClaimAsync(users[0], adminClaimRole).GetAwaiter().GetResult();
+                   // var result1 = UserManager.AddClaimAsync(users[0], adminClaimRole).GetAwaiter().GetResult();
                     var result2 = UserManager.AddClaimAsync(users[0], adminClaimEmail).GetAwaiter().GetResult();
                     var result3 = UserManager.AddClaimAsync(users[0], adminClaimUserName).GetAwaiter().GetResult();
                     var result4 = UserManager.AddClaimAsync(users[0], adminRoleClaim).GetAwaiter().GetResult();
 
                     //for local users
-                    var userClaimRole = new Claim(GetClaimType, "appUser");
+                    //var userClaimRole = new Claim(GetClaimType, "appUser");
                     var userClaimEmail = new Claim("email", "user@test.com");
                     var userClaimUserName = new Claim("username", "user"); //username same as role
                     var userRoleClaim = new Claim("role", "user");
 
-                    var result5 = UserManager.AddClaimAsync(users[1], userClaimRole).GetAwaiter().GetResult();
+                    //var result5 = UserManager.AddClaimAsync(users[1], userClaimRole).GetAwaiter().GetResult();
                     var result6 = UserManager.AddClaimAsync(users[1], userClaimEmail).GetAwaiter().GetResult();
                     var result7 = UserManager.AddClaimAsync(users[1], userClaimUserName).GetAwaiter().GetResult();
                     var result8 = UserManager.AddClaimAsync(users[1], userRoleClaim).GetAwaiter().GetResult();

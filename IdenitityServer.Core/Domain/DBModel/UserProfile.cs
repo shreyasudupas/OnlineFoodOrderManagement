@@ -40,5 +40,8 @@ namespace IdenitityServer.Core.Domain.DBModel
         public string ImagePath { get; set; }
         public int CartAmount { get; set; }
         public double Points { get; set; }
+
+        public Dictionary<string,string> Claims { get; set; }
+        public Dictionary<int, string> Roles { get; set; }
     }
 }
