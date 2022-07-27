@@ -5,7 +5,7 @@ function UserLayout() {
   console.log('User Layout called')
   return (
     <>
-        <div>This is User Layout</div>
+        {/* <div>This is User Layout</div> */}
         <Outlet/>
     </>
     

@@ -18,9 +18,8 @@
     },
     "IdentityServer.API": {
       "commandName": "Project",
-      //"launchUrl": "swagger",
       "launchUrl": "graphql",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
