@@ -10,6 +10,7 @@ import { Accordion, AccordionTab } from 'primereact/accordion';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import UserClaim from '../../components/UserClaim';
+import UserClaim2 from '../../components/UserClaim2';
 
 function UserProfileOverview() {
     const getUserContext = useAuth()
@@ -78,7 +79,8 @@ function UserProfileOverview() {
          </div>
          
         <div className="grid p-fluid App-Logo">
-          <UserClaim userClaims={claimList}/>
+          {/* <UserClaim userClaims={claimList}/> */}
+          <UserClaim2 userClaims={claimList}/>
         </div>
 
         <div className='grid p-fluid'>
