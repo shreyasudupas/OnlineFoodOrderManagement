@@ -9,8 +9,8 @@ import { Button } from 'primereact/button';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
-import UserClaim from '../../components/UserClaim';
-import UserClaim2 from '../../components/UserClaim2';
+import UserClaim from '../../components/user/UserClaim';
+import ImageUpload from '../../components/ImageUpload';
 
 function UserProfileOverview() {
     const getUserContext = useAuth()
@@ -33,54 +33,61 @@ function UserProfileOverview() {
     console.log('User overview called')
   return (
     <Card title="Welcome to the Content Management Dashboard" subTitle="User Profile">
-       <h5>Username</h5>
-       <div className="grid p-fluid">
-          <div className="col-12 md:col-4">
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">
-                <i className="pi pi-user"></i>
-                  </span>
-              <InputText placeholder="Username" />
-              </div>
-            </div>
-            <div className="col-12 md:col-4">
+      <div className='grid p-fluid'>
+        <div className='col-5'>
+
+        </div>
+        <div className='col-7'>
+          <div className='col-12'>
+            <h5>Username</h5>
               <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-user"></i>
+                </span>
+                <InputText placeholder="Username" />
+              </div>
+          </div>
+          <div className='col-12'>
+            <h5>Email</h5>
+            <div className="p-inputgroup">
                 <span className="p-inputgroup-addon">www</span>
                 <InputText placeholder="Email" />
-                </div>
-              </div>
-         </div>
+            </div>
+          </div>
+          <div className='col-12'>
+          <h5>Cart Ammount</h5>
+          <div className="p-inputgroup">
+            <span className="p-inputgroup-addon">$</span>
+            <InputNumber  placeholder="CartAmmount" />
+          </div>
+        </div>
+        <div className='col-12'>
+          <h5>Points</h5>
+          <div className="p-inputgroup">
+            <span className="p-inputgroup-addon">$</span>
+            <InputNumber placeholder="Points" />
+          </div>
+        </div>
+        <div className='col-12'>
+          <div className="field-checkbox">
+              <Checkbox inputId="binary" onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
+              <label htmlFor="binary">Active</label>
+            </div>
+        </div>
+        </div>
+        <div className='p-col-4 col-offset-5'>
+          <Button label="Save" className="p-button-rounded" />
+        </div>
+      </div>
 
-         <div className="grid p-fluid">
-            <div className="col-12 md:col-4">
-              <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">$</span>
-                <InputNumber  placeholder="CartAmmount" />
-              </div>
-            </div>
-            <div className="col-12 md:col-4">
-              <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">$</span>
-                <InputNumber placeholder="Points" />
-              </div>
-            </div>
-         </div>
-
-         <div className="grid p-fluid">
-            <div className="col-12 md:col-4">
-            <div className="field-checkbox">
-                <Checkbox inputId="binary" onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
-                <label htmlFor="binary">Active</label>
-              </div>
-            </div>
-            <div className="col-12 md:col-4">
-            <InputText placeholder="Image PAth" />
-            </div>
-         </div>
+      <div className='grid p-fluid'>
+        <div className='p-col-12 w-full'>
+          <ImageUpload/>
+        </div>
+      </div>
          
         <div className="grid p-fluid App-Logo">
-          {/* <UserClaim userClaims={claimList}/> */}
-          <UserClaim2 userClaims={claimList}/>
+          <UserClaim userClaims={claimList}/>
         </div>
 
         <div className='grid p-fluid'>

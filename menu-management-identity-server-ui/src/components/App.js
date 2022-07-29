@@ -5,7 +5,7 @@ import { AuthProvider } from '../hooks/useAuth';
 import HomeLayout from './HomeLayout';
 import Login from '../pages/Login';
 import ProtectedLayout from './ProtectedLayout';
-import UserLayout from './UserLayout';
+import UserLayout from '../components/user/UserLayout';
 import UserProfileOverview from '../pages/user/UserProfileOverview';
 import { ListUser } from '../pages/user/ListUser';
 import PageNotFound from '../pages/PageNotFound';
@@ -13,7 +13,6 @@ import Home from '../pages/Home';
 import Error from '../pages/Error';
 import LoginCallback from './LoginCallback';
 import LogoutCallback from './LogoutCallback';
-import AccessDenied from '../pages/AccessDenied';
 import AccessDeniedLayout from './AccessDeniedLayout';
 
 function App() {

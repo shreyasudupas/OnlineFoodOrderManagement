@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -47,15 +47,15 @@ const reducer =(state,action) => {
                 ...state,
                 claim:action.claim
             }
+        default: 
+            return state
     }
-    return state
 }
 
-function UserClaim2({userClaims}) {
+function UserClaim({userClaims}) {
     const [state, dispatch] = useReducer(reducer,initialState)
    
 
-    //dispatch({type:'claims-list-update',claims:userClaims})
     useEffect(()=>{
         if(userClaims != null){
             console.log('called userclaims')
@@ -80,7 +80,7 @@ function UserClaim2({userClaims}) {
         dispatch({type: name ,isOpen:false })
 
         if(name==="delete-claim-dialog" && save === true){
-            dispatch({type:'claims-list-update',claims: state.claims.filter(item=> item.key!= state.claim["key"])})
+            dispatch({type:'claims-list-update',claims: state.claims.filter(item=> item.key !== state.claim["key"])})
         }
 
         //edit operation
@@ -152,8 +152,8 @@ function UserClaim2({userClaims}) {
             <Column field='delete' header="Delete" body={oprationDeleteTemplate}></Column>
         </DataTable>
     </div>
-    <div className='col-6'>
-        <Button label="Add" className="p-button-info" onClick={() => addPreUserClaim()}/>
+    <div className='col-4 col-offset-8'>
+        <Button label="Add" className="p-button-raised" onClick={() => addPreUserClaim()}/>
     </div>
     {/* <div className='col-6'>
         <Button label="Delete" className="p-button-danger" />
@@ -212,4 +212,4 @@ function UserClaim2({userClaims}) {
   )
 }
 
-export default UserClaim2
+export default UserClaim
