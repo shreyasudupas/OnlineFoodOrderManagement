@@ -23,6 +23,8 @@ namespace IdenitityServer.Core.QueryResolvers
                 result = await _userService.GetUserClaims(result);
 
                 result = await _userService.GetUserRoles(result);
+
+                //result = await _userService.GetUserAddressUtilities(result);
             }
 
             return result;

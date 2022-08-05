@@ -98,9 +98,9 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.UserProfile
                 Id = "00000000-0000-0000-0000-00000000001a",
                 UserName = "admin",
                 Email = "admin@test.com",
-                Address = new List<UserAddress>
+                Address = new List<UserProfileAddress>
                 {
-                    new UserAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
+                    new UserProfileAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
                 },
                 IsAdmin = true,
                 ImagePath = "20210112_SampleImage.png",
@@ -127,9 +127,9 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.UserProfile
                 Id = "00000000-0000-0000-0000-00000000001a",
                 UserName = "admin",
                 Email = "admin@test.com",
-                Address = new List<UserAddress>
+                Address = new List<UserProfileAddress>
                 {
-                    new UserAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
+                    new UserProfileAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
                 },
                 IsAdmin = true,
                 ImagePath = "20210112_SampleImage.png",

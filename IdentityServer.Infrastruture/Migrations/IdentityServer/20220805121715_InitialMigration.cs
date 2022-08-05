@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace IdentityServer.Infrastruture.Migrations.IdentityServer.ApplicationDb
+namespace IdentityServer.Infrastruture.Migrations.IdentityServer
 {
-    public partial class InitialApplicationMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

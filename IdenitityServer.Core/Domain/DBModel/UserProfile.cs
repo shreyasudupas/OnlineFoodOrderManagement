@@ -5,6 +5,11 @@ namespace IdenitityServer.Core.Domain.DBModel
 {
     public class UserProfile
     {
+        public UserProfile()
+        {
+            Address = new List<UserProfileAddress>();
+        }
+
         public string Id { get; set; }
 
         public DateTimeOffset? LockoutEnd { get; set; }
@@ -35,7 +40,7 @@ namespace IdenitityServer.Core.Domain.DBModel
         public bool LockoutEnabled { get; set; }
 
         public int AccessFailedCount { get; set; }
-        public List<UserAddress> Address { get; set; }
+        public List<UserProfileAddress> Address { get; set; }
         public bool IsAdmin { get; set; }
         public string ImagePath { get; set; }
         public int CartAmount { get; set; }

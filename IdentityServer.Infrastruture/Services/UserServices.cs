@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.DBModel;
+using IdenitityServer.Core.Domain.Model;
+using IdenitityServer.Core.MapperProfiles.Custom;
 using IdentityServer.Infrastruture.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +37,8 @@ namespace IdentityServer.Infrastruture.Services
             var user = await _context.Users.Include(u=>u.Address).Where(u => u.Id == UserId).FirstOrDefaultAsync();
             if(user != null)
             {
-                var modelMap = _mapper.Map<UserProfile>(user);
+                //var modelMap = _mapper.Map<UserProfile>(user);
+                var modelMap = user.MapToProfile(_context);
                 return modelMap;
             }
             else
@@ -124,6 +127,46 @@ namespace IdentityServer.Infrastruture.Services
                 _logger.LogInformation($"user is null");
             }
             return null;
+        }
+
+        public async Task<List<DropdownModel>> GetCityById(int StateId)
+        {
+            if(StateId > 0)
+            {
+                var response = await _context.Cities.Where(c=>c.StateId == StateId).Select(city => new DropdownModel
+                {
+                    Label = city.Name,
+                    Value = city.Id
+                }).ToListAsync();
+
+                return response;
+            }
+            else
+            {
+                _logger.LogInformation($"user is null");
+                return null;
+            }
+            
+        }
+
+        public async Task<List<DropdownModel>> GetLocationAreaById(int CityId)
+        {
+            if (CityId > 0)
+            {
+                var response = await _context.LocationAreas.Where(c => c.CityId == CityId).Select(city => new DropdownModel
+                {
+                    Label = city.AreaName,
+                    Value = city.Id
+                }).ToListAsync();
+
+                return response;
+            }
+            else
+            {
+                _logger.LogInformation($"user is null");
+                return null;
+            }
+            
         }
     }
 }
