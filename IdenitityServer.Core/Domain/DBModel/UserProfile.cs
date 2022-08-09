@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IdenitityServer.Core.Domain.Model;
 
 namespace IdenitityServer.Core.Domain.DBModel
 {
@@ -8,6 +9,8 @@ namespace IdenitityServer.Core.Domain.DBModel
         public UserProfile()
         {
             Address = new List<UserProfileAddress>();
+            Claims = new List<DropdownModel>();
+            Roles = new List<DropdownModel>();
         }
 
         public string Id { get; set; }
@@ -46,7 +49,7 @@ namespace IdenitityServer.Core.Domain.DBModel
         public int CartAmount { get; set; }
         public double Points { get; set; }
 
-        public Dictionary<string,string> Claims { get; set; }
-        public Dictionary<int, string> Roles { get; set; }
+        public List<DropdownModel> Claims { get; set; }
+        public List<DropdownModel> Roles { get; set; }
     }
 }

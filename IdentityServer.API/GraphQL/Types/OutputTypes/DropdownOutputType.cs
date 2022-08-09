@@ -10,12 +10,12 @@ namespace IdentityServer.API.GraphQL.Types.OutputTypes
             descriptor.Field(_ => _.Label)
                 .Type<StringType>()
                 .Description("Label")
-                .Name("Label");
+                .Name("label");
 
             descriptor.Field(_ => _.Value)
-                .Type<IntType>()
+                .Type<StringType>()
                 .Description("Value")
-                .Name("Value");
+                .Name("value");
         }
     }
 }

@@ -51,7 +51,7 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                     MyStates = context.States.Select(state=> new Domain.Model.DropdownModel
                     {
                         Label = state.Name,
-                        Value = state.Id
+                        Value = state.Id.ToString()
                     }).ToList()
                 });
             }

@@ -11,96 +11,96 @@ namespace IdenitityServer.API.Types.OutputTypes
             descriptor.Field(_ => _.Id)
                 .Type<StringType>()
                 .Description("User ID")
-                .Name("Id");
+                .Name("id");
 
             descriptor.Field(_ => _.TwoFactorEnabled)
                 .Type<BooleanType>()
-                .Name("TwoFactorEnabled");
+                .Name("twoFactorEnabled");
 
             descriptor.Field(_ => _.PhoneNumberConfirmed)
                 .Type<StringType>()
-                .Name("PhoneNumberConfirmed");
+                .Name("phoneNumberConfirmed");
 
             descriptor.Field(_ => _.PhoneNumber)
                 .Type<StringType>()
                 .Description("Phone Number")
-                .Name("PhoneNumber");
+                .Name("phoneNumber");
 
             descriptor.Field(_ => _.ConcurrencyStamp)
                 .Type<StringType>()
-                .Name("ConcurrencyStamp");
+                .Name("concurrencyStamp");
 
             descriptor.Field(_ => _.SecurityStamp)
                 .Type<StringType>()
-                .Name("SecurityStamp");
+                .Name("securityStamp");
 
             descriptor.Field(_ => _.EmailConfirmed)
                 .Type<BooleanType>()
                 .Description("Email Comfirmed")
-                .Name("EmailConfirmed");
+                .Name("emailConfirmed");
 
             descriptor.Field(_ => _.NormalizedEmail)
                 .Type<StringType>()
                 .Description("Normalized Email")
-                .Name("NormalizedEmail");
+                .Name("normalizedEmail");
 
             descriptor.Field(_ => _.Email)
                 .Type<StringType>()
                 .Description("Email")
-                .Name("Email");
+                .Name("email");
 
             descriptor.Field(_ => _.NormalizedUserName)
                 .Type<StringType>()
                 .Description("Normalized UserName")
-                .Name("NormalizedUserName");
+                .Name("normalizedUserName");
 
             descriptor.Field(_ => _.UserName)
                 .Type<StringType>()
                 .Description("UserName")
-                .Name("UserName");
+                .Name("userName");
 
             descriptor.Field(_ => _.LockoutEnabled)
                 .Type<BooleanType>()
-                .Name("LockoutEnabled");
+                .Name("lockoutEnabled");
 
             descriptor.Field(_ => _.AccessFailedCount)
                 .Type<IntType>()
-                .Name("AccessFailedCount");
+                .Name("accessFailedCount");
 
             descriptor.Field(_ => _.IsAdmin)
                 .Type<BooleanType>()
                 .Description("Is Admin")
-                .Name("IsAdmin");
+                .Name("isAdmin");
 
             descriptor.Field(_ => _.ImagePath)
                 .Type<StringType>()
                 .Description("Image Path")
-                .Name("ImagePath");
+                .Name("imagePath");
 
             descriptor.Field(_ => _.CartAmount)
                 .Type<IntType>()
                 .Description("Cart Amount")
-                .Name("CartAmount");
+                .Name("cartAmount");
 
             descriptor.Field(_ => _.Points)
                 .Type<DecimalType>()
                 .Description("Points")
-                .Name("Points");
+                .Name("points");
 
             descriptor.Field(_ => _.Address)
                 .Type<ListType<UserAddressType>>()
                 .Description("User Address Informations")
-                .Name("Address");
+                .Name("address");
 
             descriptor.Field(_ => _.Claims)
-                .Type<AnyType>()
+                .Type<ListType<DropdownOutputType>>()
                 .Description("User Claims")
-                .Name("Claims");
+                .Name("claims");
 
             descriptor.Field(_ => _.Roles)
-                .Type<AnyType>()
+                .Type<ListType<DropdownOutputType>>()
                 .Description("User Roles")
-                .Name("Roles");
+                .Name("roles");
 
         }
     }

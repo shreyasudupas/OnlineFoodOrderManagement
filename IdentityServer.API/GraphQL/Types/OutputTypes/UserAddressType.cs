@@ -10,47 +10,47 @@ namespace IdentityServer.API.GraphQL.Types.OutputTypes
             descriptor.Field(_ => _.Id)
                 .Type<LongType>()
                 .Description("Address ID")
-                .Name("Id");
+                .Name("id");
 
             descriptor.Field(_ => _.FullAddress)
                 .Type<StringType>()
                 .Description("Complete Address")
-                .Name("FullAddress");
+                .Name("fullAddress");
 
             descriptor.Field(_ => _.City)
                 .Type<StringType>()
                 .Description("City")
-                .Name("City");
+                .Name("city");
 
             descriptor.Field(_ => _.Area)
                 .Type<StringType>()
                 .Description("Area")
-                .Name("Area");
+                .Name("area");
 
             descriptor.Field(_ => _.State)
                 .Type<StringType>()
                 .Description("State")
-                .Name("State");
+                .Name("state");
 
             descriptor.Field(_ => _.IsActive)
                 .Type<BooleanType>()
                 .Description("Address Active/Not Active")
-                .Name("IsActive");
+                .Name("isActive");
 
             descriptor.Field(_ => _.MyStates)
                 .Type<ListType<DropdownOutputType>>()
                 .Description("Users States List")
-                .Name("MyStates");
+                .Name("myStates");
 
             descriptor.Field(_ => _.MyCities)
                 .Type<ListType<DropdownOutputType>>()
                 .Description("Users Cities List")
-                .Name("MyCities");
+                .Name("myCities");
 
             descriptor.Field(_ => _.MyAreas)
                 .Type<ListType<DropdownOutputType>>()
                 .Description("Users MyAreas List")
-                .Name("MyAreas");
+                .Name("myAreas");
         }
     }
 }

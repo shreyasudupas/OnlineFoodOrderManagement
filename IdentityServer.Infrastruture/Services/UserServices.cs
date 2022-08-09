@@ -63,10 +63,12 @@ namespace IdentityServer.Infrastruture.Services
 
                     if (userClaims.Count > 0)
                     {
-                        user.Claims = new Dictionary<string, string>();
                         foreach (var claim in userClaims)
                         {
-                            user.Claims.Add(claim.Type, claim.Value);
+                            user.Claims.Add(new DropdownModel{
+                                Label = claim.Type,
+                                Value = claim.Value
+                            });
                         }
                     }
                     else
@@ -103,11 +105,12 @@ namespace IdentityServer.Infrastruture.Services
 
                     if (userRoles.Count > 0)
                     {
-                        int i = 0;
-                        user.Roles = new Dictionary<int, string>();
                         foreach (var role in userRoles)
                         {
-                            user.Roles.Add(++i, role);
+                            user.Roles.Add(new DropdownModel{
+                                Label = role,
+                                Value = role
+                            });
                         }
                     }
                     else
@@ -136,7 +139,7 @@ namespace IdentityServer.Infrastruture.Services
                 var response = await _context.Cities.Where(c=>c.StateId == StateId).Select(city => new DropdownModel
                 {
                     Label = city.Name,
-                    Value = city.Id
+                    Value = city.Id.ToString()
                 }).ToListAsync();
 
                 return response;
@@ -156,7 +159,7 @@ namespace IdentityServer.Infrastruture.Services
                 var response = await _context.LocationAreas.Where(c => c.CityId == CityId).Select(city => new DropdownModel
                 {
                     Label = city.AreaName,
-                    Value = city.Id
+                    Value = city.Id.ToString()
                 }).ToListAsync();
 
                 return response;
