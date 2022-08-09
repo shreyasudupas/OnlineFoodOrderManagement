@@ -8,7 +8,8 @@ const AuthContext = createContext({
     isAuthenticated: () => ({}),
     signinRedirect: () => ({}),
     createSigninRequest: () => ({}),
-    userRoleIsAdmin: () => ({})
+    userRoleIsAdmin: () => ({}),
+    getUser: () => ({})
 })
 
 // export const AuthProvider = ({ children }) => {

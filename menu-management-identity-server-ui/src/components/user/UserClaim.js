@@ -37,7 +37,7 @@ const reducer =(state,action) => {
                 claims: action.claims
             }
         case "claim-user-add":
-            console.log("custome action",action)
+            //console.log("custome action",action)
             return {
                 ...state,
                 claims: [...state.claims,action.addClaim]
@@ -65,10 +65,10 @@ function UserClaim({userClaims}) {
 
 
     const claimTypes = [
-        { name: 'username', code: 'username' },
-        { name: 'email', code: 'email' },
-        { name: 'role', code: 'role' },
-        { name: 'picture', code: 'picture' }
+        { label: 'username', value: 'username' },
+        { label: 'email', value: 'email' },
+        { label: 'role', value: 'role' },
+        { label: 'picture', value: 'picture' }
     ];
 
 
@@ -146,7 +146,7 @@ function UserClaim({userClaims}) {
     <>
     <div className='col-12'>
         <DataTable header="User Claims" value={state.claims} responsiveLayout="scroll" className='w-full'>
-            <Column field="key" header="Claim Type"></Column>
+            <Column field="label" header="Claim Type"></Column>
             <Column field="value" header="Claim Name"></Column>
             <Column field='edit' header="Edit" body={oprationAddTemplate}></Column>
             <Column field='delete' header="Delete" body={oprationDeleteTemplate}></Column>
@@ -164,10 +164,10 @@ function UserClaim({userClaims}) {
                 <div className='col-6'>
                     <h5>Key</h5>
                     <Dropdown
-                        value={state.claim.key} 
+                        value={state.claim.label} 
                         options={claimTypes} 
-                        optionValue="code"
-                        optionLabel="name" 
+                        optionValue="value"
+                        optionLabel="label" 
                         onChange={e=> handleClaimTypeChange(e)}
                         placeholder="Select a User Type" />
                 </div>
@@ -187,10 +187,10 @@ function UserClaim({userClaims}) {
                 <div className='col-6'>
                     <h5>Key</h5>
                     <Dropdown
-                        value={state.claim.key} 
+                        value={state.claim.value} 
                         options={claimTypes} 
-                        optionValue="code"
-                        optionLabel="name" 
+                        optionValue="value"
+                        optionLabel="label" 
                         onChange={e=> handleClaimTypeChange(e)}
                         placeholder="Select a User Type" />
                 </div>
