@@ -19,7 +19,7 @@
     "IdentityServer.API": {
       "commandName": "Project",
       "launchUrl": "graphql",
-      "launchBrowser": false,
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

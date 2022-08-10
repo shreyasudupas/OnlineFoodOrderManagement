@@ -22,15 +22,30 @@ namespace IdentityServer.API.GraphQL.Types.OutputTypes
                 .Description("City")
                 .Name("city");
 
+            descriptor.Field(_ => _.CityId)
+                .Type<StringType>()
+                .Description("City ID")
+                .Name("cityId");
+
             descriptor.Field(_ => _.Area)
                 .Type<StringType>()
                 .Description("Area")
                 .Name("area");
 
+             descriptor.Field(_ => _.AreaId)
+                .Type<StringType>()
+                .Description("Area Id")
+                .Name("areaId");
+
             descriptor.Field(_ => _.State)
                 .Type<StringType>()
                 .Description("State")
                 .Name("state");
+
+            descriptor.Field(_ => _.StateId)
+                .Type<StringType>()
+                .Description("State Id")
+                .Name("stateId");
 
             descriptor.Field(_ => _.IsActive)
                 .Type<BooleanType>()
