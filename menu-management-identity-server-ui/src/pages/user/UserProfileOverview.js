@@ -24,13 +24,39 @@ const USER_INFO = gql`
         label
         value
       }
+      address {
+        id
+        fullAddress
+        city
+        area
+        state
+        stateId
+        myStates {
+          label
+          value
+        }
+        isActive
+        city
+        myCities {
+          label
+          value
+        }
+        cityId
+        area
+        myAreas {
+          label
+          value
+        }
+        areaId
+      }
     }
   }
 `;
 
 const initialState = {
   userId:null,
-  userInformation:{}
+  userInformation:{},
+  activeIndex:0
 }
 
 const reducer = (state,action) => {
@@ -49,6 +75,11 @@ const reducer = (state,action) => {
       return {
         ...state,
         userInformation: {...state,[action.field]:action.value}
+      }
+    case 'UPDATE-ACTIVE-INDEX-ADDRESS':
+      return {
+        ...state,
+        activeIndex: state.userInformation.address.findIndex((element)=> element.isActive === true)
       }
     default:
       return state
@@ -81,53 +112,23 @@ function UserProfileOverview() {
 
     if((data !== null) && (data !== undefined)){
       dispatch({type:'INITILIZE-USERINFORMATION',userInfo:data.userInformation})
+
+      dispatch({type:'UPDATE-ACTIVE-INDEX-ADDRESS'})
     }
   }
   ,[user,data])
 
   const [checked, setChecked] = useState(false)
-  
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :</p>;
 
   //console.log( 'userInformation' + state.userInformation)
-
-  // const claimList = [
-  //   { 'key': 'email', 'value': 'xyz@cmm.com' },
-  //   { 'key': 'role', 'value': 'admin' },
-  //   { 'key': 'username', 'value': 'admin' }
-  // ]
-
-  const cities = [
-    { label: 'Bengaluru', value: 'Bengaluru' },
-    { label: 'Mumbai', value: 'Mumbai' },
-    { label: 'Chennai', value: 'Chennai' }
-  ];
-
-  const states = [
-    { label: 'Karnataka', value: 'Karnataka' },
-    { label: 'Maharastra', value: 'Maharastra' },
-    { label: 'Tamil Nadu', value: 'Tamil Nadu' }
-  ];
-
-  const areas = [
-    { label: 'Kathreguppe', value: 'Kathreguppe' },
-    { label: 'JP Nagar', value: 'JP Nagar' },
-    { label: 'Jayanagar', value: 'Jayanagar' }
-  ];
-
-  const userAddress = [
-    { id:1,fullAddress:'sample address 1',city:'Bengaluru',state:'Karnataka',area:'Kathreguppe',isActive:false },
-    { id:2,fullAddress:'sample address 2',city:'Bengaluru',state:'Karnataka',area:'JP Nagar',isActive:true }
-  ]
-
-  const activeIndex = userAddress.findIndex((element)=> element.isActive === true)
 
   const handleInput = (event) => {
     dispatch({type:'UPDATE-USERINFORMATION', field: event.target.name , value: event.target.value})
   }
 
   //console.log('User overview called')
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :</p>;
   
   return (
     <Card title="Welcome to the Content Management Dashboard" subTitle="User Profile">
@@ -209,7 +210,7 @@ function UserProfileOverview() {
         <UserClaim userClaims={state.userInformation.claims} />
       </div>
 
-      <UserAddress getStates={states} getCities={cities} getAreas={areas} getUserAddress={userAddress} getActiveIndex={activeIndex}/>
+      <UserAddress getUserAddress={state.userInformation.address} getActiveIndex={state.activeIndex}/>
 
     </Card>
   )
