@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace IdentityServer.API.GraphQL.Mutation
 {
-    public class AddUserInformationExtensionType : ObjectTypeExtension
+    public class SaveUserInformationExtensionType : ObjectTypeExtension
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
@@ -14,7 +14,7 @@ namespace IdentityServer.API.GraphQL.Mutation
 
             descriptor.Field("saveUserInfo")
                 .Description("Save User Information")
-                .Argument("user", _ => _.Type<UserInformationInput>())
+                .Argument("userInfoInput", _ => _.Type<UserInformationInput>())
                 .Resolve(context =>
                 {
                     CancellationToken ct = context.RequestAborted;

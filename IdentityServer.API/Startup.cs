@@ -75,7 +75,7 @@ namespace IdentityServer.API
                 .AddTypeExtension<UserInformationExtensionType>()
                 .AddTypeExtension<UserAddressType>()
                 .AddMutationType(m=>m.Name("Mutation"))
-                .AddTypeExtension<AddUserInformationExtensionType>();
+                .AddTypeExtension<SaveUserInformationExtensionType>();
                 //.AddType<UserInformationOutputType>();
 
             services.AddSwaggerGen(c =>
