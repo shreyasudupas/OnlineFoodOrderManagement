@@ -7,6 +7,7 @@ using IdentityServer.Infrastruture.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -170,6 +171,35 @@ namespace IdentityServer.Infrastruture.Services
                 return null;
             }
             
+        }
+
+        public async Task<bool> ModifyUserInformation(UserProfile user)
+        {
+            var userIdPresent = await _userManager.GetUserIdAsync(new ApplicationUser { Id = user.Id });
+
+            if(!string.IsNullOrEmpty(userIdPresent))
+            {
+                var currentUser = await _context.Users.Where(u => u.Id == user.Id).FirstOrDefaultAsync();
+                
+                currentUser.Email = user.Email;
+                currentUser.CartAmount = user.CartAmount;
+                currentUser.Points = user.Points;
+                currentUser.IsAdmin = user.IsAdmin;
+
+                var result = await _userManager.UpdateAsync(currentUser);
+
+                if(result.Succeeded)
+                    return result.Succeeded;
+                else
+                {
+                    _logger.LogError(JsonConvert.SerializeObject(result.Errors));
+                    return false;
+                }
+            }else
+            {
+                _logger.LogInformation($"User with {user.Id} not present in database");
+                return false;
+            }
         }
     }
 }

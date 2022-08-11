@@ -22,8 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphQL\Mutation\" />
-    <Folder Include="GraphQL\Types\InputTypes\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -1,8 +1,8 @@
-﻿using IdenitityServer.Core.QueryResolvers;
+﻿using IdenitityServer.Core.MutationResolver;
+using IdenitityServer.Core.QueryResolvers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Reflection;
 
 namespace IdenitityServer.Core
@@ -15,6 +15,7 @@ namespace IdenitityServer.Core
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<GetUserInformationResolver>();
+            services.AddScoped<UpdateUserInfoResolver>();
             
             return services;
         }

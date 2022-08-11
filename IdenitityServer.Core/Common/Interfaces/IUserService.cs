@@ -12,5 +12,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<UserProfile> GetUserRoles(UserProfile user);
         Task<List<DropdownModel>> GetCityById(int StateId);
         Task<List<DropdownModel>> GetLocationAreaById(int CityId);
+        Task<bool> ModifyUserInformation(UserProfile user);
     }
 }

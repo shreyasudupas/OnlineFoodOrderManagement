@@ -2,6 +2,7 @@ using AutoMapper;
 using IdenitityServer.Core;
 using IdenitityServer.Core.MapperProfiles;
 using IdentityServer.API.AutoMapperProfile;
+using IdentityServer.API.GraphQL.Mutation;
 using IdentityServer.API.GraphQL.Query;
 using IdentityServer.API.GraphQL.Types.OutputTypes;
 using IdentityServer.API.Middleware;
@@ -72,7 +73,9 @@ namespace IdentityServer.API
             services.AddGraphQLServer()
                 .AddQueryType(q => q.Name("Query"))
                 .AddTypeExtension<UserInformationExtensionType>()
-                .AddTypeExtension<UserAddressType>();
+                .AddTypeExtension<UserAddressType>()
+                .AddMutationType(m=>m.Name("Mutation"))
+                .AddTypeExtension<AddUserInformationExtensionType>();
                 //.AddType<UserInformationOutputType>();
 
             services.AddSwaggerGen(c =>
