@@ -10,52 +10,12 @@ import UserClaim from '../../components/user/UserClaim';
 import ImageUpload from '../../components/ImageUpload';
 import UserAddress from '../../components/user/UserAddress';
 import { Image } from 'primereact/image';
-import { useQuery, gql } from '@apollo/client';
-
-const USER_INFO = gql`
-  query GetUserInformation($userId:String!){
-    userInformation (userId:$userId){
-      id
-      userName
-      email
-      cartAmount
-      points
-      claims{
-        label
-        value
-      }
-      address {
-        id
-        fullAddress
-        city
-        area
-        state
-        stateId
-        myStates {
-          label
-          value
-        }
-        isActive
-        city
-        myCities {
-          label
-          value
-        }
-        cityId
-        area
-        myAreas {
-          label
-          value
-        }
-        areaId
-      }
-    }
-  }
-`;
+import { useQuery } from '@apollo/client';
+import { GET_USERINFORMATION } from '../../graphQL/queries/GetUserInformation';
 
 const initialState = {
   userId:null,
-  userInformation:{},
+  userInformation:{ id:null,userName:'',email:'',cartAmount:0,points:0,address:[],claims:[] },
   activeIndex:0
 }
 
@@ -91,7 +51,7 @@ function UserProfileOverview() {
   const [state,dispatch] = useReducer(reducer,initialState)
   const getUserContext = useAuth()
   let user = null;
-  const { loading, error, data } = useQuery(USER_INFO,{
+  const { loading, error, data } = useQuery(GET_USERINFORMATION,{
     variables: {
       userId: state.userId
     }
@@ -126,94 +86,104 @@ function UserProfileOverview() {
     dispatch({type:'UPDATE-USERINFORMATION', field: event.target.name , value: event.target.value})
   }
 
+  const saveUserInformation = (userInfo) => {
+    console.log(userInfo)
+  }
+
   //console.log('User overview called')
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :</p>;
   
-  return (
-    <Card title="Welcome to the Content Management Dashboard" subTitle="User Profile">
-      <div className='grid p-fluid'>
-        <div className='col-5'>
-          <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" alt="Image" width="250" preview />
+  if (state.userInformation !== undefined) {
+    return (
+      <Card title="Welcome to the Content Management Dashboard" subTitle="User Profile">
+        <div className='grid p-fluid'>
+          <div className='col-5'>
+            <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" alt="Image" width="250" preview />
+          </div>
+          <div className='col-7'>
+            <div className='col-12'>
+              <h5>Username</h5>
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-user"></i>
+                </span>
+                <InputText
+                  name="userName"
+                  value={state.userInformation.userName}
+                  onChange={(e) => handleInput(e)}
+                  placeholder="Username" />
+              </div>
+            </div>
+            <div className='col-12'>
+              <h5>Email</h5>
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">www</span>
+                <InputText
+                  name="email"
+                  value={state.userInformation.email}
+                  placeholder="Email"
+                  onChange={(e) => handleInput(e)} />
+              </div>
+            </div>
+            <div className='col-12'>
+              <h5>Cart Ammount</h5>
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">$</span>
+                <InputNumber
+                  name="cartAmount"
+                  placeholder="CartAmount"
+                  value={state.userInformation.cartAmount}
+                  onChange={(e) => handleInput(e)} />
+              </div>
+            </div>
+            <div className='col-12'>
+              <h5>Points</h5>
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">$</span>
+                <InputNumber
+                  name="points"
+                  placeholder="Points"
+                  value={state.userInformation.points}
+                  onChange={(e) => handleInput(e)}
+                />
+              </div>
+            </div>
+            <div className='col-12'>
+              <div className="field-checkbox">
+                <Checkbox
+                  name="active"
+                  inputId="binary"
+                  onChange={(e) => handleInput(e)}
+                  checked={checked}></Checkbox>
+                <label htmlFor="binary">Active</label>
+              </div>
+            </div>
+          </div>
+          <div className='p-col-4 col-offset-5'>
+            <Button label="Save" className="p-button-rounded" onClick={ ()=>saveUserInformation(state.userInformation) }/>
+          </div>
         </div>
-        <div className='col-7'>
-          <div className='col-12'>
-            <h5>Username</h5>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">
-                <i className="pi pi-user"></i>
-              </span>
-              <InputText
-              name="userName"
-              value={state.userInformation.userName}
-              onChange = {(e)=> handleInput(e) }
-               placeholder="Username" />
-            </div>
-          </div>
-          <div className='col-12'>
-            <h5>Email</h5>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">www</span>
-              <InputText
-                name="email"
-                value = {state.userInformation.email}
-               placeholder="Email"
-               onChange={(e)=> handleInput(e) } />
-            </div>
-          </div>
-          <div className='col-12'>
-            <h5>Cart Ammount</h5>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">$</span>
-              <InputNumber
-               name = "cartAmount"
-               placeholder="CartAmount"
-               value = {state.userInformation.cartAmount} 
-               onChange={(e)=> handleInput(e) }/>
-            </div>
-          </div>
-          <div className='col-12'>
-            <h5>Points</h5>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">$</span>
-              <InputNumber 
-               name="points"
-               placeholder="Points" 
-               value = {state.userInformation.points}
-               onChange={(e)=> handleInput(e) }
-               />
-            </div>
-          </div>
-          <div className='col-12'>
-            <div className="field-checkbox">
-              <Checkbox
-               name="active"
-               inputId="binary"
-                onChange={(e)=> handleInput(e) }
-                checked={checked}></Checkbox>
-              <label htmlFor="binary">Active</label>
-            </div>
+
+        <div className='grid p-fluid'>
+          <div className='p-col-12 w-full'>
+            <ImageUpload />
           </div>
         </div>
-        <div className='p-col-4 col-offset-5'>
-          <Button label="Save" className="p-button-rounded" />
+
+        <div className="grid p-fluid App-Logo">
+          <UserClaim userClaims={state.userInformation.claims} />
         </div>
-      </div>
 
-      <div className='grid p-fluid'>
-        <div className='p-col-12 w-full'>
-          <ImageUpload />
-        </div>
-      </div>
+        <UserAddress getUserAddress={state.userInformation.address} getActiveIndex={state.activeIndex} />
 
-      <div className="grid p-fluid App-Logo">
-        <UserClaim userClaims={state.userInformation.claims} />
-      </div>
-
-      <UserAddress getUserAddress={state.userInformation.address} getActiveIndex={state.activeIndex}/>
-
-    </Card>
-  )
+      </Card>
+    )
+  }
+  else{
+    return <p>Loading UserInformation....</p>
+  }
+  
 }
 
 export default UserProfileOverview
