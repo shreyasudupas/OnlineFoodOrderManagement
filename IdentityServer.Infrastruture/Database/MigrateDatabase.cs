@@ -270,8 +270,8 @@ namespace IdentityServer.Infrastruture.Database
                                 {
                                     new UserAddress
                                     {
-                                        FullAddress = "sample address 1, sample address 1",
-                                        City = "Bangalore",
+                                        FullAddress = "sample admin address 1, sample address 1",
+                                        City = "Bengaluru",
                                         State = "Karnataka",
                                         IsActive = true
                                     }
@@ -289,8 +289,8 @@ namespace IdentityServer.Infrastruture.Database
                                 {
                                     new UserAddress
                                     {
-                                        FullAddress = "sample address 1, sample address 1",
-                                        City = "Bangalore",
+                                        FullAddress = "sample user address 1, sample address 1",
+                                        City = "Bengaluru",
                                         State = "Karnataka",
                                         IsActive = true
                                     }
