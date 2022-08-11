@@ -18,7 +18,7 @@ namespace IdentityServer.API.GraphQL.Mutation
                 .Resolve(context =>
                 {
                     CancellationToken ct = context.RequestAborted;
-                    var user = context.ArgumentValue<UserInput>("user");
+                    var user = context.ArgumentValue<UserInput>("userInfoInput");
 
                     UpdateUserInfoResolver service = context.Service<UpdateUserInfoResolver>();
                     return service.AddUserInformation(new IdenitityServer.Core.Domain.DBModel.UserProfile 
