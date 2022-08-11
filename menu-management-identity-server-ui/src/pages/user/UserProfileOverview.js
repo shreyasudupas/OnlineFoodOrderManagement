@@ -10,8 +10,9 @@ import UserClaim from '../../components/user/UserClaim';
 import ImageUpload from '../../components/ImageUpload';
 import UserAddress from '../../components/user/UserAddress';
 import { Image } from 'primereact/image';
-import { useQuery } from '@apollo/client';
+import { useQuery,useMutation } from '@apollo/client';
 import { GET_USERINFORMATION } from '../../graphQL/queries/GetUserInformation';
+import { SAVE_USERINFO } from '../../graphQL/mutations/SaveUserInformation';
 
 const initialState = {
   userId:null,
@@ -34,7 +35,7 @@ const reducer = (state,action) => {
     case 'UPDATE-USERINFORMATION':
       return {
         ...state,
-        userInformation: {...state,[action.field]:action.value}
+        userInformation: {...state.userInformation,[action.field]:action.value}
       }
     case 'UPDATE-ACTIVE-INDEX-ADDRESS':
       return {
@@ -56,6 +57,7 @@ function UserProfileOverview() {
       userId: state.userId
     }
   });
+  const [saveUserInfo, { udata, uloading, uerror }] = useMutation(SAVE_USERINFO);
 
   //once the promise gets the value then
   useEffect(()=>{
@@ -87,12 +89,25 @@ function UserProfileOverview() {
   }
 
   const saveUserInformation = (userInfo) => {
-    console.log(userInfo)
+    //console.log(userInfo)
+    saveUserInfo({
+      variables: {
+        saveUser:{
+          id:userInfo.id,
+          userName:userInfo.userName,
+          isAdmin:userInfo.isAdmin,
+          email:userInfo.email,
+          cartAmount:userInfo.cartAmount,
+          points:userInfo.points
+        }
+      }
+    })
   }
 
   //console.log('User overview called')
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :</p>;
+  if (uerror) { console.log(error) }
   
   if (state.userInformation !== undefined) {
     return (
@@ -127,14 +142,14 @@ function UserProfileOverview() {
               </div>
             </div>
             <div className='col-12'>
-              <h5>Cart Ammount</h5>
+              <h5>Cart Amount</h5>
               <div className="p-inputgroup">
                 <span className="p-inputgroup-addon">$</span>
                 <InputNumber
                   name="cartAmount"
                   placeholder="CartAmount"
                   value={state.userInformation.cartAmount}
-                  onChange={(e) => handleInput(e)} />
+                  onValueChange={(e) => handleInput(e)} />
               </div>
             </div>
             <div className='col-12'>
@@ -145,7 +160,7 @@ function UserProfileOverview() {
                   name="points"
                   placeholder="Points"
                   value={state.userInformation.points}
-                  onChange={(e) => handleInput(e)}
+                  onValueChange={(e) => handleInput(e)}
                 />
               </div>
             </div>
