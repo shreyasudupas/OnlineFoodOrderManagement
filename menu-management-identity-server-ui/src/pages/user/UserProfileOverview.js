@@ -80,7 +80,7 @@ function UserProfileOverview() {
   }
   ,[user,data])
 
-  const [checked, setChecked] = useState(false)
+  //const [checked, setChecked] = useState(false)
 
   //console.log( 'userInformation' + state.userInformation)
 
@@ -93,15 +93,16 @@ function UserProfileOverview() {
     saveUserInfo({
       variables: {
         saveUser:{
-          id:userInfo.id,
-          userName:userInfo.userName,
-          isAdmin:userInfo.isAdmin,
-          email:userInfo.email,
-          cartAmount:userInfo.cartAmount,
-          points:userInfo.points
+          id: state.userInformation.id,
+          userName: state.userInformation.userName,
+          email: state.userInformation.email,
+          cartAmount: state.userInformation.cartAmount,
+          points: state.userInformation.points,
+          isAdmin: state.userInformation.isAdmin
         }
       }
-    })
+    }).then((res)=> console.log(res))
+    .catch((err)=> console.log(err))
   }
 
   //console.log('User overview called')
@@ -170,7 +171,7 @@ function UserProfileOverview() {
                   name="active"
                   inputId="binary"
                   onChange={(e) => handleInput(e)}
-                  checked={checked}></Checkbox>
+                  checked={state.userInformation.isActive}></Checkbox>
                 <label htmlFor="binary">Active</label>
               </div>
             </div>

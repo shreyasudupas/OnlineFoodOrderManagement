@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const SAVE_USERINFO = gql`
-mutation saveUser($saveUser:UserInput){
+mutation ModifyUserInformation($saveUser:UserInput!){
     modifyUserInformation(userInfoInput: $saveUser)
 }
 `
