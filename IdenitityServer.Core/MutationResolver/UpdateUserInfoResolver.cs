@@ -1,5 +1,6 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.DBModel;
+using IdenitityServer.Core.Domain.Response;
 using System.Threading.Tasks;
 
 namespace IdenitityServer.Core.MutationResolver
@@ -13,10 +14,11 @@ namespace IdenitityServer.Core.MutationResolver
             _userService = userService;
         }
 
-        public async Task<bool> AddUserInformation(UserProfile user)
+        public async Task<SaveUserResponse> AddUserInformation(UserProfile user)
         {
-            var result =await _userService.ModifyUserInformation(user);
-            return result;
+            var response = new SaveUserResponse();
+            response.Result = await _userService.ModifyUserInformation(user);
+            return response;
         }
     }
 }

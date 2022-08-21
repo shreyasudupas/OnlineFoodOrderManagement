@@ -2,6 +2,7 @@
 using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.MutationResolver;
 using IdentityServer.API.GraphQL.Types.InputTypes;
+using IdentityServer.API.GraphQL.Types.OutputTypes;
 using System.Threading;
 
 namespace IdentityServer.API.GraphQL.Mutation
@@ -31,7 +32,7 @@ namespace IdentityServer.API.GraphQL.Mutation
                         Points = user.Points
                     });
                 })
-                .Type<BooleanType>()
+                .Type<SaveUserInformationOutputType>()
                 .Name("modifyUserInformation");
         }
     }
