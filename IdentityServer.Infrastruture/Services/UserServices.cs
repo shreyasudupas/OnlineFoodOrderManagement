@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -200,6 +201,50 @@ namespace IdentityServer.Infrastruture.Services
                 _logger.LogInformation($"User with {user.Id} not present in database");
                 return false;
             }
+        }
+
+        public async Task<UserProfileAddress> AddModifyUserAddress(string UserId,UserProfileAddress profileAddress)
+        {
+            var userInfo = await _context.Users.Include(u => u.Address).Where(u => u.Id == UserId).FirstOrDefaultAsync();
+
+            if(userInfo != null)
+            {
+                var addressToModify = _context.UserAddresses.Where(x=>x.Id == profileAddress.Id && x.ApplicationUserId == UserId)
+                    .FirstOrDefault();
+
+                if(addressToModify != null)
+                {
+                    addressToModify.FullAddress = profileAddress.FullAddress;
+                    addressToModify.City = _context.Cities.Where(c=>c.Id == Convert.ToInt32(profileAddress.CityId)).Select(c=>c.Name).FirstOrDefault();
+                    addressToModify.Area = _context.LocationAreas.Where(c => c.Id == Convert.ToInt32(profileAddress.AreaId)).Select(c => c.AreaName).FirstOrDefault();
+                    addressToModify.State = _context.States.Where(c => c.Id == Convert.ToInt32(profileAddress.StateId)).Select(c => c.Name).FirstOrDefault();
+                    addressToModify.IsActive = profileAddress.IsActive;
+                }
+                else
+                {
+                    //rest of the address becomes false and new address becomes active
+                    foreach (var address in userInfo.Address)
+                    {
+                        address.IsActive = false;
+                    }
+
+                    userInfo.Address.Add(new UserAddress
+                    {
+                        Area = _context.LocationAreas.Where(c => c.Id == Convert.ToInt32(profileAddress.AreaId)).Select(c => c.AreaName).FirstOrDefault(),
+                        City = _context.Cities.Where(c => c.Id == Convert.ToInt32(profileAddress.CityId)).Select(c => c.Name).FirstOrDefault(),
+                        FullAddress = profileAddress.FullAddress,
+                        IsActive = true,
+                        State = _context.States.Where(c => c.Id == Convert.ToInt32(profileAddress.StateId)).Select(c => c.Name).FirstOrDefault()
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogInformation("User is not present");
+                return null;
+            }
+            return profileAddress;
         }
     }
 }

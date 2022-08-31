@@ -13,5 +13,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<List<DropdownModel>> GetCityById(int StateId);
         Task<List<DropdownModel>> GetLocationAreaById(int CityId);
         Task<bool> ModifyUserInformation(UserProfile user);
+        Task<UserProfileAddress> AddModifyUserAddress(string UserId, UserProfileAddress profileAddress);
     }
 }

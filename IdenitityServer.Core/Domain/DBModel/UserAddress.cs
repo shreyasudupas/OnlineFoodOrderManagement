@@ -8,5 +8,6 @@
         public string Area { get; set; }
         public string State { get; set; }
         public bool IsActive { get; set; }
+        public string? ApplicationUserId { get; set; }
     }
 }

@@ -47,6 +47,7 @@ const AuthContext = createContext({
 export class AuthProvider extends Component {
     authService;
     constructor(props) {
+        debugger
         super(props);
         this.authService = new AuthService();
     }

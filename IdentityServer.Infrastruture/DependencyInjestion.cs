@@ -95,9 +95,9 @@ namespace IdentityServer.Infrastruture
                                 .AddDeveloperSigningCredential();
 
             }
-            
 
-            
+
+            services.AddLocalApiAuthentication();
 
             //Register services
             services.AddScoped<IAuthService, AuthService>();

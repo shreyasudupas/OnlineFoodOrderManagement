@@ -20,9 +20,9 @@ namespace MenuOrder.Shared.Middlewares
 
             if(claims.Count > 0)
             {
-                if(claims.Any(u=>u.Type == "UserId"))
+                if(claims.Any(u=>u.Type == "userId"))
                 {
-                    var userId = claims.Find(u => u.Type == "UserId").Value;
+                    var userId = claims.Find(u => u.Type == "userId").Value;
                     profile.UserId = userId;
                 }
 

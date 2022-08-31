@@ -1,15 +1,18 @@
 ﻿using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Features.Utility;
 using MenuOrder.Shared.Controller;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace IdentityServer.API.APIControllers
 {
     public class UtilitiesController : BaseController
     {
+        [Authorize(LocalApi.PolicyName)]
         [HttpGet("/api/utility/getCityByStateId")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(List<DropdownModel>))]
         public async Task<List<DropdownModel>> GetCityById(int StateId)

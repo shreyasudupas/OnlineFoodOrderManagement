@@ -92,7 +92,7 @@ namespace MenuManagement.BasketMicroService.API
             app.UseAuthorization();
 
             //Register custom middleware
-            app.RegisterMiddleware();
+            app.RegisterSharedMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

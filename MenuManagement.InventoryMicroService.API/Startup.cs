@@ -97,7 +97,7 @@ namespace MenuManagement.InventoryMicroService.API
             app.UseAuthorization();
 
             //Adding Custom Middleware
-            app.RegisterMiddleware();
+            app.RegisterSharedMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

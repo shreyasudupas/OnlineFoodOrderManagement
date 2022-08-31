@@ -1,6 +1,7 @@
 using AutoMapper;
 using IdenitityServer.Core;
 using IdenitityServer.Core.MapperProfiles;
+using IdenitityServer.Core.MutationResolver;
 using IdentityServer.API.AutoMapperProfile;
 using IdentityServer.API.GraphQL.Mutation;
 using IdentityServer.API.GraphQL.Query;
@@ -8,6 +9,10 @@ using IdentityServer.API.GraphQL.Types.OutputTypes;
 using IdentityServer.API.Middleware;
 using IdentityServer.Infrastruture;
 using IdentityServer.Infrastruture.MapperProfiles;
+using MenuOrder.Shared;
+using MenuOrder.Shared.Extension;
+using MenuOrder.Shared.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -69,13 +75,52 @@ namespace IdentityServer.API
             services.AddControllers();
             services.AddCors(Configuration);
             services.AddInfrastructure(Configuration);
+            services.AddSharedInjection();
+
+            services.AddHttpContextAccessor();
+
+            services
+               .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.TokenValidationParameters =
+                       new TokenValidationParameters
+                       {
+                           ValidIssuer = "https://localhost:5006",
+                           ValidAudience = "idsAPI"
+
+                       };
+                   options.Events = new JwtBearerEvents
+                   {
+                       OnAuthenticationFailed = (context) =>
+                       {
+                           var loggerFactory = context.HttpContext
+                               .RequestServices
+                               .GetRequiredService<ILoggerFactory>();
+
+                           var logger = loggerFactory.CreateLogger(typeof(Startup));
+                           logger.LogError(context.Exception, "Authentication Failed");
+
+                           return Task.CompletedTask;
+                       }
+                   };
+                });
+
+            services.AddAuthorization(p => 
+                p.AddPolicy("isAdmin", policy => policy.RequireClaim("role", "admin"))
+                );
 
             services.AddGraphQLServer()
+                .AddAuthorization()
                 .AddQueryType(q => q.Name("Query"))
                 .AddTypeExtension<UserInformationExtensionType>()
                 .AddTypeExtension<UserAddressType>()
                 .AddMutationType(m=>m.Name("Mutation"))
-                .AddTypeExtension<SaveUserInformationExtensionType>();
+                .AddTypeExtension<SaveUserInformationExtensionType>()
+                .AddTypeExtension<AddModifyUserAddressExtensionType>()
+                .RegisterService<AddModifyUserAddressResolver>()
+                .RegisterService<IProfileUser>()
+                ;
                 //.AddType<UserInformationOutputType>();
 
             services.AddSwaggerGen(c =>
@@ -105,7 +150,10 @@ namespace IdentityServer.API
 
             app.UseIdentityServer();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.RegisterSharedMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
