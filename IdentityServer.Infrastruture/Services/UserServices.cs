@@ -246,5 +246,25 @@ namespace IdentityServer.Infrastruture.Services
             }
             return profileAddress;
         }
+
+        public async Task<List<UserProfile>> GetUserList()
+        {
+            var users = new List<UserProfile>();
+
+            var user = await _context.Users.ToListAsync();
+            if (user.Count > 0)
+            {
+                user.ForEach(u =>
+                {
+                    users.Add(u.MapToProfile(_context));
+                });
+            }
+            else
+            {
+                _logger.LogInformation($"Users is not present in the database");
+                return null;
+            }
+            return users;
+        }
     }
 }

@@ -140,5 +140,13 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.UserProfile
             var actual = await sut.GetUserRoles(userProfile);
             actual.Roles.Should().HaveCount(2);
         }
+
+        [Fact]
+        public async Task GetUserList_Success()
+        {
+            var actual = await sut.GetUserList();
+            actual.Should().HaveCount(1);
+            actual[0].UserName.Should().Be("admin");
+        }
     }
 }

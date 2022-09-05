@@ -276,7 +276,8 @@ namespace IdentityServer.Infrastruture.Database
                                         IsActive = true
                                     }
                                 },
-                    IsAdmin = true
+                    IsAdmin = true,
+                    CreatedDate = DateTime.Now
                 };
 
                 var result = UserManager.CreateAsync(userOne, "password").GetAwaiter().GetResult();
@@ -295,7 +296,8 @@ namespace IdentityServer.Infrastruture.Database
                                         IsActive = true
                                     }
                                 },
-                    IsAdmin = false
+                    IsAdmin = false,
+                    CreatedDate = DateTime.Now
                 };
 
                 var resultTwo = UserManager.CreateAsync(userTwo, "password").GetAwaiter().GetResult();

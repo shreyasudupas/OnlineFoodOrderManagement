@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -100,6 +101,7 @@ namespace IdentityServer.Infrastruture.Services
             {
                 UserName = reqisterCommand.Username,
                 Email = reqisterCommand.Email,
+                CreatedDate = DateTime.Now,
                 Address = new List<UserAddress>
                     {
                         new UserAddress

@@ -2,6 +2,7 @@ using AutoMapper;
 using IdenitityServer.Core;
 using IdenitityServer.Core.MapperProfiles;
 using IdenitityServer.Core.MutationResolver;
+using IdenitityServer.Core.QueryResolvers;
 using IdentityServer.API.AutoMapperProfile;
 using IdentityServer.API.GraphQL.Mutation;
 using IdentityServer.API.GraphQL.Query;
@@ -115,11 +116,13 @@ namespace IdentityServer.API
                 .AddQueryType(q => q.Name("Query"))
                 .AddTypeExtension<UserInformationExtensionType>()
                 .AddTypeExtension<UserAddressType>()
+                .AddTypeExtension<UserInformationListExtensionType>()
                 .AddMutationType(m=>m.Name("Mutation"))
                 .AddTypeExtension<SaveUserInformationExtensionType>()
                 .AddTypeExtension<AddModifyUserAddressExtensionType>()
                 .RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<IProfileUser>()
+                .RegisterService<GetUserListResolver>()
                 ;
                 //.AddType<UserInformationOutputType>();
 

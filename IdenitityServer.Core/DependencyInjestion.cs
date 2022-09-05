@@ -17,6 +17,7 @@ namespace IdenitityServer.Core
             services.AddScoped<GetUserInformationResolver>();
             services.AddScoped<UpdateUserInfoResolver>();
             services.AddScoped<AddModifyUserAddressResolver>();
+            services.AddScoped<GetUserListResolver>();
 
             return services;
         }

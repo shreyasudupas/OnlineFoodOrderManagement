@@ -42,6 +42,8 @@ namespace IdenitityServer.Core.Domain.DBModel
 
         public bool LockoutEnabled { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
         public int AccessFailedCount { get; set; }
         public List<UserProfileAddress> Address { get; set; }
         public bool IsAdmin { get; set; }

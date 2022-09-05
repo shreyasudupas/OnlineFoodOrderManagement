@@ -1,5 +1,6 @@
 ﻿using IdenitityServer.Core.Domain.DBModel;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace IdentityServer.Infrastruture.Database
@@ -11,5 +12,6 @@ namespace IdentityServer.Infrastruture.Database
         public string ImagePath { get; set; }
         public int CartAmount { get; set; }
         public double Points { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
