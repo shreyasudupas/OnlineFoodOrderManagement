@@ -103,7 +103,7 @@ namespace IdenitityServer.API.Types.OutputTypes
                 .Name("roles");
 
             descriptor.Field(_ => _.CreatedDate)
-                .Type<DateType>()
+                .Type<DateTimeType>()
                 .Description("User Created Date")
                 .Name("createdDate");
 

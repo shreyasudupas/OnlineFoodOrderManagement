@@ -31,7 +31,8 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                 IsAdmin = applicationUser.IsAdmin,
                 ImagePath = applicationUser.ImagePath,
                 CartAmount = applicationUser.CartAmount,
-                Points = applicationUser.Points
+                Points = applicationUser.Points,
+                CreatedDate = applicationUser.CreatedDate
             };
             return result;
         }
