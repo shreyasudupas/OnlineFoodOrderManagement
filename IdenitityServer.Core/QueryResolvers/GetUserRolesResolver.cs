@@ -18,5 +18,10 @@ namespace IdenitityServer.Core.QueryResolvers
             var result = _administrationService.Roles();
             return result;
         }
+
+        public RoleListResponse GetRoleById(string RoleId)
+        {
+            return _administrationService.GetRoleById(RoleId);
+        }
     }
 }

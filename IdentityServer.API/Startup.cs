@@ -118,6 +118,7 @@ namespace IdentityServer.API
                 .AddTypeExtension<UserAddressType>()
                 .AddTypeExtension<UserInformationListExtensionType>()
                 .AddTypeExtension<RolesExtensionType>()
+                .AddTypeExtension<RoleByIdExtensionType>()
                 .AddMutationType(m=>m.Name("Mutation"))
                 .AddTypeExtension<SaveUserInformationExtensionType>()
                 .AddTypeExtension<AddModifyUserAddressExtensionType>()

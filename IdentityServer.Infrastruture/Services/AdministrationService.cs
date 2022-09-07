@@ -46,5 +46,23 @@ namespace IdentityServer.Infrastruture.Services
                 return null;
             }
         }
+
+        public RoleListResponse GetRoleById(string RoleId)
+        {
+            var role = _roleManager.Roles.Where(r=>r.Id == RoleId).Select(r=> new RoleListResponse{
+                RoleId = r.Id,
+                RoleName = r.Name
+            }).FirstOrDefault();
+
+            if(role != null)
+            {
+                return role;
+            }
+            else
+            {
+                _logger.LogError($"Role with {RoleId} not present");
+                return null;
+            }
+        }
     }
 }
