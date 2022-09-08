@@ -19,7 +19,7 @@ namespace IdenitityServer.Core
             services.AddScoped<AddModifyUserAddressResolver>();
             services.AddScoped<GetUserListResolver>();
             services.AddScoped<GetUserRolesResolver>();
-            services.AddScoped<AddRoleResolver>();
+            services.AddScoped<MutationRoleResolver>();
 
             return services;
         }

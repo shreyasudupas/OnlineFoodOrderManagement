@@ -123,11 +123,12 @@ namespace IdentityServer.API
                 .AddTypeExtension<SaveUserInformationExtensionType>()
                 .AddTypeExtension<AddModifyUserAddressExtensionType>()
                 .AddTypeExtension<AddRoleExtensionType>()
+                .AddTypeExtension<DeleteRoleExtensionType>()
                 .RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<IProfileUser>()
                 .RegisterService<GetUserListResolver>()
                 .RegisterService<GetUserRolesResolver>()
-                .RegisterService<AddRoleResolver>()
+                .RegisterService<MutationRoleResolver>()
                 ;
                 //.AddType<UserInformationOutputType>();
 

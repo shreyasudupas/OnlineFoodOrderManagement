@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace IdenitityServer.Core.MutationResolver
 {
-    public class AddRoleResolver
+    public class MutationRoleResolver
     {
         private readonly IAdministrationService _administrationService;
 
-        public AddRoleResolver(IAdministrationService administrationService)
+        public MutationRoleResolver(IAdministrationService administrationService)
         {
             _administrationService = administrationService;
         }
@@ -16,6 +16,11 @@ namespace IdenitityServer.Core.MutationResolver
         public async Task<RoleListResponse> AddRole(RoleListResponse newRole)
         {
             return await _administrationService.AddRole(newRole);
+        }
+
+        public async Task<bool> DeleteRole(string roleId)
+        {
+            return await _administrationService.DeleteRole(roleId);
         }
     }
 }

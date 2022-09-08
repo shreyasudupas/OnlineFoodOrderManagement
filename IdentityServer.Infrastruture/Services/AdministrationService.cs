@@ -1,5 +1,7 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.Response;
+using IdentityServer.Infrastruture.Database;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -13,12 +15,16 @@ namespace IdentityServer.Infrastruture.Services
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public AdministrationService(RoleManager<IdentityRole> roleManager
-            , ILogger<AdministrationService> logger)
+        public AdministrationService(
+            RoleManager<IdentityRole> roleManager
+            , ILogger<AdministrationService> logger
+            , ApplicationDbContext applicationDbContext)
         {
             _roleManager = roleManager;
             _logger = logger;
+            _applicationDbContext = applicationDbContext;
         }
 
         public List<RoleListResponse> Roles()
@@ -62,6 +68,23 @@ namespace IdentityServer.Infrastruture.Services
             {
                 _logger.LogError($"Role with {RoleId} not present");
                 return null;
+            }
+        }
+
+        public async Task<bool> DeleteRole(string roleId)
+        {
+            var rolePresent = _roleManager.Roles.Where(r=>r.Id==roleId).FirstOrDefault();
+            if(rolePresent != null)
+            {
+                var role = _applicationDbContext.Roles.Remove(rolePresent);
+                await _applicationDbContext.SaveChangesAsync();
+
+                return true;
+            }
+            else
+            {
+                _logger.LogError($"{roleId} is not present in the database");
+                return false;
             }
         }
     }
