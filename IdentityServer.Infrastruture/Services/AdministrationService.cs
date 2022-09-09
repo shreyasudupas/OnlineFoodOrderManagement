@@ -44,9 +44,14 @@ namespace IdentityServer.Infrastruture.Services
             var response = await _roleManager.CreateAsync(newRole);
             if(response.Succeeded)
             {
-                var getRoleId = await _roleManager.GetRoleIdAsync(new IdentityRole { Name = role.RoleName });
-                role.RoleId = getRoleId;
-                return role;
+                var roleInfo = _applicationDbContext.Roles.Where(r=>r.Name == role.RoleName)
+                .Select(r=>new RoleListResponse{
+                    RoleId = r.Id,
+                    RoleName = r.Name
+                })
+                .FirstOrDefault();
+                
+                return roleInfo;
             }
             else
             {
