@@ -18,7 +18,7 @@ namespace IdenitityServer.Core.MutationResolver
             return await _administrationService.AddRole(newRole);
         }
 
-        public async Task<bool> DeleteRole(string roleId)
+        public async Task<RoleListResponse> DeleteRole(string roleId)
         {
             return await _administrationService.DeleteRole(roleId);
         }

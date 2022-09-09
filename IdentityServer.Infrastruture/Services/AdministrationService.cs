@@ -44,6 +44,8 @@ namespace IdentityServer.Infrastruture.Services
             var response = await _roleManager.CreateAsync(newRole);
             if(response.Succeeded)
             {
+                var getRoleId = await _roleManager.GetRoleIdAsync(new IdentityRole { Name = role.RoleName });
+                role.RoleId = getRoleId;
                 return role;
             }
             else
@@ -71,20 +73,31 @@ namespace IdentityServer.Infrastruture.Services
             }
         }
 
-        public async Task<bool> DeleteRole(string roleId)
+        public async Task<RoleListResponse> DeleteRole(string roleId)
         {
-            var rolePresent = _roleManager.Roles.Where(r=>r.Id==roleId).FirstOrDefault();
-            if(rolePresent != null)
+            var result = new RoleListResponse();
+            if(!string.IsNullOrEmpty(roleId))
             {
-                var role = _applicationDbContext.Roles.Remove(rolePresent);
-                await _applicationDbContext.SaveChangesAsync();
+                var rolePresent = _roleManager.Roles.Where(r => r.Id == roleId).FirstOrDefault();
+                if (rolePresent != null)
+                {
+                    var role = _applicationDbContext.Roles.Remove(rolePresent);
+                    await _applicationDbContext.SaveChangesAsync();
 
-                return true;
+                    result.RoleId = rolePresent.Id;
+                    result.RoleName = rolePresent.Name;
+
+                    return result;
+                }
+                else
+                {
+                    _logger.LogError($"{roleId} is not present in the database");
+                    return result;
+                }
             }
             else
             {
-                _logger.LogError($"{roleId} is not present in the database");
-                return false;
+                return result;
             }
         }
     }
