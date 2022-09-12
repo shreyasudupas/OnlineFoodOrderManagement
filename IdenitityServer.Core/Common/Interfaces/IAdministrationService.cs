@@ -10,5 +10,7 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<RoleListResponse> AddRole(RoleListResponse role);
         RoleListResponse GetRoleById(string RoleId);
         Task<RoleListResponse> DeleteRole(string roleId);
+
+        RoleListResponse EditRoleById(RoleListResponse role);
     }
 }

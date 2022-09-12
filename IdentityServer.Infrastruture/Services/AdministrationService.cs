@@ -78,6 +78,27 @@ namespace IdentityServer.Infrastruture.Services
             }
         }
 
+        public RoleListResponse EditRoleById(RoleListResponse role)
+        {
+            var roleIfPresent = _applicationDbContext.Roles.Where(r => r.Id == role.RoleId).FirstOrDefault();
+
+            if(roleIfPresent!=null)
+            {
+                roleIfPresent.Name = role.RoleName;
+                _applicationDbContext.SaveChanges();
+
+                _logger.LogInformation($"Role with Id{roleIfPresent.Id} changed");
+                return role;
+            }
+            else
+            {
+                _logger.LogError($"Role with Id:{role.RoleId} is not present");
+                return null;
+            }
+
+            
+        }
+
         public async Task<RoleListResponse> DeleteRole(string roleId)
         {
             var result = new RoleListResponse();

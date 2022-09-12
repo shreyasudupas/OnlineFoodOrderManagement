@@ -124,6 +124,7 @@ namespace IdentityServer.API
                 .AddTypeExtension<AddModifyUserAddressExtensionType>()
                 .AddTypeExtension<AddRoleExtensionType>()
                 .AddTypeExtension<DeleteRoleExtensionType>()
+                .AddTypeExtension<SaveRoleExtensionType>()
                 .RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<IProfileUser>()
                 .RegisterService<GetUserListResolver>()

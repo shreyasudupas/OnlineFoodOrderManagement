@@ -22,5 +22,10 @@ namespace IdenitityServer.Core.MutationResolver
         {
             return await _administrationService.DeleteRole(roleId);
         }
+
+        public RoleListResponse SaveRole(RoleListResponse role)
+        {
+            return _administrationService.EditRoleById(role);
+        }
     }
 }
