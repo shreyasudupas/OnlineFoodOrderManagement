@@ -23,7 +23,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Administration
             mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockRoleStore.Object, null, null, null, null);
             mockLogs = new Mock<ILogger<AdministrationService>>();
 
-            sut = new AdministrationService(mockRoleManager.Object, mockLogs.Object, appContext);
+            sut = new AdministrationService(mockRoleManager.Object, mockLogs.Object, appContext, dbClientContext);
         }
 
         [Fact]

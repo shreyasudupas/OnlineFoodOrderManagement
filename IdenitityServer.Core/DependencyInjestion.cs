@@ -20,6 +20,8 @@ namespace IdenitityServer.Core
             services.AddScoped<GetUserListResolver>();
             services.AddScoped<GetUserRolesResolver>();
             services.AddScoped<MutationRoleResolver>();
+            services.AddScoped<ApiScopeMutationResolver>();
+            services.AddScoped<ApiScopeQueryResolver>();
 
             return services;
         }
