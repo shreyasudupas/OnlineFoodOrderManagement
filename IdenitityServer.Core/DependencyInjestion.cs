@@ -22,6 +22,7 @@ namespace IdenitityServer.Core
             services.AddScoped<MutationRoleResolver>();
             services.AddScoped<ApiScopeMutationResolver>();
             services.AddScoped<ApiScopeQueryResolver>();
+            services.AddScoped<ClientQueryResolver>();
 
             return services;
         }

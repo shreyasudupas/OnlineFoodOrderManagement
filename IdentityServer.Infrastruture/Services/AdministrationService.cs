@@ -153,7 +153,7 @@ namespace IdentityServer.Infrastruture.Services
                 Id = a.Id,
                 Name = a.Name,
                 DisplayName = a.DisplayName,
-                Description = a.Description
+                Description = a.Description??""
             }).FirstOrDefaultAsync();
 
             if (apiScope != null)

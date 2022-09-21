@@ -14,10 +14,10 @@ namespace IdentityServer.API.GraphQL.Query
             return getUserRolesResolver.GetRoles();
         }
 
-        public RoleListResponse Role(string RoleId,
+        public RoleListResponse Role(string roleId,
         [Service] GetUserRolesResolver resolver)
         {
-            return resolver.GetRoleById(RoleId);
+            return resolver.GetRoleById(roleId);
         }
     }
 }
