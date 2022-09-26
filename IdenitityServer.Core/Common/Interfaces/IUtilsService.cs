@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using IdenitityServer.Core.Domain.Model;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
 namespace IdenitityServer.Core.Common.Interfaces
@@ -7,5 +8,6 @@ namespace IdenitityServer.Core.Common.Interfaces
     {
         List<SelectListItem> GetAllStates();
         List<SelectListItem> GetAllCities();
+        List<DropdownModel> GetAllowedScopeList();
     }
 }

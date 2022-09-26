@@ -10,9 +10,9 @@ using static IdentityServer4.IdentityServerConstants;
 
 namespace IdentityServer.API.APIControllers
 {
+    [Authorize(LocalApi.PolicyName)]
     public class UtilitiesController : BaseController
     {
-        [Authorize(LocalApi.PolicyName)]
         [HttpGet("/api/utility/getCityByStateId")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(List<DropdownModel>))]
         public async Task<List<DropdownModel>> GetCityById(int StateId)
@@ -25,6 +25,13 @@ namespace IdentityServer.API.APIControllers
         public async Task<List<DropdownModel>> GetAreaById(int CityId)
         {
             return await Mediator.Send(new GetAreaByCityIdQuery { CityId = CityId });
+        }
+
+        [HttpGet("/api/utility/getAllowedScopes")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
+        public async Task<List<DropdownModel>> GetAllowedScopes()
+        {
+            return await Mediator.Send(new GetAllowedScopeListQuery ());
         }
     }
 }

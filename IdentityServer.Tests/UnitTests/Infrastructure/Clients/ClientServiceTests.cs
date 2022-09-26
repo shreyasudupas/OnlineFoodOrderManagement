@@ -60,7 +60,8 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Clients
                     },
                     AllowedScopes = new List<ClientScope>
                     {
-                        new ClientScope { Id = 2, Scope="testApi"}
+                        new ClientScope { Id = 2, Scope="testApi"},
+                        new ClientScope { Id = 3, Scope="testApi 2"}
                     } 
                  },
             };
@@ -82,6 +83,15 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Clients
             var result = await sut.GetClientById(1);
             result.Should().NotBeNull();
             result.AllowedScopes.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public async Task Save_ClientAllowedScopes()
+        {
+            var selectedScopes = new List<string> { "testApi", "test 2" };
+            var result = await sut.SaveAllowedScopes(2, selectedScopes);
+            result.Should().NotBeEmpty();
+            result.Should().HaveCount(2);
         }
     }
 }

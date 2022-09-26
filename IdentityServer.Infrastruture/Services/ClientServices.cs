@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.Model;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -73,6 +74,26 @@ namespace IdentityServer.Infrastruture.Services
                 _logger.LogError($"Client Id: {clientId} has no data in database");
                 return null;
             }
+        }
+
+        public async Task<List<string>> SaveAllowedScopes(int clientId,List<string> scopes)
+        {
+            var existingScopes = await _configurationDbContext.Clients.Include(x=>x.AllowedScopes)
+                .Where(c => c.Id == clientId)
+                .FirstOrDefaultAsync();
+
+            var newScope = new List<ClientScope>();
+            
+            foreach(var sc in scopes)
+            {
+                newScope.Add(new ClientScope { Scope = sc });
+            }
+
+            existingScopes.AllowedScopes = newScope;
+
+            _configurationDbContext.SaveChanges();
+
+            return existingScopes.AllowedScopes.Select(x => x.Scope).ToList();
         }
     }
 }
