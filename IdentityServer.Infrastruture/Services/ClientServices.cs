@@ -76,24 +76,106 @@ namespace IdentityServer.Infrastruture.Services
             }
         }
 
-        public async Task<List<string>> SaveAllowedScopes(int clientId,List<string> scopes)
+        public async Task<List<string>> SaveAllowedScopes(int clientId,List<string> selectedScopes)
         {
-            var existingScopes = await _configurationDbContext.Clients.Include(x=>x.AllowedScopes)
+            var client = await _configurationDbContext.Clients.Include(x=>x.AllowedScopes)
                 .Where(c => c.Id == clientId)
                 .FirstOrDefaultAsync();
 
-            var newScope = new List<ClientScope>();
-            
-            foreach(var sc in scopes)
+            if(client != null)
             {
-                newScope.Add(new ClientScope { Scope = sc });
+                var newScope = new List<ClientScope>();
+
+                //if existing ones are same
+                if (client.AllowedScopes.Select(a => a.Scope).ToList().SequenceEqual(selectedScopes))
+                {
+                    return selectedScopes;
+                }
+
+                //new added scopes
+                var tobeAddedScopes = selectedScopes.Except(client.AllowedScopes.Select(a => a.Scope)).ToArray();
+                foreach (var tobeAddedScope in tobeAddedScopes)
+                {
+                    newScope.Add(new ClientScope { Scope = tobeAddedScope });
+                    _logger.LogInformation($"Item with scope:{tobeAddedScope} addedd");
+                }
+
+                if (newScope.Count > 0)
+                {
+                    client.AllowedScopes.AddRange(newScope);
+                }
+
+                //Remove Old Scope
+                var toBeRemovedScopes = client.AllowedScopes.Select(a => a.Scope).Except(selectedScopes);
+
+                foreach (var toBeRemovedScope in toBeRemovedScopes.ToList())
+                {
+                    var item = client.AllowedScopes.Where(x => x.Scope == toBeRemovedScope).FirstOrDefault();
+                    client.AllowedScopes.Remove(item);
+
+                    _logger.LogInformation($"Item with scope:{toBeRemovedScope} removed");
+                }
+
+                _configurationDbContext.SaveChanges();
+
+                return client.AllowedScopes.Select(x => x.Scope).ToList();
             }
+            else
+            {
+                _logger.LogError($"client with ID {clientId} is not present in database");
+                return null;
+            }
+        }
 
-            existingScopes.AllowedScopes = newScope;
+        public async Task<List<string>> SaveAllowedGrants(int clientId, List<string> selectedGrantTypes)
+        {
+            var client = await _configurationDbContext.Clients.Include(x => x.AllowedGrantTypes)
+                .Where(c => c.Id == clientId)
+                .FirstOrDefaultAsync();
 
-            _configurationDbContext.SaveChanges();
+            if (client != null)
+            {
+                var newGrantTypes = new List<ClientGrantType>();
 
-            return existingScopes.AllowedScopes.Select(x => x.Scope).ToList();
+                //if existing ones are same
+                if (client.AllowedGrantTypes.Select(a => a.GrantType).ToList().SequenceEqual(selectedGrantTypes))
+                {
+                    return selectedGrantTypes;
+                }
+
+                //new added grant type
+                var tobeAddedGrantTypes = selectedGrantTypes.Except(client.AllowedGrantTypes.Select(a => a.GrantType)).ToArray();
+                foreach (var tobeAddedGrantType in tobeAddedGrantTypes)
+                {
+                    newGrantTypes.Add(new ClientGrantType { GrantType = tobeAddedGrantType });
+                    _logger.LogInformation($"Item with grant:{tobeAddedGrantType} addedd");
+                }
+
+                if (newGrantTypes.Count > 0)
+                {
+                    client.AllowedGrantTypes.AddRange(newGrantTypes);
+                }
+
+                //Remove Old Grant Type
+                var toBeRemovedGrantTypes = client.AllowedGrantTypes.Select(a => a.GrantType).Except(selectedGrantTypes);
+
+                foreach (var toBeRemovedGrantType in toBeRemovedGrantTypes.ToList())
+                {
+                    var item = client.AllowedGrantTypes.Where(x => x.GrantType == toBeRemovedGrantType).FirstOrDefault();
+                    client.AllowedGrantTypes.Remove(item);
+
+                    _logger.LogInformation($"Item with grant:{toBeRemovedGrantType} removed");
+                }
+
+                _configurationDbContext.SaveChanges();
+
+                return client.AllowedGrantTypes.Select(x => x.GrantType).ToList();
+            }
+            else
+            {
+                _logger.LogError($"client with ID {clientId} is not present in database");
+                return null;
+            }
         }
     }
 }

@@ -17,5 +17,10 @@ namespace IdenitityServer.Core.MutationResolver
         {
             return await _clientService.SaveAllowedScopes(clientId, scopes);
         }
+
+        public async Task<List<string>> SaveAllowedGrantTypes(int clientId, List<string> selectedGrantTypes)
+        {
+            return await _clientService.SaveAllowedGrants(clientId, selectedGrantTypes);
+        }
     }
 }

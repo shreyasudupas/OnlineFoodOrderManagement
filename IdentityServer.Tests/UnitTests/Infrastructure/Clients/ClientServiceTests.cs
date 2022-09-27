@@ -56,7 +56,8 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Clients
                     },
                     AllowedGrantTypes = new List<ClientGrantType>
                     {
-                        new ClientGrantType { Id =2 , GrantType = "client_credentials"}
+                        new ClientGrantType { Id =2 , GrantType = "Test grant 1"},
+                        new ClientGrantType { Id =3 , GrantType = "Test grant 2"}
                     },
                     AllowedScopes = new List<ClientScope>
                     {
@@ -86,10 +87,37 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Clients
         }
 
         [Fact]
-        public async Task Save_ClientAllowedScopes()
+        public async Task Save_ClientAllowedScopes_AddNewScope_AndRemoveOneScope()
         {
-            var selectedScopes = new List<string> { "testApi", "test 2" };
+            var selectedScopes = new List<string> { "testApi", "newScope" };
             var result = await sut.SaveAllowedScopes(2, selectedScopes);
+            result.Should().NotBeEmpty();
+            result.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task Save_ClientAllowedScopes_NoSaveShouldHappen_IfSameScopeIsSelected()
+        {
+            var selectedScopes = new List<string> { "testApi", "testApi 2" };
+            var result = await sut.SaveAllowedScopes(2, selectedScopes);
+            result.Should().NotBeEmpty();
+            result.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task Save_ClientAllowedScopes_DeleteAllScope()
+        {
+            var selectedScopes = new List<string> ();
+            var result = await sut.SaveAllowedScopes(2, selectedScopes);
+            result.Should().BeEmpty();
+            result.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public async Task Save_ClientAllowedGrantTypes_AddNewGrant_AndRemoveFirstGrant()
+        {
+            var selectedGrantTypes = new List<string> { "Test grant 2" , "Test grant 3" };
+            var result = await sut.SaveAllowedGrants(2, selectedGrantTypes);
             result.Should().NotBeEmpty();
             result.Should().HaveCount(2);
         }
