@@ -9,6 +9,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<List<ClientModel>> GetAllClients();
         Task<ClientModel> GetClientById(int clientId);
         Task<List<string>> SaveAllowedScopes(int clientId, List<string> scopes);
-        Task<List<string>> SaveAllowedGrants(int clientId, List<string> selectedGrantTypes);
+        Task<string> SaveAllowedGrants(int clientId, string selectedGrantTypes);
     }
 }

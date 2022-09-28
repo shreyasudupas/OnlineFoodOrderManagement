@@ -127,7 +127,7 @@ namespace IdentityServer.Infrastruture.Services
             }
         }
 
-        public async Task<List<string>> SaveAllowedGrants(int clientId, List<string> selectedGrantTypes)
+        public async Task<string> SaveAllowedGrants(int clientId, string selectedGrantTypes)
         {
             var client = await _configurationDbContext.Clients.Include(x => x.AllowedGrantTypes)
                 .Where(c => c.Id == clientId)
@@ -135,41 +135,23 @@ namespace IdentityServer.Infrastruture.Services
 
             if (client != null)
             {
-                var newGrantTypes = new List<ClientGrantType>();
-
-                //if existing ones are same
-                if (client.AllowedGrantTypes.Select(a => a.GrantType).ToList().SequenceEqual(selectedGrantTypes))
+                var isExistsGrantType = client.AllowedGrantTypes.Any(g => g.GrantType == selectedGrantTypes);
+                if(!isExistsGrantType)
                 {
+                    //add new grant type in our app 1:1 mapping is enough
+                    client.AllowedGrantTypes = new List<ClientGrantType>
+                    {
+                        new ClientGrantType { GrantType = selectedGrantTypes }
+                    };
+
+                    _configurationDbContext.SaveChanges();
+                    return client.AllowedGrantTypes.Select(x => x.GrantType).FirstOrDefault();
+                }
+                else
+                {
+                    _logger.LogInformation($"Grant Type {selectedGrantTypes} is already saved");
                     return selectedGrantTypes;
                 }
-
-                //new added grant type
-                var tobeAddedGrantTypes = selectedGrantTypes.Except(client.AllowedGrantTypes.Select(a => a.GrantType)).ToArray();
-                foreach (var tobeAddedGrantType in tobeAddedGrantTypes)
-                {
-                    newGrantTypes.Add(new ClientGrantType { GrantType = tobeAddedGrantType });
-                    _logger.LogInformation($"Item with grant:{tobeAddedGrantType} addedd");
-                }
-
-                if (newGrantTypes.Count > 0)
-                {
-                    client.AllowedGrantTypes.AddRange(newGrantTypes);
-                }
-
-                //Remove Old Grant Type
-                var toBeRemovedGrantTypes = client.AllowedGrantTypes.Select(a => a.GrantType).Except(selectedGrantTypes);
-
-                foreach (var toBeRemovedGrantType in toBeRemovedGrantTypes.ToList())
-                {
-                    var item = client.AllowedGrantTypes.Where(x => x.GrantType == toBeRemovedGrantType).FirstOrDefault();
-                    client.AllowedGrantTypes.Remove(item);
-
-                    _logger.LogInformation($"Item with grant:{toBeRemovedGrantType} removed");
-                }
-
-                _configurationDbContext.SaveChanges();
-
-                return client.AllowedGrantTypes.Select(x => x.GrantType).ToList();
             }
             else
             {
