@@ -177,5 +177,40 @@ namespace IdentityServer.Infrastruture.Services
                 return null;
             }
         }
+
+        public async Task<ClientBasicInfo> SaveClient(ClientBasicInfo clientModel)
+        {
+            if(clientModel.Id == 0)
+            {
+                var client = new Client();
+
+                client.ClientId = clientModel.ClientId;
+                client.ClientName = clientModel.ClientName;
+                client.Description = clientModel.Description;
+                client.AccessTokenLifetime = clientModel.AccessTokenLifetime;
+                client.RequireConsent = client.RequireConsent;
+                client.RequirePkce = client.RequirePkce;
+                client.Enabled = true;
+                client.Created = DateTime.Now;
+
+                _configurationDbContext.Clients.Add(client);
+            }
+            else
+            {
+                var client = await _configurationDbContext.Clients
+                .Where(c => c.Id == clientModel.Id).FirstOrDefaultAsync();
+
+                client.ClientId = clientModel.ClientId;
+                client.ClientName = clientModel.ClientName;
+                client.Description = clientModel.Description;
+                client.AccessTokenLifetime = clientModel.AccessTokenLifetime;
+                client.RequireConsent = client.RequireConsent;
+                client.RequirePkce = client.RequirePkce;
+            }
+
+            _configurationDbContext.SaveChanges();
+
+            return clientModel;
+        }
     }
 }

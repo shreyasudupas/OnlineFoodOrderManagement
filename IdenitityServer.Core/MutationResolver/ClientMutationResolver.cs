@@ -1,4 +1,5 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
+using IdenitityServer.Core.Domain.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,6 +12,11 @@ namespace IdenitityServer.Core.MutationResolver
         public ClientMutationResolver(IClientService clientService)
         {
             _clientService = clientService;
+        }
+
+        public async Task<ClientBasicInfo> SaveClientBasicInformation(ClientBasicInfo clientModel)
+        {
+            return await _clientService.SaveClient(clientModel);
         }
 
         public async Task<List<string>> SaveAllowedScope(int clientId, List<string> scopes)

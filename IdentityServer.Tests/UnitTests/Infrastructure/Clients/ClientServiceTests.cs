@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IdenitityServer.Core.Domain.Model;
 using IdentityServer.Infrastruture.Services;
 using IdentityServer.Tests.Helper;
 using IdentityServer4.EntityFramework.Entities;
@@ -120,6 +121,45 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Clients
             var result = await sut.SaveAllowedGrants(2, selectedGrantTypes);
             result.Should().NotBeEmpty();
             result.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task SaveNewClient_Basic_Info()
+        {
+            var clientInfoToBeSaved = new ClientBasicInfo
+            {
+                ClientId = "New.client",
+                ClientName = "New Client",
+                Description = "",
+                AccessTokenLifetime = 122
+                ,
+                RequireConsent = false,
+                RequirePkce = true
+            };
+
+            var result = await sut.SaveClient(clientInfoToBeSaved);
+            result.Should().NotBeNull();
+            dbClientContext.Clients.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public async Task SaveExistingClient_BasicInfo()
+        {
+            var clientInfoToBeSaved = new ClientBasicInfo
+            {
+                Id =1,
+                ClientId = "m2m.client",
+                ClientName = "edited Client Name",
+                Description = "",
+                AccessTokenLifetime = 122
+                ,
+                RequireConsent = false,
+                RequirePkce = true
+            };
+
+            var result = await sut.SaveClient(clientInfoToBeSaved);
+            result.Should().NotBeNull();
+            dbClientContext.Clients.Where(x=>x.Id==1).Select(x=>x.ClientName).FirstOrDefault().Should().Be("edited Client Name");
         }
     }
 }
