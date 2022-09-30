@@ -117,10 +117,19 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Clients
         [Fact]
         public async Task Save_ClientAllowedGrantTypes_AddNewGrant_AndRemoveFirstGrant()
         {
-            var selectedGrantTypes = new List<string> { "Test grant 2" , "Test grant 3" };
-            var result = await sut.SaveAllowedGrants(2, selectedGrantTypes);
+            var selectedGrantTypes = "Test grant 2";
+            var result = await sut.SaveAllowedGrants(1, selectedGrantTypes);
             result.Should().NotBeEmpty();
-            result.Should().HaveCount(2);
+            result.Should().Be("Test grant 2");
+        }
+
+        [Fact]
+        public async Task Save_ClientAllowedGrantTypes_SendQueryBack()
+        {
+            var selectedGrantTypes = "client_credentials";
+            var result = await sut.SaveAllowedGrants(1, selectedGrantTypes);
+            result.Should().NotBeEmpty();
+            result.Should().Be("client_credentials");
         }
 
         [Fact]
