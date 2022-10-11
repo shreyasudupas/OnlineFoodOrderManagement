@@ -194,5 +194,146 @@ namespace IdentityServer.Infrastruture.Services
 
             return clientModel;
         }
+
+        public async Task<ClientSecretModel> SaveClientSecret(ClientSecretModel clientSecretModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x=>x.ClientSecrets).Where(c => c.Id == clientSecretModel.ClientId).FirstOrDefaultAsync();
+
+            if(client != null)
+            {
+                client.ClientSecrets.Add(new ClientSecret 
+                {
+                    Value = clientSecretModel.SecretValue
+                });
+
+                _configurationDbContext.SaveChanges();
+
+                return client.ClientSecrets.Where(x=>x.Value == clientSecretModel.SecretValue)
+                    .Select(s => new ClientSecretModel { Id = s.Id, ClientId = s.ClientId, SecretValue = s.Value }).FirstOrDefault();
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {clientSecretModel.ClientId} not present in database");
+                return new ClientSecretModel();
+            }
+        }
+
+        public async Task<ClientSecretModel> DeleteClientSecret(ClientSecretModel clientSecretModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.ClientSecrets).Where(c => c.Id == clientSecretModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                var tobeDeleted = client.ClientSecrets.Where(c => c.Id == clientSecretModel.Id)
+                    .FirstOrDefault();
+
+                client.ClientSecrets.Remove(tobeDeleted);
+
+                _configurationDbContext.SaveChanges();
+
+                return clientSecretModel;
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {clientSecretModel.ClientId} not present in database");
+                return new ClientSecretModel();
+            }
+        }
+
+        public async Task<AllowedCrosOriginModel> SaveClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.AllowedCorsOrigins).Where(c => c.Id == allowedCrosOriginModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                client.AllowedCorsOrigins.Add(new ClientCorsOrigin
+                {
+                    Origin = allowedCrosOriginModel.Url
+                });
+
+                _configurationDbContext.SaveChanges();
+
+                return client.AllowedCorsOrigins.Where(x=>x.Origin == allowedCrosOriginModel.Url)
+                    .Select(s => new AllowedCrosOriginModel { Id = s.Id, ClientId = s.ClientId, Url = s.Origin }).FirstOrDefault();
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {allowedCrosOriginModel.ClientId} not present in database");
+                return new AllowedCrosOriginModel();
+            }
+        }
+
+        public async Task<AllowedCrosOriginModel> DeleteClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.AllowedCorsOrigins).Where(c => c.Id == allowedCrosOriginModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                var tobeDeleted = client.AllowedCorsOrigins.Where(c => c.Id == allowedCrosOriginModel.Id)
+                    .FirstOrDefault();
+
+                client.AllowedCorsOrigins.Remove(tobeDeleted);
+
+                _configurationDbContext.SaveChanges();
+
+                return allowedCrosOriginModel;
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {allowedCrosOriginModel.ClientId} not present in database");
+                return new AllowedCrosOriginModel();
+            }
+        }
+
+        public async Task<RedirectUrlModel> SaveClientRedirectUrls(RedirectUrlModel redirectUrlModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.RedirectUris).Where(c => c.Id == redirectUrlModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                client.RedirectUris.Add(new ClientRedirectUri
+                {
+                    RedirectUri = redirectUrlModel.RedirectUri
+                });
+
+                _configurationDbContext.SaveChanges();
+
+                return client.RedirectUris.Where(r=>r.RedirectUri == redirectUrlModel.RedirectUri)
+                    .Select(s => new RedirectUrlModel { Id = s.Id, ClientId = s.ClientId, RedirectUri = s.RedirectUri }).FirstOrDefault();
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {redirectUrlModel.ClientId} not present in database");
+                return new RedirectUrlModel();
+            }
+        }
+
+        public async Task<RedirectUrlModel> DeleteClientRedirectUrls(RedirectUrlModel redirectUrlModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.RedirectUris).Where(c => c.Id == redirectUrlModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                var tobeDeleted = client.RedirectUris.Where(c => c.Id == redirectUrlModel.Id)
+                    .FirstOrDefault();
+
+                client.RedirectUris.Remove(tobeDeleted);
+
+                _configurationDbContext.SaveChanges();
+
+                return redirectUrlModel;
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {redirectUrlModel.ClientId} not present in database");
+                return new RedirectUrlModel();
+            }
+        }
     }
 }

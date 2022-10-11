@@ -11,5 +11,11 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<List<string>> SaveAllowedScopes(int clientId, List<string> scopes);
         Task<string> SaveAllowedGrants(int clientId, string selectedGrantTypes);
         Task<ClientBasicInfo> SaveClient(ClientBasicInfo clientModel);
+        Task<ClientSecretModel> SaveClientSecret(ClientSecretModel clientSecretModel);
+        Task<ClientSecretModel> DeleteClientSecret(ClientSecretModel clientSecretModel);
+        Task<AllowedCrosOriginModel> SaveClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel);
+        Task<AllowedCrosOriginModel> DeleteClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel);
+        Task<RedirectUrlModel> SaveClientRedirectUrls(RedirectUrlModel redirectUrlModel);
+        Task<RedirectUrlModel> DeleteClientRedirectUrls(RedirectUrlModel redirectUrlModel);
     }
 }

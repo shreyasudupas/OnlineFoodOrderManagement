@@ -31,5 +31,17 @@ namespace IdentityServer.API.GraphQL.Mutation
         {
             return await clientMutationResolver.SaveAllowedGrantTypes(clientId, selectedGrantTypes);
         }
+
+        public async Task<ClientSecretModel> SaveClientSecret(ClientSecretModel clientSecretModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.SaveClientSecret(clientSecretModel);
+        }
+
+        public async Task<ClientSecretModel> DeleteClientSecret(ClientSecretModel clientSecretModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.DeleteClientSecret(clientSecretModel);
+        }
     }
 }

@@ -28,5 +28,15 @@ namespace IdenitityServer.Core.MutationResolver
         {
             return await _clientService.SaveAllowedGrants(clientId, selectedGrantTypes);
         }
+
+        public async Task<ClientSecretModel> SaveClientSecret(ClientSecretModel clientSecretModel)
+        {
+            return await _clientService.SaveClientSecret(clientSecretModel);
+        }
+
+        public async Task<ClientSecretModel> DeleteClientSecret(ClientSecretModel clientSecretModel)
+        {
+            return await _clientService.DeleteClientSecret(clientSecretModel);
+        }
     }
 }
