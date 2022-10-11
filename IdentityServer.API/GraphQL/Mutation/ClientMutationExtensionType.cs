@@ -43,5 +43,29 @@ namespace IdentityServer.API.GraphQL.Mutation
         {
             return await clientMutationResolver.DeleteClientSecret(clientSecretModel);
         }
+
+        public async Task<AllowedCrosOriginModel> SaveAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.SaveClientAllowedCorsOrigin(allowedCrosOriginModel);
+        }
+
+        public async Task<AllowedCrosOriginModel> DeleteAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.DeleteClientAllowedCorsOrigin(allowedCrosOriginModel);
+        }
+
+        public async Task<RedirectUrlModel> SaveClientRedirectUrl(RedirectUrlModel redirectUrlModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.SaveClientRedirectUrls(redirectUrlModel);
+        }
+
+        public async Task<RedirectUrlModel> DeleteClientRedirectUrl(RedirectUrlModel redirectUrlModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.DeleteClientRedirectUrls(redirectUrlModel);
+        }
     }
 }

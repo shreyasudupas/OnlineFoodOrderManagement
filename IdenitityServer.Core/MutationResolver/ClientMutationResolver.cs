@@ -38,5 +38,25 @@ namespace IdenitityServer.Core.MutationResolver
         {
             return await _clientService.DeleteClientSecret(clientSecretModel);
         }
+
+        public async Task<AllowedCrosOriginModel> SaveClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel)
+        {
+            return await _clientService.SaveClientAllowedCorsOrigin(allowedCrosOriginModel);
+        }
+
+        public async Task<AllowedCrosOriginModel> DeleteClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel)
+        {
+            return await _clientService.DeleteClientAllowedCorsOrigin(allowedCrosOriginModel);
+        }
+
+        public async Task<RedirectUrlModel> SaveClientRedirectUrls(RedirectUrlModel redirectUrlModel)
+        {
+            return await _clientService.SaveClientRedirectUrls(redirectUrlModel);
+        }
+
+        public async Task<RedirectUrlModel> DeleteClientRedirectUrls(RedirectUrlModel redirectUrlModel)
+        {
+            return await _clientService.DeleteClientRedirectUrls(redirectUrlModel);
+        }
     }
 }
