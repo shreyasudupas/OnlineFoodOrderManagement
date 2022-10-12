@@ -17,5 +17,7 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<AllowedCrosOriginModel> DeleteClientAllowedCorsOrigin(AllowedCrosOriginModel allowedCrosOriginModel);
         Task<RedirectUrlModel> SaveClientRedirectUrls(RedirectUrlModel redirectUrlModel);
         Task<RedirectUrlModel> DeleteClientRedirectUrls(RedirectUrlModel redirectUrlModel);
+        Task<PostLogoutRedirectUriModel> SaveClientPostLogoutRedirectUrls(PostLogoutRedirectUriModel postLogoutRedirectUriModel);
+        Task<PostLogoutRedirectUriModel> DeleteClientPostLogoutRedirectUrls(PostLogoutRedirectUriModel postLogoutRedirectUriModel);
     }
 }

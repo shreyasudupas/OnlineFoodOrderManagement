@@ -335,5 +335,53 @@ namespace IdentityServer.Infrastruture.Services
                 return new RedirectUrlModel();
             }
         }
+
+        public async Task<PostLogoutRedirectUriModel> SaveClientPostLogoutRedirectUrls(PostLogoutRedirectUriModel postLogoutRedirectUriModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.PostLogoutRedirectUris).Where(c => c.Id == postLogoutRedirectUriModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                client.PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
+                {
+                    PostLogoutRedirectUri = postLogoutRedirectUriModel.PostLogoutRedirectUri
+                });
+
+                _configurationDbContext.SaveChanges();
+
+                return client.PostLogoutRedirectUris.Where(r => r.PostLogoutRedirectUri == postLogoutRedirectUriModel.PostLogoutRedirectUri)
+                    .Select(s => new PostLogoutRedirectUriModel { Id = s.Id, ClientId = s.ClientId, PostLogoutRedirectUri = s.PostLogoutRedirectUri }).FirstOrDefault();
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {postLogoutRedirectUriModel.ClientId} not present in database");
+                return new PostLogoutRedirectUriModel();
+
+            }
+        }
+
+        public async Task<PostLogoutRedirectUriModel> DeleteClientPostLogoutRedirectUrls(PostLogoutRedirectUriModel postLogoutRedirectUriModel)
+        {
+            var client = await _configurationDbContext
+                .Clients.Include(x => x.PostLogoutRedirectUris).Where(c => c.Id == postLogoutRedirectUriModel.ClientId).FirstOrDefaultAsync();
+
+            if (client != null)
+            {
+                var tobeDeleted = client.PostLogoutRedirectUris.Where(c => c.Id == postLogoutRedirectUriModel.Id)
+                    .FirstOrDefault();
+
+                client.PostLogoutRedirectUris.Remove(tobeDeleted);
+
+                _configurationDbContext.SaveChanges();
+
+                return postLogoutRedirectUriModel;
+            }
+            else
+            {
+                _logger.LogError($"Client with Id {postLogoutRedirectUriModel.ClientId} not present in database");
+                return new PostLogoutRedirectUriModel();
+            }
+        }
     }
 }

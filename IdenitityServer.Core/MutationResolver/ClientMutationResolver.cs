@@ -58,5 +58,15 @@ namespace IdenitityServer.Core.MutationResolver
         {
             return await _clientService.DeleteClientRedirectUrls(redirectUrlModel);
         }
+
+        public async Task<PostLogoutRedirectUriModel> SaveClientPostLogoutRedirectUrls(PostLogoutRedirectUriModel postLogoutRedirectUriModel)
+        {
+            return await _clientService.SaveClientPostLogoutRedirectUrls(postLogoutRedirectUriModel);
+        }
+
+        public async Task<PostLogoutRedirectUriModel> DeleteClientPostLogoutRedirectUrls(PostLogoutRedirectUriModel postLogoutRedirectUriModel)
+        {
+            return await _clientService.DeleteClientPostLogoutRedirectUrls(postLogoutRedirectUriModel);
+        }
     }
 }

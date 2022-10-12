@@ -67,5 +67,17 @@ namespace IdentityServer.API.GraphQL.Mutation
         {
             return await clientMutationResolver.DeleteClientRedirectUrls(redirectUrlModel);
         }
+
+        public async Task<PostLogoutRedirectUriModel> SaveClientPostLogoutRedirectUrl(PostLogoutRedirectUriModel postLogoutRedirectUriModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.SaveClientPostLogoutRedirectUrls(postLogoutRedirectUriModel);
+        }
+
+        public async Task<PostLogoutRedirectUriModel> DeleteClientPostLogoutRedirectUrl(PostLogoutRedirectUriModel postLogoutRedirectUriModel,
+            [Service] ClientMutationResolver clientMutationResolver)
+        {
+            return await clientMutationResolver.DeleteClientPostLogoutRedirectUrls(postLogoutRedirectUriModel);
+        }
     }
 }
