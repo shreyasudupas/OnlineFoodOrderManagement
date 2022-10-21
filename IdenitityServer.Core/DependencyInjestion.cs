@@ -24,6 +24,8 @@ namespace IdenitityServer.Core
             services.AddScoped<ApiScopeQueryResolver>();
             services.AddScoped<ClientQueryResolver>();
             services.AddScoped<ClientMutationResolver>();
+            services.AddScoped<AddressQueryResolver>();
+            services.AddScoped<AddressMutationResolver>();
 
             return services;
         }

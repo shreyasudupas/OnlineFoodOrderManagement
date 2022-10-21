@@ -105,6 +105,7 @@ namespace IdentityServer.Infrastruture
             services.AddScoped<IUserService, UserServices>();
             services.AddScoped<IAdministrationService, AdministrationService>();
             services.AddScoped<IClientService,ClientServices>();
+            services.AddScoped<IAddressService, AddressService>();
 
             return services;
         }

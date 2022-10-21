@@ -120,7 +120,8 @@ namespace IdentityServer.API
                 .AddTypeExtension<RolesExtensionType>()
                 .AddTypeExtension<ApiScopeQueryExtensionType>()
                 .AddTypeExtension<ClientQueryExtensionType>()
-                .AddMutationType(m=>m.Name("Mutation"))
+                .AddTypeExtension<AddressQueryExtensionType>()
+                .AddMutationType(m => m.Name("Mutation"))
                 .AddTypeExtension<SaveUserInformationExtensionType>()
                 .AddTypeExtension<AddModifyUserAddressExtensionType>()
                 .AddTypeExtension<AddRoleExtensionType>()
@@ -128,6 +129,7 @@ namespace IdentityServer.API
                 .AddTypeExtension<SaveRoleExtensionType>()
                 .AddTypeExtension<ApiScopeMutationExtensionType>()
                 .AddTypeExtension<ClientMutationExtensionType>()
+                .AddType<AddressExtensionType>()
                 .RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<IProfileUser>()
                 .RegisterService<GetUserListResolver>()
@@ -135,6 +137,8 @@ namespace IdentityServer.API
                 .RegisterService<MutationRoleResolver>()
                 .RegisterService<ClientQueryResolver>()
                 .RegisterService<ClientMutationResolver>()
+                .RegisterService<AddressQueryResolver>()
+                .RegisterService<AddressMutationResolver>()
                 ;
                 //.AddType<UserInformationOutputType>();
 
