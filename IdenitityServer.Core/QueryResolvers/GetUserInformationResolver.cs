@@ -20,6 +20,11 @@ namespace IdenitityServer.Core.QueryResolvers
 
             if(result!=null)
             {
+                if(string.IsNullOrEmpty(result.ImagePath))
+                {
+                    result.ImagePath = "profile-default.jpg";
+                }
+
                 result = await _userService.GetUserClaims(result);
 
                 result = await _userService.GetUserRoles(result);

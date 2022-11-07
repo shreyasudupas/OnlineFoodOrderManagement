@@ -1,6 +1,7 @@
 ﻿using HotChocolate.Types;
 using IdenitityServer.API.Types.OutputTypes;
 using IdenitityServer.Core.QueryResolvers;
+using Microsoft.AspNetCore.Hosting;
 using System.Threading;
 
 namespace IdentityServer.API.GraphQL.Query

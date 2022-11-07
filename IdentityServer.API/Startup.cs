@@ -1,4 +1,5 @@
 using AutoMapper;
+using HotChocolate.Types;
 using IdenitityServer.Core;
 using IdenitityServer.Core.MapperProfiles;
 using IdenitityServer.Core.MutationResolver;
@@ -123,14 +124,13 @@ namespace IdentityServer.API
                 .AddTypeExtension<AddressQueryExtensionType>()
                 .AddMutationType(m => m.Name("Mutation"))
                 .AddTypeExtension<SaveUserInformationExtensionType>()
-                .AddTypeExtension<AddModifyUserAddressExtensionType>()
-                .AddTypeExtension<AddRoleExtensionType>()
-                .AddTypeExtension<DeleteRoleExtensionType>()
-                .AddTypeExtension<SaveRoleExtensionType>()
                 .AddTypeExtension<ApiScopeMutationExtensionType>()
                 .AddTypeExtension<ClientMutationExtensionType>()
                 .AddType<AddressExtensionType>()
-                .RegisterService<AddModifyUserAddressResolver>()
+                .AddType<UserProfileExtensionType>()
+                .AddType<UploadType>()
+                //.RegisterService<AddModifyUserAddressResolver>()
+                .RegisterService<UserProfileResolver>()
                 .RegisterService<IProfileUser>()
                 .RegisterService<GetUserListResolver>()
                 .RegisterService<GetUserRolesResolver>()
@@ -139,6 +139,8 @@ namespace IdentityServer.API
                 .RegisterService<ClientMutationResolver>()
                 .RegisterService<AddressQueryResolver>()
                 .RegisterService<AddressMutationResolver>()
+                .RegisterService<IWebHostEnvironment>()
+                .AddMutationConventions()
                 ;
                 //.AddType<UserInformationOutputType>();
 
@@ -160,6 +162,8 @@ namespace IdentityServer.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IdentityServer.API v1"));
             }
+
+            app.UseStaticFiles();
 
             app.UseCors("IdentityReactSpa.Cors");
 

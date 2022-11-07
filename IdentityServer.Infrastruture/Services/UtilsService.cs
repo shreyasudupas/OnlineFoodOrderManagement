@@ -1,10 +1,13 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
+using IdenitityServer.Core.Domain.DBModel;
 using IdenitityServer.Core.Domain.Model;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IdentityServer.Infrastruture.Services
 {
@@ -56,6 +59,37 @@ namespace IdentityServer.Infrastruture.Services
             });
 
             return result;
+        }
+
+        public async Task<UserProfile> GetUserProfile(string userId)
+        {
+            var users = await _context.Users.Where(u => u.Id == userId).Select(u=> new UserProfile
+            {
+                Id = u.Id,
+                ImagePath = u.ImagePath
+            }).FirstOrDefaultAsync();
+
+            if (userId != null)
+            {
+                return users;
+            }
+            else
+                return null;
+        }
+
+        public async Task<string> UpdateUserProfileImage(string userId,string newImageName)
+        {
+            var users = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+
+            if (userId != null)
+            {
+                var oldImagePath = users.ImagePath;
+                users.ImagePath = newImageName;
+                _context.SaveChanges();
+                return oldImagePath;
+            }
+            else
+                return "";
         }
     }
 }
