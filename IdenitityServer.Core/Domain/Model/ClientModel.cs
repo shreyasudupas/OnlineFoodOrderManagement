@@ -22,6 +22,7 @@ namespace IdenitityServer.Core.Domain.Model
         public List<string> AllowedGrantType { get; set; }
         public int AccessTokenLifetime { get; set; }
         public bool RequireConsent { get; set; }
+        public bool RequireClientSecret { get; set; }
         public bool RequirePkce { get; set; }
         public DateTime CreatedDate { get; set; }
         public List<ClientSecretModel> ClientSecrets { get; set; }

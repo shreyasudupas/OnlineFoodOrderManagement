@@ -57,6 +57,7 @@ namespace IdentityServer.Infrastruture.Services
                     Enabled = c.Enabled,
                     AllowedGrantType = c.AllowedGrantTypes.Select(x => x.GrantType).ToList(),
                     ClientSecrets = c.ClientSecrets.Select(s=> new ClientSecretModel { Id = s.Id, ClientId = s.ClientId , SecretValue = s.Value }).ToList(),
+                    RequireClientSecret = c.RequireClientSecret,
                     AccessTokenLifetime = c.AccessTokenLifetime,
                     CreatedDate = c.Created,
                     AllowedScopes = c.AllowedScopes.Select(ac=> new AllowedScopeModel { Id = ac.Id , Scope = ac.Scope , ClientId = ac.ClientId }).ToList(),
@@ -174,6 +175,7 @@ namespace IdentityServer.Infrastruture.Services
                 client.RequirePkce = client.RequirePkce;
                 client.Enabled = true;
                 client.Created = DateTime.Now;
+                client.RequireClientSecret = clientModel.RequireConsent;
 
                 _configurationDbContext.Clients.Add(client);
             }
@@ -188,6 +190,7 @@ namespace IdentityServer.Infrastruture.Services
                 client.AccessTokenLifetime = clientModel.AccessTokenLifetime;
                 client.RequireConsent = client.RequireConsent;
                 client.RequirePkce = client.RequirePkce;
+                client.RequireClientSecret = clientModel.RequireConsent;
             }
 
             _configurationDbContext.SaveChanges();
