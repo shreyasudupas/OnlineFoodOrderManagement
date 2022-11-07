@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IdentityServer.Infrastruture.Database;
 using IdentityServer.Infrastruture.Services;
 using IdentityServer.Tests.Helper;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,19 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.Administration
             mockLogs = new Mock<ILogger<AdministrationService>>();
 
             sut = new AdministrationService(mockRoleManager.Object, mockLogs.Object, appContext, dbClientContext);
+
+            SeedData(appContext);
+        }
+
+        private void SeedData(ApplicationDbContext appContext)
+        {
+            appContext.Roles.Add(new IdentityRole
+            {
+                Name="appLooser",
+            });
+
+            appContext.SaveChanges();
+
         }
 
         [Fact]
