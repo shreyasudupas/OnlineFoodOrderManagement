@@ -12,6 +12,7 @@ namespace IdenitityServer.Core.Domain.Model
         public int AccessTokenLifetime { get; set; }
         public bool RequireConsent { get; set; }
         public bool RequirePkce { get; set; }
+        public bool RequireClientSecret { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }
