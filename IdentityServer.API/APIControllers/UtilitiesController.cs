@@ -24,6 +24,13 @@ namespace IdentityServer.API.APIControllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [HttpGet("/api/utility/getAllCities")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
+        public async Task<List<DropdownModel>> GetAllCities()
+        {
+            return await Mediator.Send(new GetAllCitiesQuery());
+        }
+
         [HttpGet("/api/utility/getCityByStateId")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(List<DropdownModel>))]
         public async Task<List<DropdownModel>> GetCityById(int StateId)

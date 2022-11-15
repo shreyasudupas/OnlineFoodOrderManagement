@@ -134,6 +134,18 @@ namespace IdentityServer.Infrastruture.Services
             return null;
         }
 
+        public async Task<List<DropdownModel>> GetAllCities()
+        {
+            var response = await _context.Cities.Select(city => new DropdownModel
+            {
+                Label = city.Name,
+                Value = city.Id.ToString()
+            }).ToListAsync();
+
+            return response;
+
+        }
+
         public async Task<List<DropdownModel>> GetCityById(int StateId)
         {
             if(StateId > 0)
