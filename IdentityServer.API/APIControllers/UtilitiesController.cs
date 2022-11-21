@@ -26,7 +26,7 @@ namespace IdentityServer.API.APIControllers
 
         [HttpGet("/api/utility/getAllCities")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
-        public async Task<List<DropdownModel>> GetAllCities()
+        public async Task<List<AddressDropdownModel>> GetAllCities()
         {
             return await Mediator.Send(new GetAllCitiesQuery());
         }

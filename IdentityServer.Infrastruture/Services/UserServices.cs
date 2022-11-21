@@ -134,12 +134,16 @@ namespace IdentityServer.Infrastruture.Services
             return null;
         }
 
-        public async Task<List<DropdownModel>> GetAllCities()
+        public async Task<List<AddressDropdownModel>> GetAllCities()
         {
-            var response = await _context.Cities.Select(city => new DropdownModel
+            var response = await _context.Cities.Include(c=>c.Areas).Select(city => new AddressDropdownModel
             {
                 Label = city.Name,
-                Value = city.Id.ToString()
+                Value = city.Id.ToString(),
+                Items = city.Areas.Select(a=> new DropdownModel {
+                    Label = a.AreaName,
+                    Value = a.Id.ToString()
+                }).ToList()
             }).ToListAsync();
 
             return response;
