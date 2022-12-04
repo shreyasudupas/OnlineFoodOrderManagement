@@ -1,4 +1,5 @@
-﻿using MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository;
+﻿using MenuManagement.Core.Mongo.Entities;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 

@@ -15,7 +15,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.MappingProfile
             CreateMap<CartVendorDetail, VendorDetail>()
                 .ReverseMap();
 
-            CreateMap<Models.ColumnDetail, MenuManagment.Domain.Mongo.Entities.ColumnDetail>()
+            CreateMap<ColumnDetail, MenuManagment.Domain.Mongo.Entities.ColumnDetail>()
                 .ReverseMap();
         }
     }

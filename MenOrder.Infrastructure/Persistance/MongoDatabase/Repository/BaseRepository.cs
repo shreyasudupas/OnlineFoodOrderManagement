@@ -19,9 +19,14 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             _context = context;
             mongoCollection = _context.GetCollection<TEntity>(typeof(TEntity).Name);
         }
-        public Task Create(TEntity obj)
+        public async Task CreateOneDocument(TEntity document)
         {
-            throw new NotImplementedException();
+            await mongoCollection.InsertOneAsync(document);
+        }
+
+        public async Task CreateManyDocument(ICollection<TEntity> documents)
+        {
+            await mongoCollection.InsertManyAsync(documents);
         }
 
         public void Delete(string id)
@@ -38,11 +43,16 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         {
             return await mongoCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
-        public async Task<TEntity> GetByIdCustom(Expression<Func<TEntity, bool>> FindCondition) => await mongoCollection.Find(FindCondition).FirstOrDefaultAsync();
+        public async Task<TEntity> GetByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).FirstOrDefaultAsync();
 
         public void Update(TEntity obj)
         {
             //mongoCollection.InsertOne(obj);
+        }
+
+        public int IfDocumentExists()
+        {
+            return mongoCollection.Find(_=> true).ToList().Count;
         }
     }
 }

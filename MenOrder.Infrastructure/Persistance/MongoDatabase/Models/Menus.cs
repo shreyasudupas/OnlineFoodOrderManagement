@@ -11,61 +11,14 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("vendor name")]
-        public string VendorName { get; set; }
+        [BsonElement("VendorId")]
+        public string VendorId { get; set; }
 
-        [BsonElement("vendor area")]
-        public string VendorArea { get; set; }
+        [BsonElement("Items")]
+        public List<MenuItems> Items { get; set; }
 
+        [BsonElement("Disable")]
+        public bool Disable { get; set; }
 
-        [BsonElement("description")]
-        public string Description { get; set; }
-
-
-        [BsonElement("vendor location")]
-        public string Location { get; set; }
-
-
-        [BsonElement("rating")]
-        public int Rating { get; set; }
-
-
-        [BsonElement("vendor details")]
-        public VendorDetail VendorDetails { get; set; }
-
-    }
-    public class VendorDetail
-    {
-        [BsonElement("column details")]
-        public List<ColumnDetail> ColumnDetails { get; set; }
-
-
-        [BsonElement("data")]
-        public List<object> Data { get; set; }
-    }
-
-    public class ColumnDetail : CommonDetails
-    {
-        [BsonElement("column name")]
-        public string ColumnName { get; set; }
-
-
-
-        [BsonElement("column description")]
-        public string ColumnDescription { get; set; }
-
-
-        [BsonElement("display name on menu")]
-        public string DisplayNameOnMenu { get; set; }
-
-
-        [BsonElement("display on screen")]
-        public string DisplayOnScreen { get; set; }
-    }
-
-    public class CommonDetails
-    {
-        [BsonElement("property type")]
-        public string PropertyType { get; set; }
     }
 }

@@ -44,6 +44,6 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         public string OfferPrice { get; set; }
         public string CreatedDate { get; set; }
         public int Quantity { get; set; }
-        public OrderStatusEnum Status { get; set; }
+        //public OrderStatusEnum Status { get; set; }
     }
 }

@@ -1,93 +1,53 @@
-﻿using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
+﻿using AutoMapper;
+using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Interfaces;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
-using MenuManagment.Domain.Mongo.Entities;
-using MenuManagment.Domain.Mongo.Interfaces;
-using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 {
     public class MenuRepository : BaseRepository<Menus> , IMenuRepository
     {
-        public MenuRepository(IMongoDBContext mongoDBContext) : base(mongoDBContext)
+        private readonly ILogger _logger;
+        private readonly IMapper _mapper;
+        public MenuRepository(IMongoDBContext mongoDBContext,
+            ILogger<MenuRepository> logger,
+            IMapper mapper) : base(mongoDBContext)
         {
+            _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<string> GetVendorDetails_DisplayName(string VendorId, string SearchColumnName)
+        public async Task<MenuDto> AddMenu(MenuDto menu)
         {
-            var GetVendorMenuDetails = await mongoCollection.Find(x => x.Id == VendorId).FirstOrDefaultAsync();
+            _logger.LogInformation("AddMenu started");
 
-            if (GetVendorMenuDetails != null)
+            if(menu != null)
             {
-                var VendorColumnDetail = GetVendorMenuDetails.VendorDetails.ColumnDetails.Find(x => x.ColumnName == SearchColumnName);
+                var mapToMenuModel = _mapper.Map<Menus>(menu);
 
-                if (VendorColumnDetail != null)
+                await CreateOneDocument(mapToMenuModel);
+
+                var createdMenu = await GetByFilter(m => m.VendorId == menu.VendorId);
+
+                if(createdMenu != null)
                 {
-                    return VendorColumnDetail.DisplayNameOnMenu;
+                    var mapToDto = _mapper.Map<MenuDto>(createdMenu);
+                    return mapToDto;
                 }
                 else
-                    return string.Empty;
+                {
+                    _logger.LogInformation($"Menu with vendorId {menu.VendorId} not found");
+                    return menu;
+                }
             }
             else
-                return string.Empty;
-
-        }
-
-        public async Task<List<MenuManagment.Domain.Mongo.Entities.VendorDetail>> ListAllVendorDetails(string Locality)
-        {
-            var result = await mongoCollection.Find(x => x.VendorArea == Locality).ToListAsync();
-            var modelList = new List<MenuManagment.Domain.Mongo.Entities.VendorDetail>();
-
-            foreach(var item in result)
             {
-                modelList.Add(new MenuManagment.Domain.Mongo.Entities.VendorDetail
-                {
-                    VendorId = item.Id,
-                    Description = item.Description,
-                    Location = item.Location,
-                    Rating = item.Rating,
-                    VendorName = item.VendorName,
-                    VendorArea = item.VendorArea
-                });
+                _logger.LogError("No Items present");
+                return null;
             }
-            return modelList;
-        }
-
-        public async Task<List<VendorColumnDetailEntity>> ListVendorMenuColumnDetails(string VendorId)
-        {
-            var vendorColumnDetailEntity = new List<VendorColumnDetailEntity>();
-
-            var result = await mongoCollection.Find(x => x.Id == VendorId).FirstOrDefaultAsync();
-            result.VendorDetails.ColumnDetails.ForEach(e =>
-            {
-                vendorColumnDetailEntity.Add(new VendorColumnDetailEntity
-                {
-                    ColumnName = e.ColumnName,
-                    DisplayName = e.DisplayNameOnMenu,
-                    DisplayOnScreen = e.DisplayOnScreen
-                });
-            });
-
-            return vendorColumnDetailEntity;
-        }
-
-        public async Task<VendorMenuDetail> ListVendorMenuDetails(string VendorId, string Location)
-        {
-            VendorMenuDetail vendorMenuDetail = new VendorMenuDetail();
-
-            var result = await mongoCollection.Find(x => x.Id == VendorId && x.VendorArea == Location).FirstOrDefaultAsync();
-            vendorMenuDetail.ColumnDetail = result.VendorDetails.ColumnDetails.Select(x => new MenuColumnDetail
-            {
-                Field = x.ColumnName,
-                DisplayOnScreen = x.DisplayOnScreen,
-                Header = x.DisplayNameOnMenu
-            }).ToList();
-
-            vendorMenuDetail.Data = result.VendorDetails.Data;
-
-            return vendorMenuDetail;
         }
     }
 }

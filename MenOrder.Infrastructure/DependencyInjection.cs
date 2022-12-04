@@ -8,6 +8,9 @@ using StackExchange.Redis;
 using System;
 using MenuManagment.Domain.Mongo.Interfaces;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository;
+using MenuManagement.Core.Mongo.Interfaces;
+using AutoMapper;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.MappingProfiles;
 
 namespace MenuManagement.Infrastructure
 {
@@ -38,8 +41,18 @@ namespace MenuManagement.Infrastructure
 
             //Database registration
             services.AddScoped<IMongoDBContext, MongoDBContext>();
-            services.AddScoped<IMenuRepository, MenuRepository>();
-            services.AddScoped<IVendorCartRepository, VendorCartRepository>();
+            services.AddScoped<Core.Mongo.Interfaces.IMenuRepository, MenuRepository>();
+            services.AddScoped<Core.Mongo.Interfaces.IVendorCartRepository, VendorCartRepository>();
+            services.AddScoped<IVendorRepository, VendorRepository>();
+
+            //mapper configuration
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new VendorProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             return services;
         }

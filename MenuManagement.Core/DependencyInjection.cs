@@ -9,7 +9,7 @@ namespace MenuManagement.Core
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             return services;
         }

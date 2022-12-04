@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using MenuManagement.Core.Mongo.Interfaces;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
 using MenuManagment.Domain.Mongo.Entities;
-using MenuManagment.Domain.Mongo.Interfaces;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
@@ -18,13 +18,9 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             _mapper = mapper;
         }
 
-        public async Task<VendorCartDetails> GetVendorConfigurationByVendorId(string VendorId)
+        Task<Core.Mongo.Entities.VendorCartDetails> IVendorCartRepository.GetVendorConfigurationByVendorId(string VendorId)
         {
-            var filter = Builders<VendorCartConfigurations>.Filter.Eq(x => x.VendorDetails.VendorId, VendorId);
-
-            var VendorCartConfigurationsReponse = await mongoCollection.Find(filter).FirstOrDefaultAsync();
-
-            return _mapper.Map<VendorCartDetails>(VendorCartConfigurationsReponse);
+            throw new System.NotImplementedException();
         }
     }
 }

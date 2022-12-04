@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MenuManagement.Core\MenuManagement.Core.csproj" />
-    <ProjectReference Include="..\MenuManagment.Domain\MenuManagment.Domain.csproj" />
+    <ProjectReference Include="..\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
   </ItemGroup>
 
 </Project>

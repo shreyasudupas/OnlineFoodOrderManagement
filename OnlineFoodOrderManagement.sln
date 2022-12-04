@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.BasketMicroS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.Shared", "MenuOrder.Shared\MenuOrder.Shared.csproj", "{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagment.Domain", "MenuManagment.Domain\MenuManagment.Domain.csproj", "{1DA48FC2-F890-4F6A-AC0D-286EAA2B9A10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagment.Mongo.Domain", "MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj", "{1DA48FC2-F890-4F6A-AC0D-286EAA2B9A10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.InventoryMicroService.API", "MenuManagement.InventoryMicroService.API\MenuManagement.InventoryMicroService.API.csproj", "{1FD07339-0306-476C-8A45-FDE1481BB53B}"
 EndProject
@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.Infrastrutur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.API", "IdentityServer.API\IdentityServer.API.csproj", "{59E05E72-CB1F-4B1C-9E6D-DCDAEF85C8CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Tests", "IdentityServer.Tests\IdentityServer.Tests.csproj", "{0400C60E-B380-4292-AED6-808300400D49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.Tests", "IdentityServer.Tests\IdentityServer.Tests.csproj", "{0400C60E-B380-4292-AED6-808300400D49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

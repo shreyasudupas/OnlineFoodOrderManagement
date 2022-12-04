@@ -13,7 +13,10 @@ namespace MenuManagement.InventoryMicroService.API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var builder = CreateHostBuilder(args).Build();
+            builder.UseMigration();
+
+            builder.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
