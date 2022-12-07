@@ -38,7 +38,8 @@ namespace IdentityServer.API.GraphQL.Mutation
         public async Task<UserProfileAddress> AddModifyAddress(string userId,
             UserProfileAddress userProfileAddress,
             [Service] UserProfileResolver userProfileResolver,
-            [Service] IProfileUser profileUser)
+            [Service] IProfileUser profileUser
+            )
         {
             var result = await userProfileResolver.AddModifyUserAddress(userId, userProfileAddress);
             return result;

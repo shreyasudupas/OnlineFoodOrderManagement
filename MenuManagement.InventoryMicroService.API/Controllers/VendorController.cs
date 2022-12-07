@@ -22,7 +22,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("/api/vendors")]
-        public async Task<List<VendorDto>> AddVendorsList(AddVendorsCommand addVendorsCommand)
+        public async Task<List<VendorDto>> AddVendorsList([FromBody]AddVendorsCommand addVendorsCommand)
         {
             return await Mediator.Send(addVendorsCommand);
         }

@@ -49,6 +49,7 @@ namespace MenuManagement.Infrastructure
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new VendorProfile());
+                mc.AddProfile(new MenuProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

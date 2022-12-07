@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
     {
         Task CreateOneDocument(TEntity document);
         Task CreateManyDocument(ICollection<TEntity> documents);
-        void Update(TEntity obj);
+        Task<UpdateResult> UpdateOneDocument(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update);
         void Delete(string id);
         Task<TEntity> GetById(string id);
         Task<IEnumerable<TEntity>> GetAllItems();
