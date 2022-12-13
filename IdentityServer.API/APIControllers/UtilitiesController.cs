@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Domain.DBModel;
 using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Domain.Request;
+using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Utility;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
@@ -24,8 +25,15 @@ namespace IdentityServer.API.APIControllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [HttpGet("/api/utility/getAllLocations")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RegisteredLocationReponse>))]
+        public async Task<List<RegisteredLocationReponse>> GetAllLocation()
+        {
+            return await Mediator.Send(new GetAllLocationQuery());
+        }
+
         [HttpGet("/api/utility/getAllCities")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDropdownModel>))]
         public async Task<List<AddressDropdownModel>> GetAllCities()
         {
             return await Mediator.Send(new GetAllCitiesQuery());

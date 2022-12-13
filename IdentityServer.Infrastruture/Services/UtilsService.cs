@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.DBModel;
 using IdenitityServer.Core.Domain.Model;
+using IdenitityServer.Core.Domain.Response;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -90,6 +91,19 @@ namespace IdentityServer.Infrastruture.Services
             }
             else
                 return "";
+        }
+
+        public async Task<List<RegisteredLocationReponse>> GetAllRegisteredLocation()
+        {
+            List<RegisteredLocationReponse> registeredLocationReponses = new List<RegisteredLocationReponse>();
+            var locations = await _context.States.Include(s => s.Cities).ThenInclude(c=>c.Areas).ToListAsync();
+
+            locations.ForEach(item => registeredLocationReponses.Add(new RegisteredLocationReponse
+            {
+                State = item
+            }));
+
+            return registeredLocationReponses;
         }
     }
 }

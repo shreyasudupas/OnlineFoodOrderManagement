@@ -1,5 +1,6 @@
 ﻿using IdenitityServer.Core.Domain.DBModel;
 using IdenitityServer.Core.Domain.Model;
+using IdenitityServer.Core.Domain.Response;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,5 +14,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         List<DropdownModel> GetAllowedScopeList();
         Task<UserProfile> GetUserProfile(string userId);
         Task<string> UpdateUserProfileImage(string userId, string newImagePath);
+        Task<List<RegisteredLocationReponse>> GetAllRegisteredLocation();
     }
 }
