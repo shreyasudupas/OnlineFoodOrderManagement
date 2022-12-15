@@ -2,6 +2,7 @@ using MenuManagement.Core;
 using MenuManagement.Infrastructure;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -71,8 +72,22 @@ namespace MenuManagement.InventoryMicroService.API
                     //opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
                     opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                     {
-                        //ValidateAudience = false
-                        ValidAudiences = audenceNames
+                        ValidateAudience = false
+                        //ValidAudiences = audenceNames
+                    };
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = (context) =>
+                        {
+                            var loggerFactory = context.HttpContext
+                                .RequestServices
+                                .GetRequiredService<ILoggerFactory>();
+
+                            var logger = loggerFactory.CreateLogger(typeof(Startup));
+                            logger.LogError(context.Exception, "Authentication Failed");
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
         }
