@@ -238,5 +238,182 @@ namespace IdentityServer.Infrastruture.Services
                 return null;
             }
         }
+
+        public async Task<List<ApiResourceModel>> GetAllApiResources()
+        {
+            var apiResources = await _configurationDbContext.ApiResources.Select(res => new ApiResourceModel
+            {
+                Id = res.Id,
+                Enabled = res.Enabled,
+                Name = res.Name,
+                DisplayName = res.DisplayName,
+                Description = res.Description,
+                AllowedAccessTokenSigningAlgorithms = res.AllowedAccessTokenSigningAlgorithms,
+                ShowInDiscoveryDocument = res.ShowInDiscoveryDocument,
+                Created = res.Created.ToString("dd/MM/yyyy H:m:ss"),
+                LastAccessed = (res.LastAccessed != null) ? res.LastAccessed.Value.ToString("dd/MM/yyyy H:m:ss") : "",
+                NonEditable = res.NonEditable,
+            }).ToListAsync();
+
+            return apiResources;
+        }
+
+        public async Task<ApiResourceModel> GetApiResourceById(int id)
+        {
+            var resource = await _configurationDbContext.ApiResources.Include(x=>x.Scopes).Where(r => r.Id == id).FirstOrDefaultAsync();
+
+            if(resource != null)
+            {
+                return new ApiResourceModel
+                {
+                    Id = resource.Id,
+                    Enabled = resource.Enabled,
+                    Name = resource.Name,
+                    DisplayName = resource.DisplayName,
+                    Description = resource.Description,
+                    AllowedAccessTokenSigningAlgorithms = resource.AllowedAccessTokenSigningAlgorithms,
+                    ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument,
+                    Created = resource.Created.ToString("dd/MM/yyyy H:m:ss"),
+                    LastAccessed = (resource.LastAccessed != null) ? resource.LastAccessed.Value.ToString("dd/MM/yyyy H:m:ss") : "",
+                    NonEditable = resource.NonEditable,
+                    Scopes = resource.Scopes.Select(s=> new ApiResourceScopeModel
+                    {
+                        ApiResourceId = s.ApiResourceId, Id = s.Id , Scope = s.Scope
+                    }).ToList()
+                };
+            }else
+            {
+                _logger.LogError($"ApiReource with Id {id} is not present");
+                return null;
+            }
+        }
+
+        public async Task<ApiResourceModel> AddApiResource(ApiResourceModel apiResourceModel)
+        {
+            var resource = await _configurationDbContext.ApiResources.Where(r => r.Id == apiResourceModel.Id).FirstOrDefaultAsync();
+
+            if (resource == null)
+            {
+                var newApiResource = new ApiResource
+                {
+                    Name = apiResourceModel.Name,
+                    Enabled = true,
+                    DisplayName = apiResourceModel.DisplayName,
+                    Description = apiResourceModel.Description,
+                    NonEditable = true,
+                    ShowInDiscoveryDocument = apiResourceModel.ShowInDiscoveryDocument,
+                    AllowedAccessTokenSigningAlgorithms = apiResourceModel.AllowedAccessTokenSigningAlgorithms,
+                    Created = System.DateTime.Now
+                };
+
+                _configurationDbContext.ApiResources.Add(newApiResource);
+                
+
+                //then add in IdentityResources as well
+                _configurationDbContext.IdentityResources.Add(new IdentityResource
+                {
+                    Enabled = true,
+                    Name = apiResourceModel.Name,
+                    DisplayName = apiResourceModel.DisplayName,
+                    Description = apiResourceModel.Description,
+                    Required = true,
+                    Emphasize =true,
+                    ShowInDiscoveryDocument = apiResourceModel.ShowInDiscoveryDocument,
+                    Created = System.DateTime.Now,
+                    NonEditable = apiResourceModel.NonEditable
+                });
+
+                _configurationDbContext.SaveChanges();
+
+                var newResource = _configurationDbContext.ApiResources.Where(a => a.Name == apiResourceModel.Name)
+                    .Select(resource=> new ApiResourceModel
+                    {
+                        Id = resource.Id,
+                        Enabled = resource.Enabled,
+                        Name = resource.Name,
+                        DisplayName = resource.DisplayName,
+                        Description = resource.Description,
+                        AllowedAccessTokenSigningAlgorithms = resource.AllowedAccessTokenSigningAlgorithms,
+                        ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument,
+                        Created = resource.Created.ToString("dd/MM/yyyy H:m:ss"),
+                        LastAccessed = (resource.LastAccessed != null)?resource.LastAccessed.Value.ToString("dd/MM/yyyy H:m:ss"):"",
+                        NonEditable = resource.NonEditable,
+                    }).FirstOrDefault();
+
+                if (newResource != null)
+                    return newResource;
+                else
+                {
+                    _logger.LogError($"Resource with Name {apiResourceModel.Name} not found");
+                    return null;
+                }
+            }
+            else
+            {
+                _logger.LogInformation($"AddApiResource with Id {apiResourceModel.Id} is present in database");
+                resource.Name = apiResourceModel.Name;
+                resource.DisplayName = apiResourceModel.DisplayName;
+                resource.Description = apiResourceModel.Description;
+                resource.Enabled = apiResourceModel.Enabled;
+                resource.AllowedAccessTokenSigningAlgorithms = apiResourceModel.AllowedAccessTokenSigningAlgorithms;
+                resource.ShowInDiscoveryDocument = apiResourceModel.ShowInDiscoveryDocument;
+                resource.NonEditable = apiResourceModel.NonEditable;
+
+                _configurationDbContext.SaveChanges();
+                _logger.LogInformation($"AddApiResource with Id {apiResourceModel.Id} Edit Saved successful");
+
+                return new ApiResourceModel
+                {
+                    Id = resource.Id,
+                    Enabled = resource.Enabled,
+                    Name = resource.Name,
+                    DisplayName = resource.DisplayName,
+                    Description = resource.Description,
+                    AllowedAccessTokenSigningAlgorithms = resource.AllowedAccessTokenSigningAlgorithms,
+                    ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument,
+                    Created = resource.Created.ToString("dd/MM/yyyy H:m:ss"),
+                    LastAccessed = (resource.LastAccessed != null) ? resource.LastAccessed.Value.ToString("dd/MM/yyyy H:m:ss") : "",
+                    NonEditable = resource.NonEditable,
+                };
+            }
+        }
+
+        public async Task<ApiResourceModel> DeleteApiResourceById(int id)
+        {
+            var resource = await _configurationDbContext.ApiResources.Where(r => r.Id == id).FirstOrDefaultAsync();
+
+            if (resource != null)
+            {
+                var res = _configurationDbContext.ApiResources.Remove(resource);
+
+                var identityResource = await _configurationDbContext.IdentityResources.Where(i => i.Name == resource.Name).FirstOrDefaultAsync();
+                if(identityResource != null)
+                {
+                    _configurationDbContext.IdentityResources.Remove(identityResource);
+                }
+
+                _configurationDbContext.SaveChanges();
+
+                _logger.LogInformation($"ApiResource with Id:{id} removed");
+                return new ApiResourceModel
+                {
+                    Id = resource.Id,
+                    Enabled = resource.Enabled,
+                    Name = resource.Name,
+                    DisplayName = resource.DisplayName,
+                    Description = resource.Description,
+                    AllowedAccessTokenSigningAlgorithms = resource.AllowedAccessTokenSigningAlgorithms,
+                    ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument,
+                    Created = resource.Created.ToString("dd/MM/yyyy H:m:ss"),
+                    LastAccessed = (resource.LastAccessed != null) ? resource.LastAccessed.Value.ToString("dd/MM/yyyy H:m:ss") : "",
+                    NonEditable = resource.NonEditable,
+                };
+            }
+            else
+            {
+                _logger.LogError($"ApiReource with Id {id} is not present");
+                return null;
+            }
+        }
     }
 }

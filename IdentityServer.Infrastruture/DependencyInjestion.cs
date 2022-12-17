@@ -46,6 +46,10 @@ namespace IdentityServer.Infrastruture
                 services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("MenuIdentityDB"));
 
                 var builder = services.AddIdentityServer(
+                    y =>
+                    {
+                        y.EmitStaticAudienceClaim = true;
+                    }
                                 //    options=> 
                                 //{
                                 //    options.UserInteraction.LoginUrl = "http://localhost:3000/login";

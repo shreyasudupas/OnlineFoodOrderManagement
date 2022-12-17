@@ -20,13 +20,13 @@ namespace IdentityServer.Infrastruture
                 ClientSecrets = { new Secret("secret".Sha256()) },
                 AllowedScopes = { "myApi.read" }
             },
-            new Client
-           {
-                ClientId = "company-employee",
-                ClientSecrets = new [] { new Secret("codemazesecret".Sha512()) },
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
-            },
+           // new Client
+           //{
+           //     ClientId = "company-employee",
+           //     ClientSecrets = new [] { new Secret("codemazesecret".Sha512()) },
+           //     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+           //     AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
+           // },
             new Client
             {
                 ClientId = "react-spa-identityServer-ui",
@@ -42,7 +42,7 @@ namespace IdentityServer.Infrastruture
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.LocalApi.ScopeName, //This is used to call API within the IDS server API when client that doesnt have cookie and can access API
-                    "idsApi"
+                    "ids"
                 },
                 AccessTokenLifetime = 86400,
                 AllowAccessTokensViaBrowser = true,
@@ -57,10 +57,13 @@ namespace IdentityServer.Infrastruture
         public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope("myApi.read"),
-            new ApiScope("myApi.write"),
+            //new ApiScope("myApi.read"),
+            //new ApiScope("myApi.write"),
             new ApiScope(IdentityServerConstants.LocalApi.ScopeName),
-            new ApiScope("idsApi","IDS APIs")
+            new ApiScope("idsApi.read","IDS API Read"),
+            new ApiScope("idsApi.write","IDS API Write"),
+            new ApiScope("inventory.read","Inventory API Read"),
+            new ApiScope("inventory.write","Inventory API Write")
         };
 
         public static List<TestUser> TestUsers =>
@@ -86,20 +89,27 @@ namespace IdentityServer.Infrastruture
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
+            new IdentityResource
+            {
+                Name="ids",
+                DisplayName ="Identity Server API",
+                Enabled=true,
+                ShowInDiscoveryDocument=true,
+                Emphasize=true
+            }
         };
 
         public static IEnumerable<ApiResource> ApiResources =>
         new ApiResource[]
         {
-            new ApiResource("myApi")
+            new ApiResource("ids","Identity Server API")
             {
-                Scopes = new List<string>{ "myApi.read","myApi.write" },
-                ApiSecrets = new List<Secret>{ new Secret("supersecret".Sha256()) }
+                Scopes = new List<string>{ "idsApi.read", "idsApi.write" },
             },
-            new ApiResource("idsAPI","Identity Service APIs")
-             {
-                 Scopes = { "idsApi" }
-             },
+            new ApiResource("inventory","Inventory Microservice API")
+            {
+                Scopes = new List<string>{ "inventory.read", "inventory.write" },
+            }
         };
     }
 }

@@ -14,10 +14,12 @@ namespace IdenitityServer.Core.Features.Utility
     public class GetAllowedScopeListQueryHandler : IRequestHandler<GetAllowedScopeListQuery, List<DropdownModel>>
     {
         private readonly IUtilsService _utilsService;
+
         public GetAllowedScopeListQueryHandler(IUtilsService utilsService)
         {
             _utilsService = utilsService;
         }
+
         public Task<List<DropdownModel>> Handle(GetAllowedScopeListQuery request, CancellationToken cancellationToken)
         {
             return Task.FromResult(_utilsService.GetAllowedScopeList());

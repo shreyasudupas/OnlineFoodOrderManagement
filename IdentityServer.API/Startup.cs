@@ -129,6 +129,8 @@ namespace IdentityServer.API
                 .AddType<AddressExtensionType>()
                 .AddType<UserProfileExtensionType>()
                 .AddType<UploadType>()
+                .AddType<ApiResourceQueryExtensionType>()
+                .AddType<ApiResourceMutationExtensionType>()
                 //.RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<UserProfileResolver>()
                 .RegisterService<IProfileUser>()
@@ -140,6 +142,8 @@ namespace IdentityServer.API
                 .RegisterService<AddressQueryResolver>()
                 .RegisterService<AddressMutationResolver>()
                 .RegisterService<IWebHostEnvironment>()
+                .RegisterService<ApiResourceQueryResolver>()
+                .RegisterService<ApiResourceMutationResolver>()
                 //.AddMutationConventions()
                 ;
                 //.AddType<UserInformationOutputType>();

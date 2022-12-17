@@ -53,11 +53,32 @@ namespace IdentityServer.API.APIControllers
             return await Mediator.Send(new GetAreaByCityIdQuery { CityId = CityId });
         }
 
+        [HttpGet("/api/utility/getAllScopes")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
+        public async Task<List<DropdownModel>> GetAllScopes()
+        {
+            return await Mediator.Send(new GetAllScopeListQuery ());
+        }
+
         [HttpGet("/api/utility/getAllowedScopes")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
         public async Task<List<DropdownModel>> GetAllowedScopes()
         {
-            return await Mediator.Send(new GetAllowedScopeListQuery ());
+            return await Mediator.Send(new GetAllowedScopeListQuery());
+        }
+
+        [HttpPost("/api/utility/addApiResourceScope")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DropdownModel))]
+        public async Task<ApiResourceScopeModel> AddApiResourceScope([FromBody]AddApiResourceScopeCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpDelete("/api/utility/deleteApiResourceScope")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<bool> DeleteApiResourceScope([FromBody]DeleteApiResourceScopeCommand command)
+        {
+            return await Mediator.Send(command);
         }
 
         [AllowAnonymous]

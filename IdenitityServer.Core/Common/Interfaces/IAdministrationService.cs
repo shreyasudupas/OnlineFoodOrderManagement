@@ -19,5 +19,9 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<ApiScopeModel> AddApiScope(ApiScopeModel apiScope);
         Task<ApiScopeModel> SaveApiScope(ApiScopeModel apiScope);
         Task<ApiScopeModel> DeleteApiScope(int apiScopeId);
+        Task<List<ApiResourceModel>> GetAllApiResources();
+        Task<ApiResourceModel> GetApiResourceById(int id);
+        Task<ApiResourceModel> AddApiResource(ApiResourceModel apiResourceModel);
+        Task<ApiResourceModel> DeleteApiResourceById(int id);
     }
 }
