@@ -29,6 +29,8 @@ namespace IdenitityServer.Core
             services.AddScoped<UserProfileResolver>();
             services.AddScoped<ApiResourceQueryResolver>();
             services.AddScoped<ApiResourceMutationResolver>();
+            services.AddScoped<IdenitityResourceQueryResolver>();
+            services.AddScoped<IdentityResourcesMutationResolver>();
 
             return services;
         }

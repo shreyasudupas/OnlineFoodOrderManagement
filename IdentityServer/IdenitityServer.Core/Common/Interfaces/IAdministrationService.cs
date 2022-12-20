@@ -23,5 +23,10 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<ApiResourceModel> GetApiResourceById(int id);
         Task<ApiResourceModel> AddApiResource(ApiResourceModel apiResourceModel);
         Task<ApiResourceModel> DeleteApiResourceById(int id);
+        Task<List<IdentityResourceModel>> GetAllIdentityResource();
+        Task<IdentityResourceModel> AddIdentityResource(IdentityResourceModel identityResourceModel);
+        Task<IdentityResourceModel> UpdateIdentityResource(IdentityResourceModel identityResourceModel);
+        Task<bool> DeleteIdentityResource(int id);
+        Task<IdentityResourceModel> GetIdentityResourceById(int Id);
     }
 }

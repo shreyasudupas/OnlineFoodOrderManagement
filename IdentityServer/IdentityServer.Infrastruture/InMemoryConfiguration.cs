@@ -42,7 +42,8 @@ namespace IdentityServer.Infrastruture
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.LocalApi.ScopeName, //This is used to call API within the IDS server API when client that doesnt have cookie and can access API
-                    "ids"
+                    "ids.read",
+                    "ids.write"
                 },
                 AccessTokenLifetime = 86400,
                 AllowAccessTokensViaBrowser = true,
@@ -88,15 +89,7 @@ namespace IdentityServer.Infrastruture
         new IdentityResource[]
         {
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile(),
-            new IdentityResource
-            {
-                Name="ids",
-                DisplayName ="Identity Server API",
-                Enabled=true,
-                ShowInDiscoveryDocument=true,
-                Emphasize=true
-            }
+            new IdentityResources.Profile()
         };
 
         public static IEnumerable<ApiResource> ApiResources =>

@@ -192,10 +192,15 @@ namespace IdentityServer.Infrastruture.Database
                 var users = context.Users.ToList();
                 var roles = context.Roles.ToList();
 
+                var adminRole = roles.Where(r => r.Name == "admin").FirstOrDefault();
+                var userRole = roles.Where(r => r.Name == "user").FirstOrDefault();
+                var vendorRole = roles.Where(r => r.Name == "vendor").FirstOrDefault();
+
                 if (users.Count > 0 && roles.Count > 0)
                 {
-                    UserManager.AddToRoleAsync(users[0], roles[0].Name).GetAwaiter().GetResult();
-                    UserManager.AddToRoleAsync(users[1], roles[1].Name).GetAwaiter().GetResult();
+                    UserManager.AddToRoleAsync(users.Where(x=>x.UserName == "admin").First(), adminRole.Name).GetAwaiter().GetResult();
+                    UserManager.AddToRoleAsync(users.Where(x => x.UserName == "user").First(), userRole.Name).GetAwaiter().GetResult();
+                    UserManager.AddToRoleAsync(users.Where(x => x.UserName == "vendor").First(), vendorRole.Name).GetAwaiter().GetResult();
                 }
                 context.SaveChanges();
             }
@@ -233,6 +238,16 @@ namespace IdentityServer.Infrastruture.Database
                     var result6 = UserManager.AddClaimAsync(users[1], userClaimEmail).GetAwaiter().GetResult();
                     var result7 = UserManager.AddClaimAsync(users[1], userClaimUserName).GetAwaiter().GetResult();
                     var result8 = UserManager.AddClaimAsync(users[1], userRoleClaim).GetAwaiter().GetResult();
+
+                    //for vendor
+                    var vendorClaimEmail = new Claim("email", "vendor@test.com");
+                    var vendorClaimUserName = new Claim("username", "vendor"); //username same as role
+                    var vendorRoleClaim = new Claim("role", "vendor");
+
+                    //var result5 = UserManager.AddClaimAsync(users[1], userClaimRole).GetAwaiter().GetResult();
+                    var result9 = UserManager.AddClaimAsync(users[2], vendorClaimEmail).GetAwaiter().GetResult();
+                    var result10 = UserManager.AddClaimAsync(users[2], vendorClaimUserName).GetAwaiter().GetResult();
+                    var result11 = UserManager.AddClaimAsync(users[2], vendorRoleClaim).GetAwaiter().GetResult();
                 }
                 context.SaveChanges();
             }
@@ -246,7 +261,8 @@ namespace IdentityServer.Infrastruture.Database
                 var NewRoles = new List<IdentityRole>
                             {
                                 new IdentityRole { Name = "admin"},
-                                new IdentityRole { Name="appUser"}
+                                new IdentityRole { Name="user"},
+                                new IdentityRole { Name="vendor"}
                             };
 
                 foreach (var role in NewRoles)
@@ -273,6 +289,7 @@ namespace IdentityServer.Infrastruture.Database
                                         FullAddress = "sample admin address 1, sample address 1",
                                         City = "Bengaluru",
                                         State = "Karnataka",
+                                        Area="Kathreguppe",
                                         IsActive = true
                                     }
                                 },
@@ -290,9 +307,10 @@ namespace IdentityServer.Infrastruture.Database
                                 {
                                     new UserAddress
                                     {
-                                        FullAddress = "sample user address 1, sample address 1",
+                                        FullAddress = "sample user address 2, sample address 2",
                                         City = "Bengaluru",
                                         State = "Karnataka",
+                                        Area="JP Nagar",
                                         IsActive = true
                                     }
                                 },
@@ -301,6 +319,27 @@ namespace IdentityServer.Infrastruture.Database
                 };
 
                 var resultTwo = UserManager.CreateAsync(userTwo, "password").GetAwaiter().GetResult();
+
+                var userThree = new ApplicationUser
+                {
+                    UserName = "vendor",
+                    Email = "vendor@test.com",
+                    Address = new List<UserAddress>
+                                {
+                                    new UserAddress
+                                    {
+                                        FullAddress = "sample user address 3, sample address 3",
+                                        City = "Bengaluru",
+                                        State = "Karnataka",
+                                        Area="JP Nagar",
+                                        IsActive = true
+                                    }
+                                },
+                    IsAdmin = false,
+                    CreatedDate = DateTime.Now
+                };
+
+                var resultThree = UserManager.CreateAsync(userThree, "password").GetAwaiter().GetResult();
 
                 context.SaveChanges();
             }

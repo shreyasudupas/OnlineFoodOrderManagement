@@ -310,18 +310,18 @@ namespace IdentityServer.Infrastruture.Services
                 
 
                 //then add in IdentityResources as well
-                _configurationDbContext.IdentityResources.Add(new IdentityResource
-                {
-                    Enabled = true,
-                    Name = apiResourceModel.Name,
-                    DisplayName = apiResourceModel.DisplayName,
-                    Description = apiResourceModel.Description,
-                    Required = true,
-                    Emphasize =true,
-                    ShowInDiscoveryDocument = apiResourceModel.ShowInDiscoveryDocument,
-                    Created = System.DateTime.Now,
-                    NonEditable = apiResourceModel.NonEditable
-                });
+                //_configurationDbContext.IdentityResources.Add(new IdentityResource
+                //{
+                //    Enabled = true,
+                //    Name = apiResourceModel.Name,
+                //    DisplayName = apiResourceModel.DisplayName,
+                //    Description = apiResourceModel.Description,
+                //    Required = true,
+                //    Emphasize =true,
+                //    ShowInDiscoveryDocument = apiResourceModel.ShowInDiscoveryDocument,
+                //    Created = System.DateTime.Now,
+                //    NonEditable = apiResourceModel.NonEditable
+                //});
 
                 _configurationDbContext.SaveChanges();
 
@@ -386,11 +386,11 @@ namespace IdentityServer.Infrastruture.Services
             {
                 var res = _configurationDbContext.ApiResources.Remove(resource);
 
-                var identityResource = await _configurationDbContext.IdentityResources.Where(i => i.Name == resource.Name).FirstOrDefaultAsync();
-                if(identityResource != null)
-                {
-                    _configurationDbContext.IdentityResources.Remove(identityResource);
-                }
+                //var identityResource = await _configurationDbContext.IdentityResources.Where(i => i.Name == resource.Name).FirstOrDefaultAsync();
+                //if(identityResource != null)
+                //{
+                //    _configurationDbContext.IdentityResources.Remove(identityResource);
+                //}
 
                 _configurationDbContext.SaveChanges();
 
@@ -413,6 +413,121 @@ namespace IdentityServer.Infrastruture.Services
             {
                 _logger.LogError($"ApiReource with Id {id} is not present");
                 return null;
+            }
+        }
+
+        public async Task<List<IdentityResourceModel>> GetAllIdentityResource()
+        {
+            var result = await _configurationDbContext.IdentityResources.Select(resource => new IdentityResourceModel
+            {
+                Id = resource.Id,
+                Enabled = resource.Enabled,
+                Name = resource.Name,
+                DisplayName = resource.DisplayName,
+                Description = resource.Description,
+                Required = resource.Required,
+                Empahasize = resource.Emphasize,
+                ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument,
+                Created = resource.Created.ToString("dd/MM/yyyy hh:m:ss"),
+                NonEditable = resource.NonEditable
+            }).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IdentityResourceModel> GetIdentityResourceById(int Id)
+        {
+            var result = await _configurationDbContext.IdentityResources.Where(x=>x.Id == Id).Select(resource => new IdentityResourceModel
+            {
+                Id = resource.Id,
+                Enabled = resource.Enabled,
+                Name = resource.Name,
+                DisplayName = resource.DisplayName,
+                Description = resource.Description,
+                Required = resource.Required,
+                Empahasize = resource.Emphasize,
+                ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument,
+                Created = resource.Created.ToString("dd/MM/yyyy hh:m:ss"),
+                NonEditable = resource.NonEditable
+            }).FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public async Task<IdentityResourceModel> AddIdentityResource(IdentityResourceModel identityResourceModel)
+        {
+            var identityResource = await _configurationDbContext.IdentityResources.Where(ir => ir.Id == identityResourceModel.Id).FirstOrDefaultAsync();
+            if (identityResource == null)
+            {
+                _configurationDbContext.IdentityResources.Add(new IdentityResource
+                {
+                    Id = identityResourceModel.Id,
+                    Enabled = identityResourceModel.Enabled,
+                    Name = identityResourceModel.Name,
+                    DisplayName = identityResourceModel.DisplayName,
+                    Description = identityResourceModel.Description,
+                    Required = identityResourceModel.Required,
+                    Emphasize = identityResourceModel.Empahasize,
+                    ShowInDiscoveryDocument = identityResourceModel.ShowInDiscoveryDocument,
+                    Created = System.DateTime.Now,
+                    NonEditable = identityResourceModel.NonEditable
+                });
+
+                _configurationDbContext.SaveChanges();
+
+                var updatedModelId = await _configurationDbContext.IdentityResources.Where(ir => ir.Name == identityResourceModel.Name).FirstOrDefaultAsync();
+                identityResourceModel.Id = updatedModelId.Id;
+
+                return identityResourceModel;
+            }
+            else
+            {
+                _logger.LogInformation($"AddIdentityResource: Id {identityResourceModel.Id} already present");
+                return identityResourceModel;
+            }
+        }
+
+        public async Task<IdentityResourceModel> UpdateIdentityResource(IdentityResourceModel identityResourceModel)
+        {
+            var identityResource = await _configurationDbContext.IdentityResources.Where(ir => ir.Id == identityResourceModel.Id).FirstOrDefaultAsync();
+            if (identityResource != null)
+            {
+                identityResource.Enabled = identityResourceModel.Enabled;
+                identityResource.Name = identityResourceModel.Name;
+                identityResource.DisplayName = identityResourceModel.DisplayName;
+                identityResource.Description = identityResourceModel.Description;
+                identityResource.Required = identityResourceModel.Required;
+                identityResource.Emphasize = identityResourceModel.Empahasize;
+                identityResource.ShowInDiscoveryDocument = identityResourceModel.ShowInDiscoveryDocument;
+                identityResource.Updated = System.DateTime.Now;
+                identityResource.NonEditable = identityResourceModel.NonEditable;
+
+                _configurationDbContext.SaveChanges();
+
+                return identityResourceModel;
+            }
+            else
+            {
+                _logger.LogInformation($"UpdateIdentityResource: Id {identityResourceModel.Id} not present in database");
+                return identityResourceModel;
+            }
+        }
+
+        public async Task<bool> DeleteIdentityResource(int id)
+        {
+            var identityResource = await _configurationDbContext.IdentityResources.Where(ir => ir.Id == id).FirstOrDefaultAsync();
+            if (identityResource != null)
+            {
+
+                _configurationDbContext.IdentityResources.Remove(identityResource);
+                _configurationDbContext.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+                _logger.LogInformation($"DeleteIdentityResource: Id {id} not present");
+                return false;
             }
         }
     }

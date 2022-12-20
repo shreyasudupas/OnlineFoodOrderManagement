@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MenuOrder.Shared\MenuOrder.Shared.csproj" />
     <ProjectReference Include="..\IdenitityServer.Core\IdenitityServer.Core.csproj" />
     <ProjectReference Include="..\IdentityServer.Infrastruture\IdentityServer.Infrastruture.csproj" />
-    <ProjectReference Include="..\MenuOrder.Shared\MenuOrder.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

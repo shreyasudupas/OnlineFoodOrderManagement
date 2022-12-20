@@ -58,17 +58,17 @@ namespace IdentityServer.Infrastruture.Services
                 Value = x.Name
             }).ToList();
 
-            var resources = _configurationDbContext.ApiResources.Select(x => new DropdownModel
+            var resources = _configurationDbContext.IdentityResources.Select(x => new DropdownModel
             {
                 Label = x.Name,
                 Value = x.Name
             }).ToList();
 
-            result.AddRange(new List<DropdownModel>
-            {
-                new DropdownModel {  Label="profile" , Value = "profile" },
-                new DropdownModel { Label="openid" , Value = "openid" }
-            });
+            //result.AddRange(new List<DropdownModel>
+            //{
+            //    new DropdownModel {  Label="profile" , Value = "profile" },
+            //    new DropdownModel { Label="openid" , Value = "openid" }
+            //});
 
             result.AddRange(resources);
 
