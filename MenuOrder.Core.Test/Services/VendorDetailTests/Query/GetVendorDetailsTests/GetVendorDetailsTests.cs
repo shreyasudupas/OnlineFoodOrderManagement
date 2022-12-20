@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using MenuManagement.Core.Mongo.Interfaces;
 using MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Query.GetVendorDetails;
 using MenuManagement.Core.Test.Base;
 using MenuManagment.Domain.Mongo.Entities;
