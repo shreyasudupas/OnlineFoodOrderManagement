@@ -33,7 +33,7 @@ namespace IdentityServer.Infrastruture.Services
             var result =  _context.States.Select(state => new SelectListItem
             {
                 Text = state.Name,
-                Value = state.Name
+                Value = state.Id.ToString()
             }).ToList();
 
             return result;
@@ -44,7 +44,7 @@ namespace IdentityServer.Infrastruture.Services
             var result = _context.Cities.Select(state => new SelectListItem
             {
                 Text = state.Name,
-                Value = state.Name
+                Value = state.Id.ToString()
             }).ToList();
 
             return result;

@@ -10,6 +10,7 @@ namespace IdenitityServer.Core.Domain.Response
         {
             Cities = new List<SelectListItem>();
             States = new List<SelectListItem>();
+            Areas = new List<SelectListItem>();
             Errors = new List<string>();
         }
         [Required]
@@ -34,12 +35,15 @@ namespace IdenitityServer.Core.Domain.Response
 
         [Required]
         public string State { get; set; }
+        [Required]
+        public string Area { get; set; }
 
         public string ReturnUrl { get; set; }
 
         public List<SelectListItem> Cities { get; set; }
 
         public List<SelectListItem> States { get; set; }
+        public List<SelectListItem> Areas { get; set; }
         public List<string> Errors { get; set; }
     }
 }

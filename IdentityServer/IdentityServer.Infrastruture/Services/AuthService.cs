@@ -8,6 +8,7 @@ using IdentityServer.Infrastruture.Database;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -123,7 +124,7 @@ namespace IdentityServer.Infrastruture.Services
                 var usernameClaim = new Claim("userName", reqisterCommand.Username);
                 var emailClaim = new Claim("email", reqisterCommand.Email);
                 var addressClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
-                var roleAddressClaim = new Claim("role", "appUser");
+                var roleAddressClaim = new Claim("role", "user");
 
 
                 var result1 = _userManager.AddClaimAsync(user, usernameClaim).GetAwaiter().GetResult();
@@ -143,6 +144,46 @@ namespace IdentityServer.Infrastruture.Services
                     reqisterCommand.Errors.Add(error.Description);
                 });
             }
+        }
+
+        public async Task<RegisterAdminResponse> RegisterAdmin(RegisterAdminResponse registerAdminResponse)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = registerAdminResponse.Username,
+                Email = registerAdminResponse.Email,
+                CreatedDate = DateTime.Now,
+                IsAdmin = true,
+                
+            };
+
+            var result = await _userManager.CreateAsync(user, registerAdminResponse.Password);
+            _logger.LogInformation($"user {registerAdminResponse.Username} added in database {result.Succeeded}");
+
+            if (result.Succeeded)
+            {
+                var usernameClaim = new Claim("userName", registerAdminResponse.Username);
+                var emailClaim = new Claim("email", registerAdminResponse.Email);
+                var roleClaim = new Claim("role", "admin");
+
+                var result1 = _userManager.AddClaimAsync(user, usernameClaim).GetAwaiter().GetResult();
+                var result2 = _userManager.AddClaimAsync(user, emailClaim).GetAwaiter().GetResult();
+                var resultRole = _userManager.AddClaimAsync(user, roleClaim).GetAwaiter().GetResult();
+
+                _logger.LogInformation($"Claim for username: {result1.Succeeded}, Claim for email: {result2.Succeeded}");
+
+                var roleUserResult = _userManager.AddToRoleAsync(user, "admin").GetAwaiter().GetResult();
+                _logger.LogInformation($"Role Admin Mapping: {roleUserResult.Succeeded}");
+            }
+            else
+            {
+                result.Errors.ToList().ForEach(error =>
+                    registerAdminResponse.Errors.Add(error.Description));
+
+                _logger.LogError($"Error when registering admin user {JsonConvert.SerializeObject(result.Errors)}");
+            }
+
+            return registerAdminResponse;
         }
     }
 }

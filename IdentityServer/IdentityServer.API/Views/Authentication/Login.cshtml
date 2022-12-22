@@ -42,7 +42,15 @@
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
 
             <div class="text-center">
-                <p>Not a member?<a asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">Register</a></p>
+                @if (Model.ReturnUrl == null || Model.ReturnUrl.Contains("http://localhost:4200"))
+                {
+                    <p>Not a member?<a asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">Register as User</a></p>
+                }
+                else if (Model.ReturnUrl.Contains("react-spa-identityServer-ui"))
+                {
+                    <p>Not a member?<a asp-action="RegisterAsAdmin" asp-route-returnUrl="@Model?.ReturnUrl">Register as Admin</a></p>
+                }
+
             </div>
         </form>
     </div>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Login;
 using IdenitityServer.Core.Features.Logout;
 using IdenitityServer.Core.Features.Register;
@@ -199,6 +200,37 @@ namespace IdentityServer.API.Controllers
             var response = _mapper.Map<RegisterViewModel>(command);
 
             return View(response);
+        }
+
+        [HttpGet]
+        public IActionResult RegisterAsAdmin(string returnUrl)
+        {
+            var model = new RegisterAdminResponse();
+
+            if (returnUrl != null)
+                model.ReturnUrl = returnUrl;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAsAdmin(RegisterAdminResponse registerAdminResponse)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _mediator.Send(new RegisterAdminQuery { 
+                    registerAdminResponse = registerAdminResponse
+                });
+
+                if(response.Errors.Count > 0)
+                {
+                    response.Errors.ForEach(err => ModelState.AddModelError("", err));
+                }
+            }else
+            {
+                ModelState.AddModelError("", "Property missing");
+            }
+            return View(registerAdminResponse);
         }
     }
 }

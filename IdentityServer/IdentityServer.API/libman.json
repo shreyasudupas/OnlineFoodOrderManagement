@@ -17,6 +17,14 @@
     {
       "library": "mdb-ui-kit@6.0.1",
       "destination": "wwwroot/mdb-ui-kit/"
+    },
+    {
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/jquery/"
+    },
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "wwwroot/jqueryui/"
     }
   ]
 }

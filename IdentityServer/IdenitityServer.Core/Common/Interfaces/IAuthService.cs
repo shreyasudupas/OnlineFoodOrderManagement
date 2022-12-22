@@ -11,5 +11,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<LoginResponse> Login(LoginCommand login);
         Task<PreLogoutResponse> PreLogout(LogoutQuery logoutCommand);
         Task Register(RegisterCommand reqisterCommand);
+        Task<RegisterAdminResponse> RegisterAdmin(RegisterAdminResponse registerAdminResponse);
     }
 }

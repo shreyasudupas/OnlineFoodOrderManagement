@@ -27,7 +27,8 @@ namespace IdenitityServer.Core.Features.Register
             };
 
             response.States = _utilsService.GetAllStates();
-            response.Cities = _utilsService.GetAllCities();
+            //response.Cities = _utilsService.GetAllCities();
+
             return Task.FromResult(response);
         }
     }

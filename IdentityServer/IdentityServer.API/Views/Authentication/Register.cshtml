@@ -43,29 +43,36 @@
                 </div>
             </div>
             @*<div class="row mb-4">
-                <div class="form-group">
-                    <select asp-for="City" asp-items="@Model.Cities" class="custom-select">
-                        <option value="">Select City</option>
-                    </select>
-                </div>
-            </div>*@
+            <div class="form-group">
+                <select asp-for="City" asp-items="@Model.Cities" class="custom-select">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+        </div>*@
             <div class="row mb-4">
-                <select asp-for="City" asp-items="@Model.Cities" class="form-select" aria-label="Default select example">
+                <select id="stateId" asp-for="State" asp-items="@Model.States" class="form-select" aria-label="Default select example">
+                    <option selected>Select State</option>
+                </select>
+            </div>
+            <div class="row mb-4">
+                <select id="citySelectId" asp-for="City" asp-items="@Model.Cities" class="form-select" aria-label="Default select example">
                     <option selected>Select City</option>
                 </select>
             </div>
             <div class="row mb-4">
-                <select asp-for="State" asp-items="@Model.States" class="form-select" aria-label="Default select example">
-                    <option selected>Select State</option>
-                </select>
-            </div>
-            @*<div class="row mb-4">
                 <div class="form-group">
-                    <select asp-for="State" asp-items="@Model.States" class="custom-select">
-                        <option value="">Select State</option>
+                    <select asp-for="Area" asp-items="@Model.Areas" class="custom-select">
+                        <option value="">Select Area</option>
                     </select>
                 </div>
-            </div>*@
+            </div>
+            <div class="row mb-4">
+                <div class="form-group">
+                    <select asp-for="Area" asp-items="@Model.Areas" class="custom-select">
+                        <option value="">Select Area</option>
+                    </select>
+                </div>
+            </div>
 
             <!-- Submit button -->
             <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
@@ -90,23 +97,51 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    (() => {
-        'use strict';
+@section Scripts{ 
+    <script type="text/javascript">
+        //(() => {
+        //    'use strict';
 
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll('.needs-validation');
+        //    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        //    const forms = document.querySelectorAll('.needs-validation');
 
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms).forEach((form) => {
-            form.addEventListener('submit', (event) => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
-</script>
+        //    // Loop over them and prevent submission
+        //    Array.prototype.slice.call(forms).forEach((form) => {
+        //        form.addEventListener('submit', (event) => {
+        //            if (!form.checkValidity()) {
+        //                event.preventDefault();
+        //                event.stopPropagation();
+        //            }
+        //            form.classList.add('was-validated');
+        //        }, false);
+        //    });
+
+
+        //})();
+        $(function () {
+            $("#stateId").change(function () {
+                debugger;
+
+                var stateId = $('#stateId').val();
+                var url = "/api/utility/getCityByStateId?stateId=" + stateId;
+                //Make a ajax call to controller here
+                $.ajax({
+                    type:'Get',
+                    url: url,
+                    success: function (response) {
+                        debugger;
+                        //console.log(response);
+                        $.each(response, function (data, value) {
+                            $('#citySelectId').append($("<option></option>").val(value.value).html(value.label));
+                        });
+                    },
+                    error: function (err) {
+                        alert("Something went wrong, please try again");
+                    }
+                });
+            });
+        })
+    </script>
+}
+
 
