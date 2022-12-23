@@ -87,10 +87,14 @@ namespace IdentityServer.Infrastruture.Services
 
         public async Task Register(RegisterCommand reqisterCommand)
         {
-            reqisterCommand.Cities = _context.Cities.Select(c=>new SelectListItem {
-                Text = c.Name,
-                Value = c.Name
-            }).ToList();
+            //reqisterCommand.Cities = _context.Cities.Select(c=>new SelectListItem {
+            //    Text = c.Name,
+            //    Value = c.Name
+            //}).ToList();
+
+            var getState = _context.States.Where(s => s.Id == Convert.ToInt32(reqisterCommand.StateId)).Select(s => s.Name).FirstOrDefault();
+            var getCity = _context.Cities.Where(s => s.Id == Convert.ToInt32(reqisterCommand.CityId)).Select(s => s.Name).FirstOrDefault();
+            var getArea = _context.LocationAreas.Where(s => s.Id == Convert.ToInt32(reqisterCommand.AreaId)).Select(s => s.AreaName).FirstOrDefault();
 
             reqisterCommand.States = _context.States.Select(c => new SelectListItem
             {
@@ -103,13 +107,15 @@ namespace IdentityServer.Infrastruture.Services
                 UserName = reqisterCommand.Username,
                 Email = reqisterCommand.Email,
                 CreatedDate = DateTime.Now,
+                Enabled= true,
                 Address = new List<UserAddress>
                     {
                         new UserAddress
                         {
                             FullAddress = reqisterCommand.Address,
-                            City = reqisterCommand.City,
-                            State = reqisterCommand.State,
+                            City = getCity,
+                            State = getState,
+                            Area = getArea,
                             IsActive = true
                         }
                     }
@@ -153,8 +159,8 @@ namespace IdentityServer.Infrastruture.Services
                 UserName = registerAdminResponse.Username,
                 Email = registerAdminResponse.Email,
                 CreatedDate = DateTime.Now,
+                Enabled = true,
                 IsAdmin = true,
-                
             };
 
             var result = await _userManager.CreateAsync(user, registerAdminResponse.Password);

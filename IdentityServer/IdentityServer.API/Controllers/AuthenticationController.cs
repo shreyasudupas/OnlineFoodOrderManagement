@@ -225,6 +225,9 @@ namespace IdentityServer.API.Controllers
                 if(response.Errors.Count > 0)
                 {
                     response.Errors.ForEach(err => ModelState.AddModelError("", err));
+                }else
+                {
+                    return RedirectToAction("login");
                 }
             }else
             {

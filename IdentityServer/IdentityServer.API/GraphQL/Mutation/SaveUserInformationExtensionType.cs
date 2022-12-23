@@ -29,7 +29,8 @@ namespace IdentityServer.API.GraphQL.Mutation
                         Email = user.Email,
                         IsAdmin = user.IsAdmin,
                         CartAmount = user.CartAmount,
-                        Points = user.Points
+                        Points = user.Points,
+                        Enabled = user.Enabled
                     });
                 })
                 .Type<SaveUserInformationOutputType>()

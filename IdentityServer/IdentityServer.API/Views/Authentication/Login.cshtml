@@ -42,7 +42,7 @@
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
 
             <div class="text-center">
-                @if (Model.ReturnUrl == null || Model.ReturnUrl.Contains("http://localhost:4200"))
+                @if (Model.ReturnUrl == null || Model.ReturnUrl.Contains("menuAngularUI"))
                 {
                     <p>Not a member?<a asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">Register as User</a></p>
                 }

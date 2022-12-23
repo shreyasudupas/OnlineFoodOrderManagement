@@ -202,11 +202,28 @@ namespace IdentityServer.Infrastruture.Services
                 currentUser.CartAmount = user.CartAmount;
                 currentUser.Points = user.Points;
                 currentUser.IsAdmin = user.IsAdmin;
+                currentUser.Enabled = user.Enabled;
 
                 var result = await _userManager.UpdateAsync(currentUser);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
+                {
+                    //update the claims
+                    var claimEnabled = await _context.UserClaims.Where(uc=>uc.ClaimType == "enabled" && uc.UserId == currentUser.Id).FirstOrDefaultAsync();
+                    if(claimEnabled != null)
+                    {
+                        claimEnabled.ClaimValue = user.Enabled.ToString();
+                    }
+
+                    var claimEmail = await _context.UserClaims.Where(uc => uc.ClaimType == "email" && uc.UserId == currentUser.Id).FirstOrDefaultAsync();
+                    if (claimEmail != null)
+                    {
+                        claimEmail.ClaimValue = user.Email;
+                    }
+                    _context.SaveChanges();
+
                     return result.Succeeded;
+                }
                 else
                 {
                     _logger.LogError(JsonConvert.SerializeObject(result.Errors));

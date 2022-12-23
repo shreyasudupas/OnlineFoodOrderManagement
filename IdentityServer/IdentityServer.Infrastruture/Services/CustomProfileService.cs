@@ -53,6 +53,12 @@ namespace IdentityServer.Infrastruture.Services
                 customClaimList.Add(new Claim("username", role.Value));
             }
 
+            if (claimList.Any(x => x.Type == "enabled"))
+            {
+                var role = claimList.Find(x => x.Type == "enabled");
+                customClaimList.Add(new Claim("enabled", role.Value));
+            }
+
             customClaimList.Add(new Claim("userId", user.Id));
 
             context.IssuedClaims = customClaimList;

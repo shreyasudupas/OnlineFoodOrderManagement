@@ -294,6 +294,7 @@ namespace IdentityServer.Infrastruture.Database
                                     }
                                 },
                     IsAdmin = true,
+                    Enabled=true,
                     CreatedDate = DateTime.Now
                 };
 
@@ -315,6 +316,7 @@ namespace IdentityServer.Infrastruture.Database
                                     }
                                 },
                     IsAdmin = false,
+                    Enabled = true,
                     CreatedDate = DateTime.Now
                 };
 
@@ -336,6 +338,7 @@ namespace IdentityServer.Infrastruture.Database
                                     }
                                 },
                     IsAdmin = false,
+                    Enabled=true,
                     CreatedDate = DateTime.Now
                 };
 

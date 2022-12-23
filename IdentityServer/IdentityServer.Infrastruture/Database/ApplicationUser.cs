@@ -13,5 +13,6 @@ namespace IdentityServer.Infrastruture.Database
         public int CartAmount { get; set; }
         public double Points { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool Enabled { get; set; }
     }
 }

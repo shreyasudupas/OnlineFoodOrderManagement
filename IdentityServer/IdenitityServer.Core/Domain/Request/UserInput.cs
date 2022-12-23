@@ -8,5 +8,6 @@
         public int CartAmount { get; set; }
         public double Points { get; set; }
         public bool IsAdmin { get; set; }
+        public bool Enabled { get; set; }
     }
 }

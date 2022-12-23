@@ -76,7 +76,8 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.UserProfile
                 Email = "test@test.com",
                 IsAdmin = true,
                 Points = 1,
-                CartAmount = 1500
+                CartAmount = 1500,
+                Enabled = true
             };
             mockUserManager.Setup(_ => _.GetUserIdAsync(It.IsAny<ApplicationUser>()))
                 .ReturnsAsync("00000000-0000-0000-0000-00000000001a");

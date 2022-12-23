@@ -31,12 +31,13 @@ namespace IdenitityServer.Core.Domain.Response
         public string Address { get; set; }
 
         [Required]
-        public string City { get; set; }
+        public string CityId { get; set; }
 
         [Required]
-        public string State { get; set; }
+        public string StateId { get; set; }
+
         [Required]
-        public string Area { get; set; }
+        public string AreaId { get; set; }
 
         public string ReturnUrl { get; set; }
 
