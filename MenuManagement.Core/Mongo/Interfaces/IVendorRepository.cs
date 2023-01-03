@@ -15,5 +15,8 @@ namespace MenuManagement.Core.Mongo.Interfaces
 
         Task<VendorDto> GetVendorDocument(string id);
         Task<VendorDto> GetVendorDocumentByCustomerfilter(Expression<Func<VendorDto, bool>> filterExpression);
+        Task<CategoryDto> AddCategoryToVendor(string vendorId, CategoryDto category);
+        Task<List<CategoryDto>> GetAllVendorCategories(string vendorId);
+        Task<VendorDto> UpdateVendorDocument(VendorDto vendorData);
     }
 }

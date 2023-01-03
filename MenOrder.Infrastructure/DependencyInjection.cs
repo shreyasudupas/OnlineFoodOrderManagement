@@ -44,7 +44,6 @@ namespace MenuManagement.Infrastructure
             services.AddScoped<Core.Mongo.Interfaces.IMenuRepository, MenuRepository>();
             services.AddScoped<Core.Mongo.Interfaces.IVendorCartRepository, VendorCartRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             //mapper configuration
             var mapperConfig = new MapperConfiguration(mc =>

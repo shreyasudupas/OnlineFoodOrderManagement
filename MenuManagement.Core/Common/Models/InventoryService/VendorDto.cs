@@ -5,13 +5,17 @@ namespace MenuManagement.Core.Common.Models.InventoryService
 {
     public class VendorDto
     {
+        public VendorDto()
+        {
+            Categories = new List<CategoryDto>();
+        }
         public string Id { get; set; }
 
         public string VendorName { get; set; }
 
         public string VendorDescription { get; set; }
 
-        public string Category { get; set; }
+        public List<CategoryDto> Categories { get; set; }
 
         public string Type { get; set; }
 

@@ -47,6 +47,7 @@ namespace IdentityServer.API.APIControllers
             return await Mediator.Send(new GetCityByStateIdQuery { StateId = StateId });
         }
 
+        [AllowAnonymous]
         [HttpGet("/api/utility/getAreaByCityId")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DropdownModel>))]
         public async Task<List<DropdownModel>> GetAreaById(int CityId)

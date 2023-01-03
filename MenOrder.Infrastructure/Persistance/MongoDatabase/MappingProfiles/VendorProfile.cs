@@ -14,6 +14,9 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.MappingProfile
             CreateMap<CoordinatesDto, Coordinates>()
                 .ReverseMap();
 
+            CreateMap<CategoryDto, Categories>()
+                .ReverseMap();
+
         }
     }
 }

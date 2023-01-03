@@ -2,8 +2,11 @@
 using MenuManagement.Core.Common.Models.InventoryService;
 using MenuManagement.Core.Mongo.Interfaces;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,6 +116,94 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         public int IfVendorCollectionExists()
         {
             return IfDocumentExists();
+        }
+
+        public async Task<CategoryDto> AddCategoryToVendor(string vendorId,CategoryDto category)
+        {
+            var vendor = await GetById(vendorId);
+
+            if(vendor != null)
+            {
+                var mapDtoToCategory = _mapper.Map<Categories>(category);
+
+                var vendorCategoryExists = vendor.Categories.Any(c => c.Name == category.Name);
+                if(!vendorCategoryExists)
+                {
+                    //add id to categories
+                    mapDtoToCategory.Id = ObjectId.GenerateNewId(DateTime.Now).ToString();
+
+                    var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorId);
+                    var update = Builders<Vendor>.Update.Push(m => m.Categories, mapDtoToCategory);
+
+                    var result = await UpdateOneDocument(filter, update);
+
+                    if (result.IsAcknowledged)
+                    {
+                        var vendorUpdated = await GetById(vendorId);
+                        var updatedCategory = vendorUpdated.Categories.Find(x => x.Name == category.Name);
+                        var mapToDto = _mapper.Map<CategoryDto>(updatedCategory);
+                        return mapToDto;
+                    }
+                    else
+                    {
+                        _logger.LogError("Error saving thge category to vendor");
+                        return null;
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"category with Name: {category.Name} already exists");
+                    return null;
+                }
+            }
+            else
+            {
+                _logger.LogError("Vendor Id not found");
+                return null;
+            }
+        }
+
+        public async Task<List<CategoryDto>> GetAllVendorCategories(string vendorId)
+        {
+            var vendor = await GetById(vendorId);
+
+            if (vendor != null)
+            {
+                var mapToDtoCatgories = _mapper.Map<List<CategoryDto>>(vendor.Categories);
+                return mapToDtoCatgories;
+            }
+            else
+            {
+                _logger.LogError($"Vendor with id {vendorId} not present ");
+                return null;
+            }
+        }
+
+        public async Task<VendorDto> UpdateVendorDocument(VendorDto vendorData)
+        {
+            _logger.LogInformation("UpdateVendorDocument started..");
+            var vendor = await GetById(vendorData.Id);
+
+            if (vendor != null)
+            {
+                var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
+
+                var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorData.Id);
+                var update = Builders<Vendor>.Update.ApplyMultiFields(mapToVendorModel);
+
+                var result = await UpdateOneDocument(filter, update);
+
+                var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
+
+                var vendorWithIdMapTo = _mapper.Map<VendorDto>(getVendorWithId);
+
+                return vendorWithIdMapTo;
+            }
+            else
+            {
+                _logger.LogError("No Items present to update");
+                return null;
+            }
         }
     }
 }

@@ -18,8 +18,8 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonElement("Vendor Description")]
         public string VendorDescription { get; set; }
 
-        [BsonElement("Category")]
-        public string Category { get; set; }
+        [BsonElement("Categories")]
+        public List<Categories> Categories { get; set; }
 
         [BsonElement("Type")]
         public string Type { get; set; }

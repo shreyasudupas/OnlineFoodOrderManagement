@@ -9,20 +9,21 @@ namespace MenuManagement.Core.Services.MenuInventoryService.GetAllCategories
 {
     public class GetAllCategoriesQuery : IRequest<List<CategoryDto>>
     {
+        public string VendorId { get; set; }
     }
 
     public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, List<CategoryDto>>
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IVendorRepository vendorRepository;
 
-        public GetAllCategoriesQueryHandler(ICategoryRepository categoryRepository)
+        public GetAllCategoriesQueryHandler(IVendorRepository vendorRepository)
         {
-            _categoryRepository = categoryRepository;
+            this.vendorRepository = vendorRepository;
         }
 
         public async Task<List<CategoryDto>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
-            return await _categoryRepository.GetAllCategories();
+            return await vendorRepository.GetAllVendorCategories(request.VendorId);
         }
     }
 }

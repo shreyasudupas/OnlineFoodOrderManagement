@@ -52,6 +52,33 @@ namespace IdentityServer.Infrastruture
                 {
                     "http://localhost:3000",
                 }
+            },
+            new Client
+            {
+                ClientId = "menuAngularUI",
+                ClientName = "Menu Angular UI",
+                ClientUri = "http://localhost:4200",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RequireClientSecret = false,
+                RequireConsent = false,
+                RedirectUris = new List<string> { "http://localhost:4200/signin-callback" },
+                PostLogoutRedirectUris = new List<string> { "http://localhost:4200/signout-callback" },
+                AllowedScopes = new List<string>{
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.LocalApi.ScopeName,
+                    "inventory.read",
+                    "ids.read",
+                    "inventory.write"
+                },
+                AccessTokenLifetime = 86400,
+                AllowAccessTokensViaBrowser = true,
+                AlwaysIncludeUserClaimsInIdToken = true,
+                AllowedCorsOrigins = new List<string>
+                {
+                    "http://localhost:4200",
+                }
             }
         };
 

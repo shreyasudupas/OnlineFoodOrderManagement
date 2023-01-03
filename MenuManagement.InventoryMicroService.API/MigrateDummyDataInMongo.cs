@@ -28,7 +28,7 @@ namespace MenuManagement.InventoryMicroService.API
                     AddressLine1 = "sample",
                     AddressLine2 = null,
                     Area = "Kathreguppe",
-                    Category = "Dining",
+                    Categories = new List<CategoryDto>(),
                     City = "Bengaluru",
                     Coordinates = new CoordinatesDto
                     {
@@ -42,9 +42,34 @@ namespace MenuManagement.InventoryMicroService.API
                     VendorName = "Vendor 1"
                 };
 
+                var dummyCategories = new List<CategoryDto>
+                {
+                    new CategoryDto
+                    {
+                        Id = "",
+                        Name="Breakfast",
+                        Active=true,
+                        Description=""
+                    },
+                    new CategoryDto
+                    {
+                        Id = "",
+                        Name="Lunch",
+                        Active=true,
+                        Description=""
+                    },
+                    new CategoryDto
+                    {
+                        Id = "",
+                        Name="Dinner",
+                        Active=true,
+                        Description=""
+                    },
+                };
+
                 var dummyMenu = new MenuDto
                 {
-                    Id="",
+                    Id = "",
                     VendorId = "",
                     Disable = false,
                     Items = new List<MenuItemsDto>
@@ -55,7 +80,7 @@ namespace MenuManagement.InventoryMicroService.API
                             Name = "test menu 1",
                             PictureLocation ="",
                             Price=20,
-                            Type= MenuTypeEnum.Breakfast.GetEnumDescription(),
+                            Type= dummyCategories[0].Name,
                             Discount = 0
                         },
                         new MenuItemsDto
@@ -64,7 +89,7 @@ namespace MenuManagement.InventoryMicroService.API
                             Name = "test menu 2",
                             PictureLocation ="",
                             Price=45,
-                            Type= MenuTypeEnum.Lunch.GetEnumDescription(),
+                            Type= dummyCategories[1].Name,
                             Discount = 0
                         },
                         new MenuItemsDto
@@ -73,11 +98,11 @@ namespace MenuManagement.InventoryMicroService.API
                             Name = "test menu 3",
                             PictureLocation ="",
                             Price=25,
-                            Type= MenuTypeEnum.Dinner.GetEnumDescription(),
+                            Type= dummyCategories[2].Name,
                             Discount = 0
                         }
                     }
-                    
+
                 };
 
                 var isExists = vendorService.IfVendorCollectionExists();
@@ -89,6 +114,11 @@ namespace MenuManagement.InventoryMicroService.API
                     var vendor = vendorService.AddVendorDocument(dummyVendors).GetAwaiter().GetResult();
 
                     dummyMenu.VendorId = vendor.Id;
+
+                    dummyCategories.ForEach(category =>
+                    {
+                        var result = vendorService.AddCategoryToVendor(vendor.Id,category).GetAwaiter().GetResult();
+                    });
 
                     var menu = menuService.AddMenu(dummyMenu).GetAwaiter().GetResult();
 

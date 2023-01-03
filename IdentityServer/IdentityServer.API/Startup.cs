@@ -27,6 +27,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -89,7 +90,14 @@ namespace IdentityServer.API
                        new TokenValidationParameters
                        {
                            ValidIssuer = "https://localhost:5006",
-                           ValidAudience = "idsAPI"
+                           ValidAudience = "inventory",
+                           ValidateAudience = true,
+                           SignatureValidator = delegate (string token, TokenValidationParameters parameters)
+                           {
+                               var jwt = new JwtSecurityToken(token);
+
+                               return jwt;
+                           }
 
                        };
                    options.Events = new JwtBearerEvents
@@ -104,16 +112,19 @@ namespace IdentityServer.API
                            logger.LogError(context.Exception, "Authentication Failed");
 
                            return Task.CompletedTask;
+                       },
+                       OnChallenge = (context) =>
+                       {
+                           return Task.CompletedTask;
                        }
                    };
                 });
 
             services.AddAuthorization(p => 
-                p.AddPolicy("isAdmin", policy => policy.RequireClaim("role", "admin"))
+                p.AddPolicy("isAdmin", policy => policy.RequireRole(new string[] { "admin" }))
                 );
 
             services.AddGraphQLServer()
-                .AddAuthorization()
                 .AddQueryType(q => q.Name("Query"))
                 .AddType<UserInformationExtensionType>()
                 .AddType<UserAddressType>()
@@ -148,6 +159,7 @@ namespace IdentityServer.API
                 .RegisterService<ApiResourceMutationResolver>()
                 .RegisterService<IdenitityResourceQueryResolver>()
                 .RegisterService<IdentityResourcesMutationResolver>()
+                .AddAuthorization()
                 //.AddMutationConventions()
                 ;
                 //.AddType<UserInformationOutputType>();
@@ -188,11 +200,11 @@ namespace IdentityServer.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGraphQL();
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapGraphQL();
 
                 endpoints.MapControllers();
             });
