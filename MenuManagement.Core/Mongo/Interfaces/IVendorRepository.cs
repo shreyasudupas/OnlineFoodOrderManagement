@@ -18,5 +18,6 @@ namespace MenuManagement.Core.Mongo.Interfaces
         Task<CategoryDto> AddCategoryToVendor(string vendorId, CategoryDto category);
         Task<List<CategoryDto>> GetAllVendorCategories(string vendorId);
         Task<VendorDto> UpdateVendorDocument(VendorDto vendorData);
+        Task<CategoryDto> GetCategoryById(string Id, string VendorId);
     }
 }

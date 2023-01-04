@@ -179,6 +179,23 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
+        public async Task<CategoryDto> GetCategoryById(string Id,string VendorId)
+        {
+            _logger.LogInformation("GetCategoryById started..");
+            var vendor = await GetById(VendorId);
+            if(vendor != null)
+            {
+                var categoryList = vendor.Categories.Find(c => c.Id == Id);
+                var mapModelToDto = _mapper.Map<CategoryDto>(categoryList);
+                return mapModelToDto;
+            }
+            else
+            {
+                _logger.LogError($"Vendor with id:{VendorId} not present");
+                return null;
+            }
+        }
+
         public async Task<VendorDto> UpdateVendorDocument(VendorDto vendorData)
         {
             _logger.LogInformation("UpdateVendorDocument started..");
