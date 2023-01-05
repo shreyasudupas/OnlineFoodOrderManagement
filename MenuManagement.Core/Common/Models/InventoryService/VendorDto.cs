@@ -8,6 +8,7 @@ namespace MenuManagement.Core.Common.Models.InventoryService
         public VendorDto()
         {
             Categories = new List<CategoryDto>();
+            CuisineType = new List<string>();
         }
         public string Id { get; set; }
 
@@ -17,7 +18,7 @@ namespace MenuManagement.Core.Common.Models.InventoryService
 
         public List<CategoryDto> Categories { get; set; }
 
-        public string Type { get; set; }
+        public List<string> CuisineType { get; set; }
 
         public int Rating { get; set; }
 

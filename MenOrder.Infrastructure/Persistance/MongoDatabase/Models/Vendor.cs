@@ -21,8 +21,8 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonElement("Categories")]
         public List<Categories> Categories { get; set; }
 
-        [BsonElement("Type")]
-        public string Type { get; set; }
+        [BsonElement("Cuisine Type")]
+        public List<string> CuisineType { get; set; }
 
         [BsonElement("Rating")]
         public int Rating { get; set; }

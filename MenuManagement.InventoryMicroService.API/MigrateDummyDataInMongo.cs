@@ -19,8 +19,24 @@ namespace MenuManagement.InventoryMicroService.API
 
                 var vendorService = scope.ServiceProvider.GetRequiredService<IVendorRepository>();
                 var menuService = scope.ServiceProvider.GetRequiredService<IMenuRepository>();
+                var foodTypeService = scope.ServiceProvider.GetRequiredService<IVendorFoodTypeRepository>();
+                var cuisineTypeService = scope.ServiceProvider.GetRequiredService<IVendorCuisineTypeRepository>();
                 var loggerContext = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+                var dummyFoodType = new VendorFoodTypeDto
+                {
+                    Id = "",
+                    TypeName = "Vegiterian",
+                    Active = true
+                };
+
+                var dummyCuisineType = new VendorCuisineDto
+                {
+                    Id = "",
+                    CuisineName = "Indian",
+                    Active = true
+                };
 
                 var dummyVendors = new VendorDto
                 {
@@ -37,7 +53,7 @@ namespace MenuManagement.InventoryMicroService.API
                     },
                     State = "Karnataka",
                     Rating = 4,
-                    Type = "Vegetarian",
+                    CuisineType = new List<string> { "Indian" },
                     VendorDescription = "sample",
                     VendorName = "Vendor 1"
                 };
@@ -123,6 +139,20 @@ namespace MenuManagement.InventoryMicroService.API
                     var menu = menuService.AddMenu(dummyMenu).GetAwaiter().GetResult();
 
                     loggerContext.LogInformation("Migration Mongo End");
+                }
+
+                if(foodTypeService.IfVendorFoodTypeCollectionExists() == 0)
+                {
+                    loggerContext.LogInformation("Migration of Food Type Started");
+                    var result = foodTypeService.AddVendorFoodType(dummyFoodType).GetAwaiter().GetResult();
+                    loggerContext.LogInformation("Migration of Food Type Finised");
+                }
+
+                if(cuisineTypeService.IfVendorCuisineDocumentExists() == 0)
+                {
+                    loggerContext.LogInformation("Migration of Cuisine Type Started");
+                    var result = cuisineTypeService.AddVendorCuisineType(dummyCuisineType).GetAwaiter().GetResult();
+                    loggerContext.LogInformation("Migration of Cuisine Type Finised");
                 }
 
             }

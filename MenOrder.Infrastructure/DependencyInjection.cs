@@ -44,6 +44,8 @@ namespace MenuManagement.Infrastructure
             services.AddScoped<Core.Mongo.Interfaces.IMenuRepository, MenuRepository>();
             services.AddScoped<Core.Mongo.Interfaces.IVendorCartRepository, VendorCartRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
+            services.AddScoped<IVendorCuisineTypeRepository, VendorCuisineTypeRepository>();
+            services.AddScoped<IVendorFoodTypeRepository, VendorFoodTypeRepository>();
 
             //mapper configuration
             var mapperConfig = new MapperConfiguration(mc =>
@@ -51,6 +53,8 @@ namespace MenuManagement.Infrastructure
                 mc.AddProfile(new VendorProfile());
                 mc.AddProfile(new MenuProfile());
                 mc.AddProfile(new CategoryProfile());
+                mc.AddProfile(new VendorCuisineProfile());
+                mc.AddProfile(new VendorFoodTypeProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
