@@ -204,17 +204,26 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             if (vendor != null)
             {
                 var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
+                //update category since FE is not sending category
+                mapToVendorModel.Categories = vendor.Categories;
 
                 var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorData.Id);
                 var update = Builders<Vendor>.Update.ApplyMultiFields(mapToVendorModel);
 
                 var result = await UpdateOneDocument(filter, update);
+                if(result.IsAcknowledged)
+                {
+                    var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
 
-                var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
+                    var vendorWithIdMapTo = _mapper.Map<VendorDto>(getVendorWithId);
 
-                var vendorWithIdMapTo = _mapper.Map<VendorDto>(getVendorWithId);
-
-                return vendorWithIdMapTo;
+                    return vendorWithIdMapTo;
+                }
+                else
+                {
+                    _logger.LogError($"Error updating the Vendor with Id {vendorData.Id}");
+                    return vendorData;
+                }
             }
             else
             {
