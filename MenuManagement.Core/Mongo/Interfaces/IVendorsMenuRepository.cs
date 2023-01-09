@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace MenuManagement.Core.Mongo.Interfaces
 {
-    public interface IMenuRepository
+    public interface IVendorsMenuRepository
     {
-        Task<MenuDto> AddMenu(MenuDto menu);
-        Task<List<MenuDto>> GetAllMenu();
+        Task<VendorMenuDto> AddVendorMenus(VendorMenuDto menu);
+        Task<List<VendorMenuDto>> GetAllMenu();
 
-        Task<List<MenuItemsDto>> GetAllMenuItem(string id);
+        Task<List<MenuItemsDto>> GetAllVendorMenuItems(string VendorId);
 
         Task<MenuItemsDto> AddMenuItem(string menuId, MenuItemsDto menuItemsDto);
     }

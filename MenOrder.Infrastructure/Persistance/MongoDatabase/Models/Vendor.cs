@@ -12,46 +12,46 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("Vendor name")]
+        [BsonElement("vendorName")]
         public string VendorName { get; set; }
 
-        [BsonElement("Vendor Description")]
+        [BsonElement("vendorDescription")]
         public string VendorDescription { get; set; }
 
-        [BsonElement("Categories")]
+        [BsonElement("categories")]
         public List<Categories> Categories { get; set; }
 
-        [BsonElement("Cuisine Type")]
+        [BsonElement("cuisineTypes")]
         public List<string> CuisineType { get; set; }
 
-        [BsonElement("Rating")]
+        [BsonElement("rating")]
         public int Rating { get; set; }
 
-        [BsonElement("State")]
+        [BsonElement("state")]
         public string State { get; set; }
 
-        [BsonElement("City")]
+        [BsonElement("city")]
         public string City { get; set; }
 
-        [BsonElement("Area")]
+        [BsonElement("area")]
         public string Area { get; set; }
 
-        [BsonElement("Coordinates")]
+        [BsonElement("coordinates")]
         public Coordinates Coordinates { get; set; }
 
-        [BsonElement("AddressLine1")]
+        [BsonElement("addressLine1")]
         public string AddressLine1 { get; set; }
 
-        [BsonElement("AddressLine2")]
+        [BsonElement("addressLine2")]
         public string AddressLine2 { get; set; }
 
-        [BsonElement("Open Timming")]
+        [BsonElement("openTimming")]
         public DateTime OpenTime { get; set; }
 
-        [BsonElement("Close Timing")]
+        [BsonElement("closeTiming")]
         public DateTime CloseTime { get; set; }
 
-        [BsonElement("Active")]
+        [BsonElement("active")]
         public bool Active { get; set; }
 
     }

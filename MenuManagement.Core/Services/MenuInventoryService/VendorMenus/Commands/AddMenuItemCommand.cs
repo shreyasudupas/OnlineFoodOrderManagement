@@ -4,7 +4,7 @@ using MenuManagement.Core.Mongo.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.AddMenuItem
+namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command
 {
     public class AddMenuItemCommand : IRequest<MenuItemsDto>
     {
@@ -14,9 +14,9 @@ namespace MenuManagement.Core.Services.MenuInventoryService.AddMenuItem
 
     public class AddMenuItemCommandHandler : IRequestHandler<AddMenuItemCommand, MenuItemsDto>
     {
-        private readonly IMenuRepository _menuRepository;
+        private readonly IVendorsMenuRepository _menuRepository;
 
-        public AddMenuItemCommandHandler(IMenuRepository menuRepository)
+        public AddMenuItemCommandHandler(IVendorsMenuRepository menuRepository)
         {
             _menuRepository = menuRepository;
         }

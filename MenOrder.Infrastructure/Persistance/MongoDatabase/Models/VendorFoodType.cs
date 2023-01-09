@@ -10,10 +10,10 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("Type Name")]
+        [BsonElement("typeName")]
         public string TypeName { get; set; }
 
-        [BsonElement("Active")]
+        [BsonElement("active")]
         public bool Active { get; set; }
     }
 }

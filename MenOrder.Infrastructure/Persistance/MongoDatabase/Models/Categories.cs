@@ -10,13 +10,13 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("Name")]
+        [BsonElement("name")]
         public string Name { get; set; }
 
-        [BsonElement("Description")]
+        [BsonElement("description")]
         public string? Description { get; set; }
 
-        [BsonElement("Active")]
+        [BsonElement("active")]
         public bool Active { get; set; }
     }
 }

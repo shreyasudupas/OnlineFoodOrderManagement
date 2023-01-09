@@ -41,7 +41,7 @@ namespace MenuManagement.Infrastructure
 
             //Database registration
             services.AddScoped<IMongoDBContext, MongoDBContext>();
-            services.AddScoped<Core.Mongo.Interfaces.IMenuRepository, MenuRepository>();
+            services.AddScoped<IVendorsMenuRepository, VendorsMenuRepository>();
             services.AddScoped<Core.Mongo.Interfaces.IVendorCartRepository, VendorCartRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IVendorCuisineTypeRepository, VendorCuisineTypeRepository>();

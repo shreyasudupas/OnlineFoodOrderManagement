@@ -18,7 +18,7 @@ namespace MenuManagement.InventoryMicroService.API
             {
 
                 var vendorService = scope.ServiceProvider.GetRequiredService<IVendorRepository>();
-                var menuService = scope.ServiceProvider.GetRequiredService<IMenuRepository>();
+                var menuService = scope.ServiceProvider.GetRequiredService<IVendorsMenuRepository>();
                 var foodTypeService = scope.ServiceProvider.GetRequiredService<IVendorFoodTypeRepository>();
                 var cuisineTypeService = scope.ServiceProvider.GetRequiredService<IVendorCuisineTypeRepository>();
                 var loggerContext = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
@@ -83,7 +83,7 @@ namespace MenuManagement.InventoryMicroService.API
                     },
                 };
 
-                var dummyMenu = new MenuDto
+                var dummyMenu = new VendorMenuDto
                 {
                     Id = "",
                     VendorId = "",
@@ -93,28 +93,34 @@ namespace MenuManagement.InventoryMicroService.API
                         new MenuItemsDto
                         {
                             Id= "",
-                            Name = "test menu 1",
-                            PictureLocation ="",
+                            ItemName = "Idly",
+                            ImageLocation ="",
                             Price=20,
-                            Type= dummyCategories[0].Name,
+                            FoodType= dummyFoodType.TypeName,
+                            Category = dummyCategories[0].Name,
+                            Active=true,
                             Discount = 0
                         },
                         new MenuItemsDto
                         {
-                            Id="",
-                            Name = "test menu 2",
-                            PictureLocation ="",
+                            Id= "",
+                            ItemName = "Plain Dosa",
+                            ImageLocation ="",
+                            Price=35,
+                            FoodType= dummyFoodType.TypeName,
+                            Category = dummyCategories[0].Name,
+                            Active=true,
+                            Discount = 10
+                        },
+                        new MenuItemsDto
+                        {
+                            Id= "",
+                            ItemName = "Mini Lunch",
+                            ImageLocation ="",
                             Price=45,
-                            Type= dummyCategories[1].Name,
-                            Discount = 0
-                        },
-                        new MenuItemsDto
-                        {
-                            Id = "",
-                            Name = "test menu 3",
-                            PictureLocation ="",
-                            Price=25,
-                            Type= dummyCategories[2].Name,
+                            FoodType= dummyFoodType.TypeName,
+                            Category = dummyCategories[1].Name,
+                            Active=true,
                             Discount = 0
                         }
                     }
@@ -136,7 +142,7 @@ namespace MenuManagement.InventoryMicroService.API
                         var result = vendorService.AddCategoryToVendor(vendor.Id,category).GetAwaiter().GetResult();
                     });
 
-                    var menu = menuService.AddMenu(dummyMenu).GetAwaiter().GetResult();
+                    var menu = menuService.AddVendorMenus(dummyMenu).GetAwaiter().GetResult();
 
                     loggerContext.LogInformation("Migration Mongo End");
                 }

@@ -8,7 +8,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.MappingProfile
     {
         public MenuProfile()
         {
-            CreateMap<MenuDto, Menus>()
+            CreateMap<VendorMenuDto, VendorsMenus>()
                 .ReverseMap();
 
             CreateMap<MenuItemsDto, MenuItems>()

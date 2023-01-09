@@ -13,25 +13,25 @@ using System.Threading.Tasks;
 
 namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 {
-    public class MenuRepository : BaseRepository<Menus> , IMenuRepository
+    public class VendorsMenuRepository : BaseRepository<VendorsMenus> , IVendorsMenuRepository
     {
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        public MenuRepository(IMongoDBContext mongoDBContext,
-            ILogger<MenuRepository> logger,
+        public VendorsMenuRepository(IMongoDBContext mongoDBContext,
+            ILogger<VendorsMenuRepository> logger,
             IMapper mapper) : base(mongoDBContext)
         {
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<MenuDto> AddMenu(MenuDto menu)
+        public async Task<VendorMenuDto> AddVendorMenus(VendorMenuDto menu)
         {
-            _logger.LogInformation("AddMenu started");
+            _logger.LogInformation("AddVendorMenus started");
 
             if(menu != null)
             {
-                var mapToMenuModel = _mapper.Map<Menus>(menu);
+                var mapToMenuModel = _mapper.Map<VendorsMenus>(menu);
 
                 mapToMenuModel.Items.ForEach(item => {
                     item.Id = ObjectId.GenerateNewId(System.DateTime.Now).ToString();
@@ -43,7 +43,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
                 if(createdMenu != null)
                 {
-                    var mapToDto = _mapper.Map<MenuDto>(createdMenu);
+                    var mapToDto = _mapper.Map<VendorMenuDto>(createdMenu);
                     return mapToDto;
                 }
                 else
@@ -59,7 +59,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<List<MenuDto>> GetAllMenu()
+        public async Task<List<VendorMenuDto>> GetAllMenu()
         {
             _logger.LogInformation("GetAllMenu started");
 
@@ -67,7 +67,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
             if(menus.ToList().Count > 0)
             {
-                var mapModel = _mapper.Map<List<MenuDto>>(menus);
+                var mapModel = _mapper.Map<List<VendorMenuDto>>(menus);
 
                 _logger.LogInformation("GetAllMenu ended");
                 return mapModel;
@@ -75,48 +75,48 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             else
             {
                 _logger.LogInformation("GetAllMenu Menu present");
-                return new List<MenuDto>();
+                return new List<VendorMenuDto>();
             }
         }
 
-        public async Task<List<MenuItemsDto>> GetAllMenuItem(string id)
+        public async Task<List<MenuItemsDto>> GetAllVendorMenuItems(string VendorId)
         {
-            _logger.LogInformation($"GetAllMenu started with id: {id}");
+            _logger.LogInformation($"GetAllVendorMenuItems started with id: {VendorId}");
 
-            var menu = await GetById(id);
+            var menu = await GetByFilter(v=>v.VendorId == VendorId);
 
             if (menu != null)
             { 
                 var mapMenuItemDto = _mapper.Map<List<MenuItemsDto>>(menu.Items);
 
-                _logger.LogInformation("GetAllMenuItem ended");
+                _logger.LogInformation("GetAllVendorMenuItems ended");
                 return mapMenuItemDto;
             }
             else
             {
-                _logger.LogInformation($"GetAllMenuItem Menu Items not present for id: {id}");
+                _logger.LogInformation($"GetAllVendorMenuItems Menu Items not present for id: {VendorId}");
                 return new List<MenuItemsDto>();
             }
         }
 
-        public async Task<MenuItemsDto> AddMenuItem(string menuId,MenuItemsDto menuItemsDto)
+        public async Task<MenuItemsDto> AddMenuItem(string vendorMenuId,MenuItemsDto menuItemsDto)
         {
             _logger.LogInformation($"AddMenuItem started with new menu item: {JsonConvert.SerializeObject(menuItemsDto)}");
 
-            var menu = await GetById(menuId);
+            var menu = await GetById(vendorMenuId);
             if(menu != null)
             {
                 var mapModelMenuItem = _mapper.Map<MenuItems>(menuItemsDto);
 
                 mapModelMenuItem.Id = ObjectId.GenerateNewId(System.DateTime.Now).ToString();
-                var filter = Builders<Menus>.Filter.Eq(x=>x.Id, menuId);
-                var update = Builders<Menus>.Update.Push(m=>m.Items, mapModelMenuItem);
+                var filter = Builders<VendorsMenus>.Filter.Eq(x=>x.Id, vendorMenuId);
+                var update = Builders<VendorsMenus>.Update.Push(m=>m.Items, mapModelMenuItem);
 
                 var result = await UpdateOneDocument(filter,update);
                 if(result.IsAcknowledged)
                 {
-                    var updateMenu = await GetById(menuId);
-                    var updatedMenuItems = updateMenu.Items.Where(x => x.Name == menuItemsDto.Name).FirstOrDefault();
+                    var updateMenu = await GetById(vendorMenuId);
+                    var updatedMenuItems = updateMenu.Items.Where(x => x.ItemName == menuItemsDto.ItemName).FirstOrDefault();
                     var mapToUpdatedMenuItem = _mapper.Map<MenuItemsDto>(updatedMenuItems);
                     return mapToUpdatedMenuItem;
                 }
@@ -128,7 +128,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
             else
             {
-                _logger.LogInformation($"AddMenuItem menu Id:{menuId}");
+                _logger.LogInformation($"AddMenuItem menu Id:{vendorMenuId}");
                 return null;
             }
         }

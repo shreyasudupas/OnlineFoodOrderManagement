@@ -2,7 +2,7 @@
 
 namespace MenuManagement.Core.Common.Models.InventoryService
 {
-    public class MenuDto
+    public class VendorMenuDto
     {
         public string Id { get; set; }
 

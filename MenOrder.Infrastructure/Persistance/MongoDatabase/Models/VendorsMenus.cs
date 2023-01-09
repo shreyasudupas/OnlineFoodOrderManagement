@@ -5,19 +5,19 @@ using System.Collections.Generic;
 
 namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
 {
-    public class Menus : IEntity
+    public class VendorsMenus : IEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("VendorId")]
+        [BsonElement("vendorId")]
         public string VendorId { get; set; }
 
-        [BsonElement("Items")]
+        [BsonElement("menuItems")]
         public List<MenuItems> Items { get; set; }
 
-        [BsonElement("Disable")]
+        [BsonElement("disable")]
         public bool Disable { get; set; }
 
     }

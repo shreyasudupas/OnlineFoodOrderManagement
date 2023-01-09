@@ -10,19 +10,25 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("Name")]
-        public string Name { get; set; }
+        [BsonElement("itemName")]
+        public string ItemName { get; set; }
 
-        [BsonElement("Picture Location")]
-        public string PictureLocation { get; set; }
+        [BsonElement("imageLocation")]
+        public string ImageLocation { get; set; }
 
-        [BsonElement("Menu Type")]
-        public string Type { get; set; }
+        [BsonElement("foodType")]
+        public string FoodType { get; set; }
 
-        [BsonElement("Price")]
+        [BsonElement("category")]
+        public string Category { get; set; }
+
+        [BsonElement("price")]
         public double Price { get; set; }
 
-        [BsonElement("Discount")]
+        [BsonElement("discount")]
         public int Discount { get; set; }
+
+        [BsonElement("active")]
+        public bool Active { get; set; }
     }
 }
