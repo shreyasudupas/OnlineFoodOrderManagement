@@ -2,6 +2,7 @@
 using MenuManagement.Core.Common.Models.InventoryService;
 using MenuManagement.Core.Mongo.Interfaces;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
@@ -100,6 +101,52 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             else
             {
                 _logger.LogInformation($"GetAllVendorMenuItems Menu Items not present for id: {VendorId}");
+                return null;
+            }
+        }
+
+        public async Task<VendorMenuDto> GetVendorMenusByMenuId(string menuId)
+        {
+            _logger.LogInformation("GetVendorMenusByMenuId started..");
+            var menuItem = await GetById(menuId);
+            if(menuItem != null)
+            {
+                var mapToDtoModel = _mapper.Map<VendorMenuDto>(menuItem);
+
+                _logger.LogInformation("GetVendorMenusByMenuId ended..");
+                return mapToDtoModel;
+            }else
+            {
+                _logger.LogError($"Menu Item for MenuId: {menuId}");
+                return null;
+            }
+        }
+
+        public async Task<VendorMenuDto> UpdateVendorMenus(VendorMenuDto menu)
+        {
+            _logger.LogInformation("UpdateVendorMenus started..");
+            var vendorMenu = await GetById(menu.Id);
+            if(vendorMenu != null)
+            {
+                var mapToVendorMenusModel = _mapper.Map<VendorsMenus>(menu);
+                var filter = Builders<VendorsMenus>.Filter.Eq(vm => vm.Id, mapToVendorMenusModel.Id);
+                var update = Builders<VendorsMenus>.Update.ApplyMultiFields(mapToVendorMenusModel);
+
+                var result = await UpdateOneDocument(filter, update);
+                if(result.IsAcknowledged)
+                {
+                    _logger.LogInformation("UpdateVendorMenus update complete");
+                    return menu;
+                }
+                else
+                {
+                    _logger.LogError($"Error updating Vendor Menus");
+                    return null;
+                }
+            }
+            else
+            {
+                _logger.LogError($"No vendor menu with Id: {menu.Id}");
                 return null;
             }
         }

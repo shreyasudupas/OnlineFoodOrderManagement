@@ -1,5 +1,7 @@
 ﻿using MenuManagement.Core.Common.Models.InventoryService;
 using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command;
+using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Commands;
+using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +19,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
             return await Mediator.Send(new GetAllVendorMenusQuery());
         }
 
-        [HttpGet("/api/vendorMenus/menuItems/list/{vendorId}")]
+        [HttpGet("/api/vendorMenus/list/{vendorId}")]
         public async Task<List<VendorMenuDto>> GetAllVendorMenuItemsByVendorId(string vendorId)
         {
             return await Mediator.Send(new GetAllVendorMenuItemsQuery { VendorId = vendorId });
@@ -27,6 +29,18 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         public async Task<VendorMenuDto> AddVendorMenuItem(VendorMenuDto menu)
         {
             return await Mediator.Send(new AddVendorMenusCommand { Menu = menu });
+        }
+
+        [HttpGet("/api/vendormenus/{menuId}")]
+        public async Task<VendorMenuDto> GetVendorMenuItemByMenuId(string menuId)
+        {
+            return await Mediator.Send(new GetVendorMenuItemByMenuIdQuery { MenuId = menuId });
+        }
+
+        [HttpPut("/api/vendormenus")]
+        public async Task<VendorMenuDto> UpdateVendorMenuItem(UpdateVendorMenuCommand updateVendorMenu)
+        {
+            return await Mediator.Send(updateVendorMenu);
         }
     }
 }
