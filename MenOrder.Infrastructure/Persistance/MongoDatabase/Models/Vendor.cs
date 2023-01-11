@@ -45,11 +45,11 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonElement("addressLine2")]
         public string AddressLine2 { get; set; }
 
-        [BsonElement("openTimming")]
-        public DateTime OpenTime { get; set; }
+        [BsonElement("openTime")]
+        public TimeSpan OpenTime { get; set; }
 
-        [BsonElement("closeTiming")]
-        public DateTime CloseTime { get; set; }
+        [BsonElement("closeTime")]
+        public TimeSpan CloseTime { get; set; }
 
         [BsonElement("active")]
         public bool Active { get; set; }

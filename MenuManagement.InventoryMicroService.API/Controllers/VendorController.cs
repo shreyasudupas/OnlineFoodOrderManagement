@@ -3,6 +3,7 @@ using MenuManagement.Core.Services.MenuInventoryService.AddCategory;
 using MenuManagement.Core.Services.MenuInventoryService.AddVendorDetail;
 using MenuManagement.Core.Services.MenuInventoryService.GetAllCategories;
 using MenuManagement.Core.Services.MenuInventoryService.GetVendorById;
+using MenuManagement.Core.Services.MenuInventoryService.Vendor.Commands;
 using MenuManagement.Core.Services.MenuInventoryService.Vendor.GetCategoryById;
 using MenuManagement.Core.Services.MenuInventoryService.Vendor.UpdateVendorDetails;
 using MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Commands.AddVendors;
@@ -66,6 +67,12 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         public async Task<CategoryDto> GetAllVendorCategories(string vendorId,string categoryId)
         {
             return await Mediator.Send(new GetCategoryByIdQuery { VendorId = vendorId , Id = categoryId });
+        }
+
+        [HttpPut("/api/vendor/update/category")]
+        public async Task<CategoryDto> UpdateVendorCategoryDetail([FromBody] UpdateCategoryItemCommand updateCategoryItemCommand)
+        {
+            return await Mediator.Send(updateCategoryItemCommand);
         }
     }
 }

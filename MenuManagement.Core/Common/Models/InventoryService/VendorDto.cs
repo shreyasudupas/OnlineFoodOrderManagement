@@ -34,9 +34,9 @@ namespace MenuManagement.Core.Common.Models.InventoryService
 
         public string AddressLine2 { get; set; }
 
-        public DateTime OpenTime { get; set; }
+        public string OpenTime { get; set; }
 
-        public DateTime CloseTime { get; set; }
+        public string CloseTime { get; set; }
 
         public bool Active { get; set; }
 

@@ -8,8 +8,18 @@ namespace MenuManagement.Core.Common.Models.InventoryService
 
         public string VendorId { get; set; }
 
-        public List<MenuItemsDto> Items { get; set; }
+        public string ItemName { get; set; }
 
-        public bool Disable { get; set; }
+        public string ImageLocation { get; set; }
+
+        public string FoodType { get; set; }
+
+        public string Category { get; set; }
+
+        public double Price { get; set; }
+
+        public int Discount { get; set; }
+
+        public bool Active { get; set; }
     }
 }

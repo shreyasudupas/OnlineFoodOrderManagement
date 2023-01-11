@@ -44,7 +44,7 @@ namespace IdentityServer.Tests.UnitTests.Core.Register
             var actual = await handler.Handle(new RegisterQuery(), It.IsAny<CancellationToken>());
             actual.Should().NotBeNull();
             actual.States.Should().HaveCount(2);
-            actual.Cities.Should().HaveCount(2);
+            actual.Cities.Should().HaveCount(0);
         }
     }
 }

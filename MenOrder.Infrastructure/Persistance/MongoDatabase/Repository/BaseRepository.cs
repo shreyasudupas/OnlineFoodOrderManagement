@@ -45,6 +45,8 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         }
         public async Task<TEntity> GetByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).FirstOrDefaultAsync();
 
+        public async Task<List<TEntity>> GetListByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
+
         public async Task<UpdateResult> UpdateOneDocument(FilterDefinition<TEntity> filter,UpdateDefinition<TEntity> update)
         {
             var result = await mongoCollection.UpdateOneAsync(filter,update);

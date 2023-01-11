@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command
 {
-    public class GetAllVendorMenuItemsQuery : IRequest<List<MenuItemsDto>>
+    public class GetAllVendorMenuItemsQuery : IRequest<List<VendorMenuDto>>
     {
         public string VendorId { get; set; }
     }
 
-    public class GetAllVendorMenuItemsQueryHandler : IRequestHandler<GetAllVendorMenuItemsQuery, List<MenuItemsDto>>
+    public class GetAllVendorMenuItemsQueryHandler : IRequestHandler<GetAllVendorMenuItemsQuery, List<VendorMenuDto>>
     {
         private readonly IVendorsMenuRepository _menuRepository;
 
@@ -21,9 +21,9 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command
             _menuRepository = menuRepository;
         }
 
-        public async Task<List<MenuItemsDto>> Handle(GetAllVendorMenuItemsQuery request, CancellationToken cancellationToken)
+        public async Task<List<VendorMenuDto>> Handle(GetAllVendorMenuItemsQuery request, CancellationToken cancellationToken)
         {
-            return await _menuRepository.GetAllVendorMenuItems(request.VendorId);
+            return await _menuRepository.GetAllVendorMenuByVendorId(request.VendorId);
         }
     }
 }

@@ -55,7 +55,9 @@ namespace MenuManagement.InventoryMicroService.API
                     Rating = 4,
                     CuisineType = new List<string> { "Indian" },
                     VendorDescription = "sample",
-                    VendorName = "Vendor 1"
+                    VendorName = "Vendor 1",
+                    OpenTime =  "07:30:00",
+                    CloseTime = "22:30:00"
                 };
 
                 var dummyCategories = new List<CategoryDto>
@@ -65,66 +67,68 @@ namespace MenuManagement.InventoryMicroService.API
                         Id = "",
                         Name="Breakfast",
                         Active=true,
-                        Description=""
+                        Description="",
+                        OpenTime = "07:30:00",
+                        CloseTime = "11:30:00"
                     },
                     new CategoryDto
                     {
                         Id = "",
                         Name="Lunch",
                         Active=true,
-                        Description=""
+                        Description="",
+                        OpenTime = "11:30:00",
+                        CloseTime = "15:00:00"
                     },
                     new CategoryDto
                     {
                         Id = "",
                         Name="Dinner",
                         Active=true,
-                        Description=""
+                        Description="",
+                        OpenTime="18:00:00",
+                        CloseTime = "22:30:00"
                     },
                 };
 
-                var dummyMenu = new VendorMenuDto
+                var dummyMenu = new List<VendorMenuDto>
                 {
-                    Id = "",
-                    VendorId = "",
-                    Disable = false,
-                    Items = new List<MenuItemsDto>
+                    new VendorMenuDto
                     {
-                        new MenuItemsDto
-                        {
-                            Id= "",
-                            ItemName = "Idly",
-                            ImageLocation ="",
-                            Price=20,
-                            FoodType= dummyFoodType.TypeName,
-                            Category = dummyCategories[0].Name,
-                            Active=true,
-                            Discount = 0
-                        },
-                        new MenuItemsDto
-                        {
-                            Id= "",
-                            ItemName = "Plain Dosa",
-                            ImageLocation ="",
-                            Price=35,
-                            FoodType= dummyFoodType.TypeName,
-                            Category = dummyCategories[0].Name,
-                            Active=true,
-                            Discount = 10
-                        },
-                        new MenuItemsDto
-                        {
-                            Id= "",
-                            ItemName = "Mini Lunch",
-                            ImageLocation ="",
-                            Price=45,
-                            FoodType= dummyFoodType.TypeName,
-                            Category = dummyCategories[1].Name,
-                            Active=true,
-                            Discount = 0
-                        }
+                        Id= "",
+                        VendorId = "",
+                        ItemName = "Idly",
+                        ImageLocation ="",
+                        Price=20,
+                        FoodType= dummyFoodType.TypeName,
+                        Category = dummyCategories[0].Name,
+                        Active=true,
+                        Discount = 0
+                    },
+                    new VendorMenuDto
+                    {
+                        Id= "",
+                        VendorId = "",
+                        ItemName = "Plain Dosa",
+                        ImageLocation ="",
+                        Price=35,
+                        FoodType= dummyFoodType.TypeName,
+                        Category = dummyCategories[0].Name,
+                        Active=true,
+                        Discount = 10
+                    },
+                    new VendorMenuDto
+                    {
+                        Id= "",
+                        VendorId="",
+                        ItemName = "Mini Lunch",
+                        ImageLocation ="",
+                        Price=45,
+                        FoodType= dummyFoodType.TypeName,
+                        Category = dummyCategories[1].Name,
+                        Active=true,
+                        Discount = 0
                     }
-
                 };
 
                 var isExists = vendorService.IfVendorCollectionExists();
@@ -135,14 +139,18 @@ namespace MenuManagement.InventoryMicroService.API
 
                     var vendor = vendorService.AddVendorDocument(dummyVendors).GetAwaiter().GetResult();
 
-                    dummyMenu.VendorId = vendor.Id;
-
                     dummyCategories.ForEach(category =>
                     {
                         var result = vendorService.AddCategoryToVendor(vendor.Id,category).GetAwaiter().GetResult();
                     });
 
-                    var menu = menuService.AddVendorMenus(dummyMenu).GetAwaiter().GetResult();
+                    dummyMenu.ForEach(menu =>
+                    {
+                        menu.VendorId = vendor.Id;
+                        var menuResult = menuService.AddVendorMenus(menu).GetAwaiter().GetResult();
+                        var res = (menuResult.Id != null)? true : false;
+                        loggerContext.LogInformation($"menu inserted with Success {res}");
+                    });
 
                     loggerContext.LogInformation("Migration Mongo End");
                 }

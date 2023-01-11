@@ -231,5 +231,41 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 return null;
             }
         }
+
+        public async Task<CategoryDto> UpdateVendorCategoryDocument(string vendorId,CategoryDto categoryDto)
+        {
+            _logger.LogInformation("UpdateVendorCategoryDocument started..");
+            var vendor = await GetById(vendorId);
+
+            if (vendor != null)
+            {
+                var mapToCategoryModel = _mapper.Map<Categories>(categoryDto);
+
+                //update category since FE is not sending category
+                var itemToBeUpdated = vendor.Categories.Where(x => x.Id == mapToCategoryModel.Id).FirstOrDefault();
+
+
+                var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorId)
+                    & Builders<Vendor>.Filter.ElemMatch(v=>v.Categories,f=>f.Id == mapToCategoryModel.Id);
+                var update = Builders<Vendor>.Update.Set(f=>f.Categories[-1],mapToCategoryModel);
+
+                var result = await UpdateOneDocument(filter, update);
+                if (result.IsAcknowledged)
+                {
+                    var mapToCategoryDtoModel = _mapper.Map<CategoryDto>(mapToCategoryModel);
+                    return mapToCategoryDtoModel;
+                }
+                else
+                {
+                    _logger.LogError($"Error updating the Vendor with Id {vendor}");
+                    return categoryDto;
+                }
+            }
+            else
+            {
+                _logger.LogError("No Items present to update");
+                return null;
+            }
+        }
     }
 }

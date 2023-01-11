@@ -9,8 +9,6 @@ namespace MenuManagement.Core.Mongo.Interfaces
         Task<VendorMenuDto> AddVendorMenus(VendorMenuDto menu);
         Task<List<VendorMenuDto>> GetAllMenu();
 
-        Task<List<MenuItemsDto>> GetAllVendorMenuItems(string VendorId);
-
-        Task<MenuItemsDto> AddMenuItem(string menuId, MenuItemsDto menuItemsDto);
+        Task<List<VendorMenuDto>> GetAllVendorMenuByVendorId(string VendorId);
     }
 }

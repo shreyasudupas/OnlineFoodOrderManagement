@@ -14,11 +14,26 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonElement("vendorId")]
         public string VendorId { get; set; }
 
-        [BsonElement("menuItems")]
-        public List<MenuItems> Items { get; set; }
+        [BsonElement("itemName")]
+        public string ItemName { get; set; }
 
-        [BsonElement("disable")]
-        public bool Disable { get; set; }
+        [BsonElement("imageLocation")]
+        public string ImageLocation { get; set; }
+
+        [BsonElement("foodType")]
+        public string FoodType { get; set; }
+
+        [BsonElement("category")]
+        public string Category { get; set; }
+
+        [BsonElement("price")]
+        public double Price { get; set; }
+
+        [BsonElement("discount")]
+        public int Discount { get; set; }
+
+        [BsonElement("active")]
+        public bool Active { get; set; }
 
     }
 }

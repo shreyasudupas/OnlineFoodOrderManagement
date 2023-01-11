@@ -18,7 +18,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         }
 
         [HttpGet("/api/vendorMenus/menuItems/list/{vendorId}")]
-        public async Task<List<MenuItemsDto>> GetAllVendorMenuItemsByVendorId(string vendorId)
+        public async Task<List<VendorMenuDto>> GetAllVendorMenuItemsByVendorId(string vendorId)
         {
             return await Mediator.Send(new GetAllVendorMenuItemsQuery { VendorId = vendorId });
         }
@@ -27,12 +27,6 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         public async Task<VendorMenuDto> AddVendorMenuItem(VendorMenuDto menu)
         {
             return await Mediator.Send(new AddVendorMenusCommand { Menu = menu });
-        }
-
-        [HttpPost("/api/vendormenus/menuItems/add")]
-        public async Task<MenuItemsDto> AddMenuItem([FromBody]AddMenuItemCommand addMenuItemCommand)
-        {
-            return await Mediator.Send(addMenuItemCommand);
         }
     }
 }

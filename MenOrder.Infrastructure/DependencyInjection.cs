@@ -52,7 +52,7 @@ namespace MenuManagement.Infrastructure
             {
                 mc.AddProfile(new VendorProfile());
                 mc.AddProfile(new MenuProfile());
-                mc.AddProfile(new CategoryProfile());
+                //mc.AddProfile(new CategoryProfile());
                 mc.AddProfile(new VendorCuisineProfile());
                 mc.AddProfile(new VendorFoodTypeProfile());
             });

@@ -31,24 +31,29 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
             if(menu != null)
             {
-                var mapToMenuModel = _mapper.Map<VendorsMenus>(menu);
-
-                mapToMenuModel.Items.ForEach(item => {
-                    item.Id = ObjectId.GenerateNewId(System.DateTime.Now).ToString();
-                });
-
-                await CreateOneDocument(mapToMenuModel);
-
-                var createdMenu = await GetByFilter(m => m.VendorId == menu.VendorId);
-
-                if(createdMenu != null)
+                var ifExists = await GetByFilter(vm => vm.ItemName == menu.ItemName && vm.VendorId == menu.VendorId);
+                if(ifExists == null)
                 {
-                    var mapToDto = _mapper.Map<VendorMenuDto>(createdMenu);
-                    return mapToDto;
+                    var mapToMenuModel = _mapper.Map<VendorsMenus>(menu);
+
+                    await CreateOneDocument(mapToMenuModel);
+
+                    var createdMenu = await GetByFilter(m => m.VendorId == menu.VendorId && m.ItemName == menu.ItemName);
+
+                    if (createdMenu != null)
+                    {
+                        var mapToDto = _mapper.Map<VendorMenuDto>(createdMenu);
+                        return mapToDto;
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Menu with vendorId {menu.VendorId} not found");
+                        return menu;
+                    }
                 }
                 else
                 {
-                    _logger.LogInformation($"Menu with vendorId {menu.VendorId} not found");
+                    _logger.LogError("ItemName already present");
                     return menu;
                 }
             }
@@ -79,56 +84,22 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<List<MenuItemsDto>> GetAllVendorMenuItems(string VendorId)
+        public async Task<List<VendorMenuDto>> GetAllVendorMenuByVendorId(string VendorId)
         {
-            _logger.LogInformation($"GetAllVendorMenuItems started with id: {VendorId}");
+            _logger.LogInformation($"GetAllVendorMenuByVendorId started with id: {VendorId}");
 
-            var menu = await GetByFilter(v=>v.VendorId == VendorId);
+            var menu = await GetListByFilter(v=>v.VendorId == VendorId);
 
             if (menu != null)
             { 
-                var mapMenuItemDto = _mapper.Map<List<MenuItemsDto>>(menu.Items);
+                var mapMenuItemDto = _mapper.Map<List<VendorMenuDto>>(menu);
 
-                _logger.LogInformation("GetAllVendorMenuItems ended");
+                _logger.LogInformation("GetAllVendorMenuByVendorId ended");
                 return mapMenuItemDto;
             }
             else
             {
                 _logger.LogInformation($"GetAllVendorMenuItems Menu Items not present for id: {VendorId}");
-                return new List<MenuItemsDto>();
-            }
-        }
-
-        public async Task<MenuItemsDto> AddMenuItem(string vendorMenuId,MenuItemsDto menuItemsDto)
-        {
-            _logger.LogInformation($"AddMenuItem started with new menu item: {JsonConvert.SerializeObject(menuItemsDto)}");
-
-            var menu = await GetById(vendorMenuId);
-            if(menu != null)
-            {
-                var mapModelMenuItem = _mapper.Map<MenuItems>(menuItemsDto);
-
-                mapModelMenuItem.Id = ObjectId.GenerateNewId(System.DateTime.Now).ToString();
-                var filter = Builders<VendorsMenus>.Filter.Eq(x=>x.Id, vendorMenuId);
-                var update = Builders<VendorsMenus>.Update.Push(m=>m.Items, mapModelMenuItem);
-
-                var result = await UpdateOneDocument(filter,update);
-                if(result.IsAcknowledged)
-                {
-                    var updateMenu = await GetById(vendorMenuId);
-                    var updatedMenuItems = updateMenu.Items.Where(x => x.ItemName == menuItemsDto.ItemName).FirstOrDefault();
-                    var mapToUpdatedMenuItem = _mapper.Map<MenuItemsDto>(updatedMenuItems);
-                    return mapToUpdatedMenuItem;
-                }
-                else
-                {
-                    _logger.LogError($"Update error");
-                    return menuItemsDto;
-                }
-            }
-            else
-            {
-                _logger.LogInformation($"AddMenuItem menu Id:{vendorMenuId}");
                 return null;
             }
         }
