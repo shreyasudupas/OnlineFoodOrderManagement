@@ -46,6 +46,7 @@ namespace MenuManagement.Infrastructure
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IVendorCuisineTypeRepository, VendorCuisineTypeRepository>();
             services.AddScoped<IVendorFoodTypeRepository, VendorFoodTypeRepository>();
+            services.AddScoped<IMenuImagesRepository,MenuImagesRepository>();
 
             //mapper configuration
             var mapperConfig = new MapperConfiguration(mc =>
@@ -55,6 +56,7 @@ namespace MenuManagement.Infrastructure
                 //mc.AddProfile(new CategoryProfile());
                 mc.AddProfile(new VendorCuisineProfile());
                 mc.AddProfile(new VendorFoodTypeProfile());
+                mc.AddProfile(new MenuImageProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
