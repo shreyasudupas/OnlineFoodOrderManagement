@@ -104,6 +104,8 @@ namespace MenuManagement.InventoryMicroService.API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseCors("Inventory.MicroService.Cors");
 
             app.UseRouting();

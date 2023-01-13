@@ -127,7 +127,8 @@ namespace MenuManagement.InventoryMicroService.API
                         FoodType= dummyFoodType.TypeName,
                         Category = dummyCategories[1].Name,
                         Active=true,
-                        Discount = 0
+                        Discount = 0,
+                        Rating = 3
                     }
                 };
 

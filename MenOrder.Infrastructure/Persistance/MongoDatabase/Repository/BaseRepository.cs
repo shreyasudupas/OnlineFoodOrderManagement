@@ -29,9 +29,9 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             await mongoCollection.InsertManyAsync(documents);
         }
 
-        public void Delete(string id)
+        public async Task<DeleteResult> DeleteOneDocument(FilterDefinition<TEntity> filter)
         {
-            throw new NotImplementedException();
+            return await mongoCollection.DeleteOneAsync(filter);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllItems()

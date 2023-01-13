@@ -150,5 +150,30 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 return null;
             }
         }
+
+        public async Task<bool> DeleteVendorMenu(string menuId)
+        {
+            _logger.LogInformation("DeleteVendorMenu started...");
+            var menu = await GetById(menuId);
+            if(menu != null)
+            {
+                var filter = Builders<VendorsMenus>.Filter.Eq(vm => vm.Id, menuId);
+                var result = await DeleteOneDocument(filter);
+                if(result.IsAcknowledged)
+                {
+                    return true;
+                }
+                else
+                {
+                    _logger.LogError($"Error in Deleting Menu with Id: {menuId}");
+                    return false;
+                }
+            }
+            else
+            {
+                _logger.LogError($"DeleteVendorMenu {menuId} not present in the database");
+                return false;
+            }
+        }
     }
 }

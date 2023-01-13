@@ -11,7 +11,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         Task CreateOneDocument(TEntity document);
         Task CreateManyDocument(ICollection<TEntity> documents);
         Task<UpdateResult> UpdateOneDocument(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update);
-        void Delete(string id);
+        Task<DeleteResult> DeleteOneDocument(FilterDefinition<TEntity> filter);
         Task<TEntity> GetById(string id);
         Task<IEnumerable<TEntity>> GetAllItems();
         public int IfDocumentExists();

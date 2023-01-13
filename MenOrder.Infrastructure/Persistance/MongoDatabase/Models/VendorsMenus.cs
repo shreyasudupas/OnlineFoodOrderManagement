@@ -32,6 +32,9 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
         [BsonElement("discount")]
         public int Discount { get; set; }
 
+        [BsonElement("rating")]
+        public int Rating { get; set; }
+
         [BsonElement("active")]
         public bool Active { get; set; }
 

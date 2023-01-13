@@ -12,5 +12,6 @@ namespace MenuManagement.Core.Mongo.Interfaces
         Task<List<VendorMenuDto>> GetAllVendorMenuByVendorId(string VendorId);
         Task<VendorMenuDto> GetVendorMenusByMenuId(string menuId);
         Task<VendorMenuDto> UpdateVendorMenus(VendorMenuDto menu);
+        Task<bool> DeleteVendorMenu(string menuId);
     }
 }

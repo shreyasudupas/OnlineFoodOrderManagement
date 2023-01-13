@@ -42,5 +42,11 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         {
             return await Mediator.Send(updateVendorMenu);
         }
+
+        [HttpDelete("/api/vendormenus/{menuId}")]
+        public async Task<bool> DeleteVendorMenuItem(string menuId)
+        {
+            return await Mediator.Send(new DeleteVendorMenuCommand { MenuId =  menuId});
+        }
     }
 }

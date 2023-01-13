@@ -20,6 +20,8 @@ namespace MenuManagement.Core.Common.Models.InventoryService
 
         public int Discount { get; set; }
 
+        public int Rating { get; set; }
+
         public bool Active { get; set; }
     }
 }
