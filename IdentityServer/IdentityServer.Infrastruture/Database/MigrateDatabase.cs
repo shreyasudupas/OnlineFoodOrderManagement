@@ -223,31 +223,34 @@ namespace IdentityServer.Infrastruture.Database
 
                     var users = context.Users.ToList();
 
+                    var adminUser = users.Where(x => x.UserName == "admin").FirstOrDefault();
                    // var result1 = UserManager.AddClaimAsync(users[0], adminClaimRole).GetAwaiter().GetResult();
-                    var result2 = UserManager.AddClaimAsync(users[0], adminClaimEmail).GetAwaiter().GetResult();
-                    var result3 = UserManager.AddClaimAsync(users[0], adminClaimUserName).GetAwaiter().GetResult();
-                    var result4 = UserManager.AddClaimAsync(users[0], adminRoleClaim).GetAwaiter().GetResult();
+                    var result2 = UserManager.AddClaimAsync(adminUser, adminClaimEmail).GetAwaiter().GetResult();
+                    var result3 = UserManager.AddClaimAsync(adminUser, adminClaimUserName).GetAwaiter().GetResult();
+                    var result4 = UserManager.AddClaimAsync(adminUser, adminRoleClaim).GetAwaiter().GetResult();
 
                     //for local users
                     //var userClaimRole = new Claim(GetClaimType, "appUser");
+                    var normalUser = users.Where(x => x.UserName == "user").FirstOrDefault();
                     var userClaimEmail = new Claim("email", "user@test.com");
                     var userClaimUserName = new Claim("username", "user"); //username same as role
                     var userRoleClaim = new Claim("role", "user");
 
                     //var result5 = UserManager.AddClaimAsync(users[1], userClaimRole).GetAwaiter().GetResult();
-                    var result6 = UserManager.AddClaimAsync(users[1], userClaimEmail).GetAwaiter().GetResult();
-                    var result7 = UserManager.AddClaimAsync(users[1], userClaimUserName).GetAwaiter().GetResult();
-                    var result8 = UserManager.AddClaimAsync(users[1], userRoleClaim).GetAwaiter().GetResult();
+                    var result6 = UserManager.AddClaimAsync(normalUser, userClaimEmail).GetAwaiter().GetResult();
+                    var result7 = UserManager.AddClaimAsync(normalUser, userClaimUserName).GetAwaiter().GetResult();
+                    var result8 = UserManager.AddClaimAsync(normalUser, userRoleClaim).GetAwaiter().GetResult();
 
                     //for vendor
+                    var vendorUser = users.Where(x => x.UserName == "vendor").FirstOrDefault();
                     var vendorClaimEmail = new Claim("email", "vendor@test.com");
                     var vendorClaimUserName = new Claim("username", "vendor"); //username same as role
                     var vendorRoleClaim = new Claim("role", "vendor");
 
                     //var result5 = UserManager.AddClaimAsync(users[1], userClaimRole).GetAwaiter().GetResult();
-                    var result9 = UserManager.AddClaimAsync(users[2], vendorClaimEmail).GetAwaiter().GetResult();
-                    var result10 = UserManager.AddClaimAsync(users[2], vendorClaimUserName).GetAwaiter().GetResult();
-                    var result11 = UserManager.AddClaimAsync(users[2], vendorRoleClaim).GetAwaiter().GetResult();
+                    var result9 = UserManager.AddClaimAsync(vendorUser, vendorClaimEmail).GetAwaiter().GetResult();
+                    var result10 = UserManager.AddClaimAsync(vendorUser, vendorClaimUserName).GetAwaiter().GetResult();
+                    var result11 = UserManager.AddClaimAsync(vendorUser, vendorRoleClaim).GetAwaiter().GetResult();
                 }
                 context.SaveChanges();
             }

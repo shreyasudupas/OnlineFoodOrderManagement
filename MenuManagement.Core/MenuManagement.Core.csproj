@@ -7,12 +7,15 @@
   <ItemGroup>
     <Compile Remove="Common\Models\Interface\**" />
     <Compile Remove="Common\Services\**" />
+    <Compile Remove="Services\MenuInventoryService\MenuDetails\**" />
     <Compile Remove="Services\MenuInventoryService\Query\**" />
     <EmbeddedResource Remove="Common\Models\Interface\**" />
     <EmbeddedResource Remove="Common\Services\**" />
+    <EmbeddedResource Remove="Services\MenuInventoryService\MenuDetails\**" />
     <EmbeddedResource Remove="Services\MenuInventoryService\Query\**" />
     <None Remove="Common\Models\Interface\**" />
     <None Remove="Common\Services\**" />
+    <None Remove="Services\MenuInventoryService\MenuDetails\**" />
     <None Remove="Services\MenuInventoryService\Query\**" />
   </ItemGroup>
 
@@ -25,10 +28,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\MenuInventoryService\MenuDetails\" />
   </ItemGroup>
 
 </Project>

@@ -97,5 +97,11 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 return null;
             }
         }
+
+        public bool IfMenuImageDocumentExists()
+        {
+            var result = IfDocumentExists();
+            return result == 0 ? false : true;
+        }
     }
 }

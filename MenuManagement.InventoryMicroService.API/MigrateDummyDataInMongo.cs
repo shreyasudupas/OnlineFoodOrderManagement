@@ -3,10 +3,13 @@ using MenuManagement.Core.Common.Enum;
 using MenuManagement.Core.Common.Extension;
 using MenuManagement.Core.Common.Models.InventoryService;
 using MenuManagement.Core.Mongo.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace MenuManagement.InventoryMicroService.API
 {
@@ -22,6 +25,8 @@ namespace MenuManagement.InventoryMicroService.API
                 var foodTypeService = scope.ServiceProvider.GetRequiredService<IVendorFoodTypeRepository>();
                 var cuisineTypeService = scope.ServiceProvider.GetRequiredService<IVendorCuisineTypeRepository>();
                 var loggerContext = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
+                var menuImageService = scope.ServiceProvider.GetRequiredService<IMenuImagesRepository>();
+                var webHostService = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
                 var dummyFoodType = new VendorFoodTypeDto
@@ -158,16 +163,49 @@ namespace MenuManagement.InventoryMicroService.API
 
                 if(foodTypeService.IfVendorFoodTypeCollectionExists() == 0)
                 {
-                    loggerContext.LogInformation("Migration of Food Type Started");
+                    loggerContext.LogInformation("Migration for Food Type Started");
                     var result = foodTypeService.AddVendorFoodType(dummyFoodType).GetAwaiter().GetResult();
-                    loggerContext.LogInformation("Migration of Food Type Finised");
+                    loggerContext.LogInformation("Migration for Food Type Finised");
                 }
 
                 if(cuisineTypeService.IfVendorCuisineDocumentExists() == 0)
                 {
-                    loggerContext.LogInformation("Migration of Cuisine Type Started");
+                    loggerContext.LogInformation("Migration for Cuisine Type Started");
                     var result = cuisineTypeService.AddVendorCuisineType(dummyCuisineType).GetAwaiter().GetResult();
-                    loggerContext.LogInformation("Migration of Cuisine Type Finised");
+                    loggerContext.LogInformation("Migration for Cuisine Type Finised");
+                }
+
+                if(!menuImageService.IfMenuImageDocumentExists())
+                {
+                    loggerContext.LogInformation("Migration for Menu Image Started");
+                    var itemDictionary = new Dictionary<string, string>();
+                    itemDictionary.Add("dosa", "Crispy single dosa with cutney");
+                    itemDictionary.Add("idly", "2 idly with sambar");
+
+                    var iamgeListToBeAdded = new List<MenuImageDto>();
+
+                    //get image location
+                    foreach(var file in Directory.GetFiles(Path.Combine(webHostService.WebRootPath,"MenuImages")))
+                    {
+                        iamgeListToBeAdded.Add(new MenuImageDto
+                        {
+                            FileName = file.Split("MenuImages\\")[1],
+                            Active=true,
+                            ImagePath = Path.Combine(webHostService.WebRootPath, "MenuImages",file)
+                        });
+                    }
+
+                    iamgeListToBeAdded[0].ItemName = "dosa";
+                    iamgeListToBeAdded[0].Description = itemDictionary["dosa"];
+                    iamgeListToBeAdded[1].ItemName = "idly";
+                    iamgeListToBeAdded[1].Description = itemDictionary["idly"];
+
+                    iamgeListToBeAdded.ForEach(image =>
+                    {
+                        var result = menuImageService.AddMenuImage(image).GetAwaiter().GetResult();
+                    });
+
+                    loggerContext.LogInformation("Migration for Menu Image Ended");
                 }
 
             }
