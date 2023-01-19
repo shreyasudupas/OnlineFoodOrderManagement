@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
+namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database
 {
     public class Vendor : IEntity
     {

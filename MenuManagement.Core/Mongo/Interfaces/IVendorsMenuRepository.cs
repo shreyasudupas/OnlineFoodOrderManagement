@@ -1,4 +1,4 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService;
+﻿using MenuManagement.Core.Mongo.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

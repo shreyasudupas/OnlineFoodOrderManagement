@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
-using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Mongo.Interfaces;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository

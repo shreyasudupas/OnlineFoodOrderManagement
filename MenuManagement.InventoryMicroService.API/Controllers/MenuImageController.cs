@@ -1,13 +1,16 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService;
-using MenuManagement.Core.Common.Models.InventoryService.Request;
+﻿using MenuManagement.Core.Common.Models.InventoryService.Request;
+using MenuManagement.Core.Mongo.Dtos;
+using MenuManagement.Core.Mongo.Models;
 using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Command;
 using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query;
+using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query.Models;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MenuManagement.InventoryMicroService.API.Controllers
@@ -47,37 +50,121 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 Active = menuFormImageRequest.Active,
                 ItemName = menuFormImageRequest.ItemName
             };
-            var result = await Mediator.Send(new UploadImageCommand { MenuImageItem = model }); 
+            var result = await Mediator.Send(new AddMenuImageCommand { MenuImageItem = model }); 
 
             return result;
         }
 
         [HttpGet("/api/menuimage/list")]
-        public async Task<List<ImageResponse>> GetAllMenuImages()
+        public async Task<ImageResponse> GetAllMenuImages([FromQuery] int Skip,int Size)
         {
-            var model = new List<ImageResponse>();
-            string path = _environment.ContentRootPath;
+            var model = new ImageResponse();
+            var result = await Mediator.Send(new GetAllMenuImagesQuery { Pagination = new Pagination { Skip = Skip , Limit = Size } });
 
-            var result = await Mediator.Send(new GetAllMenuImagesQuery());
+            var count = await Mediator.Send(new GetMenuImagesRecordCountQuery());
+            if (count > 0)
+                model.TotalRecord = count;
 
-            result.ForEach(async image =>
+            var tasks = result?.Select(image => GetImageModel(image));
+
+            var taskResult = await Task.WhenAll(tasks);
+            
+            foreach(var res in taskResult)
             {
-                var imagePath = image.ImagePath.Split("MenuImages")[1];
-                var file = Directory.GetFiles(path);
-
-                byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_environment.WebRootPath, "MenuImages", image.FileName));
-
-                model.Add(new ImageResponse
-                {
-                    ItemName = image.ItemName,
-                    Active= image.Active,
-                    Data = Convert.ToBase64String(bytes, 0, bytes.Length),
-                    Description = image.Description
-                });
-
-            });
+                model.ImageData.Add(res);
+            }
 
             return model;
+        }
+
+        public async  Task<ImageDataModel> GetImageModel(MenuImageDto menuImageDto)
+        {
+            byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_environment.WebRootPath, "MenuImages", menuImageDto.FileName));
+
+            return new ImageDataModel
+            {
+                Id = menuImageDto.Id,
+                ItemName = menuImageDto.ItemName,
+                Active = menuImageDto.Active,
+                Data = Convert.ToBase64String(bytes, 0, bytes.Length),
+                Description = menuImageDto.Description
+            };
+        }
+
+        [HttpGet("/api/menuimage/{menuImageId}")]
+        public async Task<ImageDataModel> GetMenuImageById(string menuImageId)
+        {
+            var imageModelResult = await Mediator.Send(new GetMenuImageByIdQuery { Id = menuImageId });
+            if(imageModelResult != null)
+            {
+                var result = await GetImageModel(imageModelResult);
+                return result;
+            }else
+                return null;
+        }
+
+        [HttpPut("/api/menuimage/upload")]
+        public async Task<MenuImageDto> UpdateFormWithImage([FromBody] MenuImageUpload menuImageUpload)
+        {
+            if(!string.IsNullOrEmpty(menuImageUpload.Image.Data) && !string.IsNullOrEmpty(menuImageUpload.Image.Type))
+            {
+                var menuImage = await Mediator.Send(new GetMenuImageByIdQuery { Id = menuImageUpload.Id });
+
+                if (menuImage != null)
+                {
+                    //check of file already exists
+                    if (System.IO.File.Exists(menuImage.ImagePath))
+                    {
+                        System.IO.File.Delete(menuImage.ImagePath);
+                    }
+                    byte[] bytes = Convert.FromBase64String(menuImageUpload.Image.Data);
+                    string fileName = menuImage.ItemName + "_" + menuImage.Id + '.' + menuImageUpload.Image.Type;
+
+                    //set the image path
+                    string imgPath = Path.Combine(_environment.WebRootPath, "MenuImages", fileName);
+
+                    System.IO.File.WriteAllBytes(imgPath, bytes);
+
+                    var update = await Mediator.Send(new UpdateMenuImagesCommand 
+                    { 
+                        UpdateMenuImage = new MenuImageDto
+                        {
+                            Id = menuImage.Id,
+                            Active = menuImageUpload.Active,
+                            Description = menuImageUpload.Description,
+                            FileName = fileName, //updated filename
+                            ImagePath = imgPath, //updated path
+                            ItemName = menuImage.ItemName
+                        }
+                    });
+
+                    return update;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                var menuImage = await Mediator.Send(new GetMenuImageByIdQuery { Id = menuImageUpload.Id });
+
+                //update other than image parameters
+                var update = await Mediator.Send(new UpdateMenuImagesCommand
+                {
+                    UpdateMenuImage = new MenuImageDto
+                    {
+                        Id = menuImage.Id,
+                        Active = menuImageUpload.Active,
+                        Description = menuImageUpload.Description,
+                        FileName = menuImage.FileName,
+                        ImagePath = menuImage.ImagePath, 
+                        ItemName = menuImageUpload.ItemName
+                    }
+                });
+
+                return update;
+            }
         }
     }
 }

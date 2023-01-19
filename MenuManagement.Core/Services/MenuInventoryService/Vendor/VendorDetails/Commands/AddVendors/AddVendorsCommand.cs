@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Mongo.Interfaces;
 using System.Collections.Generic;
 using System.Threading;

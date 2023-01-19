@@ -1,4 +1,4 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService;
+﻿using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command;
 using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Commands;
 using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query;

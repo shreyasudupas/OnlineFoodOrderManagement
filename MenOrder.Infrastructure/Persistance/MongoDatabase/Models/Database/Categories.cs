@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
+namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database
 {
     public class Categories : IEntity
     {

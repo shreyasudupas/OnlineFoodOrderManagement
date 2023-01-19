@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MenuManagement.Core.Mongo.Dtos;
+using System;
 using System.Collections.Generic;
 
-namespace MenuManagement.Core.Common.Models.InventoryService
+namespace MenuManagement.Core.Mongo.Dtos
 {
     public class VendorDto
     {

@@ -1,4 +1,4 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService;
+﻿using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Services.MenuInventoryService.AddCategory;
 using MenuManagement.Core.Services.MenuInventoryService.AddVendorDetail;
 using MenuManagement.Core.Services.MenuInventoryService.GetAllCategories;

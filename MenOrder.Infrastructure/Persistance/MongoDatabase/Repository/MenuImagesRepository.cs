@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Mongo.Interfaces;
+using MenuManagement.Core.Mongo.Models;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -25,9 +26,9 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             _mapper = mapper;
         }
 
-        public async Task<List<MenuImageDto>> GetAllMenuImages()
+        public async Task<List<MenuImageDto>> GetAllMenuImages(Pagination pagination)
         {
-            var menusImages = await GetAllItems();
+            var menusImages = await GetAllItemsByPagination(pagination);
             if(menusImages.ToList().Count > 0)
             {
                 var mapToDto = _mapper.Map<List<MenuImageDto>>(menusImages);
@@ -102,6 +103,12 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         {
             var result = IfDocumentExists();
             return result == 0 ? false : true;
+        }
+
+        public async Task<int> GetMenuImageRecordCount()
+        {
+            var result = await GetAllItems();
+            return result.ToList().Count;
         }
     }
 }

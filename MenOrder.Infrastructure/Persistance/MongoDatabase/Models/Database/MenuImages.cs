@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models
+namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database
 {
     public class MenuImages : IEntity
     {

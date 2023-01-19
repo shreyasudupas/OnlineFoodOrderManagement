@@ -1,4 +1,6 @@
-﻿using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
+﻿using MenuManagement.Core.Mongo.Models;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
+using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
 using MenuManagment.Domain.Mongo.Interfaces;
 using MongoDB.Driver;
 using System;
@@ -37,6 +39,11 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         public async Task<IEnumerable<TEntity>> GetAllItems()
         {
             return await mongoCollection.Find(_ => true).ToListAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllItemsByPagination(Pagination mongoPagination)
+        {
+            return await mongoCollection.Find(_=> true).SortBy(x=>x.Id).Skip(mongoPagination.Skip).Limit(mongoPagination.Limit).ToListAsync();
         }
 
         public async Task<TEntity> GetById(string id)

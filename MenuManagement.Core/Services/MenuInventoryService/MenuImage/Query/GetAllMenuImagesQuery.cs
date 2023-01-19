@@ -1,25 +1,16 @@
 ﻿using MediatR;
-using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Mongo.Interfaces;
-using System;
+using MenuManagement.Core.Mongo.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query
 {
-    public class ImageResponse
-    {
-        public string ItemName { get; set; }
-        public string Data { get; set; }
-        public bool Active { get; set; }
-        public string Description { get; set; }
-    }
-
     public class GetAllMenuImagesQuery : IRequest<List<MenuImageDto>>
     {
+        public Pagination Pagination { get; set; }
     }
 
     public class GetAllMenuImagesQueryHandler : IRequestHandler<GetAllMenuImagesQuery, List<MenuImageDto>>
@@ -33,7 +24,8 @@ namespace MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query
 
         public async Task<List<MenuImageDto>> Handle(GetAllMenuImagesQuery request, CancellationToken cancellationToken)
         {
-            return await menuImagesRespository.GetAllMenuImages();
+            return await menuImagesRespository.GetAllMenuImages(request.Pagination);
+
         }
     }
 }

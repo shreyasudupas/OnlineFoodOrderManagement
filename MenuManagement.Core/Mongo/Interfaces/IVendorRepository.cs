@@ -1,4 +1,5 @@
 ﻿using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

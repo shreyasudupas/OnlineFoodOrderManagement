@@ -1,4 +1,4 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService;
+﻿using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Services.MenuInventoryService.CuisineTypes.Command;
 using MenuManagement.Core.Services.MenuInventoryService.CuisineTypes.Query;
 using MenuOrder.Shared.Controller;

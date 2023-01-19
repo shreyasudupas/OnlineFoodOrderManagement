@@ -1,4 +1,4 @@
-﻿namespace MenuManagement.Core.Common.Models.InventoryService
+﻿namespace MenuManagement.Core.Mongo.Dtos
 {
     public class VendorCuisineDto
     {

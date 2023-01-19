@@ -2,6 +2,7 @@
 using MenuManagement.Core.Common.Enum;
 using MenuManagement.Core.Common.Extension;
 using MenuManagement.Core.Common.Models.InventoryService;
+using MenuManagement.Core.Mongo.Dtos;
 using MenuManagement.Core.Mongo.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
