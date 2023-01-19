@@ -7,6 +7,7 @@ using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query.Models;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,13 +19,16 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
     public class MenuImageController : BaseController
     {
         private readonly IWebHostEnvironment _environment;
+        private readonly ILogger _logger;
 
-        public MenuImageController(IWebHostEnvironment environment)
+        public MenuImageController(IWebHostEnvironment environment,
+            ILogger<MenuImageController> logger)
         {
             _environment = environment;
+            _logger = logger;
         }
 
-        [HttpPost("/api/menuimage/upload")]
+        [HttpPost("/api/menuimage/upload/manual")]
         [RequestSizeLimit(5 * 1024 * 1024)]
         public async Task<MenuImageDto> UploadImage([FromForm] MenuFormImageRequest menuFormImageRequest)
         {
@@ -104,7 +108,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         }
 
         [HttpPut("/api/menuimage/upload")]
-        public async Task<MenuImageDto> UpdateFormWithImage([FromBody] MenuImageUpload menuImageUpload)
+        public async Task<MenuImageDto> UpdateMenuImage([FromBody] MenuImageUpload menuImageUpload)
         {
             if(!string.IsNullOrEmpty(menuImageUpload.Image.Data) && !string.IsNullOrEmpty(menuImageUpload.Image.Type))
             {
@@ -164,6 +168,67 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 });
 
                 return update;
+            }
+        }
+
+        [HttpPost("/api/menuimage/upload")]
+        public async Task<MenuImageDto> AddMenuImage([FromBody] MenuImageUpload menuImageUpload)
+        {
+            if(!string.IsNullOrEmpty(menuImageUpload.Image.Data) && !string.IsNullOrEmpty(menuImageUpload.Image.Type))
+            {
+                var result = await Mediator.Send(new AddMenuImageCommand
+                {
+                    MenuImageItem = new MenuImageDto
+                    {
+                        Id = menuImageUpload.Id,
+                        ItemName = menuImageUpload.ItemName,
+                        Active = menuImageUpload.Active,
+                        Description = menuImageUpload.Description,
+                        FileName = "",
+                        ImagePath = ""
+                    }
+                });
+
+                if (result != null)
+                {
+                    menuImageUpload.Id = result.Id;
+                    byte[] bytes = Convert.FromBase64String(menuImageUpload.Image.Data);
+                    string fileName = menuImageUpload.ItemName + "_" + menuImageUpload.Id + '.' + menuImageUpload.Image.Type;
+
+                    //set the image path
+                    string imgPath = Path.Combine(_environment.WebRootPath, "MenuImages", fileName);
+                    System.IO.File.WriteAllBytes(imgPath, bytes);
+
+                    var updateResult = await Mediator.Send(new UpdateMenuImagesCommand
+                    {
+                        UpdateMenuImage = new MenuImageDto
+                        {
+                            Id = menuImageUpload.Id,
+                            Active = menuImageUpload.Active,
+                            Description = menuImageUpload.Description,
+                            FileName = fileName, //updated filename
+                            ImagePath = imgPath, //updated path
+                            ItemName = menuImageUpload.ItemName
+                        }
+                    });
+
+                    if (updateResult != null)
+                        return updateResult;
+                    else
+                    {
+                        _logger.LogError($"AddMenuImage:Error updating Image path and fileName");
+                        return null;
+                    }
+                }
+                else
+                {
+                    _logger.LogError("Error in saving the menu Image");
+                    return null;
+                }
+            }else
+            {
+                _logger.LogError("Base64 Data / Image type is missing from Image request");
+                return null;
             }
         }
     }
