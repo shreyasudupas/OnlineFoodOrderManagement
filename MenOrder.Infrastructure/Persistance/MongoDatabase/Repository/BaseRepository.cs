@@ -64,5 +64,10 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         {
             return mongoCollection.Find(_=> true).ToList().Count;
         }
+
+        public async Task<List<TEntity>> GetAllMatchItems(FilterDefinition<TEntity> filter)
+        {
+            return await mongoCollection.FindSync(filter).ToListAsync();
+        }
     }
 }

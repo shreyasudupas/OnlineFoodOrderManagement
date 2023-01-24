@@ -6,9 +6,11 @@ using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
 using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
@@ -109,6 +111,24 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
         {
             var result = await GetAllItems();
             return result.ToList().Count;
+        }
+
+        public async Task<List<MenuImageDto>> GetImagesBySearchParam(string searchParam)
+        {
+            var queryExpr = new BsonRegularExpression(new Regex(searchParam, RegexOptions.IgnoreCase));
+
+            var filter = Builders<MenuImages>.Filter.Regex(f => f.ItemName, queryExpr);
+            var result = await GetAllMatchItems(filter);
+            if(result.Count > 0)
+            {
+                var mapToDto = _mapper.Map<List<MenuImageDto>>(result);
+                return mapToDto;
+            }
+            else
+            {
+                _logger.LogInformation("No Items got");
+                return null;
+            }
         }
     }
 }

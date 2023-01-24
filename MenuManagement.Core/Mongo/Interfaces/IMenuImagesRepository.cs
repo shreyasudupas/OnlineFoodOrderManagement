@@ -13,5 +13,7 @@ namespace MenuManagement.Core.Mongo.Interfaces
         Task<MenuImageDto> UpdateMenuImage(MenuImageDto menuImageDto);
         bool IfMenuImageDocumentExists();
         Task<int> GetMenuImageRecordCount();
+
+        Task<List<MenuImageDto>> GetImagesBySearchParam(string searchParam);
     }
 }

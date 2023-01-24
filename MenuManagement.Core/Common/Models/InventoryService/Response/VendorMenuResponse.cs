@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-
-namespace MenuManagement.Core.Mongo.Dtos
+﻿namespace MenuManagement.Core.Common.Models.InventoryService.Response
 {
-    public class VendorMenuDto
+    public class VendorMenuResponse
     {
         public string Id { get; set; }
 
         public string VendorId { get; set; }
 
         public string ItemName { get; set; }
-
         public string ImageId { get; set; }
+
+        public string ImageData { get; set; }
 
         public string FoodType { get; set; }
 

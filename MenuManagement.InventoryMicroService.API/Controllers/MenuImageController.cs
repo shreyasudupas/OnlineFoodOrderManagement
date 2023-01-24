@@ -4,6 +4,7 @@ using MenuManagement.Core.Mongo.Models;
 using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Command;
 using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query;
 using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query.Models;
+using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -231,5 +232,25 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 return null;
             }
         }
+
+        [HttpGet("/api/menuimage/search")]
+        public async Task<List<ImageDataModel>> GetMenuImagesByParam([FromQuery] string searchParam)
+        {
+            var response = new List<ImageDataModel>();
+            var result = await Mediator.Send(new GetMenuImagesByItemName { SearchParam = searchParam });
+
+            if(result != null)
+            {
+                foreach(var image in result)
+                {
+                    var getImageModel = await GetImageModel(image);
+
+                    response.Add(getImageModel);
+                }
+            }
+
+            return response;
+        }
+
     }
 }

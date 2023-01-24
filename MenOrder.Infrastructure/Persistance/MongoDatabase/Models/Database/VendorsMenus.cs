@@ -17,8 +17,8 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Databas
         [BsonElement("itemName")]
         public string ItemName { get; set; }
 
-        [BsonElement("imageLocation")]
-        public string ImageLocation { get; set; }
+        [BsonElement("imageId")]
+        public string ImageId { get; set; }
 
         [BsonElement("foodType")]
         public string FoodType { get; set; }
