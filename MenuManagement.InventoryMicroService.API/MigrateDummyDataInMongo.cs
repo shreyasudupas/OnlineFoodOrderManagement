@@ -30,6 +30,8 @@ namespace MenuManagement.InventoryMicroService.API
                 var webHostService = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
+                var menus = new List<VendorMenuDto>();
+
                 var dummyFoodType = new VendorFoodTypeDto
                 {
                     Id = "",
@@ -155,6 +157,7 @@ namespace MenuManagement.InventoryMicroService.API
                     {
                         menu.VendorId = vendor.Id;
                         var menuResult = menuService.AddVendorMenus(menu).GetAwaiter().GetResult();
+                        menus.Add(menuResult);
                         var res = (menuResult.Id != null)? true : false;
                         loggerContext.LogInformation($"menu inserted with Success {res}");
                     });
@@ -186,20 +189,23 @@ namespace MenuManagement.InventoryMicroService.API
                     var iamgeListToBeAdded = new List<MenuImageDto>();
 
                     //get image location
-                    foreach(var file in Directory.GetFiles(Path.Combine(webHostService.WebRootPath,"MenuImages")))
+                    foreach(var file in Directory.GetFiles(Path.Combine(webHostService.WebRootPath, "DefaultMenuImages")))
                     {
                         iamgeListToBeAdded.Add(new MenuImageDto
                         {
-                            FileName = file.Split("MenuImages\\")[1],
+                            FileName = file.Split("DefaultMenuImages\\")[1],
                             Active=true,
                             ImagePath = Path.Combine(webHostService.WebRootPath, "MenuImages",file)
                         });
                     }
 
-                    iamgeListToBeAdded[0].ItemName = "dosa";
+                    iamgeListToBeAdded[0].ItemName = "Plain Dosa";
                     iamgeListToBeAdded[0].Description = itemDictionary["dosa"];
-                    iamgeListToBeAdded[1].ItemName = "idly";
+                    iamgeListToBeAdded[0].FileName = iamgeListToBeAdded[0].FileName + "_" + menus.Find(m=>m.ItemName == "Plain Dosa").Id;
+
+                    iamgeListToBeAdded[1].ItemName = "Idly";
                     iamgeListToBeAdded[1].Description = itemDictionary["idly"];
+                    iamgeListToBeAdded[1].FileName = iamgeListToBeAdded[1].FileName + "_" + menus.Find(m => m.ItemName == "Idly").Id;
 
                     iamgeListToBeAdded.ForEach(image =>
                     {
