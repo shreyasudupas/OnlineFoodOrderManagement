@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace MenuManagement.InventoryMicroService.API
 {
@@ -201,16 +204,29 @@ namespace MenuManagement.InventoryMicroService.API
 
                     iamgeListToBeAdded[0].ItemName = "Plain Dosa";
                     iamgeListToBeAdded[0].Description = itemDictionary["dosa"];
-                    iamgeListToBeAdded[0].FileName = iamgeListToBeAdded[0].FileName + "_" + menus.Find(m=>m.ItemName == "Plain Dosa").Id;
+                    iamgeListToBeAdded[0].FileName = iamgeListToBeAdded[0].FileName.Split('.')[0] + "_" + menus.Find(m=>m.ItemName == "Plain Dosa").Id + "." + iamgeListToBeAdded[0].FileName.Split('.')[1];
+                    byte[] byteDosa = File.ReadAllBytesAsync(Path.Combine(webHostService.WebRootPath, "DefaultMenuImages", "dosa.jpg")).GetAwaiter().GetResult();
 
                     iamgeListToBeAdded[1].ItemName = "Idly";
                     iamgeListToBeAdded[1].Description = itemDictionary["idly"];
-                    iamgeListToBeAdded[1].FileName = iamgeListToBeAdded[1].FileName + "_" + menus.Find(m => m.ItemName == "Idly").Id;
+                    iamgeListToBeAdded[1].FileName = iamgeListToBeAdded[1].FileName.Split('.')[0] + "_" + menus.Find(m => m.ItemName == "Idly").Id + "." + iamgeListToBeAdded[1].FileName.Split('.')[1];
+                    byte[] byteIdly = File.ReadAllBytesAsync(Path.Combine(webHostService.WebRootPath, "DefaultMenuImages", "idly.png")).GetAwaiter().GetResult();
 
                     iamgeListToBeAdded.ForEach(image =>
                     {
                         var result = menuImageService.AddMenuImage(image).GetAwaiter().GetResult();
+
+                        
+                        //set the image path
+                        string imgPath = Path.Combine(webHostService.WebRootPath, "MenuImages", image.FileName);
+
+                        if(image.ItemName== "Plain Dosa")
+                            System.IO.File.WriteAllBytes(imgPath, byteDosa);
+                        else
+                            System.IO.File.WriteAllBytes(imgPath, byteIdly);
                     });
+
+                    
 
                     loggerContext.LogInformation("Migration for Menu Image Ended");
                 }
