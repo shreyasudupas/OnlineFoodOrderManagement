@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using MenuManagement.Core.Common.Models.InventoryService;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Extension;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -14,7 +13,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
 {
     public class VendorRepository : BaseRepository<Vendor>, IVendorRepository
     {
@@ -29,7 +28,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             _mapper = mapper;
         }
 
-        public async Task<VendorDto> AddVendorDocument(VendorDto vendor)
+        public async Task<Vendor> AddVendorDocument(VendorDto vendor)
         {
             _logger.LogInformation("AddVendorDocument started..");
             if (vendor != null)
@@ -40,9 +39,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
                 var getVendorWithId = await GetByFilter(v=>v.VendorName == vendor.VendorName);
 
-                var vendorWithIdMapTo = _mapper.Map<VendorDto>(getVendorWithId);
-
-                return vendorWithIdMapTo;
+                return getVendorWithId;
             }
             else
             {
@@ -51,7 +48,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<List<VendorDto>> AddVendorDocuments(List<VendorDto> vendors)
+        public async Task<List<Vendor>> AddVendorDocuments(List<VendorDto> vendors)
         {
             _logger.LogInformation("AddVendorDocuments started..");
             if(vendors.Count > 0)
@@ -60,7 +57,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
                 await CreateManyDocument(mapToVendorModel);
 
-                return vendors;
+                return mapToVendorModel;
             }
             else
             {
@@ -69,7 +66,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<List<VendorDto>> GetAllVendorDocuments()
+        public async Task<List<Vendor>> GetAllVendorDocuments()
         {
             _logger.LogInformation("GetAllVendorDocuments started..");
 
@@ -77,18 +74,16 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
             if(vendors.ToList().Count > 0)
             {
-                var mapToVendorDto = _mapper.Map<List<VendorDto>>(vendors);
-
-                return mapToVendorDto;
+                return vendors.ToList();
             }
             else
             {
                 _logger.LogInformation("No Vendors is database");
-                return new List<VendorDto>();
+                return new List<Vendor>();
             }
         }
 
-        public async Task<VendorDto> GetVendorDocument(string id)
+        public async Task<Vendor> GetVendorDocument(string id)
         {
             _logger.LogInformation("GetVendorDocument started..");
 
@@ -96,18 +91,16 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
             if (vendor != null)
             {
-                var mapToVendorDto = _mapper.Map<VendorDto>(vendor);
-
-                return mapToVendorDto;
+                return vendor;
             }
             else
             {
                 _logger.LogInformation($"Vendors with id: {id} is database");
-                return new VendorDto();
+                return null;
             }
         }
 
-        public async Task<VendorDto> GetVendorDocumentByCustomerfilter(Expression<Func<VendorDto, bool>> filterExpression)
+        public async Task<Vendor> GetVendorDocumentByCustomerfilter(Expression<Func<VendorDto, bool>> filterExpression)
         {
             _logger.LogInformation("GetVendorDocumentByCustomerfilter started..");
 
@@ -119,7 +112,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             return IfDocumentExists();
         }
 
-        public async Task<CategoryDto> AddCategoryToVendor(string vendorId,CategoryDto category)
+        public async Task<Categories> AddCategoryToVendor(string vendorId,CategoryDto category)
         {
             var vendor = await GetById(vendorId);
 
@@ -142,8 +135,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                     {
                         var vendorUpdated = await GetById(vendorId);
                         var updatedCategory = vendorUpdated.Categories.Find(x => x.Name == category.Name);
-                        var mapToDto = _mapper.Map<CategoryDto>(updatedCategory);
-                        return mapToDto;
+                        return updatedCategory;
                     }
                     else
                     {
@@ -164,14 +156,13 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<List<CategoryDto>> GetAllVendorCategories(string vendorId)
+        public async Task<List<Categories>> GetAllVendorCategories(string vendorId)
         {
             var vendor = await GetById(vendorId);
 
             if (vendor != null)
             {
-                var mapToDtoCatgories = _mapper.Map<List<CategoryDto>>(vendor.Categories);
-                return mapToDtoCatgories;
+                return vendor.Categories;
             }
             else
             {
@@ -180,15 +171,14 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<CategoryDto> GetCategoryById(string Id,string VendorId)
+        public async Task<Categories> GetCategoryById(string Id,string VendorId)
         {
             _logger.LogInformation("GetCategoryById started..");
             var vendor = await GetById(VendorId);
             if(vendor != null)
             {
                 var categoryList = vendor.Categories.Find(c => c.Id == Id);
-                var mapModelToDto = _mapper.Map<CategoryDto>(categoryList);
-                return mapModelToDto;
+                return categoryList;
             }
             else
             {
@@ -197,14 +187,15 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<VendorDto> UpdateVendorDocument(VendorDto vendorData)
+        public async Task<Vendor> UpdateVendorDocument(VendorDto vendorData)
         {
             _logger.LogInformation("UpdateVendorDocument started..");
             var vendor = await GetById(vendorData.Id);
 
+            var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
             if (vendor != null)
             {
-                var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
+                
                 //update category since FE is not sending category
                 mapToVendorModel.Categories = vendor.Categories;
 
@@ -215,15 +206,12 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 if(result.IsAcknowledged)
                 {
                     var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
-
-                    var vendorWithIdMapTo = _mapper.Map<VendorDto>(getVendorWithId);
-
-                    return vendorWithIdMapTo;
+                    return getVendorWithId;
                 }
                 else
                 {
                     _logger.LogError($"Error updating the Vendor with Id {vendorData.Id}");
-                    return vendorData;
+                    return mapToVendorModel;
                 }
             }
             else
@@ -233,15 +221,14 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<CategoryDto> UpdateVendorCategoryDocument(string vendorId,CategoryDto categoryDto)
+        public async Task<Categories> UpdateVendorCategoryDocument(string vendorId,CategoryDto categoryDto)
         {
             _logger.LogInformation("UpdateVendorCategoryDocument started..");
+            var mapToCategoryModel = _mapper.Map<Categories>(categoryDto);
             var vendor = await GetById(vendorId);
 
             if (vendor != null)
             {
-                var mapToCategoryModel = _mapper.Map<Categories>(categoryDto);
-
                 //update category since FE is not sending category
                 var itemToBeUpdated = vendor.Categories.Where(x => x.Id == mapToCategoryModel.Id).FirstOrDefault();
 
@@ -253,13 +240,12 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 var result = await UpdateOneDocument(filter, update);
                 if (result.IsAcknowledged)
                 {
-                    var mapToCategoryDtoModel = _mapper.Map<CategoryDto>(mapToCategoryModel);
-                    return mapToCategoryDtoModel;
+                    return mapToCategoryModel;
                 }
                 else
                 {
                     _logger.LogError($"Error updating the Vendor with Id {vendor}");
-                    return categoryDto;
+                    return mapToCategoryModel;
                 }
             }
             else

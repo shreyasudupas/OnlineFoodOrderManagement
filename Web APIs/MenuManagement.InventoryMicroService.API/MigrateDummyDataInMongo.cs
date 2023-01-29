@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
-using MenuManagement.Core.Common.Enum;
-using MenuManagement.Core.Common.Extension;
-using MenuManagement.Core.Common.Models.InventoryService;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace MenuManagement.InventoryMicroService.API
 {
@@ -33,7 +27,7 @@ namespace MenuManagement.InventoryMicroService.API
                 var webHostService = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
-                var menus = new List<VendorMenuDto>();
+                var menus = new List<VendorsMenus>();
 
                 var dummyFoodType = new VendorFoodTypeDto
                 {

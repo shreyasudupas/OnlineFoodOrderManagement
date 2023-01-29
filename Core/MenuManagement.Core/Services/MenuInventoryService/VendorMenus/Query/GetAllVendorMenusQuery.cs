@@ -1,11 +1,12 @@
-﻿using MediatR;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Command
 {
     public class GetAllVendorMenusQuery : IRequest<List<VendorMenuDto>>
     {
@@ -14,15 +15,24 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command
     public class GetAllVendorMenusQueryHandler : IRequestHandler<GetAllVendorMenusQuery, List<VendorMenuDto>>
     {
         private readonly IVendorsMenuRepository _menuRepository;
+        private readonly IMapper _mapper;
 
-        public GetAllVendorMenusQueryHandler(IVendorsMenuRepository menuRepository)
+        public GetAllVendorMenusQueryHandler(IVendorsMenuRepository menuRepository, IMapper mapper)
         {
             _menuRepository = menuRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<VendorMenuDto>> Handle(GetAllVendorMenusQuery request, CancellationToken cancellationToken)
         {
-            return await _menuRepository.GetAllMenu();
+            var result = await _menuRepository.GetAllMenu();
+            if (result.Count > 0)
+            {
+                var mapToDto = _mapper.Map<List<VendorMenuDto>>(result);
+                return mapToDto;
+            }
+            else
+                return null;
         }
     }
 }

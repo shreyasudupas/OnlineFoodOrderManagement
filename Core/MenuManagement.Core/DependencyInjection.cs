@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace MenuManagement.Core
+namespace Inventory.Microservice.Core
 {
     public static class DependencyInjection
     {

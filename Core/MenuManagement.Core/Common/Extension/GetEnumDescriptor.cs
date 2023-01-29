@@ -1,8 +1,8 @@
-﻿using MenuManagement.Core.Common.Enum;
+﻿using Inventory.Microservice.Core.Common.Enum;
 using System;
 using System.ComponentModel;
 
-namespace MenuManagement.Core.Common.Extension
+namespace Inventory.Microservice.Core.Common.Extension
 {
     public static class Extension
     {

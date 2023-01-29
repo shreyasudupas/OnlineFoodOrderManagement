@@ -1,10 +1,10 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService.Request;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Models;
-using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Command;
-using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query;
-using MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query.Models;
-using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query;
+﻿using Inventory.Microservice.Core.Common.Models.InventoryService.Request;
+using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Command;
+using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query;
+using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query.Models;
+using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Models;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

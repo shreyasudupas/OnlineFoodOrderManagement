@@ -1,11 +1,12 @@
-﻿using MediatR;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.FoodTypes.Query
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.FoodTypes.Query
 {
     public class GetAllFoodTypeQuery : IRequest<List<VendorFoodTypeDto>>
     {
@@ -15,15 +16,24 @@ namespace MenuManagement.Core.Services.MenuInventoryService.FoodTypes.Query
     public class GetAllFoodTypeQueryHandler : IRequestHandler<GetAllFoodTypeQuery, List<VendorFoodTypeDto>>
     {
         private readonly IVendorFoodTypeRepository vendorFoodTypeRepository;
+        private readonly IMapper _mapper;
 
-        public GetAllFoodTypeQueryHandler(IVendorFoodTypeRepository vendorFoodTypeRepository)
+        public GetAllFoodTypeQueryHandler(IVendorFoodTypeRepository vendorFoodTypeRepository, IMapper mapper)
         {
             this.vendorFoodTypeRepository = vendorFoodTypeRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<VendorFoodTypeDto>> Handle(GetAllFoodTypeQuery request, CancellationToken cancellationToken)
         {
-            return await vendorFoodTypeRepository.GetListVendorFoodType(request.Active);
+            var result = await vendorFoodTypeRepository.GetListVendorFoodType(request.Active);
+            if (result.Count > 0)
+            {
+                var mapToDto = _mapper.Map<List<VendorFoodTypeDto>>(result);
+                return mapToDto;
+            }
+            else
+                return null;
         }
     }
 }

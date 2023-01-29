@@ -1,10 +1,11 @@
-﻿using MediatR;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Commands
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Commands
 {
     public class UpdateVendorMenuCommand : IRequest<VendorMenuDto>
     {
@@ -14,15 +15,24 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Commands
     public class UpdateVendorMenuCommandHandler : IRequestHandler<UpdateVendorMenuCommand, VendorMenuDto>
     {
         private readonly IVendorsMenuRepository vendorsMenuRepository;
+        private readonly IMapper _mapper;
 
-        public UpdateVendorMenuCommandHandler(IVendorsMenuRepository vendorsMenuRepository)
+        public UpdateVendorMenuCommandHandler(IVendorsMenuRepository vendorsMenuRepository, IMapper mapper)
         {
             this.vendorsMenuRepository = vendorsMenuRepository;
+            _mapper = mapper;
         }
 
         public async Task<VendorMenuDto> Handle(UpdateVendorMenuCommand request, CancellationToken cancellationToken)
         {
-            return await vendorsMenuRepository.UpdateVendorMenus(request.UpdateVendorMenu);
+            var result = await vendorsMenuRepository.UpdateVendorMenus(request.UpdateVendorMenu);
+            if (result != null)
+            {
+                var mapToModel = _mapper.Map<VendorMenuDto>(result);
+                return mapToModel;
+            }
+            else
+                return null;
         }
     }
 }

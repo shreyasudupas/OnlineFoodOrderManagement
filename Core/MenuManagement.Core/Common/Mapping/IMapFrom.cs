@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace MenuManagement.Core.Common.Mapping
+namespace Inventory.Microservice.Core.Common.Mapping
 {
     public interface IMapFrom<T>
     {

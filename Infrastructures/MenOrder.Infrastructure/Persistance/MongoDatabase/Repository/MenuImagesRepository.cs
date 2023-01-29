@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
-using MenuManagement.Core.Mongo.Models;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Extension;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
+using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
 {
     public class MenuImagesRepository : BaseRepository<MenuImages> , IMenuImagesRepository
     {
@@ -28,13 +28,12 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             _mapper = mapper;
         }
 
-        public async Task<List<MenuImageDto>> GetAllMenuImages(Pagination pagination)
+        public async Task<List<MenuImages>> GetAllMenuImages(Pagination pagination)
         {
             var menusImages = await GetAllItemsByPagination(pagination);
             if(menusImages.ToList().Count > 0)
             {
-                var mapToDto = _mapper.Map<List<MenuImageDto>>(menusImages);
-                return mapToDto;
+                return menusImages.ToList();
             }
             else
             {
@@ -43,13 +42,12 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<MenuImageDto> GetMenuImagesById(string Id)
+        public async Task<MenuImages> GetMenuImagesById(string Id)
         {
             var menusImages = await GetById(Id);
             if (menusImages != null)
             {
-                var mapToDto = _mapper.Map<MenuImageDto>(menusImages);
-                return mapToDto;
+                return menusImages;
             }
             else
             {
@@ -58,7 +56,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<MenuImageDto> AddMenuImage(MenuImageDto menuImageDto)
+        public async Task<MenuImages> AddMenuImage(MenuImageDto menuImageDto)
         {
             _logger.LogInformation("AddMenuImage started...");
 
@@ -68,10 +66,10 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             var insertedMenuItem = await GetByFilter(i => i.FileName == menuImageDto.FileName);
             menuImageDto.Id = insertedMenuItem.Id;
 
-            return menuImageDto;
+            return insertedMenuItem;
         }
 
-        public async Task<MenuImageDto> UpdateMenuImage(MenuImageDto menuImageDto)
+        public async Task<MenuImages> UpdateMenuImage(MenuImageDto menuImageDto)
         {
             _logger.LogInformation("UpdateMenuImage started...");
             var menuImage = await GetById(menuImageDto.Id);
@@ -86,7 +84,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 if(result.IsAcknowledged)
                 {
                     _logger.LogInformation("update success");
-                    return menuImageDto;
+                    return mapToModel;
                 }
                 else
                 {
@@ -113,7 +111,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             return result.ToList().Count;
         }
 
-        public async Task<List<MenuImageDto>> GetImagesBySearchParam(string searchParam)
+        public async Task<List<MenuImages>> GetImagesBySearchParam(string searchParam)
         {
             var queryExpr = new BsonRegularExpression(new Regex(searchParam, RegexOptions.IgnoreCase));
 
@@ -121,8 +119,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             var result = await GetAllMatchItems(filter);
             if(result.Count > 0)
             {
-                var mapToDto = _mapper.Map<List<MenuImageDto>>(result);
-                return mapToDto;
+                return result;
             }
             else
             {

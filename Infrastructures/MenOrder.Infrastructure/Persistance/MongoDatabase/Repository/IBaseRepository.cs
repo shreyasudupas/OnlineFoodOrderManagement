@@ -1,10 +1,11 @@
-﻿using MongoDB.Driver;
+﻿using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
 {
     public interface IBaseRepository<TEntity> where TEntity : class, IEntity
     {
@@ -18,10 +19,5 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
         Task<TEntity> GetByFilter(Expression<Func<TEntity, bool>> filterExpression);
 
-    }
-
-    public interface IEntity
-    {
-        public string Id { get; set; }
     }
 }

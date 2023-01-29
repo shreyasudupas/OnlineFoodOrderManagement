@@ -1,10 +1,11 @@
-﻿using MediatR;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.CuisineTypes.Command
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.CuisineTypes.Command
 {
     public class AddCuisineTypeCommand : IRequest<VendorCuisineDto>
     {
@@ -14,15 +15,26 @@ namespace MenuManagement.Core.Services.MenuInventoryService.CuisineTypes.Command
     public class AddCuisineTypeCommandHandler : IRequestHandler<AddCuisineTypeCommand, VendorCuisineDto>
     {
         private readonly IVendorCuisineTypeRepository vendorCuisineTypeRepository;
+        private readonly IMapper _mapper;
 
-        public AddCuisineTypeCommandHandler(IVendorCuisineTypeRepository vendorCuisineTypeRepository)
+        public AddCuisineTypeCommandHandler(IVendorCuisineTypeRepository vendorCuisineTypeRepository, IMapper mapper)
         {
             this.vendorCuisineTypeRepository = vendorCuisineTypeRepository;
+            _mapper = mapper;
         }
 
         public async Task<VendorCuisineDto> Handle(AddCuisineTypeCommand request, CancellationToken cancellationToken)
         {
-            return await vendorCuisineTypeRepository.AddVendorCuisineType(request.CuisineType);
+            var result = await vendorCuisineTypeRepository.AddVendorCuisineType(request.CuisineType);
+            if(result != null)
+            {
+                var mapToDto = _mapper.Map<VendorCuisineDto>(result);
+                return mapToDto;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

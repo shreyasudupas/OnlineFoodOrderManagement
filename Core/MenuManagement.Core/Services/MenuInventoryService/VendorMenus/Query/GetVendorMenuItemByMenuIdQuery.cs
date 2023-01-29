@@ -1,10 +1,11 @@
-﻿using MediatR;
-using MenuManagement.Core.Common.Models.InventoryService.Response;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using Inventory.Microservice.Core.Common.Models.InventoryService.Response;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query
 {
     public class GetVendorMenuItemByMenuIdQuery : IRequest<VendorMenuResponse>
     {
@@ -15,12 +16,14 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query
     {
         private readonly IVendorsMenuRepository vendorsMenuRepository;
         private readonly IMenuImagesRepository menuImagesRepository;
+        private readonly IMapper _mapper;
 
-        public GetVendorMenuItemByMenuIdQueryHandler(IVendorsMenuRepository vendorsMenuRepository, 
-            IMenuImagesRepository menuImagesRepository)
+        public GetVendorMenuItemByMenuIdQueryHandler(IVendorsMenuRepository vendorsMenuRepository,
+            IMenuImagesRepository menuImagesRepository, IMapper mapper)
         {
             this.vendorsMenuRepository = vendorsMenuRepository;
             this.menuImagesRepository = menuImagesRepository;
+            _mapper = mapper;
         }
 
         public async Task<VendorMenuResponse> Handle(GetVendorMenuItemByMenuIdQuery request, CancellationToken cancellationToken)

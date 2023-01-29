@@ -1,4 +1,4 @@
-﻿namespace MenuManagement.Core.Services.MenuInventoryService.MenuImage.Query.Models
+﻿namespace Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query.Models
 {
     public class ImageDataModel
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MenuManagement.Core.Common.Models.Common
+namespace Inventory.Microservice.Core.Common.Models.Common
 {
     public class UserInformationModel
     {

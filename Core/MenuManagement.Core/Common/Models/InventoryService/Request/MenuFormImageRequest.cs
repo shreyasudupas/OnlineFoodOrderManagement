@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace MenuManagement.Core.Common.Models.InventoryService.Request
+namespace Inventory.Microservice.Core.Common.Models.InventoryService.Request
 {
     public class MenuFormImageRequest
     {

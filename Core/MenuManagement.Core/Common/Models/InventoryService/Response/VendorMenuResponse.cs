@@ -1,4 +1,4 @@
-﻿namespace MenuManagement.Core.Common.Models.InventoryService.Response
+﻿namespace Inventory.Microservice.Core.Common.Models.InventoryService.Response
 {
     public class VendorMenuResponse
     {

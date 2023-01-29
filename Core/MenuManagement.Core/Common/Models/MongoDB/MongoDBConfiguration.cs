@@ -1,4 +1,4 @@
-﻿namespace MenuManagement.Core.Common.Models.MongoDB
+﻿namespace Inventory.Microservice.Core.Common.Models.MongoDB
 {
     public class MongoDatabaseConfiguration
     {

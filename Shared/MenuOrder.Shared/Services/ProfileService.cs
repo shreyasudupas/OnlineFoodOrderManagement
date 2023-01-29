@@ -1,6 +1,6 @@
 ﻿using MenuOrder.Shared.Services.Interfaces;
 
-namespace MenuManagement.Core.Common.Services
+namespace Inventory.Microservice.Core.Common.Services
 {
     /// <summary>
     /// This is used to send the Email Id across the diffrent layers in Scopped Lifetime from Middleware to Authorization to Controller the value Email Id can be read

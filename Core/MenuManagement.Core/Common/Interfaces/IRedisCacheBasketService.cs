@@ -1,8 +1,8 @@
-﻿using MenuManagement.Core.Common.Models.BasketService;
-using MenuManagement.Core.Common.Models.Common;
+﻿using Inventory.Microservice.Core.Common.Models.BasketService;
+using Inventory.Microservice.Core.Common.Models.Common;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Common.Interfaces
+namespace Inventory.Microservice.Core.Common.Interfaces
 {
     public interface IRedisCacheBasketService
     {

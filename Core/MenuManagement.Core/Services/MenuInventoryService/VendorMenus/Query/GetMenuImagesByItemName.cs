@@ -1,11 +1,12 @@
-﻿using MediatR;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query
 {
     public class GetMenuImagesByItemName : IRequest<List<MenuImageDto>>
     {
@@ -15,16 +16,24 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query
     public class GetMenuImagesByItemNameHandler : IRequestHandler<GetMenuImagesByItemName, List<MenuImageDto>>
     {
         private readonly IMenuImagesRepository menuImagesRepository;
+        private readonly IMapper _mapper;
 
-        public GetMenuImagesByItemNameHandler(IMenuImagesRepository menuImagesRepository)
+        public GetMenuImagesByItemNameHandler(IMenuImagesRepository menuImagesRepository, IMapper mapper)
         {
             this.menuImagesRepository = menuImagesRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<MenuImageDto>> Handle(GetMenuImagesByItemName request, CancellationToken cancellationToken)
         {
-            var images = await menuImagesRepository.GetImagesBySearchParam(request.SearchParam);
-            return images;
+            var result = await menuImagesRepository.GetImagesBySearchParam(request.SearchParam);
+            if(result != null)
+            {
+                var mapToDto = _mapper.Map<List<MenuImageDto>>(result);
+                return mapToDto; 
+            }
+            else
+                return null;
         }
     }
 }

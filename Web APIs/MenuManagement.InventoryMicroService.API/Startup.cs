@@ -1,5 +1,5 @@
-using MenuManagement.Core;
-using MenuManagement.Infrastructure;
+using Inventory.Microservice.Core;
+using MongoDb.Infrastructure.Persistance;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -53,7 +53,7 @@ namespace MenuManagement.InventoryMicroService.API
             });
 
             services.AddCore();
-            services.AddInfratructure(Configuration);
+            services.AddMongoInfratructure(Configuration);
             services.AddSharedInjection();
 
             services.AddAuthentication("Bearer")

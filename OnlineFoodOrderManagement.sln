@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck.API.MicroServic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{97AFDB0F-6243-496D-88B6-8AD392EE9877}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Core", "Core\MenuManagement.Core\MenuManagement.Core.csproj", "{5FC6A043-BC44-4796-86AC-9361197BB2EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Microservice.Core", "Core\MenuManagement.Core\Inventory.Microservice.Core.csproj", "{5FC6A043-BC44-4796-86AC-9361197BB2EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Infrastructure", "Infrastructures\MenOrder.Infrastructure\MenuManagement.Infrastructure.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDb.Infrastructure.Persistance", "Infrastructures\MenOrder.Infrastructure\MongoDb.Infrastructure.Persistance.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.BasketMicroService.API", "Web APIs\MenuOrder.BasketMicroService.API\MenuManagement.BasketMicroService.API.csproj", "{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}"
 EndProject

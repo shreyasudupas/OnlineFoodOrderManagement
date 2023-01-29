@@ -1,8 +1,8 @@
-﻿using MenuManagement.Core.Common.Models.MongoDB;
+﻿using Inventory.Microservice.Core.Common.Models.MongoDB;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext
 {
     public class MongoDBContext : IMongoDBContext
     {

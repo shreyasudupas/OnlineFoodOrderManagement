@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models.Database;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Extension;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
 {
     public class VendorFoodTypeRepository : BaseRepository<VendorFoodType> , IVendorFoodTypeRepository
     {
@@ -24,25 +25,25 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             _logger = logger;
         }
 
-        public async Task<List<VendorFoodTypeDto>> GetListVendorFoodType(bool active)
+        public async Task<List<VendorFoodType>> GetListVendorFoodType(bool active)
         {
             _logger.LogInformation("GetListVendorType started");
             var foodTypes = await GetAllItems();
-            var mapToDtoModel = _mapper.Map<List<VendorFoodTypeDto>>(foodTypes);
-            if (active)
-                mapToDtoModel = mapToDtoModel.FindAll(x => x.Active == true);
+            var foodTypesList = foodTypes.ToList();
 
-            return mapToDtoModel;
+            if (active)
+                foodTypesList = foodTypesList.FindAll(x => x.Active == true);
+
+            return foodTypesList;
         }
 
-        public async Task<VendorFoodTypeDto> GetVendorFoodTypeById(string Id)
+        public async Task<VendorFoodType> GetVendorFoodTypeById(string Id)
         {
             _logger.LogInformation("GetVendorTypeById started");
             var foodTypeById = await GetById(Id);
             if(foodTypeById != null)
             {
-                var mapToDto = _mapper.Map<VendorFoodTypeDto>(foodTypeById);
-                return mapToDto;
+                return foodTypeById;
             }else
             {
                 _logger.LogError($"Food Type with Id: {Id} not available");
@@ -50,7 +51,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
             }
         }
 
-        public async Task<VendorFoodTypeDto> AddVendorFoodType(VendorFoodTypeDto FoodType)
+        public async Task<VendorFoodType> AddVendorFoodType(VendorFoodTypeDto FoodType)
         {
             _logger.LogInformation("AddVendorFoodTypeById started");
             var ifExists = await GetByFilter(f => f.TypeName == FoodType.TypeName);
@@ -60,17 +61,17 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
                 await CreateOneDocument(mapDtoToModel);
 
                 var updatedFoodType = await GetByFilter(f => f.TypeName == FoodType.TypeName);
-                FoodType.Id = updatedFoodType.Id;
-                return FoodType;
+                return updatedFoodType;
             }
             else
             {
                 _logger.LogError("Food Type already exists");
-                return FoodType;
+                var mapModel = _mapper.Map<VendorFoodType>(FoodType);
+                return mapModel;
             }
         }
 
-        public async Task<VendorFoodTypeDto> UpdateFoodTypeDocument(VendorFoodTypeDto vendorFoodTypeDto)
+        public async Task<VendorFoodType> UpdateFoodTypeDocument(VendorFoodTypeDto vendorFoodTypeDto)
         {
             _logger.LogInformation("UpdateFoodTypeDocument started..");
             var vendor = await GetById(vendorFoodTypeDto.Id);
@@ -86,9 +87,7 @@ namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
 
                 var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
 
-                var mapToVendorFoodTypeModelToDto = _mapper.Map<VendorFoodTypeDto>(getVendorWithId);
-
-                return mapToVendorFoodTypeModelToDto;
+                return getVendorWithId;
             }
             else
             {

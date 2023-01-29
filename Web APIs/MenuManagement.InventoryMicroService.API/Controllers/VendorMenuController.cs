@@ -1,8 +1,8 @@
-﻿using MenuManagement.Core.Common.Models.InventoryService.Response;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Command;
-using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Commands;
-using MenuManagement.Core.Services.MenuInventoryService.VendorMenus.Query;
+﻿using Inventory.Microservice.Core.Common.Models.InventoryService.Response;
+using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Command;
+using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Commands;
+using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;

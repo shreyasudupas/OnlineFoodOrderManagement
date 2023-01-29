@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MenuManagement.Core\MenuManagement.Core.csproj" />
+    <Folder Include="Mongo\Enum\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.15.0" />
   </ItemGroup>
 
 </Project>

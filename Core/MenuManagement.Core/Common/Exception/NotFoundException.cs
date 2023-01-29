@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MenuManagement.Core.Common.Exception
+namespace Inventory.Microservice.Core.Common.Exception
 {
     public class NotFoundException : ApplicationException
     {

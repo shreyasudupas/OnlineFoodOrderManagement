@@ -1,11 +1,12 @@
-﻿using MediatR;
-using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Mongo.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Commands.AddVendors
+namespace Inventory.Microservice.Core.Services.MenuInventoryService.VendorDetails.Commands.AddVendors
 {
     public class AddVendorsCommand : IRequest<List<VendorDto>>
     {
@@ -15,15 +16,24 @@ namespace MenuManagement.Core.Services.MenuInventoryService.VendorDetails.Comman
     public class AddVendorCommandHandler : IRequestHandler<AddVendorsCommand, List<VendorDto>>
     {
         private readonly IVendorRepository _vendorRepository;
+        private readonly IMapper _mapper;
 
-        public AddVendorCommandHandler(IVendorRepository vendorRepository)
+        public AddVendorCommandHandler(IVendorRepository vendorRepository, IMapper mapper)
         {
             _vendorRepository = vendorRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<VendorDto>> Handle(AddVendorsCommand request, CancellationToken cancellationToken)
         {
-            return await _vendorRepository.AddVendorDocuments(request.VendorsInput);
+            var result = await _vendorRepository.AddVendorDocuments(request.VendorsInput);
+            if (result.Count > 0)
+            {
+                var mapToDto = _mapper.Map<List<VendorDto>>(result);
+                return mapToDto;
+            }
+            else
+                return null;
         }
     }
 }

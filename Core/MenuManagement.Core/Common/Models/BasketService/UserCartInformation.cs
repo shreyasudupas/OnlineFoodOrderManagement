@@ -1,8 +1,8 @@
-﻿using MenuManagement.Core.Common.Models.Common;
+﻿using Inventory.Microservice.Core.Common.Models.Common;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace MenuManagement.Core.Common.Models.BasketService
+namespace Inventory.Microservice.Core.Common.Models.BasketService
 {
     public class UserCartInformation
     {

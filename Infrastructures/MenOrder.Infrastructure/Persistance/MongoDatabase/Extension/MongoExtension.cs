@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Extension
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Extension
 {
     public static class MongoExtension
     {

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace MenuManagement.Core.Common.Mapping
+namespace Inventory.Microservice.Core.Common.Mapping
 {
     public class MappingProfile : Profile
     {

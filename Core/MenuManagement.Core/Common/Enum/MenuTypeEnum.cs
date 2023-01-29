@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MenuManagement.Core.Common.Enum
+namespace Inventory.Microservice.Core.Common.Enum
 {
     public enum MenuTypeEnum
     {

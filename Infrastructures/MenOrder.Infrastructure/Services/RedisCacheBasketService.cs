@@ -1,12 +1,12 @@
-﻿using MenuManagement.Core.Common.Interfaces;
-using MenuManagement.Core.Common.Models.BasketService;
-using MenuManagement.Core.Common.Models.Common;
+﻿using Inventory.Microservice.Core.Common.Interfaces;
+using Inventory.Microservice.Core.Common.Models.BasketService;
+using Inventory.Microservice.Core.Common.Models.Common;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Infrastructure.Services
+namespace MongoDb.Infrastructure.Persistance.Services
 {
     public class RedisCacheBasketService : IRedisCacheBasketService
     {

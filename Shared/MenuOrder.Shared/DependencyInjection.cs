@@ -1,4 +1,4 @@
-﻿using MenuManagement.Core.Common.Services;
+﻿using Inventory.Microservice.Core.Common.Services;
 using MenuOrder.Shared.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 

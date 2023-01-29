@@ -1,6 +1,6 @@
-﻿using MenuManagement.Core.Mongo.Dtos;
-using MenuManagement.Core.Services.MenuInventoryService.FoodTypes.Command;
-using MenuManagement.Core.Services.MenuInventoryService.FoodTypes.Query;
+﻿using Inventory.Microservice.Core.Services.MenuInventoryService.FoodTypes.Command;
+using Inventory.Microservice.Core.Services.MenuInventoryService.FoodTypes.Query;
+using MenuManagment.Mongo.Domain.Mongo.Dtos;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

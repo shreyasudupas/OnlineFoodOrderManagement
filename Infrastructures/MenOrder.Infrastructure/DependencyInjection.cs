@@ -1,22 +1,21 @@
-﻿using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
-using MenuManagement.Infrastructure.Services;
-using MenuManagement.Core.Common.Interfaces;
-using MenuManagement.Core.Common.Models.MongoDB;
+﻿using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
+using MongoDb.Infrastructure.Persistance.Services;
+using Inventory.Microservice.Core.Common.Interfaces;
+using Inventory.Microservice.Core.Common.Models.MongoDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
-using MenuManagment.Domain.Mongo.Interfaces;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository;
-using MenuManagement.Core.Mongo.Interfaces;
+using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository;
 using AutoMapper;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.MappingProfiles;
+using MenuManagment.Mongo.Domain.Mongo.MappingProfile;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 
-namespace MenuManagement.Infrastructure
+namespace MongoDb.Infrastructure.Persistance
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfratructure(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddMongoInfratructure(this IServiceCollection services,IConfiguration configuration)
         {
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -42,7 +41,6 @@ namespace MenuManagement.Infrastructure
             //Database registration
             services.AddScoped<IMongoDBContext, MongoDBContext>();
             services.AddScoped<IVendorsMenuRepository, VendorsMenuRepository>();
-            services.AddScoped<Core.Mongo.Interfaces.IVendorCartRepository, VendorCartRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IVendorCuisineTypeRepository, VendorCuisineTypeRepository>();
             services.AddScoped<IVendorFoodTypeRepository, VendorFoodTypeRepository>();

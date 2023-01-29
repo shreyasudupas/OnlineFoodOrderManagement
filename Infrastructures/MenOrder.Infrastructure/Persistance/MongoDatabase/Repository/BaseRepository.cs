@@ -1,16 +1,14 @@
-﻿using MenuManagement.Core.Mongo.Models;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.DbContext;
-using MenuManagement.Infrastructure.Persistance.MongoDatabase.Models;
-using MenuManagment.Domain.Mongo.Interfaces;
+﻿using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
+using MenuManagment.Mongo.Domain.Mongo.Models;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace MenuManagement.Infrastructure.Persistance.MongoDatabase.Repository
+namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
 {
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IEntity
     {
