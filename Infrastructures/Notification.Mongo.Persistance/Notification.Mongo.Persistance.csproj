@@ -13,4 +13,8 @@
     <Folder Include="Repository\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Notification.Microservice.Core\Notification.Microservice.Core.csproj" />
+  </ItemGroup>
+
 </Project>
