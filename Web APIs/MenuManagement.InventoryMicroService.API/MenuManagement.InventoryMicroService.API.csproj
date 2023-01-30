@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\MenuManagement.Core\Inventory.Microservice.Core.csproj" />
-    <ProjectReference Include="..\..\Infrastructures\MenOrder.Infrastructure\MongoDb.Infrastructure.Persistance.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\Inventory.Mongo.Persistance\Inventory.Mongo.Persistance.csproj" />
     <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
   </ItemGroup>
 

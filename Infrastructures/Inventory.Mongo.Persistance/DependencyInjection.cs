@@ -1,19 +1,19 @@
-﻿using MongoDb.Infrastructure.Persistance.Services;
+﻿using Inventory.Mongo.Persistance.Services;
 using Inventory.Microservice.Core.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
-using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository;
+using Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository;
 using AutoMapper;
 using MenuManagment.Mongo.Domain.Mongo.MappingProfile;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 
-namespace MongoDb.Infrastructure.Persistance
+namespace Inventory.Mongo.Persistance
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddMongoInfratructure(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddInventoryMongoInfratructure(this IServiceCollection services,IConfiguration configuration)
         {
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

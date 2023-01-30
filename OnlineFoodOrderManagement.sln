@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{97AFDB0F-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Microservice.Core", "Core\MenuManagement.Core\Inventory.Microservice.Core.csproj", "{5FC6A043-BC44-4796-86AC-9361197BB2EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDb.Infrastructure.Persistance", "Infrastructures\MenOrder.Infrastructure\MongoDb.Infrastructure.Persistance.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Mongo.Persistance", "Infrastructures\Inventory.Mongo.Persistance\Inventory.Mongo.Persistance.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.BasketMicroService.API", "Web APIs\MenuOrder.BasketMicroService.API\MenuManagement.BasketMicroService.API.csproj", "{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}"
 EndProject
@@ -55,11 +55,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{4611F8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B09520D4-6101-412C-BEAD-6F1D393D4C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification.Microservice.Core", "Core\Notification.Microservice.Core\Notification.Microservice.Core.csproj", "{19E65A6B-3DB8-4789-BF59-4849708D056B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification.Microservice.Core", "Core\Notification.Microservice.Core\Notification.Microservice.Core.csproj", "{19E65A6B-3DB8-4789-BF59-4849708D056B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuManagement.Notification.API", "Web APIs\MenuManagement.Notification.API\MenuManagement.Notification.API.csproj", "{E5FF7F13-1DDA-4899-92D1-730A97F42A46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Notification.API", "Web APIs\MenuManagement.Notification.API\MenuManagement.Notification.API.csproj", "{E5FF7F13-1DDA-4899-92D1-730A97F42A46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDb.Shared.Persistance", "MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj", "{03417895-7EE3-4466-84FE-57B49EF1D4F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDb.Shared.Persistance", "Infrastructures\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj", "{03417895-7EE3-4466-84FE-57B49EF1D4F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification.Mongo.Persistance", "Infrastructures\Notification.Mongo.Persistance\Notification.Mongo.Persistance.csproj", "{B3E6B50F-CB79-4ADC-BF8D-E4B39DB87000}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{03417895-7EE3-4466-84FE-57B49EF1D4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03417895-7EE3-4466-84FE-57B49EF1D4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03417895-7EE3-4466-84FE-57B49EF1D4F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3E6B50F-CB79-4ADC-BF8D-E4B39DB87000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3E6B50F-CB79-4ADC-BF8D-E4B39DB87000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3E6B50F-CB79-4ADC-BF8D-E4B39DB87000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3E6B50F-CB79-4ADC-BF8D-E4B39DB87000}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,6 +184,7 @@ Global
 		{19E65A6B-3DB8-4789-BF59-4849708D056B} = {71B47887-05DC-4269-8571-CEF8482A5638}
 		{E5FF7F13-1DDA-4899-92D1-730A97F42A46} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
 		{03417895-7EE3-4466-84FE-57B49EF1D4F2} = {48513472-D17E-4F30-AFCB-FB29350ECB0E}
+		{B3E6B50F-CB79-4ADC-BF8D-E4B39DB87000} = {48513472-D17E-4F30-AFCB-FB29350ECB0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9205ABE5-5F68-4004-8637-2E366D0E7280}

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Notification.Microservice.Core\Notification.Microservice.Core.csproj" />
+    <ProjectReference Include="..\..\Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\Notification.Mongo.Persistance\Notification.Mongo.Persistance.csproj" />
+    <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,24 +1,19 @@
-using Inventory.Microservice.Core;
-using Inventory.Mongo.Persistance;
 using MenuOrder.Shared;
-using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MongoDb.Shared.Persistance;
+using Notification.Microservice.Core;
+using Notification.Mongo.Persistance;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace MenuManagement.InventoryMicroService.API
+namespace MenuManagement.Notification.API
 {
     public class Startup
     {
@@ -34,9 +29,9 @@ namespace MenuManagement.InventoryMicroService.API
         {
             services.AddCors(options =>
             {
-                var origin = Configuration.GetValue<string>("InventoryApiCors:ORIGIN_URL");
-                var headers = Configuration.GetValue<string>("InventoryApiCors:HEADERS");
-                var methods = Configuration.GetValue<string>("InventoryApiCors:METHODS");
+                var origin = Configuration.GetValue<string>("NotificationApiCors:ORIGIN_URL");
+                var headers = Configuration.GetValue<string>("NotificationApiCors:HEADERS");
+                var methods = Configuration.GetValue<string>("NotificationApiCors:METHODS");
 
                 options.AddPolicy(name: "Inventory.MicroService.Cors",
                     builder =>
@@ -50,11 +45,11 @@ namespace MenuManagement.InventoryMicroService.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MenuManagement.InventoryMicroService.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MenuManagement.Notification.API", Version = "v1" });
             });
 
-            services.AddInventoryCore();
-            services.AddInventoryMongoInfratructure(Configuration);
+            services.AddNotificationCore();
+            services.AddNotificationMongoInfrastructure(Configuration);
             services.AddSharedInjection();
             services.AddSharedMongoServices(Configuration);
 
@@ -101,22 +96,14 @@ namespace MenuManagement.InventoryMicroService.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MenuManagement.InventoryMicroService.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MenuManagement.Notification.API v1"));
             }
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
-
-            app.UseCors("Inventory.MicroService.Cors");
-
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
-
-            //Adding Custom Middleware
-            app.RegisterSharedMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
+namespace Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository
 {
     public class VendorsMenuRepository : BaseRepository<VendorsMenus> , IVendorsMenuRepository
     {

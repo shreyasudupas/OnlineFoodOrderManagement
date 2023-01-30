@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\MenuManagement.Core\Inventory.Microservice.Core.csproj" />
-    <ProjectReference Include="..\..\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
+    <ProjectReference Include="..\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

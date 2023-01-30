@@ -11,7 +11,7 @@ using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDb.Shared.Persistance.Extensions;
 
-namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
+namespace Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository
 {
     public class VendorCuisineTypeRepository : BaseRepository<VendorCuisineType> , IVendorCuisineTypeRepository
     {

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Threading.Tasks;
 
-namespace MongoDb.Infrastructure.Persistance.Services
+namespace Inventory.Mongo.Persistance.Services
 {
     public class RedisCacheBasketService : IRedisCacheBasketService
     {
