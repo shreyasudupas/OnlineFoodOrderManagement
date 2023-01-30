@@ -1,6 +1,7 @@
-﻿using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
-using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
+﻿using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
 using MenuManagment.Mongo.Domain.Mongo.Models;
+using MongoDb.Shared.Persistance.DBContext;
+using MongoDb.Shared.Persistance.Interfaces;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repository
+namespace MongoDb.Shared.Persistance.Repositories
 {
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IEntity
     {
@@ -41,7 +42,7 @@ namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repositor
 
         public async Task<IEnumerable<TEntity>> GetAllItemsByPagination(Pagination mongoPagination)
         {
-            return await mongoCollection.Find(_=> true).SortBy(x=>x.Id).Skip(mongoPagination.Skip).Limit(mongoPagination.Limit).ToListAsync();
+            return await mongoCollection.Find(_ => true).SortBy(x => x.Id).Skip(mongoPagination.Skip).Limit(mongoPagination.Limit).ToListAsync();
         }
 
         public async Task<TEntity> GetById(string id)
@@ -52,15 +53,15 @@ namespace MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Repositor
 
         public async Task<List<TEntity>> GetListByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
 
-        public async Task<UpdateResult> UpdateOneDocument(FilterDefinition<TEntity> filter,UpdateDefinition<TEntity> update)
+        public async Task<UpdateResult> UpdateOneDocument(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update)
         {
-            var result = await mongoCollection.UpdateOneAsync(filter,update);
+            var result = await mongoCollection.UpdateOneAsync(filter, update);
             return result;
         }
 
         public int IfDocumentExists()
         {
-            return mongoCollection.Find(_=> true).ToList().Count;
+            return mongoCollection.Find(_ => true).ToList().Count;
         }
 
         public async Task<List<TEntity>> GetAllMatchItems(FilterDefinition<TEntity> filter)

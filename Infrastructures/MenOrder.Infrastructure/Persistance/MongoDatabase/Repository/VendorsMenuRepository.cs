@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
-using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.Extension;
 using MenuManagment.Mongo.Domain.Mongo.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
 using Microsoft.Extensions.Logging;
+using MongoDb.Shared.Persistance.DBContext;
+using MongoDb.Shared.Persistance.Extensions;
+using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;

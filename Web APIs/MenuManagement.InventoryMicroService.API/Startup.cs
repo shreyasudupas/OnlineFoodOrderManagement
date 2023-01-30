@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDb.Shared.Persistance;
 
 namespace MenuManagement.InventoryMicroService.API
 {
@@ -52,9 +53,10 @@ namespace MenuManagement.InventoryMicroService.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MenuManagement.InventoryMicroService.API", Version = "v1" });
             });
 
-            services.AddCore();
+            services.AddInventoryCore();
             services.AddMongoInfratructure(Configuration);
             services.AddSharedInjection();
+            services.AddSharedMongoServices(Configuration);
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", opt =>

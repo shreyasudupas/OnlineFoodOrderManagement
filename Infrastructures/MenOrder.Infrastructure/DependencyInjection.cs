@@ -1,7 +1,5 @@
-﻿using MongoDb.Infrastructure.Persistance.Persistance.MongoDatabase.DbContext;
-using MongoDb.Infrastructure.Persistance.Services;
+﻿using MongoDb.Infrastructure.Persistance.Services;
 using Inventory.Microservice.Core.Common.Interfaces;
-using Inventory.Microservice.Core.Common.Models.MongoDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -32,14 +30,13 @@ namespace MongoDb.Infrastructure.Persistance
             //var redis = ConnectionMultiplexer.Connect(Configuration.GetValue<string>("RedisConnection"));
             var redis = ConnectionMultiplexer.Connect(config);
 
-            services.Configure<MongoDatabaseConfiguration>(configuration.GetSection("MongoOrderDBSettings"));
+            
 
             //register services
             services.AddSingleton<IConnectionMultiplexer>(redis);
             services.AddScoped<IRedisCacheBasketService, RedisCacheBasketService>();
 
             //Database registration
-            services.AddScoped<IMongoDBContext, MongoDBContext>();
             services.AddScoped<IVendorsMenuRepository, VendorsMenuRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IVendorCuisineTypeRepository, VendorCuisineTypeRepository>();
