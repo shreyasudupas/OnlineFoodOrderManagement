@@ -3,7 +3,7 @@ using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Comman
 using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query;
 using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query.Models;
 using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query;
-using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Hosting;

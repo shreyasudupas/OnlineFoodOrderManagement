@@ -1,4 +1,5 @@
 using MenuOrder.Shared;
+using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -103,7 +104,11 @@ namespace MenuManagement.Notification.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            //Adding Custom Middleware
+            app.RegisterSharedMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

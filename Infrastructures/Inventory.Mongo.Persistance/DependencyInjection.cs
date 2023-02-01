@@ -7,7 +7,7 @@ using System;
 using Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository;
 using AutoMapper;
 using MenuManagment.Mongo.Domain.Mongo.MappingProfile;
-using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 
 namespace Inventory.Mongo.Persistance
 {

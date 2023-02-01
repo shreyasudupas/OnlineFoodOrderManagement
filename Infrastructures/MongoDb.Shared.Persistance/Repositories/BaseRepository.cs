@@ -45,6 +45,25 @@ namespace MongoDb.Shared.Persistance.Repositories
             return await mongoCollection.Find(_ => true).SortBy(x => x.Id).Skip(mongoPagination.Skip).Limit(mongoPagination.Limit).ToListAsync();
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllItemsByPaginationWithFilter(Expression<Func<TEntity, bool>> filterExpression,
+            Expression<Func<TEntity, object>> sortExpresion,
+            bool asecending,
+            Pagination mongoPagination)
+        {
+            if(asecending)
+                return await mongoCollection.Find(filterExpression)
+                    .SortBy(sortExpresion)
+                    .Skip(mongoPagination.Skip)
+                    .Limit(mongoPagination.Limit)
+                    .ToListAsync();
+            else
+                return await mongoCollection.Find(filterExpression)
+                    .SortByDescending(sortExpresion)
+                    .Skip(mongoPagination.Skip)
+                    .Limit(mongoPagination.Limit)
+                    .ToListAsync();
+        }
+
         public async Task<TEntity> GetById(string id)
         {
             return await mongoCollection.Find(x => x.Id == id).FirstOrDefaultAsync();

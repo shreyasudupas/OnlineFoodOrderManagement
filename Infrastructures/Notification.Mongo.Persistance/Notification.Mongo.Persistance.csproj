@@ -10,11 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\Notification.Microservice.Core\Notification.Microservice.Core.csproj" />
+    <ProjectReference Include="..\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

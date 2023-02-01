@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MenuManagment.Mongo.Domain.Mongo.Dtos
+namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 {
     public class CategoryDto
     {

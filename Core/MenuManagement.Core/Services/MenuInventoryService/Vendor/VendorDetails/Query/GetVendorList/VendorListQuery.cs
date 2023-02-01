@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using MenuManagment.Mongo.Domain.Mongo.Dtos;
-using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
+using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

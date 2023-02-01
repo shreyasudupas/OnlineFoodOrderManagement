@@ -7,7 +7,7 @@ using Inventory.Microservice.Core.Services.MenuInventoryService.Vendor.GetCatego
 using Inventory.Microservice.Core.Services.MenuInventoryService.Vendor.UpdateVendorDetails;
 using Inventory.Microservice.Core.Services.MenuInventoryService.VendorDetails.Commands.AddVendors;
 using Inventory.Microservice.Core.Services.MenuInventoryService.VendorDetails.Query.GetVendorList;
-using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -220,6 +220,7 @@ namespace IdentityServer.Infrastruture.Database
                     var adminClaimEmail = new Claim("email", "admin@test.com");
                     var adminClaimUserName = new Claim("username", "admin"); //username same as role
                     var adminRoleClaim = new Claim("role", "admin");
+                    var adminEnabledClaim = new Claim("enabled", "True");
 
                     var users = context.Users.ToList();
 
@@ -228,6 +229,7 @@ namespace IdentityServer.Infrastruture.Database
                     var result2 = UserManager.AddClaimAsync(adminUser, adminClaimEmail).GetAwaiter().GetResult();
                     var result3 = UserManager.AddClaimAsync(adminUser, adminClaimUserName).GetAwaiter().GetResult();
                     var result4 = UserManager.AddClaimAsync(adminUser, adminRoleClaim).GetAwaiter().GetResult();
+                    var result12 = UserManager.AddClaimAsync(adminUser, adminEnabledClaim).GetAwaiter().GetResult();
 
                     //for local users
                     //var userClaimRole = new Claim(GetClaimType, "appUser");

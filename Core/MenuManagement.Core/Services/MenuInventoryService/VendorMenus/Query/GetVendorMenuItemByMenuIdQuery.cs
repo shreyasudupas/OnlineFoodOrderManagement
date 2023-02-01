@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Inventory.Microservice.Core.Common.Models.InventoryService.Response;
-using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using System.Threading;
 using System.Threading.Tasks;
 

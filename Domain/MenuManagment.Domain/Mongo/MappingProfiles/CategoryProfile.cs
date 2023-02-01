@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MenuManagment.Mongo.Domain.Mongo.Dtos;
+using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using System;
 

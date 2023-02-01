@@ -1,11 +1,11 @@
-﻿using MenuManagment.Mongo.Domain.Mongo.Dtos;
+﻿using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository
+namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
 {
     public interface IVendorRepository
     {
