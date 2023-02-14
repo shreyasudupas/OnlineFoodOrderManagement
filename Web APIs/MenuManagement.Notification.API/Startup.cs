@@ -1,3 +1,4 @@
+using MenuManagment.Mongo.Domain.Hubs;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,8 +39,9 @@ namespace MenuManagement.Notification.API
                     builder =>
                     {
                         builder.WithOrigins(origin)
-                                .WithHeaders(headers.Split(','))
-                                .WithMethods(methods.Split(','));
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .AllowCredentials();
                     });
             });
 
@@ -114,6 +116,7 @@ namespace MenuManagement.Notification.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationHub>("/notification");
                 endpoints.MapControllers();
             });
         }
