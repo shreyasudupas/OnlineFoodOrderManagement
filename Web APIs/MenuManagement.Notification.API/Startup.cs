@@ -34,7 +34,7 @@ namespace MenuManagement.Notification.API
                 var headers = Configuration.GetValue<string>("NotificationApiCors:HEADERS");
                 var methods = Configuration.GetValue<string>("NotificationApiCors:METHODS");
 
-                options.AddPolicy(name: "Inventory.MicroService.Cors",
+                options.AddPolicy(name: "Notification.MicroService.Cors",
                     builder =>
                     {
                         builder.WithOrigins(origin)
@@ -67,11 +67,11 @@ namespace MenuManagement.Notification.API
                     }
 
                     opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
-                    //opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                    opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
                     opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                     {
-                        ValidateAudience = false
-                        //ValidAudiences = audenceNames
+                        ValidateAudience = true,
+                        ValidAudiences = audenceNames
                     };
                     opt.Events = new JwtBearerEvents
                     {
@@ -101,6 +101,8 @@ namespace MenuManagement.Notification.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("Notification.MicroService.Cors");
 
             app.UseRouting();
 

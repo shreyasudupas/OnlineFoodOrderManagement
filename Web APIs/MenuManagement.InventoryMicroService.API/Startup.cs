@@ -71,11 +71,11 @@ namespace MenuManagement.InventoryMicroService.API
                     }
 
                     opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
-                    //opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                    opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
                     opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                     {
-                        ValidateAudience = false
-                        //ValidAudiences = audenceNames
+                        ValidateAudience = true,
+                        ValidAudiences = audenceNames
                     };
                     opt.Events = new JwtBearerEvents
                     {

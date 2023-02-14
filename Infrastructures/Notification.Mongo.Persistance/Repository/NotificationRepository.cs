@@ -5,6 +5,7 @@ using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Logging;
 using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Repositories;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +28,52 @@ namespace Notification.Mongo.Persistance.Repository
         {
             var result = await GetAllItemsByPaginationWithFilter(n => n.UserId == userId, n=>n.RecordedTimeStamp,false , pagination);
             return result?.ToList();
+        }
+
+        public async Task<Notifications> AddNotifications(Notifications newNotification)
+        {
+            _logger.LogInformation("AddNotification started..");
+            var recordedDateTime = newNotification.RecordedTimeStamp = System.DateTime.Now;
+            await CreateOneDocument(newNotification);
+
+            var getNotification = await GetByFilter(n => n.Description == newNotification.Description && n.UserId == newNotification.UserId
+                && n.RecordedTimeStamp == recordedDateTime);
+            if(getNotification != null)
+            {
+                newNotification.Id = getNotification.Id;
+                _logger.LogInformation("AddNotification ended");
+                return newNotification;
+            }
+            else
+            {
+                _logger.LogInformation("Unable to get Notification in AddNew Notification");
+                return newNotification;
+            }
+        }
+
+        public async Task<Notifications> UpdateNotificationToAsRead(Notifications updateNotification)
+        {
+            _logger.LogInformation("UpdateNotificationToAsRead started..");
+            var filter = Builders<Notifications>.Filter.Eq(n => n.Id,updateNotification.Id);
+            var update = Builders<Notifications>.Update.Set(n => n.Read, true);
+            var notifcationUpdateResult = await UpdateOneDocument(filter,update);
+
+            if(notifcationUpdateResult.IsAcknowledged)
+            {
+                _logger.LogInformation("UpdateNotificationToAsRead as started..");
+                return updateNotification;
+            }else
+            {
+                _logger.LogError($"Error in saving UpdateNotificationToAsRead {updateNotification.Id}");
+                return null;
+            }
+        }
+
+        public async Task<int> GetNewNotificationCount(string userId)
+        {
+            var response = await GetListByFilter(n => n.UserId == userId && n.Read == false);
+            var getCount = response.Count;
+            return getCount;
         }
     }
 }
