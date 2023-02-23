@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Notification.Microservice.Core.Interface;
 using Notification.Microservice.Core.Mapping;
 using Notification.Microservice.Core.Services;
+using System;
 using System.Reflection;
 
 namespace Notification.Microservice.Core
@@ -24,6 +26,8 @@ namespace Notification.Microservice.Core
             services.AddSingleton<TimerControl>();
 
             services.AddSignalR();
+
+            services.AddSingleton<INotificationService, GetNotificationService>();
 
             return services;
         }

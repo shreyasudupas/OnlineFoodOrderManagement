@@ -1,4 +1,3 @@
-using MenuManagment.Mongo.Domain.Hubs;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MongoDb.Shared.Persistance;
 using Notification.Microservice.Core;
+using Notification.Microservice.Core.Hub;
 using Notification.Mongo.Persistance;
 using System.Collections.Generic;
 using System.Threading.Tasks;

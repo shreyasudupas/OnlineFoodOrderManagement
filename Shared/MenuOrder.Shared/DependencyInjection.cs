@@ -8,7 +8,7 @@ namespace MenuOrder.Shared
     {
         public static IServiceCollection AddSharedInjection(this IServiceCollection services)
         {
-            services.AddScoped<IProfileUser, ProfileUser>();
+            services.AddSingleton<IProfileUser, ProfileUser>();
             return services;
         }
     }

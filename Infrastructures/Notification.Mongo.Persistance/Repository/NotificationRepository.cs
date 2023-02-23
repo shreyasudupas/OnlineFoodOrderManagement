@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using MenuManagment.Mongo.Domain.Hubs;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository.Notification;
 using MenuManagment.Mongo.Domain.Mongo.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
+using Notification.Microservice.Core.Hub;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +19,15 @@ namespace Notification.Mongo.Persistance.Repository
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IHubContext<NotificationHub, INotificationHub> _notificationHub;
         public NotificationRepository(IMongoDBContext mongoDBContext,
             IMapper mapper,
-            ILogger<NotificationRepository> logger) : base(mongoDBContext)
+            ILogger<NotificationRepository> logger,
+            IHubContext<NotificationHub,INotificationHub> notificationHub) : base(mongoDBContext)
         {
             _mapper = mapper;
             _logger = logger;
+            _notificationHub = notificationHub;
         }
 
         public async Task<List<Notifications>> GetAllNotificationByUserId(string userId,Pagination pagination)
@@ -30,7 +36,7 @@ namespace Notification.Mongo.Persistance.Repository
             return result?.ToList();
         }
 
-        public async Task<Notifications> AddNotifications(Notifications newNotification)
+        public async Task<Notifications> AddNotifications(Notifications newNotification,string connectionId)
         {
             _logger.LogInformation("AddNotification started..");
             var recordedDateTime = newNotification.RecordedTimeStamp = System.DateTime.Now;
@@ -42,6 +48,11 @@ namespace Notification.Mongo.Persistance.Repository
             {
                 newNotification.Id = getNotification.Id;
                 _logger.LogInformation("AddNotification ended");
+
+                //call hub
+                var result = await GetNewNotificationCount(newNotification.UserId);
+                await _notificationHub.Clients.All.SendUserNotification(result);
+
                 return newNotification;
             }
             else
