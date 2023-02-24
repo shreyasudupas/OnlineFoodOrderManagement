@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Notification.Microservice.Core.Hub;
 using Notification.Microservice.Core.Interface;
 using Notification.Microservice.Core.Mapping;
 using Notification.Microservice.Core.Services;
@@ -28,6 +29,7 @@ namespace Notification.Microservice.Core
             services.AddSignalR();
 
             services.AddSingleton<INotificationService, GetNotificationService>();
+            services.AddSingleton<IConnectionMapping,ConnectionMapping>();
 
             return services;
         }

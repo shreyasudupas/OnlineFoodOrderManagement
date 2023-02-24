@@ -22,7 +22,5 @@ namespace MenuManagment.Microservice.Core.Dtos
 
         public bool Read { get; set; }
 
-        //This property is used by SignalR Hub
-        public string ConnectionId { get; set; }
     }
 }

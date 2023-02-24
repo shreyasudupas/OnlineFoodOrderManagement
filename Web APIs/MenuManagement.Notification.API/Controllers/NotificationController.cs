@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using MenuManagment.Microservice.Core.Dtos;
-using MenuManagment.Mongo.Domain.Hubs;
 using MenuOrder.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Notification.Microservice.Core.Command.AddNotification;
 using Notification.Microservice.Core.Command.UpdateNotification;
+using Notification.Microservice.Core.Domain.Service;
 using Notification.Microservice.Core.Hub;
 using Notification.Microservice.Core.Interface;
 using Notification.Microservice.Core.Querries.GetAllNotificationByUserId;

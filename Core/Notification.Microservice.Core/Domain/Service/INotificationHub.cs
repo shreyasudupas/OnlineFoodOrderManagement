@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MenuManagment.Mongo.Domain.Hubs
+namespace Notification.Microservice.Core.Domain.Service
 {
     public interface INotificationHub
     {

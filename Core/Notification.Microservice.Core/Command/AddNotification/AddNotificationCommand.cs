@@ -27,7 +27,7 @@ namespace Notification.Microservice.Core.Command.AddNotification
         public async Task<NotificationDto> Handle(AddNotificationCommand request, CancellationToken cancellationToken)
         {
             var mapModel = _mapper.Map<Notifications>(request.NewNotification);
-            var response = await _notificationRepository.AddNotifications(mapModel,request.NewNotification.ConnectionId);
+            var response = await _notificationRepository.AddNotifications(mapModel);
             var mapToDto = _mapper.Map<NotificationDto>(response);
             return mapToDto;
         }

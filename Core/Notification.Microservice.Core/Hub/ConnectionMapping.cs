@@ -1,68 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using Notification.Microservice.Core.Domain.Model;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Notification.Microservice.Core.Hub
 {
-    public class ConnectionMapping<T>
+    public class ConnectionMapping : IConnectionMapping
     {
-        private readonly Dictionary<T, HashSet<string>> _connections =
-            new Dictionary<T, HashSet<string>>();
-
-        public int Count
+        private readonly List<HubConnectionManager> connectionManagers;
+        public ConnectionMapping()
         {
-            get
-            {
-                return _connections.Count;
-            }
+            connectionManagers = new List<HubConnectionManager>();
         }
 
-        public void Add(T key, string connectionId)
+        public void Add(string userId ,string role, string connectionId)
         {
-            lock (_connections)
+            lock (connectionManagers)
             {
-                HashSet<string> connections;
-                if (!_connections.TryGetValue(key, out connections))
+                var user = connectionManagers.Find(x => x.UserId == userId);
+                if (user == null)
                 {
-                    connections = new HashSet<string>();
-                    _connections.Add(key, connections);
-                }
-
-                lock (connections)
-                {
-                    connections.Add(connectionId);
-                }
-            }
-        }
-
-        public IEnumerable<string> GetConnections(T key)
-        {
-            HashSet<string> connections;
-            if (_connections.TryGetValue(key, out connections))
-            {
-                return connections;
-            }
-
-            return Enumerable.Empty<string>();
-        }
-
-        public void Remove(T key, string connectionId)
-        {
-            lock (_connections)
-            {
-                HashSet<string> connections;
-                if (!_connections.TryGetValue(key, out connections))
-                {
-                    return;
-                }
-
-                lock (connections)
-                {
-                    connections.Remove(connectionId);
-
-                    if (connections.Count == 0)
+                    connectionManagers.Add(new HubConnectionManager 
                     {
-                        _connections.Remove(key);
-                    }
+                        UserId = userId,
+                        Role = role,
+                        ConnectionId = connectionId
+                    });
+                }
+            }
+        }
+
+        public HubConnectionManager? GetConnection(string userId)
+        {
+            var user = connectionManagers.Find(x => x.UserId == userId);
+            if(user != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
+        public List<HubConnectionManager> GetAllConnectionManager()
+        {
+            return connectionManagers;
+        }
+
+        public void Remove(string userId, string connectionId)
+        {
+            lock (connectionManagers)
+            {
+                var user = connectionManagers.Find(x => x.UserId == userId && x.ConnectionId == connectionId);
+                if (user != null)
+                {
+                    connectionManagers.Remove(user);
                 }
             }
         }
