@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Notification.Microservice.Core.Domain.Service;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Notification.Microservice.Core.Hub
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NotificationHub : Hub<INotificationHub>
     {
         private readonly IConnectionMapping _connectionMapping;
@@ -18,7 +19,19 @@ namespace Notification.Microservice.Core.Hub
             _connectionMapping = connectionMapping;
         }
 
-        public string GetConnectionId() => Context.ConnectionId;
+        public string GetConnectionId()
+        {
+            var claims = Context.User.Claims;
+            var userId = claims.Where(x => x.Type == "userId").Select(x => x.Value).FirstOrDefault();
+
+            var connManager = _connectionMapping.GetConnection(userId);
+            if (connManager != null)
+            {
+                return connManager.ConnectionId;
+            }
+            else
+                return Context.ConnectionId;
+        }
 
         public override async Task OnConnectedAsync()
         {

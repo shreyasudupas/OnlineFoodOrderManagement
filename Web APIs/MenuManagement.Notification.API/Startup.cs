@@ -56,26 +56,30 @@ namespace MenuManagement.Notification.API
             services.AddSharedInjection();
             services.AddSharedMongoServices(Configuration);
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", opt =>
+            services.AddAuthentication(options=>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer("Bearer", opt =>
+            {
+                var audienceList = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                var splitAudienceList = audienceList.Split(',');
+                var audenceNames = new List<string>();
+
+                foreach (var a in splitAudienceList)
                 {
-                    var audienceList = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
-                    var splitAudienceList = audienceList.Split(',');
-                    var audenceNames = new List<string>();
+                    audenceNames.Add(a);
+                }
 
-                    foreach (var a in splitAudienceList)
-                    {
-                        audenceNames.Add(a);
-                    }
-
-                    opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
-                    opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
-                    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    {
-                        ValidateAudience = true,
-                        ValidAudiences = audenceNames
-                    };
-                    opt.Events = new JwtBearerEvents
+                opt.Authority = Configuration.GetValue<string>("AuthenticationConfig:AUTHORITY");
+                opt.Audience = Configuration.GetValue<string>("AuthenticationConfig:AUDIENCE");
+                opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudiences = audenceNames
+                };
+                opt.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = (context) =>
                         {
@@ -87,9 +91,23 @@ namespace MenuManagement.Notification.API
                             logger.LogError(context.Exception, "Authentication Failed");
 
                             return Task.CompletedTask;
+                        },
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            // If the request is for our hub...
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/hubs/notification")))
+                            {
+                                // Read the token out of the query string
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
                         }
-                    };
-                });
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,7 +134,7 @@ namespace MenuManagement.Notification.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<NotificationHub>("/notification");
+                endpoints.MapHub<NotificationHub>("/hubs/notification");
                 endpoints.MapControllers();
             });
         }
