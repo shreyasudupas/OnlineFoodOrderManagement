@@ -22,7 +22,7 @@ namespace MenuManagement.InventoryMicroService.API
                 var menuService = scope.ServiceProvider.GetRequiredService<IVendorsMenuRepository>();
                 var foodTypeService = scope.ServiceProvider.GetRequiredService<IVendorFoodTypeRepository>();
                 var cuisineTypeService = scope.ServiceProvider.GetRequiredService<IVendorCuisineTypeRepository>();
-                var loggerContext = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
+                var loggerContext = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 var menuImageService = scope.ServiceProvider.GetRequiredService<IMenuImagesRepository>();
                 var webHostService = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
