@@ -49,7 +49,10 @@ namespace IdentityServer.API.Controllers
                 var loginResult = await _mediator.Send(command);
 
                 if(loginResult.isSuccess == false)
-                    ModelState.AddModelError("", "Invalid Login");
+                {
+                    ModelState.AddModelError("", loginResult.Error);
+                    command.isSuccess = false;
+                }
                 else if(loginResult.RedirectRequired == true)
                 {
                     return Redirect(command.ReturnUrl);
@@ -60,7 +63,7 @@ namespace IdentityServer.API.Controllers
                     return RedirectToAction("Privacy");
                 }
             }
-            return View();
+            return View(command);
         }
 
         /// <summary>
