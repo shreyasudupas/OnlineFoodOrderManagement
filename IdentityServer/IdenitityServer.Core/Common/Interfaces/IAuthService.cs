@@ -1,4 +1,5 @@
-﻿using IdenitityServer.Core.Domain.Response;
+﻿using IdenitityServer.Core.Domain.Model;
+using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Login;
 using IdenitityServer.Core.Features.Logout;
 using IdenitityServer.Core.Features.Register;
@@ -12,5 +13,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<PreLogoutResponse> PreLogout(LogoutQuery logoutCommand);
         Task Register(RegisterCommand reqisterCommand);
         Task<RegisterAdminResponse> RegisterAdmin(RegisterAdminResponse registerAdminResponse);
+        Task<(VendorRegister,string)> RegisterAsVendor(VendorRegister vendorRegister);
     }
 }

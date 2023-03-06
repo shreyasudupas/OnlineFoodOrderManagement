@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Login;
 using IdenitityServer.Core.Features.Logout;
@@ -13,6 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -237,6 +239,70 @@ namespace IdentityServer.API.Controllers
                 ModelState.AddModelError("", "Property missing");
             }
             return View(registerAdminResponse);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RegisterAsVendor(string returnUrl)
+        {
+            var model = new VendorRegisterViewModel();
+
+            var dropDownValues = await _mediator.Send(new RegisterQuery { ReturnUrl = returnUrl });
+            var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
+            model.States= dropDownValuesDto.States;
+
+
+            if (returnUrl != null)
+                model.ReturnUrl = returnUrl;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAsVendor(VendorRegisterViewModel vendorRegisterViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _mediator.Send(new RegisterAsVendorCommand { vendorRegister = vendorRegisterViewModel });
+
+                if(result.Errors.Any())
+                {
+                    await CallStates(vendorRegisterViewModel);
+
+                    result.Errors.ForEach(err =>
+                    {
+                        ModelState.AddModelError("", err);
+                    });
+                }
+                else
+                {
+                    //send a mail to vendor with code
+
+                    //return to login page
+                }
+            }
+            else
+            {
+                await CallStates(vendorRegisterViewModel);
+
+                var errors = ModelState.Values.SelectMany(e => e.Errors).ToList();
+                if (errors.Any())
+                {
+                    errors.ForEach(e => ModelState.AddModelError("", e.ErrorMessage));
+
+                }
+            }
+            return View(vendorRegisterViewModel);
+        }
+
+        private async Task CallStates(VendorRegisterViewModel vendorRegisterViewModel)
+        {
+            vendorRegisterViewModel.StateId = "";
+            vendorRegisterViewModel.CityId = "";
+            vendorRegisterViewModel.AreaId = "";
+
+            var dropDownValues = await _mediator.Send(new RegisterQuery { ReturnUrl = "" });
+            var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
+            vendorRegisterViewModel.States = dropDownValuesDto.States;
         }
     }
 }

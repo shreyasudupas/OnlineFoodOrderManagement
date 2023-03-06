@@ -14,19 +14,18 @@ namespace IdentityServer.Infrastruture
         {
             new Client
             {
-                ClientId = "cwm.client",
+                ClientId = "admin.client",
                 ClientName = "Client Credentials Client",
-                AllowedGrantTypes = GrantTypes.Code,
-                ClientSecrets = { new Secret("secret".Sha256()) },
-                AllowedScopes = { "myApi.read" }
+                Description= "This is for admin to access the token",
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                //ClientSecrets = { new Secret("secret".Sha256()) },
+                AllowedScopes = new List<string> { 
+                    "inventory.read", 
+                    "inventory.write", 
+                    "notification.read", 
+                    "notification.write" 
+                }
             },
-           // new Client
-           //{
-           //     ClientId = "company-employee",
-           //     ClientSecrets = new [] { new Secret("codemazesecret".Sha512()) },
-           //     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-           //     AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
-           // },
             new Client
             {
                 ClientId = "react-spa-identityServer-ui",
@@ -70,7 +69,9 @@ namespace IdentityServer.Infrastruture
                     IdentityServerConstants.LocalApi.ScopeName,
                     "inventory.read",
                     "ids.read",
-                    "inventory.write"
+                    "inventory.write",
+                    "notification.read",
+                    "notification.write"
                 },
                 AccessTokenLifetime = 86400,
                 AllowAccessTokensViaBrowser = true,
@@ -91,7 +92,9 @@ namespace IdentityServer.Infrastruture
             new ApiScope("idsApi.read","IDS API Read"),
             new ApiScope("idsApi.write","IDS API Write"),
             new ApiScope("inventory.read","Inventory API Read"),
-            new ApiScope("inventory.write","Inventory API Write")
+            new ApiScope("inventory.write","Inventory API Write"),
+            new ApiScope("notification.read","Notification API Read"),
+            new ApiScope("notification.write","Notification API Write")
         };
 
         public static List<TestUser> TestUsers =>
@@ -129,6 +132,10 @@ namespace IdentityServer.Infrastruture
             new ApiResource("inventory","Inventory Microservice API")
             {
                 Scopes = new List<string>{ "inventory.read", "inventory.write" },
+            },
+            new ApiResource("notification","Notification Microservice API")
+            {
+                Scopes = new List<string>{ "notification.read", "notification.write" },
             }
         };
     }

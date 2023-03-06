@@ -44,13 +44,32 @@
             <div class="text-center">
                 @if (Model.ReturnUrl == null || Model.ReturnUrl.Contains("menuAngularUI"))
                 {
-                    <p>Not a member?<a asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">Register as User</a></p>
+                   <div class="row">
+                       <div class="col-6">
+                           <a asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">
+                            <button type="button" class="btn btn-primary">Register as User</button>
+                            </a>
+                       </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary">Register as Vendor</button>
+                        </div>
+                   </div>
                 }
                 else if (Model.ReturnUrl.Contains("react-spa-identityServer-ui"))
                 {
-                    <p>Not a member?<a asp-action="RegisterAsAdmin" asp-route-returnUrl="@Model?.ReturnUrl">Register as Admin</a></p>
+                    <div class="row paddingRegister">
+                        <div class="col-6">
+                            <a asp-action="Register" asp-route-returnUrl="@Model?.ReturnUrl">
+                            <button type="button" class="btn btn-primary">Register as Admin</button>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a asp-action="RegisterAsVendor" asp-route-returnUrl="@Model?.ReturnUrl">
+                                <button type="button" class="btn btn-secondary">Register as Vendor</button>
+                            </a>
+                        </div>
+                   </div>
                 }
-
             </div>
         </form>
     </div>

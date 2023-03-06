@@ -1,11 +1,13 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.DBModel;
+using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Login;
 using IdenitityServer.Core.Features.Logout;
 using IdenitityServer.Core.Features.Register;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer4.Services;
+using IdentityServer4.Test;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -190,6 +192,49 @@ namespace IdentityServer.Infrastruture.Services
             }
 
             return registerAdminResponse;
+        }
+
+        public async Task<(VendorRegister,string)> RegisterAsVendor(VendorRegister vendorRegister)
+        {
+            var appUser = new ApplicationUser();
+
+            var user = new ApplicationUser
+            {
+                UserName = vendorRegister.Username,
+                Email = vendorRegister.Email,
+                CreatedDate = DateTime.Now,
+                Enabled = true,
+                IsAdmin = true,
+            };
+            var result = await _userManager.CreateAsync(user, vendorRegister.Password);
+            _logger.LogInformation($"user {vendorRegister.Username} added in database {result.Succeeded}");
+
+            if (result.Succeeded)
+            {
+                var usernameClaim = new Claim("userName", vendorRegister.Username);
+                var emailClaim = new Claim("email", vendorRegister.Email);
+                var roleClaim = new Claim("role", "vendor");
+
+                var result1 = await _userManager.AddClaimAsync(user, usernameClaim);
+                var result2 = await _userManager.AddClaimAsync(user, emailClaim);
+                var resultRole = await _userManager.AddClaimAsync(user, roleClaim);
+
+                _logger.LogInformation($"Claim for username: {result1.Succeeded}, Claim for email: {result2.Succeeded}");
+
+                var roleUserResult = _userManager.AddToRoleAsync(user, "vendor").GetAwaiter().GetResult();
+                _logger.LogInformation($"Role Admin Mapping: {roleUserResult.Succeeded}");
+
+                appUser = await _userManager.FindByNameAsync(vendorRegister.Username);
+            }
+            else
+            {
+                result.Errors.ToList().ForEach(error =>
+                    vendorRegister.Errors.Add(error.Description));
+
+                _logger.LogError($"Error when registering vendor user {JsonConvert.SerializeObject(result.Errors)}");
+            }
+
+            return (vendorRegister, appUser.Id);
         }
     }
 }
