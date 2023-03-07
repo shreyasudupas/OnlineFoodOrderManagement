@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /MenuManagement.InventoryMicroService.API/wwwroot/MenuImages
+**/wwwroot/MenuImages

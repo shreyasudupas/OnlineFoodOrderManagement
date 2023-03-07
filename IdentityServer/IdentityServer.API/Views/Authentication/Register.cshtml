@@ -124,6 +124,9 @@
                     success: function (response) {
                         //debugger;
                         //console.log(response);
+                        $("#citySelectId").empty().append('<option selected="selected" value="">Select City</option>');
+                        $("#areaSelectId").empty().append('<option selected="selected" value="">Select Area</option>');
+
                         $.each(response, function (data, value) {
                             $('#citySelectId').append($("<option></option>").val(value.value).html(value.label));
                         });
@@ -146,6 +149,8 @@
                     success: function (response) {
                         debugger;
                         //console.log(response);
+                        $("#areaSelectId").empty().append('<option selected="selected" value="">Select Area</option>');
+
                         $.each(response, function (data, value) {
                             $('#areaSelectId').append($("<option></option>").val(value.value).html(value.label));
                         });
