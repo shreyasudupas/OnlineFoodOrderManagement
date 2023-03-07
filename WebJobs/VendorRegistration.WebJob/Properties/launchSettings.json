@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "VendorRegistration.WebJob": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
