@@ -1,4 +1,4 @@
-﻿using IdenitityServer.Core.Common.Interfaces;
+﻿using MenuManagement.HttpClient.Domain.Interface;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +11,7 @@ namespace MenuMangement.Infrastructure.HttpClient
         {
             services.AddHttpClient("IDSClient", config =>
             {
-                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:NotificationApi").Value);
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:IdentityServer").Value);
                 config.DefaultRequestHeaders.Clear();
             });
 
@@ -21,7 +21,7 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
-            services.AddScoped<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
+            services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
         }
     }
 }

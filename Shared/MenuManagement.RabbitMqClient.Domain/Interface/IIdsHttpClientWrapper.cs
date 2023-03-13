@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace IdenitityServer.Core.Common.Interfaces
+﻿namespace MenuManagement.HttpClient.Domain.Interface
 {
     public interface IIdsHttpClientWrapper
     {

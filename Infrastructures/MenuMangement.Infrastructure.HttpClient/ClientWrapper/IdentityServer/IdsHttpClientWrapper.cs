@@ -1,9 +1,7 @@
-﻿using IdenitityServer.Core.Common.Interfaces;
+﻿using MenuManagement.HttpClient.Domain.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Security.Policy;
 using System.Text;
 
 namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer
@@ -65,7 +63,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer
         public async Task<string> GetApiAccessToken()
         {
             HttpResponseMessage responseMessage;
-            var httpClient = _httpClientFactory.CreateClient(_configuration.GetSection("ExternalAPIs:IdentityServer").Value);
+            var httpClient = _httpClientFactory.CreateClient("IDSClient");
 
             httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 

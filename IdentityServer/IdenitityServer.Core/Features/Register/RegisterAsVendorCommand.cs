@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.Model;
 using MediatR;
+using MenuManagement.HttpClient.Domain.Interface;
 using System;
 using System.Linq;
 using System.Threading;
