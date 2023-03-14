@@ -1,4 +1,4 @@
-﻿namespace VendorRegistration.Webjob.Core.Interfaces
+﻿namespace MenuManagement.Webjob.Core.Interfaces
 {
     public interface IVendorRegistrationConsumerServices
     {

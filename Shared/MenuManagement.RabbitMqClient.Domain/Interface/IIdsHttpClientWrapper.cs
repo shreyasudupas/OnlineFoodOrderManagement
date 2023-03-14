@@ -2,7 +2,7 @@
 {
     public interface IIdsHttpClientWrapper
     {
-        Task<string> AddApiCallAsync<TData>(string url, TData payload, string token, string clientName);
+        Task<string> PostApiCallAsync<TData>(string url, TData payload, string token, string clientName);
         Task<string> GetApiAccessToken();
     }
 }

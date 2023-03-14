@@ -1,4 +1,4 @@
-using VendorRegistration.Webjob.Core.Interfaces;
+using MenuManagement.Webjob.Core.Interfaces;
 
 namespace VendorRegistration.WebJob
 {

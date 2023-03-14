@@ -71,9 +71,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorRegistration.WebJob",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Infrastruture.RabbitMqClient", "Infrastructures\MenuManagement.Infrastruture.RabbitMqClient\MenuManagement.Infrastruture.RabbitMqClient.csproj", "{5AA5D998-51C3-419E-A23F-D3BF7B7EBD28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorRegistration.Webjob.Core", "Core\VendorRegistration.Webjob.Core\VendorRegistration.Webjob.Core.csproj", "{A1EDE62B-C935-466E-B757-7C5AA795F550}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Webjob.Core", "Core\VendorRegistration.Webjob.Core\MenuManagement.Webjob.Core.csproj", "{A1EDE62B-C935-466E-B757-7C5AA795F550}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuManagement.HttpClient.Domain", "Shared\MenuManagement.RabbitMqClient.Domain\MenuManagement.HttpClient.Domain.csproj", "{1FCAD0ED-E106-429F-A547-36E9C5AC55E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.HttpClient.Domain", "Shared\MenuManagement.RabbitMqClient.Domain\MenuManagement.HttpClient.Domain.csproj", "{1FCAD0ED-E106-429F-A547-36E9C5AC55E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

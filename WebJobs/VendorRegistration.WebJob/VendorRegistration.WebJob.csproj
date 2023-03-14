@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\VendorRegistration.Webjob.Core.csproj" />
+    <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\MenuManagement.Webjob.Core.csproj" />
     <ProjectReference Include="..\..\Infrastructures\MenuManagement.Infrastruture.RabbitMqClient\MenuManagement.Infrastruture.RabbitMqClient.csproj" />
     <ProjectReference Include="..\..\Infrastructures\MenuMangement.Infrastructure.HttpClient\MenuMangement.Infrastructure.HttpClient.csproj" />
   </ItemGroup>

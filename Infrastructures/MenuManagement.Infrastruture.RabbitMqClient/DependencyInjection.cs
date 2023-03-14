@@ -1,6 +1,6 @@
 ﻿using MenuManagement.Infrastruture.RabbitMqClient.Consumer;
 using Microsoft.Extensions.DependencyInjection;
-using VendorRegistration.Webjob.Core.Interfaces;
+using MenuManagement.Webjob.Core.Interfaces;
 
 namespace MenuManagement.Infrastruture.RabbitMqClient
 {

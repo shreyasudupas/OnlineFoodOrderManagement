@@ -1,7 +1,8 @@
-﻿namespace VendorRegistration.Webjob.Core.Models
+﻿namespace MenuManagement.Webjob.Core.Models
 {
     public class VendorModel
     {
+        public string Id { get; set; }
         public string VendorName { get; set; }
 
         public string VendorDescription { get; set; }

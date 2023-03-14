@@ -1,5 +1,6 @@
 ﻿using MenuManagement.HttpClient.Domain.Interface;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +22,14 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
+            services.AddHttpClient("NotificationClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:NotificationApi").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+
             services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
+            services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
         }
     }
 }

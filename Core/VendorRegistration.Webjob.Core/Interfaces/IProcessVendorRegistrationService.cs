@@ -1,6 +1,6 @@
-﻿using VendorRegistration.Webjob.Core.Models;
+﻿using MenuManagement.Webjob.Core.Models;
 
-namespace VendorRegistration.Webjob.Core.Interfaces
+namespace MenuManagement.Webjob.Core.Interfaces
 {
     public interface IProcessVendorRegistrationService
     {

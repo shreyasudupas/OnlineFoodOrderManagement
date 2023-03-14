@@ -1,7 +1,7 @@
 using MenuManagement.Infrastruture.RabbitMqClient;
 using MenuMangement.Infrastructure.HttpClient;
-using VendorRegistration.Webjob.Core;
-using VendorRegistration.Webjob.Core.Interfaces;
+using MenuManagement.Webjob.Core;
+using MenuManagement.Webjob.Core.Interfaces;
 
 
 IHost host = Host.CreateDefaultBuilder(args)

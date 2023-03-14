@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using VendorRegistration.Webjob.Core.Interfaces;
-using VendorRegistration.Webjob.Core.Services;
+using MenuManagement.Webjob.Core.Interfaces;
+using MenuManagement.Webjob.Core.Services;
 
-namespace VendorRegistration.Webjob.Core
+namespace MenuManagement.Webjob.Core
 {
     public static class DependencyInjection
     {

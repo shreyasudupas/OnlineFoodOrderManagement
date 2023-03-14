@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\VendorRegistration.Webjob.Core.csproj" />
+    <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\MenuManagement.Webjob.Core.csproj" />
   </ItemGroup>
 
 </Project>

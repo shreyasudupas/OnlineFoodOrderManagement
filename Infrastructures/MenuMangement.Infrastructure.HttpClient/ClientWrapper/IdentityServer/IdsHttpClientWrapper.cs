@@ -21,7 +21,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer
             _configuration = configuration;
         }
 
-        public async Task<string> AddApiCallAsync<TData>(string url,TData payload,string token,string clientName)
+        public async Task<string> PostApiCallAsync<TData>(string url,TData payload,string token,string clientName)
         {
             HttpResponseMessage responseMessage;
             var httpClient = _httpClientFactory.CreateClient(clientName);
