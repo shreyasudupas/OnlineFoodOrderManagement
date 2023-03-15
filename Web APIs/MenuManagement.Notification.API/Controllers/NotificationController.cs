@@ -46,7 +46,7 @@ namespace MenuManagement.Notification.API.Controllers
             return await _mediator.Send(new GetAllNotificationByUserIdQuery { UserId = userId , Skip = skip , Limit = limit });
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost("/api/notification")]
         public async Task<NotificationDto> AddNotification([FromBody] NotificationDto notification)
         {
@@ -59,7 +59,7 @@ namespace MenuManagement.Notification.API.Controllers
             return await _mediator.Send(new UpdateNotificationCommand { Notification = notification });
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("/api/notification/{userId}/count")]
         public async Task<IActionResult> NewNotificationCount(string userId)
         {
