@@ -46,10 +46,10 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         public string AddressLine2 { get; set; }
 
         [BsonElement("openTime")]
-        public TimeSpan OpenTime { get; set; }
+        public TimeSpan? OpenTime { get; set; }
 
         [BsonElement("closeTime")]
-        public TimeSpan CloseTime { get; set; }
+        public TimeSpan? CloseTime { get; set; }
 
         [BsonElement("active")]
         public bool Active { get; set; }

@@ -11,7 +11,6 @@ using IdentityServer.API.GraphQL.Types.OutputTypes;
 using IdentityServer.API.Middleware;
 using IdentityServer.Infrastruture;
 using IdentityServer.Infrastruture.MapperProfiles;
-using MenuMangement.Infrastructure.HttpClient;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using MenuOrder.Shared.Services.Interfaces;
@@ -80,7 +79,7 @@ namespace IdentityServer.API
             services.AddCors(Configuration);
             services.AddInfrastructure(Configuration);
             services.AddSharedInjection();
-            services.AddInfrastrutureHttpClient(Configuration);
+            //services.AddInfrastrutureHttpClient(Configuration);
 
             services.AddHttpContextAccessor();
 

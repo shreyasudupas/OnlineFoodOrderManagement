@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using MenuManagement.Webjob.Core.Interfaces;
 using MenuManagement.Webjob.Core.Models;
+using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 
 namespace MenuManagement.Webjob.Core.Services
 {
@@ -12,16 +13,19 @@ namespace MenuManagement.Webjob.Core.Services
         private readonly ILogger _logger;
         private readonly IIdsHttpClientWrapper _idsHttpClientWrapper;
         private readonly INotificationClientWrapper _notificationClientWrapper;
+        private readonly IInventoryClientWrapper _inventoryClientWrapper;
 
         public ProcessVendorRegistrationService(
             ILogger<ProcessVendorRegistrationService> logger,
             IIdsHttpClientWrapper idsHttpClientWrapper
 ,
-            INotificationClientWrapper notificationClientWrapper)
+            INotificationClientWrapper notificationClientWrapper,
+            IInventoryClientWrapper inventoryClientWrapper)
         {
             _logger = logger;
             _idsHttpClientWrapper = idsHttpClientWrapper;
             _notificationClientWrapper = notificationClientWrapper;
+            _inventoryClientWrapper = inventoryClientWrapper;
         }
 
         public async Task ProcessVendorRegistration(string vendorModelMessage)
@@ -42,27 +46,57 @@ namespace MenuManagement.Webjob.Core.Services
                     {
                         var token = JsonConvert.DeserializeObject<AccessTokenModel>(tokenResult);
 
-                        //call notification API
-                        var notificationModel = new NotificationModel
+                        //call Inventory Vendor API
+                        var vendorDetail = new VendorDto
                         {
-                            UserId = vendorModel?.Id,
-                            Description = "Welcome user",
-                            Role = "vendor",
-                            SendAll = false,
-                            Title = "Welcome",
-                            Read = false,
-                            RecordedTimeStamp = DateTime.Now
+                            VendorName = vendorModel.VendorName,
+                            VendorDescription = vendorModel.VendorDescription,
+                            Rating = 0,
+                            State = vendorModel.State,
+                            City= vendorModel.City,
+                            Area= vendorModel.Area,
+                            Coordinates=null,
+                            AddressLine1 = vendorModel.Address,
+                            Active=  false //vendor has to login and confirm the changes
                         };
-                        var notificationResponse = await _notificationClientWrapper.PostApiCall("", token?.AccessToken, notificationModel);
-
-                        if (notificationResponse != null)
+                        var vendorAddBody = new
                         {
-                            _logger.LogInformation("Vendor Notification");
+                            VendorDetail = vendorDetail
+                        };
+
+                        var vendorResult = await _inventoryClientWrapper.PostApiCall("api/vendor", token?.AccessToken, vendorAddBody);
+
+                        if(!string.IsNullOrEmpty(vendorResult))
+                        {
+                            var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
+
+                            //call notification API
+                            var notificationModel = new NotificationModel
+                            {
+                                UserId = vendorModel?.UserId,
+                                Description = "Welcome user",
+                                Role = "vendor",
+                                SendAll = false,
+                                Title = "Welcome",
+                                Read = false,
+                                RecordedTimeStamp = DateTime.Now
+                            };
+                            var notificationResponse = await _notificationClientWrapper.PostApiCall("", token?.AccessToken, notificationModel);
+
+                            if (notificationResponse != null)
+                            {
+                                _logger.LogInformation("Vendor Notification");
+                            }
+                            else
+                            {
+                                //send back to dead-letter queue
+                            }
                         }
                         else
                         {
-                            //send back to dead-letter queue
+                            //send back to dead letter
                         }
+                        
                     }
                     else
                     {

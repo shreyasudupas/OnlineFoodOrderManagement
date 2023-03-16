@@ -1,5 +1,6 @@
 ﻿using MenuManagement.HttpClient.Domain.Interface;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +17,9 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
-            services.AddHttpClient("VendorClient", config =>
+            services.AddHttpClient("InventoryClient", config =>
             {
-                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:VendorApi").Value);
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:InventoryApi").Value);
                 config.DefaultRequestHeaders.Clear();
             });
 
@@ -30,6 +31,7 @@ namespace MenuMangement.Infrastructure.HttpClient
 
             services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
             services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
+            services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();
         }
     }
 }

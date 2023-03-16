@@ -19,7 +19,8 @@ namespace IdenitityServer.Core.Features.Register
         private readonly IAuthService _authService;
         //private readonly IIdsHttpClientWrapper _idsHttpClientWrapper;
 
-        public RegisterAsVendorCommandHandler(IIdsHttpClientWrapper idsHttpClientWrapper,
+        public RegisterAsVendorCommandHandler(
+            //IIdsHttpClientWrapper idsHttpClientWrapper,
             IAuthService authService)
         {
             //_idsHttpClientWrapper = idsHttpClientWrapper;

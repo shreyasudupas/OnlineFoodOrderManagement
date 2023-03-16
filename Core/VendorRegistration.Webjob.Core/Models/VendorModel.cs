@@ -2,7 +2,7 @@
 {
     public class VendorModel
     {
-        public string Id { get; set; }
+        public string UserId { get; set; }
         public string VendorName { get; set; }
 
         public string VendorDescription { get; set; }

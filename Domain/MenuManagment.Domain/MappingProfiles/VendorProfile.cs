@@ -12,21 +12,34 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
             CreateMap<VendorDto, Vendor>()
                 .ForMember(act=>act.OpenTime,opt=>opt.MapFrom((src,dest)=> {
 
-                    var splitTime = src.OpenTime.Split(':');
-                    var hours = Convert.ToInt32(splitTime[0]);
-                    var min = Convert.ToInt32(splitTime[1]);
-                    var sec = Convert.ToInt32(splitTime[2]);
-                    var time = new TimeSpan(hours, min, sec);
-                    return time;
+                    if(src.OpenTime != null)
+                    {
+                        var splitTime = src.OpenTime.Split(':');
+                        var hours = Convert.ToInt32(splitTime[0]);
+                        var min = Convert.ToInt32(splitTime[1]);
+                        var sec = Convert.ToInt32(splitTime[2]);
+                        var time = new TimeSpan(hours, min, sec);
+                        return time;
+                    }else
+                    {
+                        return new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                    }
                 }))
                 .ForMember(act => act.CloseTime, opt => opt.MapFrom((src, dest) => {
-
-                    var splitTime = src.CloseTime.Split(':');
-                    var hours = Convert.ToInt32(splitTime[0]);
-                    var min = Convert.ToInt32(splitTime[1]);
-                    var sec = Convert.ToInt32(splitTime[2]);
-                    var time = new TimeSpan(hours, min, sec);
-                    return time;
+                    
+                    if(src.CloseTime != null)
+                    {
+                        var splitTime = src.CloseTime.Split(':');
+                        var hours = Convert.ToInt32(splitTime[0]);
+                        var min = Convert.ToInt32(splitTime[1]);
+                        var sec = Convert.ToInt32(splitTime[2]);
+                        var time = new TimeSpan(hours, min, sec);
+                        return time;
+                    }else
+                    {
+                        return new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                    }
+                    
                 }))
                 ;
 
