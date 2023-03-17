@@ -1,5 +1,5 @@
 ﻿using MenuManagement.HttpClient.Domain.Interface;
-using MenuManagement.Webjob.Core.Models;
+using MenuManagement.MessagingQueue.Core.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text;

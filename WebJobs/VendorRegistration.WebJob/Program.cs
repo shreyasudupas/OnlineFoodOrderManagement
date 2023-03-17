@@ -1,8 +1,8 @@
 using MenuManagement.Infrastruture.RabbitMqClient;
 using MenuMangement.Infrastructure.HttpClient;
-using MenuManagement.Webjob.Core;
-using MenuManagement.Webjob.Core.Interfaces;
-
+using MenuManagement.MessagingQueue.Core;
+using MenuManagement.MessagingQueue.Core.Interfaces;
+using MenuMangement.RabbitMqClient.Domain.Interfaces;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context,services) =>

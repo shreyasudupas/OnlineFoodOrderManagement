@@ -1,4 +1,4 @@
-﻿namespace MenuManagement.Webjob.Core.Models
+﻿namespace MenuManagement.MessagingQueue.Core.Models
 {
     public class NotificationModel
     {

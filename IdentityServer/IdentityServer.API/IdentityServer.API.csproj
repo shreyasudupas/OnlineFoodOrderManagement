@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.12.1" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.12.1" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
@@ -23,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructures\MenuManagement.Infrastruture.RabbitMqClient\MenuManagement.Infrastruture.RabbitMqClient.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MenuMangement.Infrastructure.HttpClient\MenuMangement.Infrastructure.HttpClient.csproj" />
     <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
     <ProjectReference Include="..\IdenitityServer.Core\IdenitityServer.Core.csproj" />
     <ProjectReference Include="..\IdentityServer.Infrastruture\IdentityServer.Infrastruture.csproj" />

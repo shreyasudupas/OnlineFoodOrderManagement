@@ -1,4 +1,4 @@
-﻿using MenuManagement.Webjob.Core.Models;
+﻿using MenuManagement.MessagingQueue.Core.Models;
 
 namespace MenuManagement.HttpClient.Domain.Interface
 {

@@ -13,5 +13,8 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<City> DeleteCity(City city);
         Task<LocationArea> AddArea(LocationArea newArea);
         Task<LocationArea> DeleteArea(LocationArea area);
+        Task<string> GetCityNameById(int cityId);
+        Task<string> GetStateNameById(int stateId);
+        Task<string> GetAreaNameById(int areaId);
     }
 }

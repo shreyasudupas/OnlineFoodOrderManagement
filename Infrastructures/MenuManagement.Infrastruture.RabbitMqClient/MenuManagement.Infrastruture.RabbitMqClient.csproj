@@ -14,11 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Producer\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\MenuManagement.Webjob.Core.csproj" />
+    <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\MenuManagement.MessagingQueue.Core.csproj" />
   </ItemGroup>
 
 </Project>

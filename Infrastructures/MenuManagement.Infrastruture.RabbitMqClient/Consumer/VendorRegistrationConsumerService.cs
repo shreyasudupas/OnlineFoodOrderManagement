@@ -3,7 +3,8 @@ using RabbitMQ.Client;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MenuManagement.Webjob.Core.Interfaces;
+using MenuMangement.RabbitMqClient.Domain.Interfaces;
+using MenuManagement.MessagingQueue.Core.Interfaces.Consumers;
 
 namespace MenuManagement.Infrastruture.RabbitMqClient.Consumer
 {

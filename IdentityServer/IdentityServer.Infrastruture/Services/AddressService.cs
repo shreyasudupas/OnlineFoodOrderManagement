@@ -123,5 +123,23 @@ namespace IdentityServer.Infrastruture.Services
                 return null;
             }
         }
+
+        public async Task<string> GetCityNameById(int cityId)
+        {
+            var cityName = await _applicationDbContext.Cities.Where(c => c.Id == cityId).Select(c => c.Name).FirstOrDefaultAsync();
+            return cityName;
+        }
+
+        public async Task<string> GetStateNameById(int stateId)
+        {
+            var cityName = await _applicationDbContext.States.Where(s => s.Id == stateId).Select(s => s.Name).FirstOrDefaultAsync();
+            return cityName;
+        }
+
+        public async Task<string> GetAreaNameById(int areaId)
+        {
+            var cityName = await _applicationDbContext.LocationAreas.Where(a => a.Id == areaId).Select(a => a.AreaName).FirstOrDefaultAsync();
+            return cityName;
+        }
     }
 }
