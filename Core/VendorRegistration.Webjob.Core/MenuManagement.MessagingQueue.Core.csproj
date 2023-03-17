@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
+    <ProjectReference Include="..\..\Domain\MenuMangement.RabbitMqClient.Domain\MenuMangement.RabbitMqClient.Domain.csproj" />
     <ProjectReference Include="..\..\Shared\MenuManagement.RabbitMqClient.Domain\MenuManagement.HttpClient.Domain.csproj" />
   </ItemGroup>
 

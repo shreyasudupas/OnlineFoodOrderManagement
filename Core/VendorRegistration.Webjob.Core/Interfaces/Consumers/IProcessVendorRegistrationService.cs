@@ -1,6 +1,4 @@
-﻿using MenuManagement.Webjob.Core.Models;
-
-namespace MenuManagement.Webjob.Core.Interfaces
+﻿namespace MenuManagement.MessagingQueue.Core.Interfaces.Consumers
 {
     public interface IProcessVendorRegistrationService
     {

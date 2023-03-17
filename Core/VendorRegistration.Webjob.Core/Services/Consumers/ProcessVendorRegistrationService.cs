@@ -2,11 +2,12 @@
 using MenuManagement.HttpClient.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using MenuManagement.Webjob.Core.Interfaces;
-using MenuManagement.Webjob.Core.Models;
+using MenuManagement.MessagingQueue.Core.Interfaces;
+using MenuManagement.MessagingQueue.Core.Models;
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
+using MenuManagement.MessagingQueue.Core.Interfaces.Consumers;
 
-namespace MenuManagement.Webjob.Core.Services
+namespace MenuManagement.MessagingQueue.Core.Services.Consumers
 {
     public class ProcessVendorRegistrationService : IProcessVendorRegistrationService
     {
@@ -36,7 +37,7 @@ namespace MenuManagement.Webjob.Core.Services
             {
                 vendorModel = JsonConvert.DeserializeObject<VendorModel>(vendorModelMessage);
 
-                if(vendorModel != null)
+                if (vendorModel != null)
                 {
                     _logger.LogInformation($"Vendor Information {JsonConvert.SerializeObject(vendorModelMessage)}");
 
@@ -53,11 +54,11 @@ namespace MenuManagement.Webjob.Core.Services
                             VendorDescription = vendorModel.VendorDescription,
                             Rating = 0,
                             State = vendorModel.State,
-                            City= vendorModel.City,
-                            Area= vendorModel.Area,
-                            Coordinates=null,
+                            City = vendorModel.City,
+                            Area = vendorModel.Area,
+                            Coordinates = null,
                             AddressLine1 = vendorModel.Address,
-                            Active=  false //vendor has to login and confirm the changes
+                            Active = false //vendor has to login and confirm the changes
                         };
                         var vendorAddBody = new
                         {
@@ -66,7 +67,7 @@ namespace MenuManagement.Webjob.Core.Services
 
                         var vendorResult = await _inventoryClientWrapper.PostApiCall("api/vendor", token?.AccessToken, vendorAddBody);
 
-                        if(!string.IsNullOrEmpty(vendorResult))
+                        if (!string.IsNullOrEmpty(vendorResult))
                         {
                             var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
 
@@ -96,7 +97,7 @@ namespace MenuManagement.Webjob.Core.Services
                         {
                             //send back to dead letter
                         }
-                        
+
                     }
                     else
                     {
