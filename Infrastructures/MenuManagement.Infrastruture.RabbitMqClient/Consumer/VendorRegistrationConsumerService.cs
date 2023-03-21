@@ -35,25 +35,49 @@ namespace MenuManagement.Infrastruture.RabbitMqClient.Consumer
             rabbitMqConnection = factory.CreateConnection();
             _channel = rabbitMqConnection.CreateModel();
 
+            //creating dead letter exchange and queue
+            var deadLetterExchange = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:DeadLetterExchange").Value;
+            _channel.ExchangeDeclare(deadLetterExchange, ExchangeType.Fanout);
+
+            var deadLetterQueue = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:DeadLetterQueueName").Value;
+            _channel.QueueDeclare(deadLetterQueue,true,false,false,null);
+            _channel.QueueBind(deadLetterQueue, deadLetterExchange, "");
+
+            var arguments = new Dictionary<string, object>()
+            {
+                { "x-dead-letter-exchange", deadLetterExchange }
+            };
+
             var queueName = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:QueueName").Value;
-            _channel.QueueDeclare(queueName, durable: true,exclusive: false,autoDelete: false,arguments: null);
+            _channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, arguments: arguments);
 
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += async (model, eventArgs) =>
             {
-                var body = eventArgs.Body.ToArray();
-                response = Encoding.UTF8.GetString(body);
+                try
+                {
+                    var body = eventArgs.Body.ToArray();
+                    response = Encoding.UTF8.GetString(body);
 
-                _channel.BasicAck(eventArgs.DeliveryTag, false);
+                    _logger.LogInformation($"Message received: {response}");
 
-                _logger.LogInformation($"Message received: {response}");
+                    await _processVendorRegistrationService.ProcessVendorRegistration(response);
 
-                await _processVendorRegistrationService.ProcessVendorRegistration(response);
+                    _channel.BasicAck(eventArgs.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Exception consuming Error:{ex.Message}");
+
+                    _channel.BasicNack(eventArgs.DeliveryTag, false, false);
+                }
+
             };
 
             _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
+
         }
 
         public void Dispose()

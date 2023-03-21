@@ -35,78 +35,93 @@ namespace MenuManagement.MessagingQueue.Core.Services.Consumers
 
             if (!string.IsNullOrEmpty(vendorModelMessage))
             {
-                vendorModel = JsonConvert.DeserializeObject<VendorModel>(vendorModelMessage);
-
-                if (vendorModel != null)
+                try
                 {
-                    _logger.LogInformation($"Vendor Information {JsonConvert.SerializeObject(vendorModelMessage)}");
+                    vendorModel = JsonConvert.DeserializeObject<VendorModel>(vendorModelMessage);
 
-                    var tokenResult = await _idsHttpClientWrapper.GetApiAccessToken();
-
-                    if (!string.IsNullOrEmpty(tokenResult))
+                    if (vendorModel != null)
                     {
-                        var token = JsonConvert.DeserializeObject<AccessTokenModel>(tokenResult);
+                        _logger.LogInformation($"Vendor Information {JsonConvert.SerializeObject(vendorModelMessage)}");
 
-                        //call Inventory Vendor API
-                        var vendorDetail = new VendorDto
+                        var tokenResult = await _idsHttpClientWrapper.GetApiAccessToken();
+
+                        if (!string.IsNullOrEmpty(tokenResult))
                         {
-                            VendorName = vendorModel.VendorName,
-                            VendorDescription = vendorModel.VendorDescription,
-                            Rating = 0,
-                            State = vendorModel.State,
-                            City = vendorModel.City,
-                            Area = vendorModel.Area,
-                            Coordinates = null,
-                            AddressLine1 = vendorModel.Address,
-                            Active = false //vendor has to login and confirm the changes
-                        };
-                        var vendorAddBody = new
-                        {
-                            VendorDetail = vendorDetail
-                        };
+                            var token = JsonConvert.DeserializeObject<AccessTokenModel>(tokenResult);
 
-                        var vendorResult = await _inventoryClientWrapper.PostApiCall("api/vendor", token?.AccessToken, vendorAddBody);
-
-                        if (!string.IsNullOrEmpty(vendorResult))
-                        {
-                            var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
-
-                            //call notification API
-                            var notificationModel = new NotificationModel
+                            //call Inventory Vendor API
+                            var vendorDetail = new VendorDto
                             {
-                                UserId = vendorModel?.UserId,
-                                Description = "Welcome user",
-                                Role = "vendor",
-                                SendAll = false,
-                                Title = "Welcome",
-                                Read = false,
-                                RecordedTimeStamp = DateTime.Now
+                                VendorName = vendorModel.VendorName,
+                                VendorDescription = vendorModel.VendorDescription,
+                                Rating = 0,
+                                State = vendorModel.State,
+                                City = vendorModel.City,
+                                Area = vendorModel.Area,
+                                Coordinates = null,
+                                AddressLine1 = vendorModel.Address,
+                                Active = false //vendor has to login and confirm the changes
                             };
-                            var notificationResponse = await _notificationClientWrapper.PostApiCall("", token?.AccessToken, notificationModel);
-
-                            if (notificationResponse != null)
+                            var vendorAddBody = new
                             {
-                                _logger.LogInformation("Vendor Notification");
+                                VendorDetail = vendorDetail
+                            };
+
+                            var vendorResult = await _inventoryClientWrapper.PostApiCall("api/vendor", token?.AccessToken, vendorAddBody);
+
+                            if (!string.IsNullOrEmpty(vendorResult))
+                            {
+                                var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
+
+                                //call notification API
+                                var notificationModel = new NotificationModel
+                                {
+                                    UserId = vendorModel?.UserId,
+                                    Description = "Welcome user",
+                                    Role = "vendor",
+                                    SendAll = false,
+                                    Title = "Welcome",
+                                    Read = false,
+                                    RecordedTimeStamp = DateTime.Now
+                                };
+                                var notificationResponse = await _notificationClientWrapper.PostApiCall("", token?.AccessToken, notificationModel);
+
+                                if (notificationResponse != null)
+                                {
+                                    _logger.LogInformation("Vendor Notification sent");
+                                }
+                                else
+                                {
+                                    //send back to dead-letter queue
+                                }
                             }
                             else
                             {
-                                //send back to dead-letter queue
+                                //send back to dead letter
+                                var error = "Unable to add Vendor info API";
+                                _logger.LogError(error);
+                                throw new Exception(error);
                             }
+
                         }
                         else
                         {
-                            //send back to dead letter
+                            var error = "IDS Token is emtpty";
+                            _logger.LogError(error);
+                            throw new Exception(error);
                         }
-
                     }
                     else
                     {
-                        _logger.LogError("IDS Token is emtpty");
+                        var error = "Vendor Deserilize Emtpy";
+                        _logger.LogError(error);
+                        throw new Exception(error);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _logger.LogError("Vendor Deserilize Emtpy");
+                    _logger.LogError($"Error has occured {ex.Message}");
+                    throw new Exception("Error in Process Vendor Service", ex);
                 }
             }
         }
