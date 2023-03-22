@@ -18,6 +18,9 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("vendorDescription")]
         public string VendorDescription { get; set; }
 
+        [BsonElement("vendorEmail")]
+        public string VendorEmail { get; set; }
+
         [BsonElement("categories")]
         public List<Categories> Categories { get; set; }
 
