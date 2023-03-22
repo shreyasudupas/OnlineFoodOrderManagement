@@ -1,5 +1,6 @@
 using Inventory.Microservice.Core;
 using Inventory.Mongo.Persistance;
+using MenuManagement.InventoryMicroService.API;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -82,6 +83,7 @@ builder.Services.AddAuthentication("Bearer")
             }
         };
     });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -110,5 +112,8 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
+//Database Seed
+app.UseMigration();
 
 app.Run();
