@@ -299,5 +299,32 @@ namespace IdentityServer.Infrastruture.Services
             }
             return users;
         }
+
+        public async Task<VendorUserIdMapping> AddVendorUserIdMapping(VendorUserIdMapping vendorUserIdMapping)
+        {
+            if(!_context.VendorUserIdMappings.Any(v=>v.UserId == vendorUserIdMapping.UserId))
+            {
+                await _context.VendorUserIdMappings.AddAsync(vendorUserIdMapping);
+                return vendorUserIdMapping;
+            }
+            else
+            {
+                _logger.LogInformation($"{vendorUserIdMapping.UserId} is already present");
+                return null;
+            }
+        }
+
+        public async Task<List<VendorUserIdMapping>> GetAllVendorUserIdMapping(string? vendorId = null)
+        {
+            var allUsers = from vendorIdMap in _context.VendorUserIdMappings
+                           select vendorIdMap;
+
+            if (vendorId != null)
+                allUsers.Where(v => v.VendorId == vendorId);
+
+            var list = allUsers.ToList();
+
+            return list;
+        }
     }
 }

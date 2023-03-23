@@ -16,5 +16,8 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<UserProfileAddress> AddModifyUserAddress(string UserId, UserProfileAddress profileAddress);
         Task<List<UserProfile>> GetUserList();
         Task<List<AddressDropdownModel>> GetAllCities();
+
+        Task<VendorUserIdMapping> AddVendorUserIdMapping(VendorUserIdMapping vendorUserIdMapping);
+        Task<List<VendorUserIdMapping>> GetAllVendorUserIdMapping(string? vendorId = null);
     }
 }

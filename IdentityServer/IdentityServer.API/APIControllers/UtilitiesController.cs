@@ -3,6 +3,7 @@ using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Utility;
+using IdenitityServer.Core.Features.Utility.VendorIdMapping;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -118,6 +119,18 @@ namespace IdentityServer.API.APIControllers
             {
                 return null;
             }
+        }
+
+        [HttpGet("/api/vendorIdMapping/all")]
+        public async Task<List<VendorIdMappingResponse>> GetAllVendorIdMappingData([FromQuery]string? vendorId = null)
+        {
+            return await Mediator.Send(new GetAllVendorIdMappingQuery { VendorId = vendorId });
+        }
+
+        [HttpPost("/api/vendorIdMapping")]
+        public async Task<VendorIdMappingResponse> AddVendorIdMappingData([FromBody]VendorIdMappingResponse vendorIdMappingResponse)
+        {
+            return await Mediator.Send(new AddVendorIdMappingCommand { VendorIdAdd = vendorIdMappingResponse });
         }
     }
 }

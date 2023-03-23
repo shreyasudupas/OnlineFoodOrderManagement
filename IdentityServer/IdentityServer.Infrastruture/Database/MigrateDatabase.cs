@@ -116,6 +116,8 @@ namespace IdentityServer.Infrastruture.Database
                     MapUsersToRole(UserManager, context);
 
                     MapAddressStateLocation(context);
+
+                    AddVendorMapping(context);
                 }
             }
         }
@@ -366,6 +368,24 @@ namespace IdentityServer.Infrastruture.Database
                             };
 
                 context.ClaimDropDowns.AddRange(ListClaimsSelections);
+                context.SaveChanges();
+            }
+        }
+
+        private static void AddVendorMapping(ApplicationDbContext context)
+        {
+            if(!context.VendorUserIdMappings.Any())
+            {
+                var vendorUser = context.Users.Where(x => x.UserName == "vendor").FirstOrDefault();
+
+                if(vendorUser != null)
+                {
+                    context.VendorUserIdMappings.Add(new VendorUserIdMapping
+                    {
+                        UserId = vendorUser.Id
+                    });
+                }
+
                 context.SaveChanges();
             }
         }

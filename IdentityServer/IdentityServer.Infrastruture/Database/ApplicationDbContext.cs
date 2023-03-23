@@ -13,5 +13,6 @@ namespace IdentityServer.Infrastruture.Database
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<LocationArea> LocationAreas { get; set; }
+        public DbSet<VendorUserIdMapping> VendorUserIdMappings { get; set; }
     }
 }
