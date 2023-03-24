@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\VendorRegistration.Webjob.Core\MenuManagement.MessagingQueue.Core.csproj" />
     <ProjectReference Include="..\..\Shared\MenuManagement.RabbitMqClient.Domain\MenuManagement.HttpClient.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
   </ItemGroup>
 
 </Project>

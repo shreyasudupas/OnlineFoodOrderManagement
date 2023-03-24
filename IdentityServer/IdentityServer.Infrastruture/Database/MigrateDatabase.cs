@@ -382,7 +382,8 @@ namespace IdentityServer.Infrastruture.Database
                 {
                     context.VendorUserIdMappings.Add(new VendorUserIdMapping
                     {
-                        UserId = vendorUser.Id
+                        UserId = vendorUser.Id,
+                        Enabled = false
                     });
                 }
 

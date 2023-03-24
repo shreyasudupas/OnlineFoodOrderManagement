@@ -2,6 +2,6 @@
 {
     public interface IMailService
     {
-        void SendMailWithSingleRecipient(string toAddress, string body);
+        bool SendMailWithSingleRecipient(string toAddress, string subject, string body);
     }
 }
