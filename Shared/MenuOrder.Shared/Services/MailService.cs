@@ -3,6 +3,8 @@ using MimeKit;
 using MenuOrder.Shared.Services.Interface;
 using System;
 using Microsoft.Extensions.Configuration;
+using MenuOrder.Shared.Enum;
+using MenuOrder.Shared.EmailTemplate;
 
 namespace MenuOrder.Shared.Services
 {
@@ -49,6 +51,23 @@ namespace MenuOrder.Shared.Services
             }
 
             return success;
+        }
+
+        public string SendEmailTemplateBody(EmailTypeEnum emailType, params string[] param)
+        {
+            string body = string.Empty;
+
+            switch(emailType)
+            {
+                case EmailTypeEnum.RegisterVendor:
+                    body = RegisterVendorTemplate.RegisterVendorEmail(param[0], param[1], param[2]);
+                        break;
+                case EmailTypeEnum.WelcomeVendor:
+                    body = WelcomeVendorTemplate.WelocmeVendorEmail(param[0], param[1], param[2]);
+                    break;
+
+            }
+            return body;
         }
     }
 }

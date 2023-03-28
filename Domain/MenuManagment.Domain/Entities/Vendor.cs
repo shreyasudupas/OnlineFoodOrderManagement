@@ -57,6 +57,9 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("active")]
         public bool Active { get; set; }
 
+        [BsonElement("sendEmailNotification")]
+        public bool SendEmailNotification { get; set; }
+
     }
 
     public class Coordinates

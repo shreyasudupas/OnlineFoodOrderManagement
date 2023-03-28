@@ -41,6 +41,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 
         public bool Active { get; set; }
 
+        public bool SendEmailNotification { get; set; }
+
     }
 
     public class CoordinatesDto
