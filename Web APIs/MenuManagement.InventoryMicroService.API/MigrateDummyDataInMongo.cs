@@ -60,12 +60,10 @@ namespace MenuManagement.InventoryMicroService.API
                     Rating = 4,
                     CuisineType = new List<string> { "Indian" },
                     VendorDescription = "sample",
-                    VendorEmail="test@gmail.com",
                     VendorName = "Vendor 1",
                     OpenTime =  "07:30:00",
                     CloseTime = "22:30:00",
-                    Active= false,
-                    SendEmailNotification=false
+                    Active= false
                 };
 
                 var dummyCategories = new List<CategoryDto>

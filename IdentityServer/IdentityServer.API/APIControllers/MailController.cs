@@ -36,7 +36,7 @@ namespace IdentityServer.API.APIControllers
             var body = _mailService.SendEmailTemplateBody(welcomeVendorModel.TemplateType, welcomeVendorModel.VendorName,
                 welcomeVendorModel.Username, vendorRegisterUrl);
 
-            var result = _mailService.SendMailWithSingleRecipient(welcomeVendorModel.ToAddress, welcomeVendorModel.Subject, welcomeVendorModel.Body);
+            var result = _mailService.SendMailWithSingleRecipient(welcomeVendorModel.VendorEmail, welcomeVendorModel.Subject, body);
             return Ok(result);
         }
     }

@@ -73,6 +73,7 @@ namespace IdentityServer.API
                 mc.AddProfile(new UserProfileMapper());
                 mc.AddProfile(new LoginProfile());
                 mc.AddProfile(new VendorIdMappingProfile());
+                mc.AddProfile(new CommonProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

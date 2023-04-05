@@ -51,7 +51,9 @@
                             </a>
                        </div>
                         <div class="col-6">
-                            <button type="button" class="btn btn-secondary">Register as Vendor</button>
+                            <a asp-action="RegisterAsVendor" asp-route-returnUrl="@Model?.ReturnUrl">
+                                <button type="button" class="btn btn-secondary">Register as Vendor</button>
+                            </a>
                         </div>
                    </div>
                 }

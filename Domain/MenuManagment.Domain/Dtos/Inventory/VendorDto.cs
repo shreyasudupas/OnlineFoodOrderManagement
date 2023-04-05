@@ -15,8 +15,6 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 
         public string VendorDescription { get; set; }
 
-        public string VendorEmail { get; set; }
-
         public List<CategoryDto> Categories { get; set; }
 
         public List<string> CuisineType { get; set; }
@@ -40,8 +38,6 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
         public string CloseTime { get; set; }
 
         public bool Active { get; set; }
-
-        public bool SendEmailNotification { get; set; }
 
     }
 

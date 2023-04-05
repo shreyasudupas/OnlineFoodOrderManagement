@@ -110,6 +110,7 @@ namespace IdentityServer.Infrastruture
             services.AddScoped<IAdministrationService, AdministrationService>();
             services.AddScoped<IClientService,ClientServices>();
             services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IVendorUserMappingService, VendorUserMappingService>();
 
             return services;
         }
