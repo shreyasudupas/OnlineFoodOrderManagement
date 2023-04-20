@@ -28,18 +28,21 @@ namespace IdentityServer.Infrastruture.Services
         private readonly IIdentityServerInteractionService _interaction;
         private readonly ILogger<AuthService> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IAddressService _addressService;
 
         public AuthService(SignInManager<ApplicationUser> signInManger,
             UserManager<ApplicationUser> userManager,
             IIdentityServerInteractionService interaction,
             ILogger<AuthService> logger,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IAddressService addressService)
         {
             _signInManger = signInManger;
             _userManager = userManager;
             _interaction = interaction;
             _logger = logger;
             _context = context;
+            _addressService = addressService;
         }
         public async Task<LoginResponse> Login(LoginCommand login)
         {
@@ -162,7 +165,7 @@ namespace IdentityServer.Infrastruture.Services
                 Email = registerAdminResponse.Email,
                 CreatedDate = DateTime.Now,
                 Enabled = true,
-                IsAdmin = true,
+                //IsAdmin = true,
             };
 
             var result = await _userManager.CreateAsync(user, registerAdminResponse.Password);
@@ -203,9 +206,11 @@ namespace IdentityServer.Infrastruture.Services
                 UserName = vendorRegister.Username,
                 Email = vendorRegister.Email,
                 CreatedDate = DateTime.Now,
-                Enabled = true,
-                IsAdmin = true,
+                Enabled = false,
+                UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Vendor,
+                //IsAdmin = true,
             };
+
             var result = await _userManager.CreateAsync(user, vendorRegister.Password);
             _logger.LogInformation($"user {vendorRegister.Username} added in database {result.Succeeded}");
 
@@ -235,6 +240,30 @@ namespace IdentityServer.Infrastruture.Services
             }
 
             return (vendorRegister, appUser.Id);
+        }
+
+        public async Task<bool> AddVendorUserAddress(string userId, UserAddress userAddress)
+        {
+            bool status = false;
+            var user = await _context.Users.Where(u=>u.Id == userId).Include(x=>x.Address).FirstOrDefaultAsync();
+
+            if(user != null)
+            {
+                if (userAddress != null)
+                {
+                    user.Address.Add(userAddress);
+
+                    await _context.SaveChangesAsync();
+                    status = true;
+                }
+            }
+            return status;
+        }
+
+        public async Task<UserAddress> GetVendorAddressByVendorId(string vendorId)
+        {
+            var vendorAddress = await _context.UserAddresses.Where(ua=>ua.VendorId == vendorId).FirstOrDefaultAsync();
+            return vendorAddress;
         }
     }
 }

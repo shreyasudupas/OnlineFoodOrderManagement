@@ -17,6 +17,12 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
+            services.AddHttpClient("IDSTokenClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:IdentityServerToken").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+
             services.AddHttpClient("InventoryClient", config =>
             {
                 config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:InventoryApi").Value);

@@ -67,10 +67,15 @@ namespace IdenitityServer.API.Types.OutputTypes
                 .Type<IntType>()
                 .Name("accessFailedCount");
 
-            descriptor.Field(_ => _.IsAdmin)
-                .Type<BooleanType>()
-                .Description("Is Admin")
-                .Name("isAdmin");
+            //descriptor.Field(_ => _.IsAdmin)
+            //    .Type<BooleanType>()
+            //    .Description("Is Admin")
+            //    .Name("isAdmin");
+
+            descriptor.Field(_ => _.UserType)
+                .Type<StringType>()
+                .Description("User Type")
+                .Name("userType");
 
             descriptor.Field(_ => _.ImagePath)
                 .Type<StringType>()

@@ -28,12 +28,13 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                 LockoutEnd = applicationUser.LockoutEnd,
                 AccessFailedCount = applicationUser.AccessFailedCount,
                 Address = GetUserAddressInfo(applicationUser, context),
-                IsAdmin = applicationUser.IsAdmin,
+                //IsAdmin = applicationUser.IsAdmin,
                 ImagePath = applicationUser.ImagePath,
                 CartAmount = applicationUser.CartAmount,
                 Points = applicationUser.Points,
                 CreatedDate = applicationUser.CreatedDate,
-                Enabled = applicationUser.Enabled
+                Enabled = applicationUser.Enabled,
+                UserType = applicationUser.UserType
             };
             return result;
         }

@@ -262,7 +262,10 @@ namespace IdentityServer.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _mediator.Send(new RegisterAsVendorCommand { vendorRegister = vendorRegisterViewModel });
+                var result = await _mediator.Send(new RegisterAsVendorCommand {
+                    vendorRegister = vendorRegisterViewModel,
+                    ProcessQueue = true
+                });
 
                 if(result.Errors.Any())
                 {

@@ -9,5 +9,10 @@
         public string State { get; set; }
         public bool IsActive { get; set; }
         public string? ApplicationUserId { get; set; }
+        //These are used only by UserType is Vendor
+        public string VendorId { get; set; }
+
+        //These are used only by UserType is Vendor
+        public bool Editable { get; set; }
     }
 }

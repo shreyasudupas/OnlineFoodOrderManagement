@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IdenitityServer.Core.Domain.Enums;
 using IdenitityServer.Core.Domain.Model;
 
 namespace IdenitityServer.Core.Domain.DBModel
@@ -46,7 +47,7 @@ namespace IdenitityServer.Core.Domain.DBModel
 
         public int AccessFailedCount { get; set; }
         public List<UserProfileAddress> Address { get; set; }
-        public bool IsAdmin { get; set; }
+        //public bool IsAdmin { get; set; }
         public string ImagePath { get; set; }
         public int CartAmount { get; set; }
         public double Points { get; set; }
@@ -54,5 +55,6 @@ namespace IdenitityServer.Core.Domain.DBModel
         public List<DropdownModel> Claims { get; set; }
         public List<DropdownModel> Roles { get; set; }
         public bool Enabled { get; set; }
+        public UserTypeEnum UserType { get; set; }
     }
 }

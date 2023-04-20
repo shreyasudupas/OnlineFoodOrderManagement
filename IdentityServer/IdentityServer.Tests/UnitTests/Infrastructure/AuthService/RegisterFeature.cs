@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Features.Register;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer.Tests.Helper;
@@ -21,6 +22,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
         Infrastruture.Services.AuthService sut;
         Mock<IIdentityServerInteractionService> mockIdentityService;
         Mock<ILogger<IdentityServer.Infrastruture.Services.AuthService>> mockLog;
+        Mock<IAddressService> mockAddressService;
 
         public RegisterFeature()
         {
@@ -32,9 +34,10 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
 
             mockIdentityService = new Mock<IIdentityServerInteractionService>();
             mockLog = new Mock<ILogger<Infrastruture.Services.AuthService>>();
+            mockAddressService = new Mock<IAddressService>();
 
             sut = new Infrastruture.Services.AuthService(mockSignInManager.Object, mockUserManager.Object, mockIdentityService.Object
-                , mockLog.Object, appContext);
+                , mockLog.Object, appContext, mockAddressService.Object);
 
             MigrateDatabase.MapAddressStateLocation(appContext);
         }

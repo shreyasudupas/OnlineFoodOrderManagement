@@ -21,6 +21,12 @@ namespace IdenitityServer.Core.Domain.DBModel
 
         public List<DropdownModel> MyStates { get; set; }
         public bool IsActive { get; set; }
+
+        //These are used only by UserType is Vendor
+        public string VendorId { get; set; }
+
+        //These are used only by UserType is Vendor
+        public bool Editable { get; set; }
     }
 
     

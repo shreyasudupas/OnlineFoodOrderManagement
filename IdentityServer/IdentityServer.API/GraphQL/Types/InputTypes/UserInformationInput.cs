@@ -22,10 +22,14 @@ namespace IdentityServer.API.GraphQL.Types.InputTypes
                 .Description("Email")
                 .Name("email");
 
-            descriptor.Field(_ => _.IsAdmin)
-                .Type<BooleanType>()
-                .Description("Is Admin")
-                .Name("isAdmin");
+            //descriptor.Field(_ => _.IsAdmin)
+            //    .Type<BooleanType>()
+            //    .Description("Is Admin")
+            //    .Name("isAdmin");
+            descriptor.Field(_ => _.UserType)
+                .Type<StringType>()
+                .Description("Different User Type")
+                .Name("userType");
 
             descriptor.Field(_ => _.CartAmount)
                 .Type<IntType>()

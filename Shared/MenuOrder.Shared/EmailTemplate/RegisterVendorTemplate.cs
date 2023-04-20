@@ -1,16 +1,20 @@
-﻿namespace MenuOrder.Shared.EmailTemplate
+﻿using System;
+using System.Web;
+
+namespace MenuOrder.Shared.EmailTemplate
 {
     public static class RegisterVendorTemplate
     {
-        public static string RegisterVendorEmail(string vendorName,string vendorEmail,string vendorRegisterUrl)
+        public static string RegisterVendorEmail(string vendorName,string vendorEmail,string vendorRegisterUrl,string vendorId)
         {
-            return @$"<!DOCTYPE html>
+            return $@"<!DOCTYPE html>
             <html>
             <body>
 
             <h4>Hello {vendorEmail.Split('@')[0]},</h4>
 
-            <p>You have been reffered by this vendor {vendorName}. So Please register to this link <a href={vendorRegisterUrl}'>Click Here</a> to enjoy all the benefits
+            <p>You have been reffered by this vendor {vendorName}. So Please register to this link <a href='{vendorRegisterUrl}?VendorId={vendorId}
+&&VendorName={HttpUtility.UrlEncode(vendorName)}&&Email={HttpUtility.UrlEncode(vendorEmail)}'>Click Here</a> to enjoy all the benefits
 provided by the MenuOrder Vendor App</p>
 
             <h4><b>Regards,</b></h4><br/>

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.DBModel;
 using IdenitityServer.Core.Features.Login;
 using IdentityServer.Infrastruture.Database;
@@ -23,6 +24,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
         Infrastruture.Services.AuthService sut;
         Mock<IIdentityServerInteractionService> mockIdentityService;
         Mock<ILogger<IdentityServer.Infrastruture.Services.AuthService>> mockLog;
+        Mock<IAddressService> mockAddressService;
 
         public LoginFeature()
         {
@@ -34,9 +36,10 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
 
             mockIdentityService = new Mock<IIdentityServerInteractionService>();
             mockLog = new Mock<ILogger<Infrastruture.Services.AuthService>>();
+            mockAddressService = new Mock<IAddressService>();
 
             sut = new Infrastruture.Services.AuthService(mockSignInManager.Object, mockUserManager.Object, mockIdentityService.Object
-                ,mockLog.Object,appContext);
+                ,mockLog.Object,appContext, mockAddressService.Object);
 
             ApplicationUser newUser = new ApplicationUser
             {
@@ -47,7 +50,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
                 {
                     new UserAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
                 },
-                IsAdmin = true,
+                //IsAdmin = true,
                 ImagePath = "20210112_SampleImage.png",
                 CartAmount = 100,
                 Points = 1

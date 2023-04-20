@@ -201,8 +201,9 @@ namespace IdentityServer.Infrastruture.Services
                 currentUser.Email = user.Email;
                 currentUser.CartAmount = user.CartAmount;
                 currentUser.Points = user.Points;
-                currentUser.IsAdmin = user.IsAdmin;
+                //currentUser.IsAdmin = user.IsAdmin;
                 currentUser.Enabled = user.Enabled;
+                currentUser.UserType = user.UserType;
 
                 var result = await _userManager.UpdateAsync(currentUser);
 

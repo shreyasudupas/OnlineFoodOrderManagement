@@ -27,7 +27,8 @@ namespace IdentityServer.API.GraphQL.Mutation
                         Id = user.Id,
                         UserName = user.UserName,
                         Email = user.Email,
-                        IsAdmin = user.IsAdmin,
+                        //IsAdmin = user.IsAdmin,
+                        UserType = user.UserType,
                         CartAmount = user.CartAmount,
                         Points = user.Points,
                         Enabled = user.Enabled

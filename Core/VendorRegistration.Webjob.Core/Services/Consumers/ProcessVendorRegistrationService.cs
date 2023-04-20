@@ -73,6 +73,33 @@ namespace MenuManagement.MessagingQueue.Core.Services.Consumers
                             {
                                 var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
 
+                                //add vendor address
+                                var vendorAddressModel = new
+                                {
+                                    UserId = vendorModel.UserId,
+                                    UserAddress = new
+                                    {
+                                        FullAddress = vendorModel.Address,
+                                        City = vendorModel?.City,
+                                        State = vendorModel?.State,
+                                        Area = vendorModel?.Area,
+                                        IsActive = true,
+                                        ApplcationUserId = vendorModel?.UserId,
+                                        VendorId = deserializeVendor?.Id,
+                                        Editable = true
+                                    }
+                                };
+                                var vendorAddressResult = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-address", vendorAddressModel, token?.AccessToken, "IDSClient");
+
+                                if(!string.IsNullOrEmpty(vendorAddressResult))
+                                {
+                                    _logger.LogInformation($"Successfully processed Vendor User Address API");
+                                }
+                                else
+                                {
+                                    _logger.LogError($"Error occured when processing Vendor User Address API");
+                                }
+
                                 //call notification API
                                 var notificationModel = new NotificationModel
                                 {

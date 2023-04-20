@@ -63,7 +63,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer
         public async Task<string> GetApiAccessToken()
         {
             HttpResponseMessage responseMessage;
-            var httpClient = _httpClientFactory.CreateClient("IDSClient");
+            var httpClient = _httpClientFactory.CreateClient("IDSTokenClient");
 
             httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 

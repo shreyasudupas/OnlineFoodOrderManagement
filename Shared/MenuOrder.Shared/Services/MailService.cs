@@ -60,7 +60,7 @@ namespace MenuOrder.Shared.Services
             switch(emailType)
             {
                 case EmailTypeEnum.RegisterVendor:
-                    body = RegisterVendorTemplate.RegisterVendorEmail(param[0], param[1], param[2]);
+                    body = RegisterVendorTemplate.RegisterVendorEmail(param[0], param[1], param[2], param[3]);
                         break;
                 case EmailTypeEnum.WelcomeVendor:
                     body = WelcomeVendorTemplate.WelocmeVendorEmail(param[0], param[1], param[2]);

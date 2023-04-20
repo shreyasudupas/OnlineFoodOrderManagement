@@ -1,4 +1,5 @@
-﻿using IdenitityServer.Core.Domain.Model;
+﻿using IdenitityServer.Core.Domain.DBModel;
+using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.Login;
 using IdenitityServer.Core.Features.Logout;
@@ -14,5 +15,7 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task Register(RegisterCommand reqisterCommand);
         Task<RegisterAdminResponse> RegisterAdmin(RegisterAdminResponse registerAdminResponse);
         Task<(VendorRegister,string)> RegisterAsVendor(VendorRegister vendorRegister);
+        Task<bool> AddVendorUserAddress(string userId, UserAddress userAddress);
+        Task<UserAddress> GetVendorAddressByVendorId(string vendorId);
     }
 }

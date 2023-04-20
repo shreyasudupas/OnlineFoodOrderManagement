@@ -44,7 +44,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.UserProfile
                 {
                     new UserAddress { FullAddress= "sample address , sample address",City = "sample city",State = "sample State",IsActive=true}
                 },
-                IsAdmin = true,
+                //IsAdmin = true,
                 ImagePath = "20210112_SampleImage.png",
                 CartAmount = 100,
                 Points = 1
@@ -74,7 +74,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.UserProfile
                 Id = "00000000-0000-0000-0000-00000000001a",
                 UserName = "admin",
                 Email = "test@test.com",
-                IsAdmin = true,
+                //IsAdmin = true,
                 Points = 1,
                 CartAmount = 1500,
                 Enabled = true

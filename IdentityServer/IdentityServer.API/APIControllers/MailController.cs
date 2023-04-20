@@ -4,6 +4,7 @@ using MenuOrder.Shared.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Text;
 using static IdentityServer4.IdentityServerConstants;
 
 namespace IdentityServer.API.APIControllers
@@ -37,6 +38,19 @@ namespace IdentityServer.API.APIControllers
                 welcomeVendorModel.Username, vendorRegisterUrl);
 
             var result = _mailService.SendMailWithSingleRecipient(welcomeVendorModel.VendorEmail, welcomeVendorModel.Subject, body);
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("/api/mail/send-register-vendor")]
+        public IActionResult SendRegisterVendorUser([FromBody] RegisterVendorUser registerVendorUser)
+        {
+            StringBuilder sendRegisterUrl = new StringBuilder(_configuration.GetSection("MailSettings:SendRegisterVendorUser").Get<string>());
+
+            var body = _mailService.SendEmailTemplateBody(registerVendorUser.TemplateType, registerVendorUser.Vendorname,
+                registerVendorUser.ToAddress, sendRegisterUrl.ToString(),registerVendorUser.VendorId);
+
+            var result = _mailService.SendMailWithSingleRecipient(registerVendorUser.ToAddress, registerVendorUser.Subject, body);
             return Ok(result);
         }
     }

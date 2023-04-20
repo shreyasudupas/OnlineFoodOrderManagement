@@ -9,6 +9,7 @@ namespace IdenitityServer.Core.Domain.Model
         public string VendorName { get; set; }
 
         public string VendorDescription { get; set; }
+        public string UserId { get; set; }
 
     }
 }

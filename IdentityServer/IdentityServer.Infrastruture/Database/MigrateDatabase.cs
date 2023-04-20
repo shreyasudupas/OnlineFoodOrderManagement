@@ -300,8 +300,9 @@ namespace IdentityServer.Infrastruture.Database
                                         IsActive = true
                                     }
                                 },
-                    IsAdmin = true,
+                    //IsAdmin = true,
                     Enabled=true,
+                    UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Admin,
                     CreatedDate = DateTime.Now
                 };
 
@@ -322,8 +323,9 @@ namespace IdentityServer.Infrastruture.Database
                                         IsActive = true
                                     }
                                 },
-                    IsAdmin = false,
+                    //IsAdmin = false,
                     Enabled = true,
+                    UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.User,
                     CreatedDate = DateTime.Now
                 };
 
@@ -344,8 +346,9 @@ namespace IdentityServer.Infrastruture.Database
                                         IsActive = true
                                     }
                                 },
-                    IsAdmin = false,
+                    //IsAdmin = false,
                     Enabled=true,
+                    UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Vendor,
                     CreatedDate = DateTime.Now
                 };
 
