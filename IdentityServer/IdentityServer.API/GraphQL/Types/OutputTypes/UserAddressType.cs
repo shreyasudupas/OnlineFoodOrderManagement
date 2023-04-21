@@ -66,6 +66,16 @@ namespace IdentityServer.API.GraphQL.Types.OutputTypes
                 .Type<ListType<DropdownOutputType>>()
                 .Description("Users MyAreas List")
                 .Name("myAreas");
+
+            descriptor.Field(_ => _.VendorId)
+                .Type<StringType>()
+                .Description("Vendor Id")
+                .Name("vendorId");
+
+            descriptor.Field(_ => _.Editable)
+                .Type<BooleanType>()
+                .Description("Address Editable")
+                .Name("editable");
         }
     }
 }

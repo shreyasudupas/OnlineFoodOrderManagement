@@ -85,7 +85,9 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                         }).ToList(),
                         MyCities = cities,
                         MyAreas = areas,
-                        AreaId = areaId
+                        AreaId = areaId,
+                        Editable = address.Editable,
+                        VendorId = address.VendorId
                     });
                 }
             }
