@@ -100,12 +100,16 @@ namespace IdentityServer.API.Controllers
                                     VendorId = decryptVendorId
                                 }
                             });
-
                             
-                        }else
+                        }
+                        else
                         {
                             _logger.LogError($"Found no address for Exsiting Vendor in UserAddress");
                         }
+
+                        //Redirect User
+                        return RedirectToAction("ShowPostRegistration",new { VendorName = vendorUserRegistrationViewModel.Vendorname,
+                            Username = vendorUserRegistrationViewModel.Username });
                     }
                     else 
                     {
@@ -122,6 +126,15 @@ namespace IdentityServer.API.Controllers
             }
 
             return View(vendorUserRegistrationViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ShowPostRegistration(string VendorName,string Username)
+        {
+            var model = new PostRegisterViewModel();
+            model.VendorName = VendorName;
+            model.UserName = Username;
+            return View(model);
         }
     }
 }
