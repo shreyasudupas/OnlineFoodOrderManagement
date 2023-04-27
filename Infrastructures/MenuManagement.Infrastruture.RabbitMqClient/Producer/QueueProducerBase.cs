@@ -17,7 +17,7 @@ namespace MenuManagement.Infrastruture.RabbitMqClient.Producer
             _logger = logger;
         }
 
-        public void InitilizeProducerQueue<TData>(string queueName, bool durable, bool exclusive, bool autodelete, TData payload
+        public void InitilizeProducerQueue<TData>(string exchangeName, bool durable, bool exclusive, bool autodelete, TData payload
             , string routingKey, IDictionary<string, object>? arguments = null)
 
         {
@@ -31,21 +31,22 @@ namespace MenuManagement.Infrastruture.RabbitMqClient.Producer
                 rabbitMqConnection = factory.CreateConnection();
                 _channel = rabbitMqConnection.CreateModel();
 
-                _channel.QueueDeclare(queueName, durable: true,
-                     exclusive: exclusive,
-                     autoDelete: autodelete,
-                     arguments: null);
+                //_channel.QueueDeclare(queueName, durable: true,
+                //     exclusive: exclusive,
+                //     autoDelete: autodelete,
+                //     arguments: null);
+                _channel.ExchangeDeclare(exchange: exchangeName,type: ExchangeType.Fanout);
 
                 var json = JsonConvert.SerializeObject(payload);
                 var body = Encoding.UTF8.GetBytes(json);
 
-                _logger.LogInformation($"Publishing payload: {JsonConvert.SerializeObject(payload)}, to the queue: {queueName}");
+                _logger.LogInformation($"Publishing payload: {JsonConvert.SerializeObject(payload)}, to the queue: {exchangeName}");
 
-                _channel.BasicPublish(exchange: "", routingKey: routingKey, body: body);
+                _channel.BasicPublish(exchange: exchangeName, routingKey: "", body: body);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error publishing the message in the queue {queueName}");
+                _logger.LogError($"Error publishing the message in the queue {exchangeName}");
             }
         }
 

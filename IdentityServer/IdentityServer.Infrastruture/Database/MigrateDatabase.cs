@@ -343,7 +343,9 @@ namespace IdentityServer.Infrastruture.Database
                                         City = "Bengaluru",
                                         State = "Karnataka",
                                         Area="JP Nagar",
-                                        IsActive = true
+                                        IsActive = true,
+                                        Editable = true
+                                        //Add VendorId later
                                     }
                                 },
                     //IsAdmin = false,
@@ -387,6 +389,7 @@ namespace IdentityServer.Infrastruture.Database
                     {
                         UserId = vendorUser.Id,
                         Enabled = false
+                        //Add VendorId Later
                     });
                 }
 

@@ -67,26 +67,27 @@ namespace MenuManagement.MessagingQueue.Core.Services.Consumers
                                 VendorDetail = vendorDetail
                             };
 
+                            //Step 1: Add the Vendor details
                             var vendorResult = await _inventoryClientWrapper.PostApiCall("api/vendor", token?.AccessToken, vendorAddBody);
 
                             if (!string.IsNullOrEmpty(vendorResult))
                             {
                                 var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
 
-                                //add vendor address
+                                //Step 2: add vendor address to IDS Server to map user to Address (default address)
                                 var vendorAddressModel = new
                                 {
-                                    UserId = vendorModel.UserId,
-                                    UserAddress = new
+                                    userId = vendorModel.UserId,
+                                    userAddress = new
                                     {
-                                        FullAddress = vendorModel.Address,
-                                        City = vendorModel?.City,
-                                        State = vendorModel?.State,
-                                        Area = vendorModel?.Area,
-                                        IsActive = true,
-                                        ApplcationUserId = vendorModel?.UserId,
-                                        VendorId = deserializeVendor?.Id,
-                                        Editable = true
+                                        fullAddress = vendorModel.Address,
+                                        city = vendorModel?.City,
+                                        state = vendorModel?.State,
+                                        area = vendorModel?.Area,
+                                        isActive = true,
+                                        applcationUserId = vendorModel?.UserId,
+                                        vendorId = deserializeVendor?.Id,
+                                        editable = true
                                     }
                                 };
                                 var vendorAddressResult = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-address", vendorAddressModel, token?.AccessToken, "IDSClient");
@@ -94,6 +95,21 @@ namespace MenuManagement.MessagingQueue.Core.Services.Consumers
                                 if(!string.IsNullOrEmpty(vendorAddressResult))
                                 {
                                     _logger.LogInformation($"Successfully processed Vendor User Address API");
+
+                                    //Step 3: Add Vendor UserID Mapping Table
+                                    var vendorUserIdModel = new
+                                    {
+                                        newVendorUserMapping = new
+                                        {
+                                            id = 0,
+                                            userId = vendorModel?.UserId,
+                                            username = "",
+                                            emailId = "",
+                                            vendorId = deserializeVendor?.Id,
+                                            enabled = false
+                                        }
+                                    };
+                                    var vendorUserIdMapping = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-user-mapping", vendorUserIdModel, token?.AccessToken, "IDSClient");
                                 }
                                 else
                                 {

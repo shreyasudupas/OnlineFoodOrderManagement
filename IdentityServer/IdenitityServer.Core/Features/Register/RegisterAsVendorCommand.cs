@@ -35,8 +35,9 @@ namespace IdenitityServer.Core.Features.Register
         public async Task<VendorRegister> Handle(RegisterAsVendorCommand request, CancellationToken cancellationToken)
         {
             var registerVendor = await _authService.RegisterAsVendor(request.vendorRegister);
+            //var registerVendor = new Tuple<VendorRegister, string>(request.vendorRegister, Guid.NewGuid().ToString());
 
-            if(!string.IsNullOrEmpty(registerVendor.Item2))
+            if (!string.IsNullOrEmpty(registerVendor.Item2))
                 request.vendorRegister.UserId = registerVendor.Item2;
 
             if(request.ProcessQueue)

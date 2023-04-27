@@ -21,8 +21,9 @@ namespace MenuManagement.MessagingQueue.Core.Services.Producers
 
         public void PublishVendorInformationToQueue(VendorModel vendorModel)
         {
-            var queueName = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:QueueName").Value;
-            _queueProducerBase.InitilizeProducerQueue(queueName, true, false, false, vendorModel,routingKey: queueName);
+            //var queueName = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:QueueName").Value;
+            var exchangeName = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:ExchangeName").Value;
+            _queueProducerBase.InitilizeProducerQueue(exchangeName, true, false, false, vendorModel,routingKey: "");
         }
     }
 }

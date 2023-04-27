@@ -35,13 +35,19 @@ namespace MenuManagement.Infrastruture.RabbitMqClient.Consumer
             rabbitMqConnection = factory.CreateConnection();
             _channel = rabbitMqConnection.CreateModel();
 
-            //creating dead letter exchange and queue
+            //Step 1: creating dead-letter exchange and queue
             var deadLetterExchange = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:DeadLetterExchange").Value;
             _channel.ExchangeDeclare(deadLetterExchange, ExchangeType.Fanout);
 
+            //Then create a queue and bind the exchange to the queue created
             var deadLetterQueue = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:DeadLetterQueueName").Value;
             _channel.QueueDeclare(deadLetterQueue,true,false,false,null);
             _channel.QueueBind(deadLetterQueue, deadLetterExchange, "");
+
+
+            //Step2: create a main exchange exchange and queue and bind the exchange to the queue
+            var mainExchangeName = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:ExchangeName").Value;
+            _channel.ExchangeDeclare(mainExchangeName, ExchangeType.Fanout);
 
             var arguments = new Dictionary<string, object>()
             {
@@ -50,6 +56,7 @@ namespace MenuManagement.Infrastruture.RabbitMqClient.Consumer
 
             var queueName = _configuration.GetSection("RabbitMQConfiguration:VendorRegistration:QueueName").Value;
             _channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, arguments: arguments);
+            _channel.QueueBind(queueName, mainExchangeName, "");
 
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
