@@ -1,0 +1,116 @@
+﻿@model UserInfomationModel
+@{ 
+    TempData["UserId"] = Model.Id;
+}
+
+
+<form enctype="multipart/form-data" asp-controller="Administration" asp-action="EditUser" method="post">
+    <div class="card-body">
+        <div class="card-text">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Id" />
+            <div class="form-outline mb-4">
+                <input type="text" id="formUserName" class="form-control" asp-for="@Model.UserName" required />
+                <label class="form-label" for="formUserName">Username</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" id="formEmail" class="form-control" asp-for="@Model.Email" required />
+                <label class="form-label" for="formEmail">Email</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="number" id="formPhone" class="form-control" asp-for="@Model.PhoneNumber" />
+                <label class="form-label" for="formPhone">Phone Number</label>
+            </div>
+            @*<div class="form-outline mb-4">
+                <input type="text" id="formAddress" class="form-control" asp-for="@Model.Address" required />
+                <label class="form-label" for="formAddress">Address</label>
+            </div>*@
+            <div class="form-group">
+                <label>Add Address</label>
+                <button type="button" class="btn btn-primary btn-floating" data-toggle="ajax-modal" data-target="#manageAddAddress"
+                        data-url="@Url.Action("UserAddressPartialView","Administration",new { UserId = Model.Id })">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="list-group">
+                @foreach (var add in Model.Address)
+                {
+                    <button type="button" class="list-group-item list-group-item-action" data-toggle="ajax-modal" data-target="#manageAddAddress"
+                            data-url="@Url.Action("UserAddressPartialView","Administration",new { UserId = Model.Id , UserAddressId = add.Id })">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @add.FullAddress
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-12">
+                                    @add.Area
+                                </div>
+                                <div class="col-12">
+                                    @add.City
+                                </div>
+                                <div class="col-12">
+                                    @add.State
+                                </div>
+                                <div class="col-12">
+                                    <input type="checkbox" id="formIsActiveAddress" class="form-check-input" asp-for="@add.IsActive" readonly />
+                                    <label class="form-check-label" for="formIsActiveAddress">Address Active</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+
+                }
+            </div>
+            @*<div class="form-outline mb-4">
+                <input type="text" id="formCity" class="form-control" asp-for="@Model.City" required />
+                <label class="form-label" for="formCity">City</label>
+            </div>*@
+            @if(!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <img src="~/images/@Model.ImagePath" alt="ProfilePic" class="img-thumbnail" />
+                    </div>
+                </div>
+                
+            }
+            <div class="form-group row">
+                <label class="form-label" for="imageUpload">Upload your Photo</label>
+                <input type="file" class="form-control" id="imageUpload" asp-for="@Model.Photo"/>
+            </div>
+
+            <div class="form-check form-check-inline mb-4">
+                @if (User.IsInRole("admin"))
+                {
+                    <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@Model.IsAdmin" />
+                    <label class="form-check-label" for="formCheckBox">IsAdmin</label>
+                }
+                else
+                {
+                    <input type="checkbox" id="formCheckBox" class="form-check-input" asp-for="@Model.IsAdmin" disabled />
+                    <label class="form-check-label" for="formCheckBox">IsAdmin</label>
+                }
+
+            </div>
+            <div class="form-check form-check-inline mb-4">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" asp-for="@Model.IsPhoneNumberConfirmed" disabled />
+                <label class="form-check-label" for="inlineCheckbox2">Phone Number Confirmed</label>
+            </div>
+            <div class="form-check form-check-inline mb-4">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" asp-for="@Model.IsEmailConfirmed" disabled />
+                <label class="form-check-label" for="inlineCheckbox3">Email Confirmed</label>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <input class="btn btn-success" type="submit" name="save" value="Save" />
+        <input class="btn btn-secondary" type="submit" name="cancel" value="Cancel" />
+    </div>
+</form>
+
+@*<form enctype="multipart/form-data" method="post" action="/Administration/upload">
+    <input type="file" name="file" />
+    <input type="submit" />
+</form>*@
+
