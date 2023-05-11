@@ -1,0 +1,110 @@
+﻿@model UserAddressPartialViewModel
+@{
+}
+<div id="manageAddAddress" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--header-->
+                <h4>Add Address</h4>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="userAddressForm" action="UserAddressPartialView">
+                    <!--For Errors-->
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input name="ErrorCount" type="hidden" value="@ViewData.ModelState.ErrorCount.ToString()" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <input id="userId" type="hidden" asp-for="UserId" />
+                    <input id="userAddressId" type="hidden" asp-for="UserAddressId" />
+                    <div class="form-group">
+                        <label for="fullAddress">Enter Full Address</label>
+                        <textarea class="form-control" id="fullAddress" rows="2" asp-for="FullAddress"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="City" asp-items="@Model.Cities" class="custom-select">
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="State" asp-items="@Model.States" class="custom-select">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="Area" asp-items="@Model.LocationArea" class="custom-select">
+                            <option value="">Select Area</option>
+                        </select>
+                    </div>
+                    <div class="form-check form-check-inline mb-4">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" asp-for="@Model.IsActive" />
+                        <label class="form-check-label" for="inlineCheckbox3">IsActive</label>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="custom-modal">Save</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    $(function () {
+        var placeHolderElement = $('#modal-placeholder');
+        var UserId = $('#userId').val();
+
+        //call api once form post
+        placeHolderElement.on('click', '[data-save="custom-modal"]', function (event) {
+            event.preventDefault();
+            //debugger;
+
+            var FormSelector = '';
+            var myFormSelector = '';
+            //find if the id is present
+            if ($(this).parents('.modal').find('form[id="userAddressForm"]').length > 0) {
+                FormSelector = 'form[id="userAddressForm"]';
+                myFormSelector = "form#userAddressForm";
+            }
+
+            var form = $(this).parents('.modal').find(FormSelector);
+            var myform = $(myFormSelector)[0];
+            var actionUrl = form.attr('action');
+
+            var fd = new FormData(myform);
+
+            $.ajax({
+                type: "POST",
+                enctype: "multipart/form-data",
+                url: actionUrl,
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (data) {
+                    var newBody = $('.modal-body', data);
+                    placeHolderElement.find('.modal-body').replaceWith(newBody);
+                    debugger;
+                    var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                    isValid = (parseInt(newBody.find('[name="ErrorCount"]').val()) >= 1) ? false : true;
+
+                    if (isValid) {
+                        placeHolderElement.find('.modal').modal('hide');
+                        //then reload the main page to get refeshed data
+                        //location.reload();
+                        alert(window.location.origin + '/Administration/EditUser?UserId=' + UserId);
+                        window.location = window.location.origin + '/Administration/EditUser?UserId=' + UserId
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+    })
+</script>

@@ -1,0 +1,54 @@
+﻿@model VendorUserRegistrationViewModel
+@{
+    ViewData["Title"] = "Register Vendor User";
+}
+
+<div class="row">
+    <h2>Vendor User Registration form</h2>
+    <div class="col-md-8">
+        <form asp-controller="VendorRegistration" asp-action="Register" autocomplete="off">
+            <input type="hidden" asp-for="VendorId" />
+            <input type="hidden" asp-for="Vendorname" />
+            <input type="hidden" asp-for="Email" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="text" id="formVendorname" class="form-control" asp-for="Vendorname" disabled />
+                    <label class="form-label" for="formVendorname">VendorName</label>
+                    <span class="text-danger" asp-validation-for="Vendorname"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="text" id="formVendorUsername" class="form-control" asp-for="Username" />
+                    <label class="form-label" for="formVendorUsername">Username</label>
+                    <span class="text-danger" asp-validation-for="Username"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="password" id="registerPassword" class="form-control" asp-for="Password" />
+                    <label class="form-label" for="formPassword">Password</label>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="password" id="registerConfirmPassword" class="form-control" asp-for="ConfirmPassword" />
+                    <label class="form-label" for="formConfirmPassword">ConfirmPassword</label>
+                    <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-outline">
+                    <input type="email" id="registerEmail" class="form-control" asp-for="Email" disabled />
+                    <label class="form-label" for="formEmail">Email</label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+        </form>
+    </div>
+</div>
