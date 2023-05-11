@@ -17,5 +17,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<(VendorRegister,string)> RegisterAsVendor(VendorRegister vendorRegister);
         Task<bool> AddVendorUserAddress(string userId, UserAddress userAddress);
         Task<UserAddress> GetVendorAddressByVendorId(string vendorId);
+        Task<bool> AddVendorClaim(VendorUserIdMapping vendorUserIdMapping);
     }
 }

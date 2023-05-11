@@ -265,5 +265,25 @@ namespace IdentityServer.Infrastruture.Services
             var vendorAddress = await _context.UserAddresses.Where(ua=>ua.VendorId == vendorId).FirstOrDefaultAsync();
             return vendorAddress;
         }
+
+        public async Task<bool> AddVendorClaim(VendorUserIdMapping vendorUserIdMapping)
+        {
+            var user = await _userManager.FindByIdAsync(vendorUserIdMapping.UserId);
+
+            if(user != null)
+            {
+                var vendorIdClaim = new Claim("vendorId", vendorUserIdMapping.VendorId);
+
+                var result1 = await _userManager.AddClaimAsync(user, vendorIdClaim);
+                _logger.LogInformation($"Claim for user: {vendorUserIdMapping.UserId}, vendorId success:{result1.Succeeded}");
+
+                return true;
+            }
+            else
+            {
+                _logger.LogError($"user not found with id: {vendorUserIdMapping.UserId}");
+                return false;
+            }
+        }
     }
 }

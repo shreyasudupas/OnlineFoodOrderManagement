@@ -4,6 +4,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -57,6 +58,12 @@ namespace IdentityServer.Infrastruture.Services
             {
                 var role = claimList.Find(x => x.Type == "enabled");
                 customClaimList.Add(new Claim("enabled", role.Value));
+            }
+
+            if(claimList.Any(x=>x.Type == "vendorId"))
+            {
+                var vendorId = claimList.Find(x => x.Type == "vendorId");
+                customClaimList.Add(new Claim("vendorId", vendorId.Value));
             }
 
             customClaimList.Add(new Claim("userId", user.Id));
