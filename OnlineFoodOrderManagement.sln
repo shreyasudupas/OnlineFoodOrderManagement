@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroServices", "MicroServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayAPI", "GatewayAPI\GatewayAPI.csproj", "{E3584950-B01F-49F7-B873-334891A90B97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck.API.MicroService", "Web APIs\HealthCheck.API.MicroService\HealthCheck.API.MicroService.csproj", "{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{97AFDB0F-6243-496D-88B6-8AD392EE9877}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck.API.MicroService", "Web APIs\HealthCheck.API.MicroService\HealthCheck.API.MicroService.csproj", "{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Microservice.Core", "Core\MenuManagement.Core\Inventory.Microservice.Core.csproj", "{5FC6A043-BC44-4796-86AC-9361197BB2EE}"
 EndProject
