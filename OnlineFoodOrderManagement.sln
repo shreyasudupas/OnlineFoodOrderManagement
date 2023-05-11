@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Microservice.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Mongo.Persistance", "Infrastructures\Inventory.Mongo.Persistance\Inventory.Mongo.Persistance.csproj", "{72DAAD8B-0860-4F7E-819E-1ED04B551E05}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.BasketMicroService.API", "Web APIs\MenuOrder.BasketMicroService.API\MenuManagement.BasketMicroService.API.csproj", "{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.Shared", "Shared\MenuOrder.Shared\MenuOrder.Shared.csproj", "{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagment.Mongo.Domain", "Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj", "{1DA48FC2-F890-4F6A-AC0D-286EAA2B9A10}"
@@ -75,7 +73,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.MessagingQue
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.HttpClient.Domain", "Shared\MenuManagement.RabbitMqClient.Domain\MenuManagement.HttpClient.Domain.csproj", "{1FCAD0ED-E106-429F-A547-36E9C5AC55E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuMangement.RabbitMqClient.Domain", "Domain\MenuMangement.RabbitMqClient.Domain\MenuMangement.RabbitMqClient.Domain.csproj", "{6621E721-815F-4D2E-9EC3-CD7C2851DD14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuMangement.RabbitMqClient.Domain", "Domain\MenuMangement.RabbitMqClient.Domain\MenuMangement.RabbitMqClient.Domain.csproj", "{6621E721-815F-4D2E-9EC3-CD7C2851DD14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,10 +97,6 @@ Global
 		{72DAAD8B-0860-4F7E-819E-1ED04B551E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72DAAD8B-0860-4F7E-819E-1ED04B551E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72DAAD8B-0860-4F7E-819E-1ED04B551E05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C4607E4-69AC-4BFA-800D-D5C8FEC36573}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -199,7 +193,6 @@ Global
 		{F7DDA68B-3C3C-4A1F-9DA0-81519D072C54} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
 		{5FC6A043-BC44-4796-86AC-9361197BB2EE} = {71B47887-05DC-4269-8571-CEF8482A5638}
 		{72DAAD8B-0860-4F7E-819E-1ED04B551E05} = {48513472-D17E-4F30-AFCB-FB29350ECB0E}
-		{3F996ADA-77CF-4D94-92CF-AB3F9D60D5A8} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
 		{8C4607E4-69AC-4BFA-800D-D5C8FEC36573} = {B09520D4-6101-412C-BEAD-6F1D393D4C0B}
 		{1DA48FC2-F890-4F6A-AC0D-286EAA2B9A10} = {4611F8E5-4B06-4279-94CF-F1A7A449C0C3}
 		{1FD07339-0306-476C-8A45-FDE1481BB53B} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
