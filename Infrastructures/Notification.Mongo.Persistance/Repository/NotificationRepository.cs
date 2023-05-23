@@ -80,7 +80,14 @@ namespace Notification.Mongo.Persistance.Repository
 
             if(notifcationUpdateResult.IsAcknowledged)
             {
-                _logger.LogInformation("UpdateNotificationToAsRead as started..");
+                _logger.LogInformation("UpdateNotificationToAsRead has updated");
+
+                var result = await GetNewNotificationCount(updateNotification.UserId);
+                var connectionManager = _connectionMapping.GetAllConnectionManager().Where(x => x.UserId == updateNotification.UserId)
+                    .FirstOrDefault();
+
+                await _notificationHub.Clients.Client(connectionManager.ConnectionId).SendUserNotification(result);
+
                 return updateNotification;
             }else
             {
