@@ -132,5 +132,27 @@ namespace Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository
                 return null;
             }
         }
+
+        public async Task<MenuImages> DeleteImageById(string id)
+        {
+            var image = await GetById(id);
+            if(image != null)
+            {
+                var filter = Builders<MenuImages>.Filter.Eq(x => x.Id, id);
+                var deleteResult = await DeleteOneDocument(filter);
+                if (deleteResult.DeletedCount > 0)
+                    return image;
+                else
+                {
+                    _logger.LogError($"Image not successfully deleted from database");
+                    return null;
+                }
+            }
+            else
+            {
+                _logger.LogError($"Image with Id: {id} not present in database");
+                return null;
+            }
+        }
     }
 }

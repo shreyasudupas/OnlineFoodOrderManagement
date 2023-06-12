@@ -16,5 +16,6 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
         Task<int> GetMenuImageRecordCount();
 
         Task<List<MenuImages>> GetImagesBySearchParam(string searchParam);
+        Task<MenuImages> DeleteImageById(string id);
     }
 }

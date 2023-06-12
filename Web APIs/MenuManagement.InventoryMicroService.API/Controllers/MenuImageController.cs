@@ -278,5 +278,29 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
             
         }
 
+        [HttpDelete("/api/menuimage/{imageId}")]
+        public async Task<MenuImageDto> DeleteImage(string imageId)
+        {
+            var menuImage = await Mediator.Send(new DeleteImageByImageIdCommand { ImageId = imageId });
+            if (menuImage != null)
+            {
+                //check of file already exists
+                if (System.IO.File.Exists(menuImage.ImagePath))
+                {
+                    System.IO.File.Delete(menuImage.ImagePath);
+                }
+                else
+                {
+                    _logger.LogError("Image is missing in the physical path");
+                }
+
+                return menuImage;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }
