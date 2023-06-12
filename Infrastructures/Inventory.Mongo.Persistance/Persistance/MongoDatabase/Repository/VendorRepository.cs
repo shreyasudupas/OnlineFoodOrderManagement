@@ -190,36 +190,45 @@ namespace Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository
 
         public async Task<Vendor> UpdateVendorDocument(VendorDto vendorData)
         {
-            _logger.LogInformation("UpdateVendorDocument started..");
-            var vendor = await GetById(vendorData.Id);
-
-            var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
-            if (vendor != null)
+            try
             {
-                
-                //update category since FE is not sending category
-                mapToVendorModel.Categories = vendor.Categories;
+                _logger.LogInformation("UpdateVendorDocument started..");
+                var vendor = await GetById(vendorData.Id);
 
-                var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorData.Id);
-                var update = Builders<Vendor>.Update.ApplyMultiFields(mapToVendorModel);
-
-                var result = await UpdateOneDocument(filter, update);
-                if(result.IsAcknowledged)
+                var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
+                if (vendor != null)
                 {
-                    var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
-                    return getVendorWithId;
+
+                    //update category since FE is not sending category
+                    mapToVendorModel.Categories = vendor.Categories;
+
+                    var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorData.Id);
+                    var update = Builders<Vendor>.Update.ApplyMultiFields(mapToVendorModel);
+
+                    var result = await UpdateOneDocument(filter, update);
+                    if (result.IsAcknowledged)
+                    {
+                        var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
+                        return getVendorWithId;
+                    }
+                    else
+                    {
+                        _logger.LogError($"Error updating the Vendor with Id {vendorData.Id}");
+                        return mapToVendorModel;
+                    }
                 }
                 else
                 {
-                    _logger.LogError($"Error updating the Vendor with Id {vendorData.Id}");
-                    return mapToVendorModel;
+                    _logger.LogError("No Items present to update");
+                    return null;
                 }
             }
-            else
+            catch(Exception ex)
             {
-                _logger.LogError("No Items present to update");
+                _logger.LogError("Error");
                 return null;
             }
+            
         }
 
         public async Task<Categories> UpdateVendorCategoryDocument(string vendorId,CategoryDto categoryDto)

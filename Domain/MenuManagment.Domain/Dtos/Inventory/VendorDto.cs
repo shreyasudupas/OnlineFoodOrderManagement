@@ -38,6 +38,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
         public string CloseTime { get; set; }
 
         public bool Active { get; set; }
+        public string VendorImage { get; set; }
 
     }
 

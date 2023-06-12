@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
+using System;
 
 namespace Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository
 {
@@ -60,6 +61,9 @@ namespace Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository
         public async Task<MenuImages> AddMenuImage(MenuImageDto menuImageDto)
         {
             _logger.LogInformation("AddMenuImage started...");
+
+            if (menuImageDto.Id == null)
+                menuImageDto.Id = ObjectId.GenerateNewId(DateTime.Now).ToString();
 
             var mapToModel = _mapper.Map<MenuImages>(menuImageDto);
             await CreateOneDocument(mapToModel);

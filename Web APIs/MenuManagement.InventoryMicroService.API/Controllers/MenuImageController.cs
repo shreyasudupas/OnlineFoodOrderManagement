@@ -70,6 +70,11 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
             if (count > 0)
                 model.TotalRecord = count;
 
+            if(result == null)
+            {
+                return model;
+            }
+
             var tasks = result?.Select(image => GetImageModel(image));
 
             var taskResult = await Task.WhenAll(tasks);
@@ -84,16 +89,24 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
 
         public async  Task<ImageDataModel> GetImageModel(MenuImageDto menuImageDto)
         {
-            byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_environment.WebRootPath, "MenuImages", menuImageDto.FileName));
-
-            return new ImageDataModel
+            if(menuImageDto != null)
             {
-                Id = menuImageDto.Id,
-                ItemName = menuImageDto.ItemName,
-                Active = menuImageDto.Active,
-                Data = Convert.ToBase64String(bytes, 0, bytes.Length),
-                Description = menuImageDto.Description
-            };
+                byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_environment.WebRootPath, "MenuImages", menuImageDto.FileName));
+
+                return new ImageDataModel
+                {
+                    Id = menuImageDto.Id,
+                    ItemName = menuImageDto.ItemName,
+                    Active = menuImageDto.Active,
+                    Data = Convert.ToBase64String(bytes, 0, bytes.Length),
+                    Description = menuImageDto.Description
+                };
+            }
+            else
+            {
+                return new ImageDataModel();
+            }
+            
         }
 
         [HttpGet("/api/menuimage/{menuImageId}")]
@@ -250,6 +263,19 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
             }
 
             return response;
+        }
+
+        [HttpGet("/api/menuimage/{menuImageId}/fileName")]
+        public async Task<string> GetImageFileName(string menuImageId)
+        {
+            var imageResult = await Mediator.Send(new GetMenuImageByIdQuery { Id = menuImageId });
+            if (imageResult != null)
+            {
+                return imageResult.FileName;
+            }
+            else
+                return null;
+            
         }
 
     }
