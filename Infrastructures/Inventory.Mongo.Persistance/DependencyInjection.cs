@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
-using Inventory.Mongo.Persistance.Persistance.MongoDatabase.Repository;
 using AutoMapper;
 using MenuManagment.Mongo.Domain.Mongo.MappingProfile;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
+using Inventory.Mongo.Persistance.Repositories;
 
 namespace Inventory.Mongo.Persistance
 {

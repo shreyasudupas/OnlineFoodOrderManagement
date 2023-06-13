@@ -1,7 +1,6 @@
 ﻿using Inventory.Microservice.Core.Common.Models.InventoryService.Response;
-using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Command;
-using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Commands;
-using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query;
+using Inventory.Microservice.Core.Services.VendorMenus.Commands;
+using Inventory.Microservice.Core.Services.VendorMenus.Query;
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;

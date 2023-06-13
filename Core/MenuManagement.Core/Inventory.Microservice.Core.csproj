@@ -7,16 +7,10 @@
   <ItemGroup>
     <Compile Remove="Common\Models\Interface\**" />
     <Compile Remove="Common\Services\**" />
-    <Compile Remove="Services\MenuInventoryService\MenuDetails\**" />
-    <Compile Remove="Services\MenuInventoryService\Query\**" />
     <EmbeddedResource Remove="Common\Models\Interface\**" />
     <EmbeddedResource Remove="Common\Services\**" />
-    <EmbeddedResource Remove="Services\MenuInventoryService\MenuDetails\**" />
-    <EmbeddedResource Remove="Services\MenuInventoryService\Query\**" />
     <None Remove="Common\Models\Interface\**" />
     <None Remove="Common\Services\**" />
-    <None Remove="Services\MenuInventoryService\MenuDetails\**" />
-    <None Remove="Services\MenuInventoryService\Query\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +26,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\Menus\Commands\" />
+    <Folder Include="Services\Menus\Queries\" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
 ﻿using Inventory.Microservice.Core.Common.Models.InventoryService.Request;
-using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Command;
-using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query;
-using Inventory.Microservice.Core.Services.MenuInventoryService.MenuImage.Query.Models;
-using Inventory.Microservice.Core.Services.MenuInventoryService.VendorMenus.Query;
+using Inventory.Microservice.Core.Services.MenuImage.Command;
+using Inventory.Microservice.Core.Services.MenuImage.Query;
+using Inventory.Microservice.Core.Services.MenuImage.Query.Models;
+using Inventory.Microservice.Core.Services.VendorMenus.Query;
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using MenuOrder.Shared.Controller;
