@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Services\Menus\Commands\" />
-    <Folder Include="Services\Menus\Queries\" />
   </ItemGroup>
 
 </Project>

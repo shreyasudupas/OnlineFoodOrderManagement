@@ -1,4 +1,5 @@
-﻿using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
+﻿using MenuManagment.Mongo.Domain.Entities.SubModel;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -16,8 +17,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("itemName")]
         public string ItemName { get; set; }
 
-        [BsonElement("imageId")]
-        public string ImageId { get; set; }
+        [BsonElement("image")]
+        public ImageModel Image { get; set; }
 
         [BsonElement("foodType")]
         public string FoodType { get; set; }

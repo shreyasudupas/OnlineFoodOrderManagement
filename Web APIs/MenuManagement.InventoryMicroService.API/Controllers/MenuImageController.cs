@@ -99,7 +99,8 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                     ItemName = menuImageDto.ItemName,
                     Active = menuImageDto.Active,
                     Data = Convert.ToBase64String(bytes, 0, bytes.Length),
-                    Description = menuImageDto.Description
+                    Description = menuImageDto.Description,
+                    FileName = menuImageDto.FileName
                 };
             }
             else

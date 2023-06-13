@@ -30,18 +30,19 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Query
         {
             var vendorMenu = await vendorsMenuRepository.GetVendorMenusByMenuId(request.MenuId);
 
-            if (!string.IsNullOrEmpty(vendorMenu.ImageId))
+            if (!string.IsNullOrEmpty(vendorMenu.Image.ImageId))
             {
-                var imageMenu = await menuImagesRepository.GetMenuImagesById(vendorMenu.ImageId);
+                var imageMenu = await menuImagesRepository.GetMenuImagesById(vendorMenu.Image.ImageId);
                 return new VendorMenuResponse
                 {
                     Id = vendorMenu.Id,
                     VendorId = vendorMenu.VendorId,
                     Category = vendorMenu.Category,
                     FoodType = vendorMenu.FoodType,
-                    ImageId = vendorMenu.ImageId,
+                    ImageId = imageMenu.Id,
                     ItemName = vendorMenu.ItemName,
-                    ImageData = imageMenu.FileName, //send File name later once the file is found then replace with base64 image string
+                    ImageData = "", //send File name later once the file is found then replace with base64 image string
+                    ImageFilename = imageMenu.FileName,
                     Price = vendorMenu.Price,
                     Active = vendorMenu.Active,
                     Discount = vendorMenu.Discount,
@@ -58,6 +59,7 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Query
                     ItemName = vendorMenu.ItemName,
                     ImageId = "",
                     ImageData = "",
+                    ImageFilename = "",
                     Price = vendorMenu.Price,
                     Active = vendorMenu.Active,
                     Discount = vendorMenu.Discount,

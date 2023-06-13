@@ -11,6 +11,8 @@
 
         public string ImageData { get; set; }
 
+        public string ImageFilename { get; set; }
+
         public string FoodType { get; set; }
 
         public string Category { get; set; }

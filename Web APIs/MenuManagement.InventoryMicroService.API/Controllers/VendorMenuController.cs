@@ -52,7 +52,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
 
             if(result != null)
             {
-                if(!string.IsNullOrEmpty(result.ImageData) && !string.IsNullOrEmpty(result.ImageId))
+                if(!string.IsNullOrEmpty(result.ImageFilename) && !string.IsNullOrEmpty(result.ImageId))
                 {
                     //Image Data is ImageFile Name
                     byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_webHostEnvironment.WebRootPath, "MenuImages", result.ImageData));
