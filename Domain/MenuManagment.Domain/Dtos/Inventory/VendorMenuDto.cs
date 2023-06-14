@@ -1,4 +1,6 @@
-﻿namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
+﻿using MenuManagment.Mongo.Domain.Entities.SubModel;
+
+namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 {
     public class VendorMenuDto
     {
@@ -8,7 +10,7 @@
 
         public string ItemName { get; set; }
 
-        public string ImageId { get; set; }
+        public ImageModel Image { get; set; }
 
         public string FoodType { get; set; }
 

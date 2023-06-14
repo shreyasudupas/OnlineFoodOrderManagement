@@ -55,7 +55,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 if(!string.IsNullOrEmpty(result.ImageFilename) && !string.IsNullOrEmpty(result.ImageId))
                 {
                     //Image Data is ImageFile Name
-                    byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_webHostEnvironment.WebRootPath, "MenuImages", result.ImageData));
+                    byte[] bytes = await System.IO.File.ReadAllBytesAsync(Path.Combine(_webHostEnvironment.WebRootPath, "MenuImages", result.ImageFilename));
                     var imagebase64 = Convert.ToBase64String(bytes, 0, bytes.Length);
                     result.ImageData = imagebase64;
                 }
