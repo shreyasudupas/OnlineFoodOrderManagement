@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MenuManagment.Mongo.Domain.Dtos.Inventory;
+using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 {
@@ -38,7 +39,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
         public string CloseTime { get; set; }
 
         public bool Active { get; set; }
-        public string VendorImage { get; set; }
+        public ImageModelDto Image { get; set; }
 
     }
 

@@ -1,4 +1,5 @@
-﻿using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
+﻿using MenuManagment.Mongo.Domain.Entities.SubModel;
+using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
@@ -55,8 +56,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("active")]
         public bool Active { get; set; }
 
-        [BsonElement("vendorImage")]
-        public string VendorImage { get; set; }
+        [BsonElement("image")]
+        public ImageModel Image { get; set; }
     }
 
     public class Coordinates

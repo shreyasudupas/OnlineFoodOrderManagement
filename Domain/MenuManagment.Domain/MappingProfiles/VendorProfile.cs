@@ -2,6 +2,8 @@
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using System;
+using MenuManagment.Mongo.Domain.Dtos.Inventory;
+using MenuManagment.Mongo.Domain.Entities.SubModel;
 
 namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
 {
@@ -77,6 +79,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                 .ForMember(act => act.CloseTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.CloseTime))
                 ;
 
+            CreateMap<ImageModelDto, ImageModel>()
+                .ReverseMap();
         }
     }
 }
