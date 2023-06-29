@@ -14,5 +14,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
         Task<VendorsMenus> GetVendorMenusByMenuId(string menuId);
         Task<VendorsMenus> UpdateVendorMenus(VendorMenuDto menu);
         Task<bool> DeleteVendorMenu(string menuId);
+
+        Task<bool> AddVendorMenuList(List<VendorMenuDto> vendorsMenuDtos);
     }
 }

@@ -10,6 +10,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -164,6 +165,27 @@ namespace Inventory.Mongo.Persistance.Repositories
             else
             {
                 _logger.LogError($"DeleteVendorMenu {menuId} not present in the database");
+                return false;
+            }
+        }
+
+        public async Task<bool> AddVendorMenuList(List<VendorMenuDto> vendorsMenuDtos)
+        {
+            try
+            {
+                _logger.LogInformation("Add List VendorMenu started...");
+
+                var mapToVendorMenus = _mapper.Map<List<VendorsMenus>>(vendorsMenuDtos);
+
+                await CreateManyDocument(mapToVendorMenus);
+
+                _logger.LogInformation("Add List VendorMenu ended...");
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Inserting Vendor Menu list encountred with error {ex.Message}");
                 return false;
             }
         }

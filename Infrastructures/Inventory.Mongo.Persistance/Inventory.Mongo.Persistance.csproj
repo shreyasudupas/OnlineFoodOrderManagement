@@ -15,8 +15,4 @@
     <ProjectReference Include="..\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Persistance\" />
-  </ItemGroup>
-
 </Project>
