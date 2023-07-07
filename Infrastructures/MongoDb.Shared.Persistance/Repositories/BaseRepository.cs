@@ -87,5 +87,11 @@ namespace MongoDb.Shared.Persistance.Repositories
         {
             return await mongoCollection.FindSync(filter).ToListAsync();
         }
+
+        public async Task<string> CreateOneIndexAsync(CreateIndexModel<TEntity> indexModel)
+        {
+            var result = await mongoCollection.Indexes.CreateOneAsync(indexModel);
+            return result;
+        }
     }
 }

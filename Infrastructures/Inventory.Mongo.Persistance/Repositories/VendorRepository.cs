@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
+using MongoDB.Libmongocrypt;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -32,6 +33,9 @@ namespace Inventory.Mongo.Persistance.Repositories
         public async Task<Vendor> AddVendorDocument(VendorDto vendor)
         {
             _logger.LogInformation("AddVendorDocument started..");
+
+            await AssignIndexForVendor();
+
             if (vendor != null)
             {
                 var mapToVendorModel = _mapper.Map<Vendor>(vendor);
@@ -52,6 +56,9 @@ namespace Inventory.Mongo.Persistance.Repositories
         public async Task<List<Vendor>> AddVendorDocuments(List<VendorDto> vendors)
         {
             _logger.LogInformation("AddVendorDocuments started..");
+
+            await AssignIndexForVendor();
+
             if (vendors.Count > 0)
             {
                 var mapToVendorModel = _mapper.Map<List<Vendor>>(vendors);
@@ -263,6 +270,17 @@ namespace Inventory.Mongo.Persistance.Repositories
                 _logger.LogError("No Items present to update");
                 return null;
             }
+        }
+
+        public async Task AssignIndexForVendor()
+        {
+            var indexKeyDefinitionBuilder = Builders<Vendor>.IndexKeys;
+            var indexModel = new CreateIndexModel<Vendor>
+                (indexKeyDefinitionBuilder.Ascending(indexKey => indexKey.VendorName),new CreateIndexOptions
+                {
+                    Unique = true,
+                });
+            var result = await CreateOneIndexAsync(indexModel);
         }
     }
 }
