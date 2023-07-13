@@ -19,9 +19,14 @@ namespace MenuMangement.OrderManagement.API.Controller
             });
         }
 
-
         [HttpPost("/api/cartInformation")]
         public async Task<CartInformationDto> AddCartInformation([FromBody] AddCartInformationCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("/api/cartInformation")]
+        public async Task<CartInformationDto?> UpdateCartInformation([FromBody] UpdateCartInformationCommand command)
         {
             return await Mediator.Send(command);
         }
