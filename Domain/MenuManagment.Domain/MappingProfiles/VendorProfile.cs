@@ -4,6 +4,7 @@ using MenuManagment.Mongo.Domain.Mongo.Entities;
 using System;
 using MenuManagment.Mongo.Domain.Dtos.Inventory;
 using MenuManagment.Mongo.Domain.Entities.SubModel;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
 {
@@ -43,15 +44,34 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                     }
                     
                 }))
+                .ForMember(dest => dest.Coordinates, act => act.MapFrom((src, dest) =>
+                {
+                    if(src.Coordinates is not null)
+                    {
+                        var position = GeoJson.Point(GeoJson.Position(src.Coordinates.Latitude, src.Coordinates.Longitute));
+                        return position;
+                    }
+                    return null;
+                }))
                 ;
 
             CreateMap<Vendor, VendorDto>()
                 .ForMember(act => act.OpenTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.OpenTime))
                 .ForMember(act => act.CloseTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.CloseTime))
+                .ForMember(dest => dest.Coordinates, act => act.MapFrom((src, dest) =>
+                {
+                    var result = new CoordinatesDto();
+                    if (src.Coordinates is not null)
+                    {
+                        result.Latitude = src.Coordinates.Coordinates.X;
+                        result.Longitute = src.Coordinates.Coordinates.Y;
+                    }
+                    return result;
+                }))
                 ;
 
-            CreateMap<CoordinatesDto, Coordinates>()
-                .ReverseMap();
+            //CreateMap<CoordinatesDto, Coordinates>()
+            //    .ReverseMap();
 
             CreateMap<CategoryDto, Categories>()
                 .ForMember(act => act.OpenTime, opt => opt.MapFrom((src, dest) => {

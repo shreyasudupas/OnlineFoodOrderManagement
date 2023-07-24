@@ -21,5 +21,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
         Task<Vendor> UpdateVendorDocument(VendorDto vendorData);
         Task<Categories> GetCategoryById(string Id, string VendorId);
         Task<Categories> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto);
+
+        Task<List<Vendor>> GetNearestDistanceOfVendorsByRadiusInKM(double latitude, double longitude, double distanceInKm);
     }
 }

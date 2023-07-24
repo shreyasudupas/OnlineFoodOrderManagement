@@ -30,5 +30,24 @@ namespace MenuMangement.OrderManagement.API.Controller
         {
             return await Mediator.Send(command);
         }
+
+        [HttpGet("/api/cartinformation/menuItems/isPresent")]
+        public async Task<bool> CheckIfMenuItemBelongsToVendor([FromQuery] string UserId,string VendorId)
+        {
+            return await Mediator.Send(new GetIfMenuItemBelongsToSameVendorQuery
+            {
+                UserId = UserId,
+                VendorId = VendorId
+            });
+        }
+
+        [HttpDelete("/api/cartInformation")]
+        public async Task<bool> ClearCartMenuItems([FromQuery] string userId)
+        {
+            return await Mediator.Send(new ClearCartMenuItemsCommand
+            {
+                UserId = userId
+            });
+        }
     }
 }

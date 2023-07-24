@@ -91,5 +91,58 @@ namespace OrderManagement.Mongo.Persistance.Repositories
 
             return isCartInfo;
         }
+
+        public async Task<bool> CheckIfMenuItemsBelongToSameVendor(string userId,string vendorId)
+        {
+            var filter = Builders<CartInformation>.Filter.Where(v => v.UserId == userId && v.CartStatus == nameof(CartStatusEnum.Active));
+            var cartMenuItemPresent = await mongoCollection.Find(filter).FirstOrDefaultAsync();
+
+            if(cartMenuItemPresent.MenuItems.Any())
+            {
+                var filter2 = Builders<CartInformation>.Filter.Where(v => v.UserId == userId && v.MenuItems.Any(m => m.VendorId == vendorId) && v.CartStatus == nameof(CartStatusEnum.Active));
+                var cartIfPresent = await mongoCollection.Find(filter2).FirstOrDefaultAsync();
+
+                if (cartIfPresent != null)
+                {
+                    _logger.LogInformation($"Menu Item with VendorId: {vendorId} is present in the Cart");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogInformation($"Menu Item with VendorId: {vendorId} is not present in the Cart");
+                    return false;
+                }
+            }
+            else
+            {
+                //that means cart menu Items are empty and any vendor menu item can be added
+                return true;
+            }
+        }
+
+        public async Task<bool> CartActiveMenuItemsClear(string userId)
+        {
+            var cartItems = await GetByFilter(c => c.UserId == userId && c.CartStatus == nameof(CartStatusEnum.Active));
+
+            if(cartItems is not null)
+            {
+                var filter = Builders<CartInformation>.Filter.Where(x => x.UserId == userId && x.CartStatus == nameof(CartStatusEnum.Active));
+                var update = Builders<CartInformation>.Update.Set(c => c.MenuItems, new List<MenuItem>());
+
+                var result = await UpdateOneDocument(filter, update);
+                if(result.IsAcknowledged)
+                {
+                    return true;
+                }
+
+                _logger.LogError($"Unable to update Clear Cart Operation for userid:{userId}");
+                return false;
+            }
+            else
+            {
+                _logger.LogError($"Given the UserId {userId} for the Cart is not Active");
+                return false;
+            }
+        }
     }
 }

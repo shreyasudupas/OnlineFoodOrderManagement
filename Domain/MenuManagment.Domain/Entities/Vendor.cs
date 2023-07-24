@@ -2,6 +2,7 @@
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver.GeoJsonObjectModel;
 using System;
 using System.Collections.Generic;
 
@@ -39,7 +40,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         public string Area { get; set; }
 
         [BsonElement("coordinates")]
-        public Coordinates Coordinates { get; set; }
+        public GeoJsonPoint<GeoJson2DCoordinates> Coordinates { get; set; }
 
         [BsonElement("addressLine1")]
         public string AddressLine1 { get; set; }

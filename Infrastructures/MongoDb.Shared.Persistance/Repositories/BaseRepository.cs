@@ -72,6 +72,8 @@ namespace MongoDb.Shared.Persistance.Repositories
 
         public async Task<List<TEntity>> GetListByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
 
+        public async Task<List<TEntity>> GetListByFilterDefinition(FilterDefinition<TEntity> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
+
         public async Task<UpdateResult> UpdateOneDocument(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update)
         {
             var result = await mongoCollection.UpdateOneAsync(filter, update);
@@ -92,6 +94,11 @@ namespace MongoDb.Shared.Persistance.Repositories
         {
             var result = await mongoCollection.Indexes.CreateOneAsync(indexModel);
             return result;
+        }
+
+        public async Task CreateMultipleIndexAsync(List<CreateIndexModel<TEntity>> indexModels)
+        {
+            var result = await mongoCollection.Indexes.CreateManyAsync(indexModels);
         }
     }
 }

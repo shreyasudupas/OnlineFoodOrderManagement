@@ -14,6 +14,7 @@ using MongoDb.Shared.Persistance.Repositories;
 using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
 using MongoDB.Libmongocrypt;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -77,6 +78,8 @@ namespace Inventory.Mongo.Persistance.Repositories
         public async Task<List<Vendor>> GetAllVendorDocuments()
         {
             _logger.LogInformation("GetAllVendorDocuments started..");
+
+            await AssignIndexForVendor();
 
             var vendors = await GetAllItems();
 
@@ -275,12 +278,36 @@ namespace Inventory.Mongo.Persistance.Repositories
         public async Task AssignIndexForVendor()
         {
             var indexKeyDefinitionBuilder = Builders<Vendor>.IndexKeys;
-            var indexModel = new CreateIndexModel<Vendor>
+
+            var vendorIdIndexModel = new CreateIndexModel<Vendor>
                 (indexKeyDefinitionBuilder.Ascending(indexKey => indexKey.VendorName),new CreateIndexOptions
                 {
                     Unique = true,
                 });
-            var result = await CreateOneIndexAsync(indexModel);
+
+            var coordinatesIndexModel = new CreateIndexModel<Vendor>
+                (indexKeyDefinitionBuilder.Geo2DSphere(indexKey => indexKey.Coordinates));
+
+            var indexModels = new List<CreateIndexModel<Vendor>>
+            {
+                vendorIdIndexModel , coordinatesIndexModel
+            };
+
+            await CreateMultipleIndexAsync(indexModels);
+        }
+
+        // Create geospatial query that searches for restaurants that fall within a radius (in KM).
+        //refer https://www.mongodb.com/developer/languages/csharp/mongodb-geospatial-queries-csharp/
+        public async Task<List<Vendor>> GetNearestDistanceOfVendorsByRadiusInKM(double latitude,double longitude,double distanceInKm)
+        {
+            var builder = Builders<Vendor>.Filter;
+            var point = GeoJson.Point(GeoJson.Position(latitude, longitude));
+
+            var filter = builder.GeoWithinCenterSphere(v => v.Coordinates, point.Coordinates.X,point.Coordinates.Y, distanceInKm / 6378.1); //distance(kilometers) to radians
+
+            var result = await GetListByFilterDefinition(filter);
+
+            return result;
         }
     }
 }

@@ -4,6 +4,7 @@ using Inventory.Microservice.Core.Services.Vendor.Commands.AddVendorDetail;
 using Inventory.Microservice.Core.Services.Vendor.Commands.UpdateVendorDetails;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetAllCategories;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetCategoryById;
+using Inventory.Microservice.Core.Services.Vendor.Querries.GetNearestVendors;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetVendorById;
 using Inventory.Microservice.Core.Services.Vendor.VendorDetails.Commands.AddVendors;
 using Inventory.Microservice.Core.Services.Vendor.VendorDetails.Query.GetVendorList;
@@ -73,6 +74,17 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         public async Task<CategoryDto> UpdateVendorCategoryDetail([FromBody] UpdateCategoryItemCommand updateCategoryItemCommand)
         {
             return await Mediator.Send(updateCategoryItemCommand);
+        }
+
+        [HttpGet("/api/vendors/near")]
+        public async Task<List<VendorDto>> GetNearestVendorsByGeoJsonPoint([FromQuery]double latitude, double longitude, double distanceInKM)
+        {
+            return await Mediator.Send(new GetNearestVendorsByGeoPointQuery
+            {
+                Latitude = latitude,
+                Longitude = longitude,
+                DistanceInKm = distanceInKM
+            });
         }
     }
 }
