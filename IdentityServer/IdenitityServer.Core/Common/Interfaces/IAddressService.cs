@@ -16,5 +16,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<string> GetCityNameById(int cityId);
         Task<string> GetStateNameById(int stateId);
         Task<string> GetAreaNameById(int areaId);
+        Task<State> AddAllStateAssociation(State state, City city, LocationArea area);
     }
 }

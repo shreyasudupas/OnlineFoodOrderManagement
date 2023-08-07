@@ -2,6 +2,7 @@
 using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.Domain.Response;
+using IdenitityServer.Core.Features.AddressMapping.AddStateAssociation;
 using IdenitityServer.Core.Features.Utility;
 using IdenitityServer.Core.Features.Utility.VendorIdMapping;
 using MenuOrder.Shared.Controller;
@@ -131,6 +132,12 @@ namespace IdentityServer.API.APIControllers
         public async Task<VendorIdMappingResponse> AddVendorIdMappingData([FromBody]VendorIdMappingResponse vendorIdMappingResponse)
         {
             return await Mediator.Send(new AddVendorIdMappingCommand { VendorIdAdd = vendorIdMappingResponse });
+        }
+
+        [HttpPost("/api/utility/addressAssociations")]
+        public async Task<RegisteredLocationReponse> AddStateAssociation([FromBody] AddStateAssociationCommand addStateAssociationCommand)
+        {
+            return await Mediator.Send(addStateAssociationCommand);
         }
     }
 }

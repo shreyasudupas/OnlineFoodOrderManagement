@@ -54,7 +54,7 @@ namespace MenuManagement.InventoryMicroService.API
                     Coordinates = new CoordinatesDto
                     {
                         Latitude = 12.2334,
-                        Longitute = 92.1212
+                        Longitude = 92.1212
                     },
                     State = "Karnataka",
                     Rating = 4,

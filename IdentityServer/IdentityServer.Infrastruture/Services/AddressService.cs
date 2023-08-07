@@ -28,6 +28,16 @@ namespace IdentityServer.Infrastruture.Services
             return address;
         }
 
+        public async Task<State> GetStateInformation(string stateName)
+        {
+            var stateInfo = await _applicationDbContext.States.Where(s=>s.Name == stateName)
+                .Include(x => x.Cities)
+                .ThenInclude(x => x.Areas)
+                .FirstOrDefaultAsync();
+
+            return stateInfo;
+        }
+
         public async Task<State> AddState(State newState)
         {
             var isState = await _applicationDbContext.States.AnyAsync(s => s.Name == newState.Name);
@@ -140,6 +150,80 @@ namespace IdentityServer.Infrastruture.Services
         {
             var cityName = await _applicationDbContext.LocationAreas.Where(a => a.Id == areaId).Select(a => a.AreaName).FirstOrDefaultAsync();
             return cityName;
+        }
+
+        public async Task<State> AddAllStateAssociation(State state,City city,LocationArea area)
+        {
+            //check the state 
+            var stateInfo = await _applicationDbContext.States.Where(s => s.Name == state.Name)
+                .Include(c=>c.Cities)
+                .ThenInclude(a=>a.Areas)
+                .FirstOrDefaultAsync();
+
+            if(stateInfo == null)
+            {
+                _applicationDbContext.States.Add(new State
+                {
+                    Name = state.Name,
+                    Cities = new List<City>
+                    {
+                        new City
+                        {
+                            Name = city.Name,
+                            Areas = new List<LocationArea>
+                            {
+                                new LocationArea
+                                {
+                                    AreaName = area.AreaName
+                                }
+                            }
+                        }
+                    }
+                });
+
+                await _applicationDbContext.SaveChangesAsync();
+
+                return await GetStateInformation(state.Name);
+            }
+
+            //if city is present
+            var cityInfo = await _applicationDbContext.Cities.Where(c => c.Name == city.Name).FirstOrDefaultAsync();
+            if(cityInfo == null)
+            {
+                _applicationDbContext.Cities.Add(new City
+                {
+                    Name = city.Name,
+                    StateId = stateInfo.Id,
+                    Areas = new List<LocationArea>
+                    {
+                        new LocationArea
+                        {
+                            AreaName = area.AreaName
+                        }
+                    }
+                });
+
+                await _applicationDbContext.SaveChangesAsync();
+
+                return await GetStateInformation(state.Name);
+            }
+
+            //if area is present
+            var areaInfo = await _applicationDbContext.LocationAreas.Where(c => c.AreaName == area.AreaName).FirstOrDefaultAsync();
+            if(areaInfo == null)
+            {
+                _applicationDbContext.LocationAreas.Add(new LocationArea
+                {
+                    CityId = cityInfo.Id,
+                    AreaName = area.AreaName
+                });
+
+                await _applicationDbContext.SaveChangesAsync();
+
+                return await GetStateInformation(state.Name);
+            }
+
+            return stateInfo;
         }
     }
 }

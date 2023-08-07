@@ -48,7 +48,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                 {
                     if(src.Coordinates is not null)
                     {
-                        var position = GeoJson.Point(GeoJson.Position(src.Coordinates.Latitude, src.Coordinates.Longitute));
+                        var position = GeoJson.Point(GeoJson.Position(src.Coordinates.Latitude, src.Coordinates.Longitude));
                         return position;
                     }
                     return null;
@@ -64,7 +64,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                     if (src.Coordinates is not null)
                     {
                         result.Latitude = src.Coordinates.Coordinates.X;
-                        result.Longitute = src.Coordinates.Coordinates.Y;
+                        result.Longitude = src.Coordinates.Coordinates.Y;
                     }
                     return result;
                 }))

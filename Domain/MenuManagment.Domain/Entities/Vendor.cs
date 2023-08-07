@@ -66,7 +66,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("Latitude")]
         public double Latitude { get; set; }
 
-        [BsonElement("Longitute")]
-        public double Longitute { get; set; }
+        [BsonElement("Longitude")]
+        public double Longitude { get; set; }
     }
 }
