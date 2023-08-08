@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "63e660bce555c8fbba2ad0d5"
+  },
+  "title": "Welcome user",
+  "description": "Welcome to vendor MenuMangement App",
+  "userId": "7b5abe72-d1a2-43bb-acda-2b5dcb4f6296",
+  "role": "admin",
+  "notification_recorded_timestamp": {
+    "$date": "2023-02-10T15:20:28.294Z"
+  },
+  "link": "",
+  "sendAll": false,
+  "read": true
+},
+{
+  "_id": {
+    "$oid": "63e6610de555c8fbba2ad0d6"
+  },
+  "title": "Photo request",
+  "description": "vendor has requested to add Photo to item vada",
+  "userId": "7b5abe72-d1a2-43bb-acda-2b5dcb4f6296",
+  "role": "admin",
+  "notification_recorded_timestamp": {
+    "$date": "2023-02-10T15:21:49.367Z"
+  },
+  "link": "",
+  "sendAll": false,
+  "read": false
+},
+{
+  "_id": {
+    "$oid": "64149610892a2e4517beeb3c"
+  },
+  "title": "Welcome",
+  "description": "Welcome user",
+  "userId": null,
+  "role": "vendor",
+  "notification_recorded_timestamp": {
+    "$date": "2023-03-17T16:32:16.912Z"
+  },
+  "link": null,
+  "sendAll": false,
+  "read": false
+},
+{
+  "_id": {
+    "$oid": "644a6bc8f1493f9d35a25ee2"
+  },
+  "title": "Welcome",
+  "description": "Welcome user",
+  "userId": "440c5e0f-f341-4730-b2e5-589a79a4fc63",
+  "role": "vendor",
+  "notification_recorded_timestamp": {
+    "$date": "2023-04-27T12:34:16.566Z"
+  },
+  "link": null,
+  "sendAll": false,
+  "read": false
+},
+{
+  "_id": {
+    "$oid": "644a95ee584bccf6f2724925"
+  },
+  "title": "Welcome",
+  "description": "Welcome user",
+  "userId": "440c5e0f-f341-4730-b2e5-589a79a4fc63",
+  "role": "vendor",
+  "notification_recorded_timestamp": {
+    "$date": "2023-04-27T15:34:06.850Z"
+  },
+  "link": null,
+  "sendAll": false,
+  "read": true
+},
+{
+  "_id": {
+    "$oid": "644a97c8d5157db480e10c52"
+  },
+  "title": "Welcome",
+  "description": "Welcome user",
+  "userId": "440c5e0f-f341-4730-b2e5-589a79a4fc63",
+  "role": "vendor",
+  "notification_recorded_timestamp": {
+    "$date": "2023-04-27T15:42:00.113Z"
+  },
+  "link": null,
+  "sendAll": false,
+  "read": true
+}]

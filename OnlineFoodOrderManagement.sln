@@ -81,6 +81,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Mongo.Persi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Microservice.Core", "Core\OrderManagement.Microservice.Core\OrderManagement.Microservice.Core.csproj", "{D78B8801-FC3A-4764-A96E-1088E2A8D9E7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoCollections", "MongoCollections", "{BB9F71C7-7A3B-4B54-93E9-1B0FE6AEC018}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\MenuManagementInventoryDB.MenuImages.json = Scripts\MenuManagementInventoryDB.MenuImages.json
+		Scripts\MenuManagementInventoryDB.Vendor.json = Scripts\MenuManagementInventoryDB.Vendor.json
+		Scripts\MenuManagementInventoryDB.VendorCuisineType.json = Scripts\MenuManagementInventoryDB.VendorCuisineType.json
+		Scripts\MenuManagementInventoryDB.VendorFoodType.json = Scripts\MenuManagementInventoryDB.VendorFoodType.json
+		Scripts\MenuManagementInventoryDB.VendorsMenus.json = Scripts\MenuManagementInventoryDB.VendorsMenus.json
+		Scripts\MenuManagementNotificationDB.Notifications.json = Scripts\MenuManagementNotificationDB.Notifications.json
+		Scripts\OrderManagementDB.CartInformation.json = Scripts\OrderManagementDB.CartInformation.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +255,7 @@ Global
 		{7C2625A4-F592-46F5-A3F9-4889F4B7FFC4} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
 		{62E3C430-6EC4-45CA-8529-2B4D769B8021} = {48513472-D17E-4F30-AFCB-FB29350ECB0E}
 		{D78B8801-FC3A-4764-A96E-1088E2A8D9E7} = {71B47887-05DC-4269-8571-CEF8482A5638}
+		{BB9F71C7-7A3B-4B54-93E9-1B0FE6AEC018} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9205ABE5-5F68-4004-8637-2E366D0E7280}

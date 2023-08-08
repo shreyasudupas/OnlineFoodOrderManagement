@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "64afed494f4706702ff29726"
+  },
+  "userId": "6ea2af92-02cc-420f-be99-73625bda3ce1",
+  "menuItems": [
+    {
+      "id": "64230eab0b6042e775edad4a",
+      "vendorId": "64230eaa0b6042e775edad46",
+      "itemName": "Idly",
+      "image": {
+        "imageId": "",
+        "imageFileName": ""
+      },
+      "foodType": "Vegiterian",
+      "category": "Breakfast",
+      "price": 20,
+      "discount": 0,
+      "quatity": 1
+    }
+  ],
+  "cartStatus": "Active"
+}]

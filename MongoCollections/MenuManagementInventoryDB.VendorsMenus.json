@@ -1,0 +1,102 @@
+[{
+  "_id": {
+    "$oid": "64230eab0b6042e775edad4a"
+  },
+  "vendorId": "64230eaa0b6042e775edad46",
+  "itemName": "Idly",
+  "foodType": "Vegiterian",
+  "category": "Breakfast",
+  "price": 20,
+  "discount": 0,
+  "rating": 0,
+  "active": true,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "64230eab0b6042e775edad4b"
+  },
+  "vendorId": "64230eaa0b6042e775edad46",
+  "itemName": "Plain Dosa",
+  "foodType": "Vegiterian",
+  "category": "Breakfast",
+  "price": 35,
+  "discount": 10,
+  "rating": 0,
+  "active": true,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "64230eab0b6042e775edad4c"
+  },
+  "vendorId": "64230eaa0b6042e775edad46",
+  "itemName": "Mini Lunch",
+  "foodType": "Vegiterian",
+  "category": "Lunch",
+  "price": 45,
+  "discount": 0,
+  "rating": 3,
+  "active": true,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "646ccf75522d7389b3100a4a"
+  },
+  "vendorId": "644a97461727cb8b90e58d8a",
+  "itemName": "idly",
+  "foodType": null,
+  "category": "Breakfast",
+  "price": 15,
+  "discount": 0,
+  "rating": 0,
+  "active": true,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "649d94bcfc1379d6857a9b75"
+  },
+  "vendorId": "64230eaa0b6042e775edad46",
+  "itemName": "Rava Idly",
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  },
+  "foodType": "Vegiterian",
+  "category": "Breakfast",
+  "price": 30,
+  "discount": 0,
+  "rating": 0,
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "649d94bcfc1379d6857a9b76"
+  },
+  "vendorId": "64230eaa0b6042e775edad46",
+  "itemName": "Masala Dosa",
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  },
+  "foodType": "Vegiterian",
+  "category": "Breakfast",
+  "price": 40,
+  "discount": 0,
+  "rating": 0,
+  "active": true
+}]

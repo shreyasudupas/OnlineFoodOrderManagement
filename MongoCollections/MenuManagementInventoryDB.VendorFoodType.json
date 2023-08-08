@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "64230eab0b6042e775edad4d"
+  },
+  "typeName": "Vegiterian",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "649b0d44e15c1be83f9aaddf"
+  },
+  "typeName": "Non Vegetarian ",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "649b0d54e15c1be83f9aade0"
+  },
+  "typeName": "Eggetarian ",
+  "active": true
+}]

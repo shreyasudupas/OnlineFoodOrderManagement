@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "64776906f306fcc027bad15c"
+  },
+  "itemName": "idly",
+  "fileName": "idly_64776906f306fcc027bad15c.png",
+  "description": "plane idly",
+  "imagePath": "E:\\Project\\FoodManagementBackend\\Web APIs\\MenuManagement.InventoryMicroService.API\\wwwroot\\MenuImages\\idly_64776906f306fcc027bad15c.png",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "64776970f306fcc027bad15d"
+  },
+  "itemName": "dosa",
+  "fileName": "dosa_64776970f306fcc027bad15d.jpg",
+  "description": "plane dosa",
+  "imagePath": "E:\\Project\\FoodManagementBackend\\Web APIs\\MenuManagement.InventoryMicroService.API\\wwwroot\\MenuImages\\dosa_64776970f306fcc027bad15d.jpg",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "64874a56620fccc959d51e33"
+  },
+  "itemName": "Vendor 1",
+  "fileName": "Vendor 1_64874a56620fccc959d51e33.jpg",
+  "description": "vendor image for vendor id: 64230eaa0b6042e775edad46with Vendor name: Vendor 1",
+  "imagePath": "E:\\Project\\FoodManagementBackend\\Web APIs\\MenuManagement.InventoryMicroService.API\\wwwroot\\MenuImages\\Vendor 1_64874a56620fccc959d51e33.jpg",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "648840c8ac78fcf0d2145fdc"
+  },
+  "itemName": "SLV Upahar",
+  "fileName": "SLV Upahar_648840c8ac78fcf0d2145fdc.jpg",
+  "description": "vendor image for vendor id: 644a97461727cb8b90e58d8awith Vendor name: SLV Upahar",
+  "imagePath": "E:\\Project\\FoodManagementBackend\\Web APIs\\MenuManagement.InventoryMicroService.API\\wwwroot\\MenuImages\\SLV Upahar_648840c8ac78fcf0d2145fdc.jpg",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "64d0c9a12d5114a8add81cdb"
+  },
+  "itemName": "SLV Upahar",
+  "fileName": "SLV Upahar_64d0c9a12d5114a8add81cdb.jpg",
+  "description": "vendor image for vendor id: 644a97461727cb8b90e58d8awith Vendor name: SLV Upahar",
+  "imagePath": "E:\\Project\\FoodManagementBackend\\Web APIs\\MenuManagement.InventoryMicroService.API\\wwwroot\\MenuImages\\SLV Upahar_64d0c9a12d5114a8add81cdb.jpg",
+  "active": true
+},
+{
+  "_id": {
+    "$oid": "64d0cb432d5114a8add81cdc"
+  },
+  "itemName": "SLV Upahar",
+  "fileName": "SLV Upahar_64d0cb432d5114a8add81cdc.jpg",
+  "description": "vendor image for vendor id: 644a97461727cb8b90e58d8awith Vendor name: SLV Upahar",
+  "imagePath": "E:\\Project\\FoodManagementBackend\\Web APIs\\MenuManagement.InventoryMicroService.API\\wwwroot\\MenuImages\\SLV Upahar_64d0cb432d5114a8add81cdc.jpg",
+  "active": true
+}]

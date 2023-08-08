@@ -1,0 +1,360 @@
+[{
+  "_id": {
+    "$oid": "64230eaa0b6042e775edad46"
+  },
+  "vendorName": "Vendor 1",
+  "vendorDescription": "sample",
+  "categories": [
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad47"
+      },
+      "name": "Breakfast",
+      "description": "",
+      "openTime": "07:30:00",
+      "closeTime": "11:30:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad48"
+      },
+      "name": "Lunch",
+      "description": "",
+      "openTime": "11:30:00",
+      "closeTime": "15:00:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad49"
+      },
+      "name": "Dinner",
+      "description": "",
+      "openTime": "18:00:00",
+      "closeTime": "22:30:00",
+      "active": true
+    }
+  ],
+  "cuisineTypes": [
+    "Indian"
+  ],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Kathreguppe",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.92624314070162,
+      77.55020961501994
+    ]
+  },
+  "addressLine1": "sample",
+  "addressLine2": null,
+  "openTime": "07:30:00",
+  "closeTime": "10:30:00",
+  "active": false,
+  "image": {
+    "imageId": "64874a56620fccc959d51e33",
+    "imageFileName": "Vendor 1_64874a56620fccc959d51e33.jpg"
+  }
+},
+{
+  "_id": {
+    "$oid": "644a97461727cb8b90e58d8a"
+  },
+  "vendorName": "SLV Upahar",
+  "vendorDescription": "SLV Upahar Bangalore",
+  "categories": [
+    {
+      "_id": {
+        "$oid": "646b8ac0360c74c6ec7864ba"
+      },
+      "name": "Breakfast",
+      "description": "morning items",
+      "openTime": "07:00:24",
+      "closeTime": "10:00:24",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "646b8b47360c74c6ec7864bb"
+      },
+      "name": "Lunch",
+      "description": "Afternoon snacks",
+      "openTime": "12:00:36",
+      "closeTime": "15:00:36",
+      "active": true
+    }
+  ],
+  "cuisineTypes": [],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Sunkenahalli Ward",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.944305280515277,
+      77.56432457648985
+    ]
+  },
+  "addressLine1": "Ganesha Bhavan, 3rd Main Road, Sunkenahalli Ward, South Zone, Bengaluru, Bangalore North, Bangalore Urban, Karnataka, 560019, India",
+  "addressLine2": null,
+  "openTime": "09:09:50",
+  "closeTime": "09:09:50",
+  "active": true,
+  "image": {
+    "imageId": "64d0cb432d5114a8add81cdc",
+    "imageFileName": "SLV Upahar_64d0cb432d5114a8add81cdc.jpg"
+  }
+},
+{
+  "_id": {
+    "$oid": "64be6aec8e5c02ce6f321d9b"
+  },
+  "vendorName": "Empire Restaurant description",
+  "vendorDescription": "Empire Restaurant description",
+  "categories": [
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad47"
+      },
+      "name": "Breakfast",
+      "description": "",
+      "openTime": "07:30:00",
+      "closeTime": "11:30:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad48"
+      },
+      "name": "Lunch",
+      "description": "",
+      "openTime": "11:30:00",
+      "closeTime": "15:00:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad49"
+      },
+      "name": "Dinner",
+      "description": "",
+      "openTime": "18:00:00",
+      "closeTime": "22:30:00",
+      "active": true
+    }
+  ],
+  "cuisineTypes": [
+    "Indian"
+  ],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Kathreguppe",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.927080572269944,
+      77.54790052535661
+    ]
+  },
+  "addressLine1": "sample",
+  "addressLine2": null,
+  "openTime": "07:30:00",
+  "closeTime": "10:30:00",
+  "active": false,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "64be6b4f8e5c02ce6f321d9c"
+  },
+  "vendorName": "Leon Burger & Wings",
+  "vendorDescription": "Leon Burger & Wings",
+  "categories": [
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad47"
+      },
+      "name": "Breakfast",
+      "description": "",
+      "openTime": "07:30:00",
+      "closeTime": "11:30:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad48"
+      },
+      "name": "Lunch",
+      "description": "",
+      "openTime": "11:30:00",
+      "closeTime": "15:00:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad49"
+      },
+      "name": "Dinner",
+      "description": "",
+      "openTime": "18:00:00",
+      "closeTime": "22:30:00",
+      "active": true
+    }
+  ],
+  "cuisineTypes": [
+    "Indian"
+  ],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Kathreguppe",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.932485665723098,
+      77.54040808698112
+    ]
+  },
+  "addressLine1": "sample",
+  "addressLine2": null,
+  "openTime": "07:30:00",
+  "closeTime": "10:30:00",
+  "active": false,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "64be6b6a8e5c02ce6f321d9d"
+  },
+  "vendorName": "Utsav North India Food Joint",
+  "vendorDescription": "Utsav North India Food Joint",
+  "categories": [
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad47"
+      },
+      "name": "Breakfast",
+      "description": "",
+      "openTime": "07:30:00",
+      "closeTime": "11:30:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad48"
+      },
+      "name": "Lunch",
+      "description": "",
+      "openTime": "11:30:00",
+      "closeTime": "15:00:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad49"
+      },
+      "name": "Dinner",
+      "description": "",
+      "openTime": "18:00:00",
+      "closeTime": "22:30:00",
+      "active": true
+    }
+  ],
+  "cuisineTypes": [
+    "Indian"
+  ],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Kathreguppe",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.930067580168588,
+      77.5520552816206
+    ]
+  },
+  "addressLine1": "sample",
+  "addressLine2": null,
+  "openTime": "07:30:00",
+  "closeTime": "10:30:00",
+  "active": false,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+},
+{
+  "_id": {
+    "$oid": "64c91ea8ab8c8e09283854f4"
+  },
+  "vendorName": "Desi Masala",
+  "vendorDescription": "Desi Masala Jayanagr 4th Block",
+  "categories": [
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad47"
+      },
+      "name": "Breakfast",
+      "description": "",
+      "openTime": "07:30:00",
+      "closeTime": "11:30:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad48"
+      },
+      "name": "Lunch",
+      "description": "",
+      "openTime": "11:30:00",
+      "closeTime": "15:00:00",
+      "active": true
+    },
+    {
+      "_id": {
+        "$oid": "64230eab0b6042e775edad49"
+      },
+      "name": "Dinner",
+      "description": "",
+      "openTime": "18:00:00",
+      "closeTime": "22:30:00",
+      "active": true
+    }
+  ],
+  "cuisineTypes": [
+    "Indian"
+  ],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Jayanagar 4th Block",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.928621015667199,
+      77.58386401484567
+    ]
+  },
+  "addressLine1": "sample",
+  "addressLine2": null,
+  "openTime": "07:30:00",
+  "closeTime": "10:30:00",
+  "active": false,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  }
+}]
