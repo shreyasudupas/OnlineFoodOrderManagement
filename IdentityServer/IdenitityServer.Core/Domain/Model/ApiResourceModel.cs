@@ -20,6 +20,6 @@ namespace IdenitityServer.Core.Domain.Model
         public string? Updated { get; set; }
         public string? LastAccessed { get; set; }
         public bool NonEditable { get; set; }
-        public List<ApiResourceScopeModel> Scopes { get; set; }
+        public List<ApiResourceScopeModel>? Scopes { get; set; }
     }
 }
