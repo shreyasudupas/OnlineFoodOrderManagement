@@ -18,7 +18,7 @@ namespace IdenitityServer.API.Types.OutputTypes
                 .Name("twoFactorEnabled");
 
             descriptor.Field(_ => _.PhoneNumberConfirmed)
-                .Type<StringType>()
+                .Type<BooleanType>()
                 .Name("phoneNumberConfirmed");
 
             descriptor.Field(_ => _.PhoneNumber)

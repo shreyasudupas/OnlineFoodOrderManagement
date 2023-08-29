@@ -205,6 +205,10 @@ namespace IdentityServer.Infrastruture.Services
                 currentUser.Enabled = user.Enabled;
                 currentUser.UserType = user.UserType;
 
+                currentUser.EmailConfirmed = user.EmailConfirmed;
+                currentUser.PhoneNumber = (user.PhoneNumber == null) ? currentUser.PhoneNumber : user.PhoneNumber; //if input mutation variable value not passed
+                currentUser.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
+
                 var result = await _userManager.UpdateAsync(currentUser);
 
                 if (result.Succeeded)

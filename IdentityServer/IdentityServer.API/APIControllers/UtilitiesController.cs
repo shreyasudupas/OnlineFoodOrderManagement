@@ -85,36 +85,87 @@ namespace IdentityServer.API.APIControllers
             return await Mediator.Send(command);
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost("/api/utility/UploadPhoto")]
         public async Task<UserProfile> UploadPhoto([FromForm] UserProfilePicture userProfilePicture)
         {
-            string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-            string uniqueImageName = Guid.NewGuid().ToString() + " " + userProfilePicture.UserId + ".png"; ;
-
-            var userResult = await Mediator.Send(new UploadUserProfilePictureCommand {
-                UserId = userProfilePicture.UserId,
-                ImageName = uniqueImageName
-            });
-
-            if (userResult != null)
+            if (userProfilePicture.Image != null && userProfilePicture.UserId != null)
             {
-                if (!string.IsNullOrEmpty(userResult.ImagePath))
+                string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uniqueImageName = Guid.NewGuid().ToString() + " " + userProfilePicture.UserId + ".png";
+
+                var userResult = await Mediator.Send(new UploadUserProfilePictureCommand
                 {
-                    //delete the existing photo
-                    if (System.IO.File.Exists(Path.Combine(uploadFolder, userResult.ImagePath)))
+                    UserId = userProfilePicture.UserId,
+                    ImageName = uniqueImageName
+                });
+
+                if (userResult != null)
+                {
+                    if (!string.IsNullOrEmpty(userResult.ImagePath))
                     {
-                        //delete the file from location
-                        System.IO.File.Delete(Path.Combine(uploadFolder, userResult.ImagePath));
-
-                        uniqueImageName = Guid.NewGuid().ToString() + " " + userResult.Id +".png";
+                        //delete the existing photo
+                        if (System.IO.File.Exists(Path.Combine(uploadFolder, userResult.ImagePath)))
+                        {
+                            //delete the file from location
+                            System.IO.File.Delete(Path.Combine(uploadFolder, userResult.ImagePath));
+                        }
                     }
+                    string uploadFolderPath = Path.Combine(uploadFolder, uniqueImageName);
+
+                    userProfilePicture.Image.CopyTo(new FileStream(uploadFolderPath, FileMode.Create));
+
+                    return userResult;
                 }
-                string uploadFolderPath = Path.Combine(uploadFolder, uniqueImageName);
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-                userProfilePicture.Image.CopyTo(new FileStream(uploadFolderPath, FileMode.Create));
+        [HttpPost("/api/utility/v2/UploadPhoto")]
+        public async Task<UserProfile> UploadPhoto([FromBody] ImageUploadRequest imageUploadRequest)
+        {
+            if(!string.IsNullOrEmpty(imageUploadRequest.UserId) && string.IsNullOrEmpty(imageUploadRequest.ImageUrl))
+            {
+                string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uniqueImageName = Guid.NewGuid().ToString() + "_" + imageUploadRequest.UserId + "." + imageUploadRequest.Type;
 
-                return userResult;
+                var userResult = await Mediator.Send(new UploadUserProfilePictureCommand
+                {
+                    UserId = imageUploadRequest.UserId,
+                    ImageName = uniqueImageName
+                });
+
+                if (userResult != null)
+                {
+                    if (!string.IsNullOrEmpty(userResult.ImagePath))
+                    {
+                        //delete the existing photo
+                        if (System.IO.File.Exists(Path.Combine(uploadFolder, userResult.ImagePath)))
+                        {
+                            //delete the file from location
+                            System.IO.File.Delete(Path.Combine(uploadFolder, userResult.ImagePath));
+                        }
+                    }
+                    string uploadFolderPath = Path.Combine(uploadFolder, uniqueImageName);
+
+                    //convert image string to bytes
+                    byte[] bytes = Convert.FromBase64String(imageUploadRequest.ImageUrl);
+                    System.IO.File.WriteAllBytes(uploadFolderPath, bytes);
+
+                    return userResult;
+                }
+                else
+                {
+                    return null;
+                }
+
             }
             else
             {

@@ -12,5 +12,11 @@ namespace IdenitityServer.Core.Domain.Request
         //public bool IsAdmin { get; set; }
         public UserTypeEnum UserType { get; set; }
         public bool Enabled { get; set; }
+
+        public bool? EmailConfirmed { get; set; }
+
+        public string? PhoneNumber { get; set; }
+
+        public bool? PhoneNumberConfirmed { get; set; }
     }
 }
