@@ -131,7 +131,7 @@ namespace IdentityServer.API.APIControllers
         [HttpPost("/api/utility/v2/UploadPhoto")]
         public async Task<UserProfile> UploadPhoto([FromBody] ImageUploadRequest imageUploadRequest)
         {
-            if(!string.IsNullOrEmpty(imageUploadRequest.UserId) && string.IsNullOrEmpty(imageUploadRequest.ImageUrl))
+            if(!string.IsNullOrEmpty(imageUploadRequest.UserId) && !string.IsNullOrEmpty(imageUploadRequest.ImageUrl))
             {
                 string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
                 string uniqueImageName = Guid.NewGuid().ToString() + "_" + imageUploadRequest.UserId + "." + imageUploadRequest.Type;

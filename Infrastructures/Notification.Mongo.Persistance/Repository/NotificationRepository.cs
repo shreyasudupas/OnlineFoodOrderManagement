@@ -33,6 +33,11 @@ namespace Notification.Mongo.Persistance.Repository
             _connectionMapping = connectionMapping;
         }
 
+        public async Task<List<Notifications>> GetAllNotifications()
+        {
+            var result = await GetAllItems();
+            return result?.ToList();
+        }
         public async Task<List<Notifications>> GetAllNotificationByUserId(string userId,Pagination pagination)
         {
             var result = await GetAllItemsByPaginationWithFilter(n => n.UserId == userId, n=>n.RecordedTimeStamp,false , pagination);
@@ -94,6 +99,13 @@ namespace Notification.Mongo.Persistance.Repository
                 _logger.LogError($"Error in saving UpdateNotificationToAsRead {updateNotification.Id}");
                 return null;
             }
+        }
+
+        public async Task<Notifications> GetNotificationBasedOnId(string id)
+        {
+            var notification = await GetById(id);
+
+            return notification;
         }
 
         public async Task<int> GetNewNotificationCount(string userId)
