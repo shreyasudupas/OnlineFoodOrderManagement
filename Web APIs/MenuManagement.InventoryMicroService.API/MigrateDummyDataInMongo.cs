@@ -63,7 +63,8 @@ namespace MenuManagement.InventoryMicroService.API
                     VendorName = "Vendor 1",
                     OpenTime =  "07:30:00",
                     CloseTime = "22:30:00",
-                    Active= false
+                    Active= false,
+                    VendorType = "Online"
                 };
 
                 var dummyCategories = new List<CategoryDto>

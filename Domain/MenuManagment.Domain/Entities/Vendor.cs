@@ -59,6 +59,9 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
 
         [BsonElement("image")]
         public ImageModel Image { get; set; }
+
+        [BsonElement("vendorType")]
+        public string VendorType { get; set; }
     }
 
     public class Coordinates
