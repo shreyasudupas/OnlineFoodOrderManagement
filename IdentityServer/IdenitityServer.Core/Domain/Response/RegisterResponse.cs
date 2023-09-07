@@ -8,9 +8,9 @@ namespace IdenitityServer.Core.Domain.Response
     {
         public RegisterResponse()
         {
-            Cities = new List<SelectListItem>();
-            States = new List<SelectListItem>();
-            Areas = new List<SelectListItem>();
+            //Cities = new List<SelectListItem>();
+            //States = new List<SelectListItem>();
+            //Areas = new List<SelectListItem>();
             Errors = new List<string>();
         }
         [Required]
@@ -27,24 +27,24 @@ namespace IdenitityServer.Core.Domain.Response
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
-        public string Address { get; set; }
+        //[Required]
+        //public string Address { get; set; }
 
-        [Required]
-        public string CityId { get; set; }
+        //[Required]
+        //public string CityId { get; set; }
 
-        [Required]
-        public string StateId { get; set; }
+        //[Required]
+        //public string StateId { get; set; }
 
-        [Required]
-        public string AreaId { get; set; }
+        //[Required]
+        //public string AreaId { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        public List<SelectListItem> Cities { get; set; }
+        //public List<SelectListItem> Cities { get; set; }
 
-        public List<SelectListItem> States { get; set; }
-        public List<SelectListItem> Areas { get; set; }
+        //public List<SelectListItem> States { get; set; }
+        //public List<SelectListItem> Areas { get; set; }
         public List<string> Errors { get; set; }
     }
 }

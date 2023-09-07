@@ -55,11 +55,11 @@ namespace MenuManagement.MessagingQueue.Core.Services.Consumers
                                 VendorName = vendorModel.VendorName,
                                 VendorDescription = vendorModel.VendorDescription,
                                 Rating = 0,
-                                State = vendorModel.State,
-                                City = vendorModel.City,
-                                Area = vendorModel.Area,
+                                State = "",
+                                City = "",
+                                Area = "",
                                 Coordinates = null,
-                                AddressLine1 = vendorModel.Address,
+                                AddressLine1 = "",
                                 Active = false //vendor has to login and confirm the changes
                             };
                             var vendorAddBody = new
@@ -75,46 +75,65 @@ namespace MenuManagement.MessagingQueue.Core.Services.Consumers
                                 var deserializeVendor = JsonConvert.DeserializeObject<VendorDto>(vendorResult);
 
                                 //Step 2: add vendor address to IDS Server to map user to Address (default address)
-                                var vendorAddressModel = new
+                                //var vendorAddressModel = new
+                                //{
+                                //    userId = vendorModel.UserId,
+                                //    userAddress = new
+                                //    {
+                                //        fullAddress = vendorModel.Address,
+                                //        city = vendorModel?.City,
+                                //        state = vendorModel?.State,
+                                //        area = vendorModel?.Area,
+                                //        isActive = true,
+                                //        applcationUserId = vendorModel?.UserId,
+                                //        vendorId = deserializeVendor?.Id,
+                                //        editable = true
+                                //    }
+                                //};
+                                //var vendorAddressResult = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-address", vendorAddressModel, token?.AccessToken, "IDSClient");
+
+                                //if(!string.IsNullOrEmpty(vendorAddressResult))
+                                //{
+                                //    _logger.LogInformation($"Successfully processed Vendor User Address API");
+
+                                //    //Step 3: Add Vendor UserID Mapping Table
+                                //    var vendorUserIdModel = new
+                                //    {
+                                //        newVendorUserMapping = new
+                                //        {
+                                //            id = 0,
+                                //            userId = vendorModel?.UserId,
+                                //            username = "",
+                                //            emailId = "",
+                                //            vendorId = deserializeVendor?.Id,
+                                //            enabled = false
+                                //        }
+                                //    };
+                                //    var vendorUserIdMapping = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-user-mapping", vendorUserIdModel, token?.AccessToken, "IDSClient");
+                                //}
+                                //else
+                                //{
+                                //    _logger.LogError($"Error occured when processing Vendor User Address API");
+                                //}
+
+
+                                //Step 3: Add Vendor UserID Mapping Table
+                                var vendorUserIdModel = new
                                 {
-                                    userId = vendorModel.UserId,
-                                    userAddress = new
+                                    newVendorUserMapping = new
                                     {
-                                        fullAddress = vendorModel.Address,
-                                        city = vendorModel?.City,
-                                        state = vendorModel?.State,
-                                        area = vendorModel?.Area,
-                                        isActive = true,
-                                        applcationUserId = vendorModel?.UserId,
+                                        id = 0,
+                                        userId = vendorModel?.UserId,
+                                        username = "",
+                                        emailId = "",
                                         vendorId = deserializeVendor?.Id,
-                                        editable = true
+                                        enabled = false
                                     }
                                 };
-                                var vendorAddressResult = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-address", vendorAddressModel, token?.AccessToken, "IDSClient");
 
-                                if(!string.IsNullOrEmpty(vendorAddressResult))
-                                {
-                                    _logger.LogInformation($"Successfully processed Vendor User Address API");
-
-                                    //Step 3: Add Vendor UserID Mapping Table
-                                    var vendorUserIdModel = new
-                                    {
-                                        newVendorUserMapping = new
-                                        {
-                                            id = 0,
-                                            userId = vendorModel?.UserId,
-                                            username = "",
-                                            emailId = "",
-                                            vendorId = deserializeVendor?.Id,
-                                            enabled = false
-                                        }
-                                    };
-                                    var vendorUserIdMapping = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-user-mapping", vendorUserIdModel, token?.AccessToken, "IDSClient");
-                                }
-                                else
-                                {
-                                    _logger.LogError($"Error occured when processing Vendor User Address API");
-                                }
+                                _logger.LogInformation($"Started Vendor User Mapping API");
+                                var vendorUserIdMapping = await _idsHttpClientWrapper.PostApiCallAsync("api/vendor-user-mapping", vendorUserIdModel, token?.AccessToken, "IDSClient");
+                                _logger.LogInformation($"Successfully processed Vendor User Mapping API");
 
                                 //call notification API
                                 var notificationModel = new NotificationModel

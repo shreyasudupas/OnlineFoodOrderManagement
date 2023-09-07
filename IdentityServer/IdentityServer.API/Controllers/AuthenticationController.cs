@@ -198,13 +198,10 @@ namespace IdentityServer.API.Controllers
             else
             {
                 ModelState.AddModelError("", "Property missing");
-                var (cities,states) = await _mediator.Send(new GetStateCityQuery());
-                command.Cities = cities;
-                command.States = states;
             }
-            var response = _mapper.Map<RegisterViewModel>(command);
+            //var response = _mapper.Map<RegisterViewModel>(command);
 
-            return View(response);
+            return View(command);
         }
 
         [HttpGet]
@@ -247,8 +244,8 @@ namespace IdentityServer.API.Controllers
             var model = new VendorRegisterViewModel();
 
             var dropDownValues = await _mediator.Send(new RegisterQuery { ReturnUrl = returnUrl });
-            var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
-            model.States= dropDownValuesDto.States;
+            //var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
+            //model.States= dropDownValuesDto.States;
 
 
             if (returnUrl != null)
@@ -269,7 +266,7 @@ namespace IdentityServer.API.Controllers
 
                 if(result.Errors.Any())
                 {
-                    await CallStates(vendorRegisterViewModel);
+                    //await CallStates(vendorRegisterViewModel);
 
                     result.Errors.ForEach(err =>
                     {
@@ -285,7 +282,7 @@ namespace IdentityServer.API.Controllers
             }
             else
             {
-                await CallStates(vendorRegisterViewModel);
+                //await CallStates(vendorRegisterViewModel);
 
                 var errors = ModelState.Values.SelectMany(e => e.Errors).ToList();
                 if (errors.Any())
@@ -297,15 +294,15 @@ namespace IdentityServer.API.Controllers
             return View(vendorRegisterViewModel);
         }
 
-        private async Task CallStates(VendorRegisterViewModel vendorRegisterViewModel)
-        {
-            vendorRegisterViewModel.StateId = "";
-            vendorRegisterViewModel.CityId = "";
-            vendorRegisterViewModel.AreaId = "";
+        //private async Task CallStates(VendorRegisterViewModel vendorRegisterViewModel)
+        //{
+        //    vendorRegisterViewModel.StateId = "";
+        //    vendorRegisterViewModel.CityId = "";
+        //    vendorRegisterViewModel.AreaId = "";
 
-            var dropDownValues = await _mediator.Send(new RegisterQuery { ReturnUrl = "" });
-            var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
-            vendorRegisterViewModel.States = dropDownValuesDto.States;
-        }
+        //    var dropDownValues = await _mediator.Send(new RegisterQuery { ReturnUrl = "" });
+        //    var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
+        //    vendorRegisterViewModel.States = dropDownValuesDto.States;
+        //}
     }
 }

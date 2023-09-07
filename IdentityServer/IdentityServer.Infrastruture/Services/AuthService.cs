@@ -92,38 +92,24 @@ namespace IdentityServer.Infrastruture.Services
 
         public async Task Register(RegisterCommand reqisterCommand)
         {
-            //reqisterCommand.Cities = _context.Cities.Select(c=>new SelectListItem {
-            //    Text = c.Name,
-            //    Value = c.Name
-            //}).ToList();
-
-            var getState = _context.States.Where(s => s.Id == Convert.ToInt32(reqisterCommand.StateId)).Select(s => s.Name).FirstOrDefault();
-            var getCity = _context.Cities.Where(s => s.Id == Convert.ToInt32(reqisterCommand.CityId)).Select(s => s.Name).FirstOrDefault();
-            var getArea = _context.LocationAreas.Where(s => s.Id == Convert.ToInt32(reqisterCommand.AreaId)).Select(s => s.AreaName).FirstOrDefault();
-
-            reqisterCommand.States = _context.States.Select(c => new SelectListItem
-            {
-                Text = c.Name,
-                Value = c.Name
-            }).ToList();
-
             var user = new ApplicationUser
             {
                 UserName = reqisterCommand.Username,
                 Email = reqisterCommand.Email,
                 CreatedDate = DateTime.Now,
                 Enabled= true,
-                Address = new List<UserAddress>
-                    {
-                        new UserAddress
-                        {
-                            FullAddress = reqisterCommand.Address,
-                            City = getCity,
-                            State = getState,
-                            Area = getArea,
-                            IsActive = true
-                        }
-                    }
+                //Address = new List<UserAddress>
+                //    {
+                //        new UserAddress
+                //        {
+                //            FullAddress = reqisterCommand.Address,
+                //            City = getCity,
+                //            State = getState,
+                //            Area = getArea,
+                //            IsActive = true
+                //        }
+                //    }
+                UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.User
             };
 
             var result = await _userManager.CreateAsync(user, reqisterCommand.Password);
@@ -134,18 +120,18 @@ namespace IdentityServer.Infrastruture.Services
                 //add claims
                 var usernameClaim = new Claim("userName", reqisterCommand.Username);
                 var emailClaim = new Claim("email", reqisterCommand.Email);
-                var addressClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
+                //var addressClaim = new Claim("address", JsonConvert.SerializeObject(user.Address));
                 var roleAddressClaim = new Claim("role", "user");
 
 
                 var result1 = _userManager.AddClaimAsync(user, usernameClaim).GetAwaiter().GetResult();
                 var result2 = _userManager.AddClaimAsync(user, emailClaim).GetAwaiter().GetResult();
-                var result3 = _userManager.AddClaimAsync(user, addressClaim).GetAwaiter().GetResult();
+                //var result3 = _userManager.AddClaimAsync(user, addressClaim).GetAwaiter().GetResult();
                 var resultRole = _userManager.AddClaimAsync(user, roleAddressClaim).GetAwaiter().GetResult();
 
-                _logger.LogInformation($"Claim for username: {result1.Succeeded}, Claim for email: {result2.Succeeded}, Claim for address: {result3.Succeeded}");
+                _logger.LogInformation($"Claim for username: {result1.Succeeded}, Claim for email: {result2.Succeeded}");
 
-                var roleUserResult = _userManager.AddToRoleAsync(user,"appUser").GetAwaiter().GetResult();
+                var roleUserResult = _userManager.AddToRoleAsync(user,"user").GetAwaiter().GetResult();
                 _logger.LogInformation($"Role appUser added to user {roleUserResult.Succeeded}");
             }
             else

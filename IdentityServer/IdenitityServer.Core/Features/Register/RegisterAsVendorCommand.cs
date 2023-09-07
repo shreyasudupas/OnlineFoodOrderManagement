@@ -45,20 +45,20 @@ namespace IdenitityServer.Core.Features.Register
                 if (!registerVendor.Item1.Errors.Any() && !string.IsNullOrEmpty(registerVendor.Item2))
                 {
                     var vendorRegistred = registerVendor.Item1;
-                    var cityname = await _addressService.GetCityNameById(Convert.ToInt32(vendorRegistred.CityId));
-                    var statename = await _addressService.GetStateNameById(Convert.ToInt32(vendorRegistred.StateId));
-                    var arename = await _addressService.GetAreaNameById(Convert.ToInt32(vendorRegistred.AreaId));
+                    //var cityname = await _addressService.GetCityNameById(Convert.ToInt32(vendorRegistred.CityId));
+                    //var statename = await _addressService.GetStateNameById(Convert.ToInt32(vendorRegistred.StateId));
+                    //var arename = await _addressService.GetAreaNameById(Convert.ToInt32(vendorRegistred.AreaId));
 
                     var vendorBody = new VendorModel
                     {
                         VendorName = vendorRegistred.VendorName,
                         VendorDescription = vendorRegistred.VendorDescription,
-                        Address = vendorRegistred.Address,
+                        //Address = vendorRegistred.Address,
                         Email = vendorRegistred.Email,
                         Username = vendorRegistred.Username,
-                        State = statename,
-                        City = cityname,
-                        Area = arename,
+                        //State = statename,
+                        //City = cityname,
+                        //Area = arename,
                         UserId = registerVendor.Item2
                     };
                     _vendorRegistrationProducerService.PublishVendorInformationToQueue(vendorBody);

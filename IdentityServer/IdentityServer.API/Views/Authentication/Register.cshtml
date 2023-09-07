@@ -36,36 +36,6 @@
                     <span class="text-danger" asp-validation-for="Email"></span>
                 </div>
             </div>
-            <div class="row mb-4">
-                <div class="form-outline">
-                    <input type="text" id="registerAddress" class="form-control" asp-for="Address" />
-                    <label class="form-label" for="formEmail">Address</label>
-                </div>
-            </div>
-            @*<div class="row mb-4">
-            <div class="form-group">
-                <select asp-for="City" asp-items="@Model.Cities" class="custom-select">
-                    <option value="">Select City</option>
-                </select>
-            </div>
-        </div>*@
-            <div class="row mb-4">
-                <select id="stateId" asp-for="StateId" asp-items="@Model.States" class="form-select" aria-label="Default select example">
-                    <option selected>Select State</option>
-                </select>
-            </div>
-            <div class="row mb-4">
-                <select id="citySelectId" asp-for="CityId" asp-items="@Model.Cities" class="form-select" aria-label="Default select example">
-                    <option selected>Select City</option>
-                </select>
-            </div>
-            <div class="row mb-4">
-                <div class="form-group">
-                    <select id="areaSelectId" asp-for="AreaId" asp-items="@Model.Areas" class="form-select" aria-label="Default select example">
-                        <option value="">Select Area</option>
-                    </select>
-                </div>
-            </div>
 
             <!-- Submit button -->
             <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
@@ -111,56 +81,56 @@
 
 
         //})();
-        $(function () {
-            $("#stateId").change(function () {
-                //debugger;
+        // $(function () {
+        //     $("#stateId").change(function () {
+        //         //debugger;
 
-                var stateId = $('#stateId').val();
-                var url = "/api/utility/getCityByStateId?stateId=" + stateId;
-                //Make a ajax call to controller here
-                $.ajax({
-                    type:'Get',
-                    url: url,
-                    success: function (response) {
-                        //debugger;
-                        //console.log(response);
-                        $("#citySelectId").empty().append('<option selected="selected" value="">Select City</option>');
-                        $("#areaSelectId").empty().append('<option selected="selected" value="">Select Area</option>');
+        //         var stateId = $('#stateId').val();
+        //         var url = "/api/utility/getCityByStateId?stateId=" + stateId;
+        //         //Make a ajax call to controller here
+        //         $.ajax({
+        //             type:'Get',
+        //             url: url,
+        //             success: function (response) {
+        //                 //debugger;
+        //                 //console.log(response);
+        //                 $("#citySelectId").empty().append('<option selected="selected" value="">Select City</option>');
+        //                 $("#areaSelectId").empty().append('<option selected="selected" value="">Select Area</option>');
 
-                        $.each(response, function (data, value) {
-                            $('#citySelectId').append($("<option></option>").val(value.value).html(value.label));
-                        });
-                    },
-                    error: function (err) {
-                        alert("Something went wrong with State API, please try again");
-                    }
-                });
-            });
+        //                 $.each(response, function (data, value) {
+        //                     $('#citySelectId').append($("<option></option>").val(value.value).html(value.label));
+        //                 });
+        //             },
+        //             error: function (err) {
+        //                 alert("Something went wrong with State API, please try again");
+        //             }
+        //         });
+        //     });
 
-            $("#citySelectId").change(function () {
-                //debugger;
+        //     $("#citySelectId").change(function () {
+        //         //debugger;
 
-                var cityId = $('#citySelectId').val();
-                var url = "/api/utility/getAreaByCityId?cityId=" + cityId;
-                //Make a ajax call to controller here
-                $.ajax({
-                    type: 'Get',
-                    url: url,
-                    success: function (response) {
-                        debugger;
-                        //console.log(response);
-                        $("#areaSelectId").empty().append('<option selected="selected" value="">Select Area</option>');
+        //         var cityId = $('#citySelectId').val();
+        //         var url = "/api/utility/getAreaByCityId?cityId=" + cityId;
+        //         //Make a ajax call to controller here
+        //         $.ajax({
+        //             type: 'Get',
+        //             url: url,
+        //             success: function (response) {
+        //                 debugger;
+        //                 //console.log(response);
+        //                 $("#areaSelectId").empty().append('<option selected="selected" value="">Select Area</option>');
 
-                        $.each(response, function (data, value) {
-                            $('#areaSelectId').append($("<option></option>").val(value.value).html(value.label));
-                        });
-                    },
-                    error: function (err) {
-                        alert("Something went wrong with City API, please try again");
-                    }
-                });
-            });
-        })
+        //                 $.each(response, function (data, value) {
+        //                     $('#areaSelectId').append($("<option></option>").val(value.value).html(value.label));
+        //                 });
+        //             },
+        //             error: function (err) {
+        //                 alert("Something went wrong with City API, please try again");
+        //             }
+        //         });
+        //     });
+        // })
     </script>
 }
 

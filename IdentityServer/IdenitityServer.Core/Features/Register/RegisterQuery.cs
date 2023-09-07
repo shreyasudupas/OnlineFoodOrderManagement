@@ -26,9 +26,6 @@ namespace IdenitityServer.Core.Features.Register
                 ReturnUrl = request.ReturnUrl
             };
 
-            response.States = _utilsService.GetAllStates();
-            //response.Cities = _utilsService.GetAllCities();
-
             return Task.FromResult(response);
         }
     }
