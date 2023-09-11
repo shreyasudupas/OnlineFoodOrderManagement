@@ -62,6 +62,9 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
 
         [BsonElement("vendorType")]
         public string VendorType { get; set; }
+
+        [BsonElement("registrationProcess")]
+        public string RegistrationProcess { get; set; }
     }
 
     public class Coordinates

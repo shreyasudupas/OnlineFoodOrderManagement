@@ -42,6 +42,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
         public ImageModelDto Image { get; set; }
 
         public string VendorType { get; set; }
+
+        public string RegistrationProcess { get; set; }
     }
 
     public class CoordinatesDto

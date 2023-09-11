@@ -56,10 +56,10 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
             {
                 Username = "test",
                 Password = "testpass",
-                Address = "test address",
-                CityId = "1",
-                StateId ="1",
-                AreaId="1",
+                //Address = "test address",
+                //CityId = "1",
+                //StateId ="1",
+                //AreaId="1",
                 Email="test.com"
             };
             await sut.Register(command);
@@ -79,10 +79,10 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
             {
                 Username = "test",
                 Password = "testpass",
-                Address = "test address",
-                CityId = "1",
-                StateId = "1",
-                AreaId="1",
+                //Address = "test address",
+                //CityId = "1",
+                //StateId = "1",
+                //AreaId="1",
                 Email = "test.com"
             };
             await sut.Register(command);

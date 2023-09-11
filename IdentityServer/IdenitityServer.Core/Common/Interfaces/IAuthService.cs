@@ -14,9 +14,10 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<PreLogoutResponse> PreLogout(LogoutQuery logoutCommand);
         Task Register(RegisterCommand reqisterCommand);
         Task<RegisterAdminResponse> RegisterAdmin(RegisterAdminResponse registerAdminResponse);
-        Task<(VendorRegister,string)> RegisterAsVendor(VendorRegister vendorRegister);
+        Task<VendorRegisterModel> RegisterAsVendor(VendorRegisterModel vendorRegister);
         Task<bool> AddVendorUserAddress(string userId, UserAddress userAddress);
         Task<UserAddress> GetVendorAddressByVendorId(string vendorId);
         Task<bool> AddVendorClaim(VendorUserIdMapping vendorUserIdMapping);
+        Task<bool> GetVendorIsEnabled(string id);
     }
 }

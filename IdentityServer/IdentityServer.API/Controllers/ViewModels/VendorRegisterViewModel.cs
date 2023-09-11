@@ -2,7 +2,8 @@
 
 namespace IdentityServer.API.Controllers.ViewModels
 {
-    public class VendorRegisterViewModel : VendorRegister
+    public class VendorRegisterViewModel : VendorRegisterModel
     {
+        
     }
 }

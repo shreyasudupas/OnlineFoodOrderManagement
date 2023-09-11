@@ -18,33 +18,15 @@ namespace IdentityServer.Tests.UnitTests.Core.Register
         public RegisterFeature()
         {
             mockUtilService = new Mock<IUtilsService>();
-
-            var cities = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "Bangalore" , Value = "Bangalore"},
-                new SelectListItem { Text = "Mumbai" , Value = "Mumbai"}
-            };
-            mockUtilService.Setup(_ => _.GetAllCities())
-                .Returns(cities);
-
-            var states = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "Karnataka" , Value = "Karnataka"},
-                new SelectListItem { Text = "Maharastra" , Value = "Maharastra"}
-            };
-            mockUtilService.Setup(_ => _.GetAllStates())
-                .Returns(states);
-
             handler = new RegisterQueryHandler(mockUtilService.Object);
         }
 
         [Fact]
         public async Task RegisterQuery_SuccessBuildModel()
         {
-            var actual = await handler.Handle(new RegisterQuery(), It.IsAny<CancellationToken>());
+            var actual = await handler.Handle(new RegisterQuery { ReturnUrl = "test.url"}, It.IsAny<CancellationToken>());
             actual.Should().NotBeNull();
-            actual.States.Should().HaveCount(2);
-            actual.Cities.Should().HaveCount(0);
+            actual.ReturnUrl.Should().Be("test.url");
         }
     }
 }

@@ -27,106 +27,105 @@ namespace IdentityServer.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult Register(string VendorId,string VendorName,string Email)
-        {
-            var model = new VendorUserRegistrationViewModel();
-            model.VendorId = VendorId;
-            model.Vendorname = VendorName;
-            model.Email = Email;
+        //[HttpGet]
+        //public IActionResult Register(string VendorId,string VendorName,string Email)
+        //{
+        //    var model = new VendorUserRegistrationViewModel();
+        //    model.VendorId = VendorId;
+        //    model.Vendorname = VendorName;
+        //    model.Email = Email;
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> Register(VendorUserRegistrationViewModel vendorUserRegistrationViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var decryptVendorId = await _mediator.Send(new DencryptionServiceQuery {  ResponseStream = vendorUserRegistrationViewModel.VendorId });
+        //[HttpPost]
+        //public async Task<IActionResult> Register(VendorUserRegistrationViewModel vendorUserRegistrationViewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var decryptVendorId = await _mediator.Send(new DencryptionServiceQuery {  ResponseStream = vendorUserRegistrationViewModel.VendorId });
 
-                if (!string.IsNullOrEmpty(decryptVendorId))
-                {
-                    _logger.LogInformation($"Vendor Id Decrpyted sucessfully {decryptVendorId}");
+        //        if (!string.IsNullOrEmpty(decryptVendorId))
+        //        {
+        //            _logger.LogInformation($"Vendor Id Decrpyted sucessfully {decryptVendorId}");
 
-                    var vendorResult = await _mediator.Send(new RegisterAsVendorCommand
-                    {
-                        vendorRegister = new VendorRegister
-                        {
-                            VendorName = vendorUserRegistrationViewModel.Vendorname,
-                            Email = vendorUserRegistrationViewModel.Email,
-                            Password = vendorUserRegistrationViewModel.Password,
-                            Username = vendorUserRegistrationViewModel.Username,
-                        },
-                        ProcessQueue = false
-                    });
+        //            var vendorResult = await _mediator.Send(new RegisterAsVendorCommand
+        //            {
+        //                vendorRegister = new VendorRegister
+        //                {
+        //                    VendorName = vendorUserRegistrationViewModel.Vendorname,
+        //                    Email = vendorUserRegistrationViewModel.Email,
+        //                    Password = vendorUserRegistrationViewModel.Password,
+        //                    Username = vendorUserRegistrationViewModel.Username,
+        //                }
+        //            });
 
-                    if(!vendorResult.Errors.Any())
-                    {
-                        var vendorAddress = await _mediator.Send(new GetVendorAddressByVendorIdQuery
-                        {
-                            VendorId = decryptVendorId
-                        });
+        //            if(!vendorResult.Errors.Any())
+        //            {
+        //                var vendorAddress = await _mediator.Send(new GetVendorAddressByVendorIdQuery
+        //                {
+        //                    VendorId = decryptVendorId
+        //                });
 
-                        if(vendorAddress != null)
-                        {
-                            _logger.LogInformation($"Vendor Address found values: {JsonConvert.SerializeObject(vendorAddress)}");
+        //                if(vendorAddress != null)
+        //                {
+        //                    _logger.LogInformation($"Vendor Address found values: {JsonConvert.SerializeObject(vendorAddress)}");
 
-                            var addVendorAddress = await _mediator.Send(new RegisterVendorAddressCommand
-                            {
-                                UserId = vendorResult.UserId,
-                                UserAddress = new IdenitityServer.Core.Domain.DBModel.UserAddress
-                                {
-                                    ApplicationUserId = vendorResult.UserId,
-                                    VendorId = decryptVendorId,
-                                    Area= vendorAddress.Area,
-                                    City = vendorAddress.City,
-                                    FullAddress = vendorAddress.FullAddress,
-                                    Editable = false,
-                                    IsActive = true,
-                                    State = vendorAddress.State
-                                }
-                            });
+        //                    var addVendorAddress = await _mediator.Send(new RegisterVendorAddressCommand
+        //                    {
+        //                        UserId = vendorResult.UserId,
+        //                        UserAddress = new IdenitityServer.Core.Domain.DBModel.UserAddress
+        //                        {
+        //                            ApplicationUserId = vendorResult.UserId,
+        //                            VendorId = decryptVendorId,
+        //                            Area= vendorAddress.Area,
+        //                            City = vendorAddress.City,
+        //                            FullAddress = vendorAddress.FullAddress,
+        //                            Editable = false,
+        //                            IsActive = true,
+        //                            State = vendorAddress.State
+        //                        }
+        //                    });
 
-                            _logger.LogInformation($"Vendor User Address added succesfully: {addVendorAddress}");
+        //                    _logger.LogInformation($"Vendor User Address added succesfully: {addVendorAddress}");
 
-                            //next add vendorId mapping table
-                            var vendorUserMappingResult = await _mediator.Send(new AddVendorUserMappingCommand
-                            {
-                                NewVendorUserMapping = new IdenitityServer.Core.Domain.Response.VendorMappingResponse
-                                {
-                                    Enabled = false,
-                                    UserId = vendorResult.UserId,
-                                    VendorId = decryptVendorId
-                                }
-                            });
+        //                    //next add vendorId mapping table
+        //                    var vendorUserMappingResult = await _mediator.Send(new AddVendorUserMappingCommand
+        //                    {
+        //                        NewVendorUserMapping = new IdenitityServer.Core.Domain.Response.VendorMappingResponse
+        //                        {
+        //                            Enabled = false,
+        //                            UserId = vendorResult.UserId,
+        //                            VendorId = decryptVendorId
+        //                        }
+        //                    });
                             
-                        }
-                        else
-                        {
-                            _logger.LogError($"Found no address for Exsiting Vendor in UserAddress");
-                        }
+        //                }
+        //                else
+        //                {
+        //                    _logger.LogError($"Found no address for Exsiting Vendor in UserAddress");
+        //                }
 
-                        //Redirect User
-                        return RedirectToAction("ShowPostRegistration",new { VendorName = vendorUserRegistrationViewModel.Vendorname,
-                            Username = vendorUserRegistrationViewModel.Username });
-                    }
-                    else 
-                    {
-                        vendorResult.Errors.ForEach(e => ModelState.AddModelError("", e));
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("","Vendor Id missing");
-                }
-            }else
-            {
-                ModelState.AddModelError("", "Property missing");
-            }
+        //                //Redirect User
+        //                return RedirectToAction("ShowPostRegistration",new { VendorName = vendorUserRegistrationViewModel.Vendorname,
+        //                    Username = vendorUserRegistrationViewModel.Username });
+        //            }
+        //            else 
+        //            {
+        //                vendorResult.Errors.ForEach(e => ModelState.AddModelError("", e));
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError("","Vendor Id missing");
+        //        }
+        //    }else
+        //    {
+        //        ModelState.AddModelError("", "Property missing");
+        //    }
 
-            return View(vendorUserRegistrationViewModel);
-        }
+        //    return View(vendorUserRegistrationViewModel);
+        //}
 
         [HttpGet]
         public IActionResult ShowPostRegistration(string VendorName,string Username)

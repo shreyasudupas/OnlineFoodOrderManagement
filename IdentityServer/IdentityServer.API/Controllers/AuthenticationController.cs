@@ -169,10 +169,10 @@ namespace IdentityServer.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Register(string returnUrl)
         {
-            var result = await _mediator.Send(new RegisterQuery { ReturnUrl = returnUrl });
-            var response = _mapper.Map<RegisterViewModel>(result);
-            
-            return View(response);
+            var model = new RegisterViewModel();
+            model.ReturnUrl = returnUrl;
+
+            return View(model);
         }
 
         [HttpPost]
@@ -243,11 +243,6 @@ namespace IdentityServer.API.Controllers
         {
             var model = new VendorRegisterViewModel();
 
-            var dropDownValues = await _mediator.Send(new RegisterQuery { ReturnUrl = returnUrl });
-            //var dropDownValuesDto = _mapper.Map<RegisterViewModel>(dropDownValues);
-            //model.States= dropDownValuesDto.States;
-
-
             if (returnUrl != null)
                 model.ReturnUrl = returnUrl;
 
@@ -259,15 +254,14 @@ namespace IdentityServer.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _mediator.Send(new RegisterAsVendorCommand {
-                    vendorRegister = vendorRegisterViewModel,
-                    ProcessQueue = true
-                });
+                var result = await _mediator.Send(
+                    new RegisterAsVendorCommand
+                    {
+                        vendorRegister = vendorRegisterViewModel
+                    });
 
-                if(result.Errors.Any())
+                if (result.Errors.Any())
                 {
-                    //await CallStates(vendorRegisterViewModel);
-
                     result.Errors.ForEach(err =>
                     {
                         ModelState.AddModelError("", err);
@@ -275,15 +269,12 @@ namespace IdentityServer.API.Controllers
                 }
                 else
                 {
-                    //send a mail to vendor with code
-
                     //return to login page
+                    return RedirectToAction("login");
                 }
             }
             else
             {
-                //await CallStates(vendorRegisterViewModel);
-
                 var errors = ModelState.Values.SelectMany(e => e.Errors).ToList();
                 if (errors.Any())
                 {

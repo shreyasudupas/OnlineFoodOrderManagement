@@ -209,8 +209,9 @@ namespace Inventory.Mongo.Persistance.Repositories
                 if (vendor != null)
                 {
 
-                    //update category since FE is not sending category
+                    //update category since FE is not sending category and Registrion Process as well
                     mapToVendorModel.Categories = vendor.Categories;
+                    mapToVendorModel.RegistrationProcess = vendor.RegistrationProcess;
 
                     var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorData.Id);
                     var update = Builders<Vendor>.Update.ApplyMultiFields(mapToVendorModel);

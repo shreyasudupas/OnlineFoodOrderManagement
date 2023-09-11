@@ -7,14 +7,11 @@ using IdenitityServer.Core.Features.Logout;
 using IdenitityServer.Core.Features.Register;
 using IdentityServer.Infrastruture.Database;
 using IdentityServer4.Services;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -28,21 +25,18 @@ namespace IdentityServer.Infrastruture.Services
         private readonly IIdentityServerInteractionService _interaction;
         private readonly ILogger<AuthService> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly IAddressService _addressService;
 
         public AuthService(SignInManager<ApplicationUser> signInManger,
             UserManager<ApplicationUser> userManager,
             IIdentityServerInteractionService interaction,
             ILogger<AuthService> logger,
-            ApplicationDbContext context,
-            IAddressService addressService)
+            ApplicationDbContext context)
         {
             _signInManger = signInManger;
             _userManager = userManager;
             _interaction = interaction;
             _logger = logger;
             _context = context;
-            _addressService = addressService;
         }
         public async Task<LoginResponse> Login(LoginCommand login)
         {
@@ -183,7 +177,7 @@ namespace IdentityServer.Infrastruture.Services
             return registerAdminResponse;
         }
 
-        public async Task<(VendorRegister,string)> RegisterAsVendor(VendorRegister vendorRegister)
+        public async Task<VendorRegisterModel> RegisterAsVendor(VendorRegisterModel vendorRegister)
         {
             var appUser = new ApplicationUser();
 
@@ -194,6 +188,7 @@ namespace IdentityServer.Infrastruture.Services
                 CreatedDate = DateTime.Now,
                 Enabled = false,
                 UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Vendor,
+                PhoneNumber = vendorRegister.PhoneNumber
                 //IsAdmin = true,
             };
 
@@ -215,7 +210,7 @@ namespace IdentityServer.Infrastruture.Services
                 var roleUserResult = _userManager.AddToRoleAsync(user, "vendor").GetAwaiter().GetResult();
                 _logger.LogInformation($"Role Admin Mapping: {roleUserResult.Succeeded}");
 
-                appUser = await _userManager.FindByNameAsync(vendorRegister.Username);
+                //appUser = await _userManager.FindByNameAsync(vendorRegister.Username);
             }
             else
             {
@@ -225,7 +220,7 @@ namespace IdentityServer.Infrastruture.Services
                 _logger.LogError($"Error when registering vendor user {JsonConvert.SerializeObject(result.Errors)}");
             }
 
-            return (vendorRegister, appUser.Id);
+            return vendorRegister;
         }
 
         public async Task<bool> AddVendorUserAddress(string userId, UserAddress userAddress)
@@ -270,6 +265,13 @@ namespace IdentityServer.Infrastruture.Services
                 _logger.LogError($"user not found with id: {vendorUserIdMapping.UserId}");
                 return false;
             }
+        }
+
+        public async Task<bool> GetVendorIsEnabled(string id)
+        {
+            var userEnabled = await _context.Users.Where(u=>u.Id == id).Select(x=>x.Enabled).FirstOrDefaultAsync();
+
+            return userEnabled;
         }
     }
 }
