@@ -19,5 +19,8 @@ namespace IdenitityServer.Core.Common.Interfaces
 
         Task<VendorUserIdMapping> AddVendorUserIdMapping(VendorUserIdMapping vendorUserIdMapping);
         Task<List<VendorUserIdMapping>> GetAllVendorUserIdMapping(string? vendorId = null);
+
+        Task<UserClaimModel> AddUserClaimsBasedOnUserId(UserClaimModel userClaimModel);
+        Task<UserClaimModel> ModifyUserClaimsBasedOnUserId(UserClaimModel userClaimModel);
     }
 }

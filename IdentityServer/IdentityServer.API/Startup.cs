@@ -157,6 +157,7 @@ namespace IdentityServer.API
                 .AddType<ApiResourceMutationExtensionType>()
                 .AddType<IdentityResourceMutationExtensionType>()
                 .AddType<IdentityResourceQueryExtensionType>()
+                .AddType<UserClaimExtensionType>()
                 //.RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<UserProfileResolver>()
                 .RegisterService<IProfileUser>()
@@ -172,6 +173,7 @@ namespace IdentityServer.API
                 .RegisterService<ApiResourceMutationResolver>()
                 .RegisterService<IdenitityResourceQueryResolver>()
                 .RegisterService<IdentityResourcesMutationResolver>()
+                .RegisterService<UserClaimMutationResolver>()
                 .AddAuthorization()
                 //.AddMutationConventions()
                 ;

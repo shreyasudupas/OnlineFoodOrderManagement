@@ -39,7 +39,7 @@ namespace IdentityServer.Tests.UnitTests.Infrastructure.AuthService
             mockAddressService = new Mock<IAddressService>();
 
             sut = new Infrastruture.Services.AuthService(mockSignInManager.Object, mockUserManager.Object, mockIdentityService.Object
-                ,mockLog.Object,appContext, mockAddressService.Object);
+                ,mockLog.Object,appContext);
 
             ApplicationUser newUser = new ApplicationUser
             {

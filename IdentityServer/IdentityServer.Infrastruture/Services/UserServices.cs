@@ -331,5 +331,50 @@ namespace IdentityServer.Infrastruture.Services
 
             return list;
         }
+
+        public async Task<UserClaimModel> AddUserClaimsBasedOnUserId(UserClaimModel userClaimModel)
+        {
+            var claimResult = await _context.UserClaims.Where(uc => uc.UserId == userClaimModel.UserId && uc.ClaimType == userClaimModel.ClaimType)
+                            .FirstOrDefaultAsync();
+
+            if (claimResult == null)
+            {
+                _context.UserClaims.Add(new IdentityUserClaim<string>
+                {
+                    UserId = userClaimModel.UserId,
+                    ClaimType = userClaimModel.ClaimType,
+                    ClaimValue = userClaimModel.ClaimValue
+                });
+
+                await _context.SaveChangesAsync();
+
+                return userClaimModel;
+            }
+            else
+            {
+                _logger.LogError($"Claim type: {userClaimModel.ClaimType} for Modify User Claim: {userClaimModel.ClaimValue} unable to add since it is present");
+                return null;
+            }
+        }
+
+        public async Task<UserClaimModel> ModifyUserClaimsBasedOnUserId(UserClaimModel userClaimModel)
+        {
+            var claimResult = await _context.UserClaims.Where(uc => uc.UserId == userClaimModel.UserId && uc.ClaimType == userClaimModel.ClaimType)
+                            .FirstOrDefaultAsync();
+
+            if(claimResult != null)
+            {
+                claimResult.ClaimValue = userClaimModel.ClaimValue;
+
+                await _context.SaveChangesAsync();
+
+                return userClaimModel;
+            }
+            else
+            {
+                _logger.LogError($"Claim type: {userClaimModel.ClaimType} for Modify User Claim: {userClaimModel.ClaimValue} unable to modify since not present");
+                return null;
+            }
+        }
     }
 }

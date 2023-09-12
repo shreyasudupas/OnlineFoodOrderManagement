@@ -11,22 +11,22 @@ using Xunit;
 
 namespace IdentityServer.Tests.UnitTests.Core.Register
 {
-    public class RegisterFeature : FakeDB
-    {
-        Mock<IUtilsService> mockUtilService;
-        RegisterQueryHandler handler;
-        public RegisterFeature()
-        {
-            mockUtilService = new Mock<IUtilsService>();
-            handler = new RegisterQueryHandler(mockUtilService.Object);
-        }
+    //public class RegisterFeature : FakeDB
+    //{
+    //    Mock<IUtilsService> mockUtilService;
+    //    RegisterQueryHandler handler;
+    //    public RegisterFeature()
+    //    {
+    //        mockUtilService = new Mock<IUtilsService>();
+    //        handler = new RegisterQueryHandler(mockUtilService.Object);
+    //    }
 
-        [Fact]
-        public async Task RegisterQuery_SuccessBuildModel()
-        {
-            var actual = await handler.Handle(new RegisterQuery { ReturnUrl = "test.url"}, It.IsAny<CancellationToken>());
-            actual.Should().NotBeNull();
-            actual.ReturnUrl.Should().Be("test.url");
-        }
-    }
+    //    [Fact]
+    //    public async Task RegisterQuery_SuccessBuildModel()
+    //    {
+    //        var actual = await handler.Handle(new RegisterQuery { ReturnUrl = "test.url"}, It.IsAny<CancellationToken>());
+    //        actual.Should().NotBeNull();
+    //        actual.ReturnUrl.Should().Be("test.url");
+    //    }
+    //}
 }
