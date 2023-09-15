@@ -18,5 +18,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<List<RegisteredLocationReponse>> GetAllRegisteredLocation();
         Task<ApiResourceScopeModel> AddApiResourceScope(int scopeId, int apiResourceId);
         Task<bool> DeleteApiResourceScope(string scopeName, int apiResourceId);
+        Task<bool> UpdateUserEnable(string userId, bool enable);
     }
 }

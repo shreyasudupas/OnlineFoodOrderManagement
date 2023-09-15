@@ -198,5 +198,20 @@ namespace IdentityServer.Infrastruture.Services
 
             return registeredLocationReponses;
         }
+
+        public async Task<bool> UpdateUserEnable(string userId,bool enable)
+        {
+            var user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                user.Enabled = enable;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

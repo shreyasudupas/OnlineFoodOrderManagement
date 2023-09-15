@@ -376,5 +376,15 @@ namespace IdentityServer.Infrastruture.Services
                 return null;
             }
         }
+
+        public async Task<string> GetUserIdByVendorClaim(string vendorId)
+        {
+            var userId = await _context.UserClaims.Where(uc => uc.ClaimType == "vendorId" && uc.ClaimValue == vendorId)
+                            .Select(uc=>uc.UserId)
+                            .FirstOrDefaultAsync();
+
+            return userId;
+
+        }
     }
 }

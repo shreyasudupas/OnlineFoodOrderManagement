@@ -22,5 +22,6 @@ namespace IdenitityServer.Core.Common.Interfaces
 
         Task<UserClaimModel> AddUserClaimsBasedOnUserId(UserClaimModel userClaimModel);
         Task<UserClaimModel> ModifyUserClaimsBasedOnUserId(UserClaimModel userClaimModel);
+        Task<string> GetUserIdByVendorClaim(string vendorId);
     }
 }

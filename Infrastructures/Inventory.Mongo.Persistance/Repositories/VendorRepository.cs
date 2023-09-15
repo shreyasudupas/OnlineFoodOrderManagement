@@ -310,5 +310,32 @@ namespace Inventory.Mongo.Persistance.Repositories
 
             return result;
         }
+
+        public async Task<bool> UpdateVendorStatus(string vendorId,string status)
+        {
+            var vendor = await GetById(vendorId);
+
+            if(vendor != null)
+            {
+                var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorId);
+                var update = Builders<Vendor>.Update.Set(m => m.RegistrationProcess, status);
+
+                var result = await UpdateOneDocument(filter, update);
+
+                if(result.IsAcknowledged)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            } 
+            else
+            {
+                return false;
+            }
+
+        }
     }
 }

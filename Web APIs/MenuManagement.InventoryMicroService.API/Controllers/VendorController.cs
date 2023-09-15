@@ -2,6 +2,7 @@
 using Inventory.Microservice.Core.Services.Vendor.Commands.AddCategory;
 using Inventory.Microservice.Core.Services.Vendor.Commands.AddVendorDetail;
 using Inventory.Microservice.Core.Services.Vendor.Commands.UpdateVendorDetails;
+using Inventory.Microservice.Core.Services.Vendor.Commands.UpdateVendorRegistration;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetAllCategories;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetCategoryById;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetNearestVendors;
@@ -85,6 +86,12 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 Longitude = longitude,
                 DistanceInKm = distanceInKM
             });
+        }
+
+        [HttpPut("/api/vendor/updateVendorStatus")]
+        public async Task<bool> UpdateVendorStatus([FromBody] UpdateVendorRegistrationCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }
