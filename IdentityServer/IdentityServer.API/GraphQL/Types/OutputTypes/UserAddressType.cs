@@ -76,6 +76,16 @@ namespace IdentityServer.API.GraphQL.Types.OutputTypes
                 .Type<BooleanType>()
                 .Description("Address Editable")
                 .Name("editable");
+
+            descriptor.Field(_ => _.Latitude)
+                .Type<DecimalType>()
+                .Description("Address Latitude")
+                .Name("latitude");
+
+            descriptor.Field(_ => _.Longitude)
+                .Type<DecimalType>()
+                .Description("Address Longitude")
+                .Name("longitude");
         }
     }
 }

@@ -117,7 +117,7 @@ namespace IdentityServer.Infrastruture.Database
 
                     MapAddressStateLocation(context);
 
-                    AddVendorMapping(context);
+                    //AddVendorMapping(context);
                 }
             }
         }
@@ -196,13 +196,13 @@ namespace IdentityServer.Infrastruture.Database
 
                 var adminRole = roles.Where(r => r.Name == "admin").FirstOrDefault();
                 var userRole = roles.Where(r => r.Name == "user").FirstOrDefault();
-                var vendorRole = roles.Where(r => r.Name == "vendor").FirstOrDefault();
+                //var vendorRole = roles.Where(r => r.Name == "vendor").FirstOrDefault();
 
                 if (users.Count > 0 && roles.Count > 0)
                 {
                     UserManager.AddToRoleAsync(users.Where(x=>x.UserName == "admin").First(), adminRole.Name).GetAwaiter().GetResult();
                     UserManager.AddToRoleAsync(users.Where(x => x.UserName == "user").First(), userRole.Name).GetAwaiter().GetResult();
-                    UserManager.AddToRoleAsync(users.Where(x => x.UserName == "vendor").First(), vendorRole.Name).GetAwaiter().GetResult();
+                    //UserManager.AddToRoleAsync(users.Where(x => x.UserName == "vendor").First(), vendorRole.Name).GetAwaiter().GetResult();
                 }
                 context.SaveChanges();
             }
@@ -289,17 +289,17 @@ namespace IdentityServer.Infrastruture.Database
                 {
                     UserName = "admin",
                     Email = "admin@test.com",
-                    Address = new List<UserAddress>
-                                {
-                                    new UserAddress
-                                    {
-                                        FullAddress = "sample admin address 1, sample address 1",
-                                        City = "Bengaluru",
-                                        State = "Karnataka",
-                                        Area="Kathreguppe",
-                                        IsActive = true
-                                    }
-                                },
+                    //Address = new List<UserAddress>
+                    //            {
+                    //                new UserAddress
+                    //                {
+                    //                    FullAddress = "sample admin address 1, sample address 1",
+                    //                    City = "Bengaluru",
+                    //                    State = "Karnataka",
+                    //                    Area="Kathreguppe",
+                    //                    IsActive = true
+                    //                }
+                    //            },
                     //IsAdmin = true,
                     Enabled=true,
                     UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Admin,
@@ -331,30 +331,30 @@ namespace IdentityServer.Infrastruture.Database
 
                 var resultTwo = UserManager.CreateAsync(userTwo, "password").GetAwaiter().GetResult();
 
-                var userThree = new ApplicationUser
-                {
-                    UserName = "vendor",
-                    Email = "vendor@test.com",
-                    Address = new List<UserAddress>
-                                {
-                                    new UserAddress
-                                    {
-                                        FullAddress = "sample user address 3, sample address 3",
-                                        City = "Bengaluru",
-                                        State = "Karnataka",
-                                        Area="JP Nagar",
-                                        IsActive = true,
-                                        Editable = true
-                                        //Add VendorId later
-                                    }
-                                },
-                    //IsAdmin = false,
-                    Enabled=true,
-                    UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Vendor,
-                    CreatedDate = DateTime.Now
-                };
+                //var userThree = new ApplicationUser
+                //{
+                //    UserName = "vendor",
+                //    Email = "vendor@test.com",
+                //    //Address = new List<UserAddress>
+                //    //            {
+                //    //                new UserAddress
+                //    //                {
+                //    //                    FullAddress = "sample user address 3, sample address 3",
+                //    //                    City = "Bengaluru",
+                //    //                    State = "Karnataka",
+                //    //                    Area="JP Nagar",
+                //    //                    IsActive = true,
+                //    //                    Editable = true
+                //    //                    //Add VendorId later
+                //    //                }
+                //    //            },
+                //    ////IsAdmin = false,
+                //    Enabled=true,
+                //    UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Vendor,
+                //    CreatedDate = DateTime.Now
+                //};
 
-                var resultThree = UserManager.CreateAsync(userThree, "password").GetAwaiter().GetResult();
+                //var resultThree = UserManager.CreateAsync(userThree, "password").GetAwaiter().GetResult();
 
                 context.SaveChanges();
             }
@@ -377,24 +377,24 @@ namespace IdentityServer.Infrastruture.Database
             }
         }
 
-        private static void AddVendorMapping(ApplicationDbContext context)
-        {
-            if(!context.VendorUserIdMappings.Any())
-            {
-                var vendorUser = context.Users.Where(x => x.UserName == "vendor").FirstOrDefault();
+        //private static void AddVendorMapping(ApplicationDbContext context)
+        //{
+        //    if(!context.VendorUserIdMappings.Any())
+        //    {
+        //        var vendorUser = context.Users.Where(x => x.UserName == "vendor").FirstOrDefault();
 
-                if(vendorUser != null)
-                {
-                    context.VendorUserIdMappings.Add(new VendorUserIdMapping
-                    {
-                        UserId = vendorUser.Id,
-                        Enabled = false
-                        //Add VendorId Later
-                    });
-                }
+        //        if(vendorUser != null)
+        //        {
+        //            context.VendorUserIdMappings.Add(new VendorUserIdMapping
+        //            {
+        //                UserId = vendorUser.Id,
+        //                Enabled = false
+        //                //Add VendorId Later
+        //            });
+        //        }
 
-                context.SaveChanges();
-            }
-        }
+        //        context.SaveChanges();
+        //    }
+        //}
     }
 }

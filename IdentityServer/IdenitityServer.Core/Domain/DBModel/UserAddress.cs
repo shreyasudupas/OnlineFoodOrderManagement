@@ -12,6 +12,10 @@
         //These are used only by UserType is Vendor
         public string VendorId { get; set; }
 
+        public decimal? Latitude { get; set; }
+
+        public decimal? Longitude { get; set; }
+
         //These are used only by UserType is Vendor
         public bool Editable { get; set; }
     }

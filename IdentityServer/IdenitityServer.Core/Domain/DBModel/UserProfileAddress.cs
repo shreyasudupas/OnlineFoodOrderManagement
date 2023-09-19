@@ -27,6 +27,10 @@ namespace IdenitityServer.Core.Domain.DBModel
 
         //These are used only by UserType is Vendor
         public bool Editable { get; set; }
+
+        public decimal? Latitude  { get; set; }
+
+        public decimal? Longitude { get; set; }
     }
 
     

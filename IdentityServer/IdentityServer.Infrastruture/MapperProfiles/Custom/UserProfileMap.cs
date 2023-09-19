@@ -87,7 +87,9 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                         MyAreas = areas,
                         AreaId = areaId,
                         Editable = address.Editable,
-                        VendorId = address.VendorId
+                        VendorId = address.VendorId,
+                        Latitude = address.Latitude,
+                        Longitude = address.Longitude
                     });
                 }
             }
