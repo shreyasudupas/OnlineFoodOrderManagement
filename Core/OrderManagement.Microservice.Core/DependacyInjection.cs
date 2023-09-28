@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using MenuManagment.Mongo.Domain.MappingProfiles;
 using MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -14,6 +15,7 @@ namespace OrderManagement.Microservice.Core
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new CartInformationProfile());
+                mc.AddProfile(new OrderInformationProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

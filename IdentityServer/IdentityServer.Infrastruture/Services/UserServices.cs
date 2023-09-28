@@ -386,5 +386,31 @@ namespace IdentityServer.Infrastruture.Services
             return userId;
 
         }
+
+        public async Task<bool> UpdateUserPoints(string userId,int amountDebited)
+        {
+            var user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            if(user != null)
+            {
+                var existingPoints = user.Points;
+                if(existingPoints >= amountDebited)
+                {
+                    user.Points = existingPoints - amountDebited;
+
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                }
+                else
+                {
+                    throw new Exception($"There are less points than the amount to be debited");
+                }
+            } 
+            else
+            {
+                _logger.LogError($"No User with Id:{userId} is present");
+                return false;
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.AddressMapping.AddStateAssociation;
 using IdenitityServer.Core.Features.Utility;
+using IdenitityServer.Core.Features.Utility.UpdateUserPoints;
 using IdenitityServer.Core.Features.Utility.VendorIdMapping;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
@@ -189,6 +190,12 @@ namespace IdentityServer.API.APIControllers
         public async Task<RegisteredLocationReponse> AddStateAssociation([FromBody] AddStateAssociationCommand addStateAssociationCommand)
         {
             return await Mediator.Send(addStateAssociationCommand);
+        }
+
+        [HttpPost("/api/utility/update/points")]
+        public async Task<bool> UpdateUserPoints([FromBody] UpdateUserPointsCommand updateUserPointsCommand)
+        {
+            return await Mediator.Send(updateUserPointsCommand);
         }
     }
 }
