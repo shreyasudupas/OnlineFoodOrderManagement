@@ -4,10 +4,13 @@ Micro Service for Menu Order Management
 This Application is used for ordering the menu and also customise the vendor details according to their need.
 
 There are 3 roles User, Admin and Vendor.<br/><br/>
-<b>User:</b> <p>Here User will register to view the vendor menu and place items in cart based on the nearest location</p>.<br/>
-<b>Admin:</b> <p>Here Admin will be able to edit any vendor details. Add Vendor Disable Vendor, add notiifcation.</p>.<br/>
-<b>Vendor:</b> <p>Here Vendor will register their shop in the application. Configure the Vendor menu based on thier needs.</p>.<br/>
-<b>IDS Admin:</b> <p>Here it is used for Microserive registration and token managemnt system</p>.<br/>
+<b>User:</b> <p>Here User will register to view the vendor menu and place items in cart based on the nearest location.</p><br/>
+<b>Admin:</b> <p>Here Admin will be able to edit any vendor details. Add Vendor Disable Vendor, add notiifcation.</p><br/>
+<b>Vendor:</b> <p>Here Vendor will register their shop in the application. Configure the Vendor menu based on thier needs.</p><br/>
+<b>IDS Admin:</b> <p>Here it is used for Microserive registration and token managemnt system. Angular UI will call the IDS server to get the Token and using
+the  token we will call individual Microservice based on the access level. If the API is unable to access then we need to give necessary access level by
+registering it as an Client ,API Resource and API Scope.
+</p><br/>
 Code base: .Net Core 6 .Net Core MVC 6, SQL,MongoDB, Docker, IDs server is a mix of API and GraphQl.<br/><br/>
 
 Front End: Angular 15 for UI. <br/>
