@@ -387,7 +387,7 @@ namespace IdentityServer.Infrastruture.Services
 
         }
 
-        public async Task<bool> UpdateUserPoints(string userId,int amountDebited)
+        public async Task<bool> UpdateUserPoints(string userId,double amountDebited)
         {
             var user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
             if(user != null)

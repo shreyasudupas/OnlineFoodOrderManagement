@@ -8,7 +8,7 @@ namespace IdenitityServer.Core.Features.Utility.UpdateUserPoints
     public class UpdateUserPointsCommand : IRequest<bool>
     {
         public string UserId { get; set; }
-        public int AmountToBeDebited { get; set; }
+        public double AmountToBeDebited { get; set; }
     }
 
     public class UpdateUserPointsCommandHandler : IRequestHandler<UpdateUserPointsCommand, bool>
