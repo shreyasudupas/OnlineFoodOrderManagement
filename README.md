@@ -25,39 +25,39 @@ Front end ReactJs: https://github.com/shreyasudupas/react-menu-ids-ui <br/>
 <p>Here we a single SignOn for all the Users (Admin,Vendor and User). The single SignOn is maagned by IdentityServer4 template. It has a separate admin portal which is designed using ReactJs</p>
 
 <p>Here are some of the pics for Vendor, It shows the Vendor Details page where vendor can configure the menu, enter hotel location using the maps
-![](Documents/Vendor_VendorDetail.PNG)</p><br/><br/>
+![](Documents/Vendor_VendorDetail.png)</p><br/><br/>
 
 <p>Here are some of the pics for Admin, Here Admin can configure vendor details, edit vendor location using maps, add/edit category, add/edit menu images, add/edit cuisine items, verify newly added vendor, add new notification
 <b>Admin Vendor List</b><br/>
-![](Documents/Admin_VendorListPage.PNG)<br/><br/>
+![](Documents/Admin_VendorListPage.png)<br/><br/>
 
 <b>Admin Menu Page</b><br/>
-![](Documents/Admin_VendorMenuPage.PNG)<br/><br/>
+![](Documents/Admin_VendorMenuPage.png)<br/><br/>
 
 <b>Admin Menu Item Image</b><br/>
-![](Documents/Admin_MenuItemImage.PNG)<br/><br/>
+![](Documents/Admin_MenuItemImage.png)<br/><br/>
 
 <b>Admin Notification Dashboard</b><br/>
-![](Documents/Admin_NotificationDashboard.PNG)<br/><br/></p>
+![](Documents/Admin_NotificationDashboard.png)<br/><br/></p>
 
 <p>Here are some of the pics for Vendor, It shows the Vendor Details page where vendor can configure the menu, enter hotel location using the maps
-![](Documents/Vendor_VendorDetail.PNG)</p><br/><br/>
+![](Documents/Vendor_VendorDetail.png)</p><br/><br/>
 
 <p>Here Users Page is used by end users to view their choice of restaurants, add menu to cart, make payments (right now only supports reward based transaction. 
 <b>User Menu Page</b><br/>
-![](Documents/User_MenuPage.PNG)<br/><br/>
+![](Documents/User_MenuPage.png)<br/><br/>
 
 <b>User Menu Page</b><br/>
-![](Documents/Admin_VendorMenuPage.PNG)<br/><br/>
+![](Documents/Admin_VendorMenuPage.png)<br/><br/>
 
 <b>User Menu Page</b><br/>
-![](Documents/User_MenuDetailPage.PNG)<br/><br/>
+![](Documents/User_MenuDetailPage.png)<br/><br/>
 
 <b>User Cart Page</b><br/>
-![](Documents/User_CartPage.PNG)<br/><br/>
+![](Documents/User_CartPage.png)<br/><br/>
 
 <b>User Payment Page</b><br/>
-![](Documents/User_PaymentPage.PNG)<br/><br/></p>
+![](Documents/User_PaymentPage.png)<br/><br/></p>
 
 <p> Reference for cache <a href="https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks">HealthChecks</a></p>
  
