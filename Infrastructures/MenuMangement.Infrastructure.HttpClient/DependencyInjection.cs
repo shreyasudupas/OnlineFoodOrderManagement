@@ -35,6 +35,18 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
+            services.AddHttpClient("OrderManagementClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:OrderManagementApi").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+
+            services.AddHttpClient("CartManagementClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:CartManagementApi").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+
             services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
             services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
             services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();

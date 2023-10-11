@@ -92,6 +92,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoCollections", "MongoCo
 		Scripts\OrderManagementDB.CartInformation.json = Scripts\OrderManagementDB.CartInformation.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saga.Orchestrator.Core", "Core\Saga.Orchestrator.Core\Saga.Orchestrator.Core.csproj", "{013FCEEA-4D66-4BAE-A137-66C26B02F6C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -214,6 +216,10 @@ Global
 		{D78B8801-FC3A-4764-A96E-1088E2A8D9E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D78B8801-FC3A-4764-A96E-1088E2A8D9E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D78B8801-FC3A-4764-A96E-1088E2A8D9E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{013FCEEA-4D66-4BAE-A137-66C26B02F6C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{013FCEEA-4D66-4BAE-A137-66C26B02F6C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{013FCEEA-4D66-4BAE-A137-66C26B02F6C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{013FCEEA-4D66-4BAE-A137-66C26B02F6C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,6 +262,7 @@ Global
 		{62E3C430-6EC4-45CA-8529-2B4D769B8021} = {48513472-D17E-4F30-AFCB-FB29350ECB0E}
 		{D78B8801-FC3A-4764-A96E-1088E2A8D9E7} = {71B47887-05DC-4269-8571-CEF8482A5638}
 		{BB9F71C7-7A3B-4B54-93E9-1B0FE6AEC018} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
+		{013FCEEA-4D66-4BAE-A137-66C26B02F6C1} = {71B47887-05DC-4269-8571-CEF8482A5638}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9205ABE5-5F68-4004-8637-2E366D0E7280}
