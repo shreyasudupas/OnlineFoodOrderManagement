@@ -41,7 +41,7 @@ Front end ReactJs: https://github.com/shreyasudupas/react-menu-ids-ui <br/>
 <b>Admin Notification Dashboard</b><br/>
 ![](Documents/AdminNotificationDashboard.png)<br/><br/>
 
-<p>Here Users Page is used by end users to view their choice of restaurants, add menu to cart, make payments (right now only supports reward based transaction. </p><br/>
+<p>Here Users Page is used by end users to view their choice of restaurants, add menu to cart, make payments (right now only supports reward based transaction.</p>
 <b>User Menu Page</b><br/>
 ![](Documents/UserMenuPage.png)<br/><br/>
 
