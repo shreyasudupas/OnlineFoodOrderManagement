@@ -25,10 +25,12 @@ Front end ReactJs: https://github.com/shreyasudupas/react-menu-ids-ui <br/>
 <p>Here we a single SignOn for all the Users (Admin,Vendor and User). The single SignOn is maagned by IdentityServer4 template. It has a separate admin portal which is designed using ReactJs</p>
 
 <p>Here are some of the pics for Vendor, It shows the Vendor Details page where vendor can configure the menu, enter hotel location using the maps.</p>
+
 <b>Vendor Page</b><br/>
 ![](Documents/VendorDetailVendor.png)<br/><br/>
 
 <p>Here are some of the pics for Admin, Here Admin can configure vendor details, edit vendor location using maps, add/edit category, add/edit menu images, add/edit cuisine items, verify newly added vendor, add new notification.</p>
+
 <b>Admin Vendor List</b><br/>
 ![](Documents/AdminVendorListPage.png)<br/><br/>
 
@@ -42,6 +44,7 @@ Front end ReactJs: https://github.com/shreyasudupas/react-menu-ids-ui <br/>
 ![](Documents/AdminNotificationDashboard.png)<br/><br/>
 
 <p>Here Users Page is used by end users to view their choice of restaurants, add menu to cart, make payments (right now only supports reward based transaction.</p>
+
 <b>User Menu Page</b><br/>
 ![](Documents/UserMenuPage.png)<br/><br/>
 
