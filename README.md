@@ -26,7 +26,7 @@ Front end ReactJs: https://github.com/shreyasudupas/react-menu-ids-ui <br/>
 
 <p>Here are some of the pics for Vendor, It shows the Vendor Details page where vendor can configure the menu, enter hotel location using the maps.</p>
 <b>Vendor Page</b><br/>
-![](Documents/VendorVendorDetail.png)<br/><br/>
+![](Documents/VendorDetailVendor.png)<br/><br/>
 
 <p>Here are some of the pics for Admin, Here Admin can configure vendor details, edit vendor location using maps, add/edit category, add/edit menu images, add/edit cuisine items, verify newly added vendor, add new notification.</p>
 <b>Admin Vendor List</b><br/>
