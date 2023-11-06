@@ -16,7 +16,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
             _logger = logger;
         }
 
-        public async Task<TData?> PostApiCall<TData>(string url, string clientName, string token, TData payload)
+        public async Task<string> PostApiCall<TData>(string url, string clientName, string token, string payload)
         {
             HttpResponseMessage responseMessage;
             var httpClient = _httpClientFactory.CreateClient(clientName);
@@ -24,7 +24,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
             try
             {
                 var item = new StringContent(
-                    JsonConvert.SerializeObject(payload),
+                    payload,
                     Encoding.UTF8,
                     "application/json");
 
@@ -36,14 +36,13 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
                 if (responseMessage.IsSuccessStatusCode)
                 {
                     var data = await responseMessage.Content.ReadAsStringAsync();
-                    var response = JsonConvert.DeserializeObject<TData>(data);
 
-                    return response;
+                    return data;
                 }
                 else
                 {
                     _logger.LogError($"Error in Posting the data to url:{url} with errors: {responseMessage.RequestMessage}");
-                    return default;
+                    return string.Empty;
                 }
             }
             catch (Exception exception)

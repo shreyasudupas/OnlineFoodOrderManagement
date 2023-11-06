@@ -2,8 +2,10 @@
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
+using MenuMangement.Infrastructure.HttpClient.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Saga.Orchestrator.Core.Interfaces;
 
 namespace MenuMangement.Infrastructure.HttpClient
 {
@@ -50,6 +52,7 @@ namespace MenuMangement.Infrastructure.HttpClient
             services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
             services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
             services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();
+            services.AddTransient<IPaymentService, PaymentService>();
         }
     }
 }
