@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
 {
-    public class BaseClientWrapper
+    public abstract class BaseClientWrapper
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger _logger;

@@ -3,6 +3,7 @@ using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
 using MenuMangement.Infrastructure.HttpClient.Services;
+using MenuMangement.Infrastructure.HttpClient.Services.Payment;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Saga.Orchestrator.Core.Interfaces;
