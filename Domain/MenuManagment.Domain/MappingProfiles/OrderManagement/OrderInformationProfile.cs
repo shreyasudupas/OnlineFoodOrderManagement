@@ -30,7 +30,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
             CreateMap<PaymentOrderDetailDto, PaymentOrderDetail>()
                 .ReverseMap();
 
-            CreateMap<UserOrderDetailsDto,UserOrderDetails>()
+            CreateMap<UserOrderDetailsDto, Dtos.OrderManagement.UserAddressDetails>()
                 .ReverseMap();
         }
     }

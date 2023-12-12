@@ -8,12 +8,8 @@ using IdentityServer.API.AutoMapperProfile;
 using IdentityServer.API.GraphQL.Mutation;
 using IdentityServer.API.GraphQL.Query;
 using IdentityServer.API.GraphQL.Types.OutputTypes;
-using IdentityServer.API.Middleware;
 using IdentityServer.Infrastruture;
 using IdentityServer.Infrastruture.MapperProfiles;
-using MenuManagement.Infrastruture.RabbitMqClient;
-using MenuManagement.MessagingQueue.Core;
-using MenuMangement.Infrastructure.HttpClient;
 using MenuOrder.Shared;
 using MenuOrder.Shared.Extension;
 using MenuOrder.Shared.Services.Interfaces;
@@ -21,8 +17,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -30,12 +24,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace IdentityServer.API
@@ -89,9 +79,9 @@ namespace IdentityServer.API
             services.AddSharedInjection();
 
             //for messaging queues service registrations
-            services.AddVendorRegistrationCore();
-            services.AddRabbitMQInfrastruture();
-            services.AddInfrastrutureHttpClient(Configuration);
+            //services.AddVendorRegistrationCore();
+            //services.AddRabbitMQInfrastruture();
+            //services.AddInfrastrutureHttpClient(Configuration);
 
             services.AddHttpContextAccessor();
 

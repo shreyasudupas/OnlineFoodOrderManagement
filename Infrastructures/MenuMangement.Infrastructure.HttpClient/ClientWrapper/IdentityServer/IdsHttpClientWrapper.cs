@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Saga.Orchestrator.Core.Interfaces;
+using Saga.Orchestrator.Core.Interfaces.Wrappers;
 using System.Text;
 
 namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer

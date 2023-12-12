@@ -28,8 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructures\MenuManagement.Infrastruture.RabbitMqClient\MenuManagement.Infrastruture.RabbitMqClient.csproj" />
-    <ProjectReference Include="..\..\Infrastructures\MenuMangement.Infrastructure.HttpClient\MenuMangement.Infrastructure.HttpClient.csproj" />
     <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
     <ProjectReference Include="..\IdenitityServer.Core\IdenitityServer.Core.csproj" />
     <ProjectReference Include="..\IdentityServer.Infrastruture\IdentityServer.Infrastruture.csproj" />

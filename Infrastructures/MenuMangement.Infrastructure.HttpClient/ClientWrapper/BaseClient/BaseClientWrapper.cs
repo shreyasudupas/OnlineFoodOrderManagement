@@ -19,10 +19,10 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
         public async Task<string> PostApiCall<TData>(string url, string clientName, string token, string payload)
         {
             HttpResponseMessage responseMessage;
-            var httpClient = _httpClientFactory.CreateClient(clientName);
-
             try
             {
+                var httpClient = _httpClientFactory.CreateClient(clientName);
+
                 var item = new StringContent(
                     payload,
                     Encoding.UTF8,
@@ -41,13 +41,13 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
                 }
                 else
                 {
-                    _logger.LogError($"Error in Posting the data to url:{url} with errors: {responseMessage.RequestMessage}");
+                    _logger.LogError("Error in Posting the data to url:{0} with errors: {1}",url,responseMessage.RequestMessage);
                     return string.Empty;
                 }
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Error occured in calling Post API, error: {exception.Message}");
+                _logger.LogError("Error occured in calling Post API, error: {0}", exception.Message);
                 throw;
             }
         }
@@ -55,10 +55,10 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
         public async Task<TData?> DeleteApiCall<TData>(string url, string clientName, string token)
         {
             HttpResponseMessage responseMessage;
-            var httpClient = _httpClientFactory.CreateClient(clientName);
-
             try
             {
+                var httpClient = _httpClientFactory.CreateClient(clientName);
+
                 if (!string.IsNullOrEmpty(token))
                     httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 

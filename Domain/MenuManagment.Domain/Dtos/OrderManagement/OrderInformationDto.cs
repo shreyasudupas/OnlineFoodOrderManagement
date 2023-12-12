@@ -1,5 +1,4 @@
 ﻿using MenuManagment.Mongo.Domain.Entities;
-using System;
 using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
@@ -23,7 +22,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
 
     public class PaymentOrderDetailDto
     {
-        public double Price { get; set; }
+        public double TotalPrice { get; set; }
 
         public string SelectedPayment { get; set; }
 

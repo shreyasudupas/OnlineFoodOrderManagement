@@ -1,12 +1,12 @@
 ﻿using MenuManagement.HttpClient.Domain.Interface;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.CartInformationClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
-using MenuMangement.Infrastructure.HttpClient.Services;
 using MenuMangement.Infrastructure.HttpClient.Services.Payment;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Saga.Orchestrator.Core.Interfaces;
+using Saga.Orchestrator.Core.Interfaces.Wrappers;
 
 namespace MenuMangement.Infrastructure.HttpClient
 {
@@ -50,10 +50,11 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
-            services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
+            services.AddTransient<Saga.Orchestrator.Core.Interfaces.Wrappers.IIdsHttpClientWrapper, IdsHttpClientWrapper>();
             services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
             services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();
             services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<ICartInformationWrapper, CartInformationClientWrapper>();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Saga.Orchestrator.Core.Interfaces
+﻿namespace Saga.Orchestrator.Core.Interfaces.Wrappers
 {
     public interface IIdsHttpClientWrapper
     {

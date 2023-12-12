@@ -2,30 +2,34 @@
 
 namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
 {
-    public record PaymentInformationRecord
+    public sealed record PaymentInformationRecord
     {
-        public string UserId { get; set; }
-        public string CartId { get; set; }
+        public string UserId { get; init; }
+        public CartInformationRecord CartInfo { get; init; }
+        public PaymentDetailDto PaymentInfo { get; init; }
+        public UserAddressDetails UserAddress { get; init; }
+    }
+
+    public record CartInformationRecord
+    {
+        public string CartId { get; init; }
         public List<MenuItemDto> MenuItems { get; set; } = new List<MenuItemDto>();
-        public PaymentDetailDto PayementDetails { get; set; }
-        public UserOrderDetails UserDetails { get; set; }
-        public string OrderPlaced { get; set; }
-        public string OrderStatus { get; set; }
     }
 
-    public class PaymentDetailDto
+    public record PaymentDetailDto
     {
-        public double Price { get; set; }
-        public string SelectedPayment { get; set; }
-        public string MethodOfDelivery { get; set; }
-        public bool PaymentSuccess { get; set; }
+        public double TotalPrice { get; init; }
+        public string SelectedPayment { get; init; }
+        public string MethodOfDelivery { get; init; }
+        public bool PaymentSuccess { get; init; }
     }
 
-    public class UserOrderDetails
+    public record UserAddressDetails
     {
-        public string UserId { get; set; }
-        public string FullAddress { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public string FullAddress { get; init; }
+        public string City { get; init; }
+        public string Area { get; init; }
+        public double Latitude { get; init; }
+        public double Longitude { get; init; }
     }
 }
