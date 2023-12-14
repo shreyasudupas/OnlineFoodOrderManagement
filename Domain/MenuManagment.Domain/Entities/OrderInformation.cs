@@ -19,13 +19,13 @@ namespace MenuManagment.Mongo.Domain.Entities
         public List<MenuItem> MenuItems { get; set; }
 
         [BsonElement("paymentDetails")]
-        public PaymentOrderDetail PayementDetails { get; set; }
+        public PaymentOrderDetail PaymentDetails { get; set; }
 
         [BsonElement("userDetails")]
         public UserOrderDetails UserDetails { get; set; }
 
-        [BsonElement("orderPlaced")]
-        public DateTime OrderPlaced { get; set; }
+        [BsonElement("orderPlacedDateTime")]
+        public DateTime OrderPlacedDateTime { get; set; }
 
         [BsonElement("orderStatus")]
         public string OrderStatus { get; set; }

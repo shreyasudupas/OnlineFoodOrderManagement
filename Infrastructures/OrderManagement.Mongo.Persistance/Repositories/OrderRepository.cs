@@ -5,6 +5,7 @@ using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
 using MongoDb.Shared.Persistance.Extensions;
 using MenuManagment.Mongo.Domain.Interfaces.Repository.Order;
+using MenuManagment.Mongo.Domain.Enum;
 
 namespace OrderManagement.Mongo.Persistance.Repositories
 {
@@ -32,7 +33,8 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             {
                 await CreateOneDocument(order);
 
-                var getOrder = await GetByFilter(order=>order.OrderPlaced == order.OrderPlaced && order.UserDetails.UserId == order.UserDetails.UserId);
+                var getOrder = await GetByFilter(order=>order.OrderStatus == OrderStatusEnum.OrderPlaced.ToString() 
+                    && order.UserDetails.UserId == order.UserDetails.UserId);
                 return getOrder;
             }
             else

@@ -1,6 +1,6 @@
 ﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
 
-namespace Saga.Orchestrator.Core.Interfaces.Wrappers
+namespace Saga.Orchestrator.Core.Interfaces.Services
 {
     public interface IPaymentService
     {

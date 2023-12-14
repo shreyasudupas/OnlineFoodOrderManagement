@@ -16,7 +16,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
             _logger = logger;
         }
 
-        public async Task<string> PostApiCall<TData>(string url, string clientName, string token, string payload)
+        public async Task<string> PostApiCall(string url, string clientName, string token, string payload)
         {
             HttpResponseMessage responseMessage;
             try

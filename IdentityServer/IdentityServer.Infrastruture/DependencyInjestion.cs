@@ -1,5 +1,7 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
+using IdenitityServer.Core.Common.Interfaces.HttpClient;
 using IdentityServer.Infrastruture.Database;
+using IdentityServer.Infrastruture.HttpClient;
 using IdentityServer.Infrastruture.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -111,6 +113,19 @@ namespace IdentityServer.Infrastruture
             services.AddScoped<IClientService,ClientServices>();
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IVendorUserMappingService, VendorUserMappingService>();
+
+
+            services.AddHttpClient("ReverseGeoLocationClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("LocationSearchAPI:ReverseAPI").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+            services.AddHttpClient("ForwardGeoLocationClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("LocationSearchAPI:ForwardGeoCoding").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+            services.AddTransient<ILocationSearch, LocationSearch>();
 
             return services;
         }

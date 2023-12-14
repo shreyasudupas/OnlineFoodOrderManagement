@@ -2,7 +2,7 @@
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Saga.Orchestrator.Core.Interfaces.Wrappers;
+using Saga.Orchestrator.Core.Interfaces.Services;
 
 namespace MenuMangement.Infrastructure.HttpClient.Services.Payment
 {
@@ -26,7 +26,7 @@ namespace MenuMangement.Infrastructure.HttpClient.Services.Payment
                     AmountToBeDebited = payementDetail.TotalPrice
                 };
                 var bodyContent = JsonConvert.SerializeObject(body);
-                var resultContent = await PostApiCall<bool>("utility/update/points", clientName, token, bodyContent);
+                var resultContent = await PostApiCall("utility/update/points", clientName, token, bodyContent);
 
                 if (!string.IsNullOrEmpty(resultContent))
                 {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Saga.Orchestrator.Core.Interfaces.Orchestrator;
+using Saga.Orchestrator.Core.Interfaces.Services;
 using Saga.Orchestrator.Core.Interfaces.Wrappers;
 using Saga.Orchestrator.Core.Models;
 using Saga.Orchestrator.Core.Models.Dtos;
@@ -14,15 +15,18 @@ namespace Saga.Orchestrator.Core.Orchestrator
         private readonly ILogger<PaymentOrchestrator> _logger;
         private readonly IIdsHttpClientWrapper _idsHttpClientWrapper;
         private readonly ICartInformationWrapper _cartInformationWrapper;
+        private readonly IOrderService _orderService;
         public PaymentOrchestrator(IPaymentService paymentService,
             ILogger<PaymentOrchestrator> logger,
             ICartInformationWrapper cartInformationWrapper,
-            IIdsHttpClientWrapper idsHttpClientWrapper)
+            IIdsHttpClientWrapper idsHttpClientWrapper,
+            IOrderService orderService)
         {
             _paymentService = paymentService;
             _logger = logger;
             _cartInformationWrapper = cartInformationWrapper;
             _idsHttpClientWrapper = idsHttpClientWrapper;
+            _orderService = orderService;
         }
 
         public async Task<PaymentProcessDto> PaymentProcess(PaymentInformationRecord paymentInformation)
@@ -52,8 +56,48 @@ namespace Saga.Orchestrator.Core.Orchestrator
                             }
                             else
                             {
-                                //next clear the cart
+                                //next add order to orderManagment microservice
+                                var orderInfo = new OrderInformationDto
+                                {
+                                    CartId = paymentInformation.CartInfo.CartId,
+                                    Id = "",
+                                    OrderPlacedDateTime = "",
+                                    PaymentDetails = new PaymentOrderDetailDto
+                                    {
+                                        MethodOfDelivery = paymentInformation.PaymentInfo.MethodOfDelivery,
+                                        PaymentSuccess = paymentSucess,
+                                        SelectedPayment = paymentInformation.PaymentInfo.SelectedPayment,
+                                        TotalPrice = paymentInformation.PaymentInfo.TotalPrice
+                                    },
+                                    OrderStatus = MenuManagment.Mongo.Domain.Enum.OrderStatusEnum.OrderPlaced,
+                                    UserDetails = new UserOrderDetailsDto
+                                    {
+                                        FullAddress = paymentInformation.UserAddress.FullAddress,
+                                        Latitude = paymentInformation.UserAddress.Latitude,
+                                        Longitude = paymentInformation.UserAddress.Longitude,
+                                        UserId = paymentInformation.UserId
+                                    },
+                                    MenuItems = new List<MenuItemDto>()
+                                };
+                                orderInfo.MenuItems = paymentInformation.CartInfo.MenuItems;
+                                var orderResult = await _orderService.AddOrderInformation(orderInfo, accessToken);
 
+                                if(orderResult is not null)
+                                {
+                                    _logger.LogInformation("Order status success");
+                                }
+                                else
+                                {
+                                    var error = "Error oc cured in Order Microservice";
+                                    _logger.LogError(error);
+
+                                    await ReversePaymentProcess(paymentInformation,accessToken,response, currentPrice);
+
+                                    return response;
+                                }
+
+
+                                //clear the cart
                                 var cartResult = await _cartInformationWrapper.ClearCartInformation(paymentInformation.UserId, accessToken);
                                 if(cartResult)
                                 {

@@ -3,9 +3,11 @@ using MenuMangement.Infrastructure.HttpClient.ClientWrapper.CartInformationClien
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
+using MenuMangement.Infrastructure.HttpClient.Services.Order;
 using MenuMangement.Infrastructure.HttpClient.Services.Payment;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Saga.Orchestrator.Core.Interfaces.Services;
 using Saga.Orchestrator.Core.Interfaces.Wrappers;
 
 namespace MenuMangement.Infrastructure.HttpClient
@@ -55,6 +57,7 @@ namespace MenuMangement.Infrastructure.HttpClient
             services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<ICartInformationWrapper, CartInformationClientWrapper>();
+            services.AddTransient<IOrderService, OrderService>();
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace MenuManagment.Mongo.Domain.Enum
+﻿namespace MenuManagment.Mongo.Domain.Enum;
+
+public enum OrderStatusEnum
 {
-    public enum OrderStatusEnum
-    {
-        WaitingOnVendorAccept,
-        AcceptedByVendor,
-        Processing,
-        Ready,
-        Done
-    }
+        OrderPlaced = 1,
+        OrderAccepted = 2,
+        OrderInProgress = 3,
+        OrderReady = 4,
+        OrderDone = 5
 }
+

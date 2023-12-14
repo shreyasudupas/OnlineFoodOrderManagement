@@ -1,4 +1,4 @@
-﻿using MenuManagment.Mongo.Domain.Entities;
+﻿using MenuManagment.Mongo.Domain.Enum;
 using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
@@ -9,15 +9,15 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
 
         public string CartId { get; set; }
 
-        public List<MenuItem> MenuItems { get; set; }
+        public List<MenuItemDto> MenuItems { get; set; }
 
-        public PaymentOrderDetailDto PayementDetails { get; set; }
+        public PaymentOrderDetailDto PaymentDetails { get; set; }
 
         public UserOrderDetailsDto UserDetails { get; set; }
 
-        public string OrderPlaced { get; set; }
+        public string OrderPlacedDateTime { get; set; }
 
-        public string OrderStatus { get; set; }
+        public OrderStatusEnum OrderStatus { get; set; }
     }
 
     public class PaymentOrderDetailDto
