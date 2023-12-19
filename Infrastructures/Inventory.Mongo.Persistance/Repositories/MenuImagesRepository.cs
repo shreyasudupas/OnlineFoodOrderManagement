@@ -68,7 +68,7 @@ namespace Inventory.Mongo.Persistance.Repositories
             var mapToModel = _mapper.Map<MenuImages>(menuImageDto);
             await CreateOneDocument(mapToModel);
 
-            var insertedMenuItem = await GetByFilter(i => i.FileName == menuImageDto.FileName);
+            var insertedMenuItem = await GetDocumentByFilter(i => i.FileName == menuImageDto.FileName);
             menuImageDto.Id = insertedMenuItem.Id;
 
             return insertedMenuItem;

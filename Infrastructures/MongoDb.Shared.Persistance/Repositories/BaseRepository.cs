@@ -68,9 +68,11 @@ namespace MongoDb.Shared.Persistance.Repositories
         {
             return await mongoCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
-        public async Task<TEntity> GetByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).FirstOrDefaultAsync();
+        public async Task<TEntity> GetDocumentByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).FirstOrDefaultAsync();
 
-        public async Task<List<TEntity>> GetListByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
+        public async Task<List<TEntity>> ListDocumentsByFilter(Expression<Func<TEntity, bool>> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
+
+        public async Task<List<TEntity>> ListDocumentsByFilter(FilterDefinition<TEntity> filterExpression,Expression<Func<TEntity,object>> sortExpression) => await mongoCollection.Aggregate().Match(filterExpression).SortByDescending(sortExpression).ToListAsync();
 
         public async Task<List<TEntity>> GetListByFilterDefinition(FilterDefinition<TEntity> filterExpression) => await mongoCollection.Find(filterExpression).ToListAsync();
 

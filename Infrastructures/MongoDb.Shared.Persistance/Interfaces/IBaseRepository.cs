@@ -16,6 +16,6 @@ namespace MongoDb.Shared.Persistance.Interfaces
         Task<TEntity> GetById(string id);
         Task<IEnumerable<TEntity>> GetAllItems();
         public int IfDocumentExists();
-        Task<TEntity> GetByFilter(Expression<Func<TEntity, bool>> filterExpression);
+        Task<TEntity> GetDocumentByFilter(Expression<Func<TEntity, bool>> filterExpression);
     }
 }

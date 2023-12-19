@@ -50,7 +50,7 @@ namespace Notification.Mongo.Persistance.Repository
             var recordedDateTime = newNotification.RecordedTimeStamp = System.DateTime.Now;
             await CreateOneDocument(newNotification);
 
-            var getNotification = await GetByFilter(n => n.Description == newNotification.Description && n.UserId == newNotification.UserId
+            var getNotification = await GetDocumentByFilter(n => n.Description == newNotification.Description && n.UserId == newNotification.UserId
                 && n.RecordedTimeStamp == recordedDateTime);
             if(getNotification != null)
             {
@@ -110,7 +110,7 @@ namespace Notification.Mongo.Persistance.Repository
 
         public async Task<int> GetNewNotificationCount(string userId)
         {
-            var response = await GetListByFilter(n => n.UserId == userId && n.Read == false);
+            var response = await ListDocumentsByFilter(n => n.UserId == userId && n.Read == false);
             var getCount = response.Count;
             return getCount;
         }

@@ -28,13 +28,13 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             await AssignIndexForCartInformation();
 
             //Here there is only one active cart Information present for one user
-            result = await GetByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
+            result = await GetDocumentByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
 
             if(result == null)
             {
                 await CreateOneDocument(cartInformation);
 
-                result = await GetByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
+                result = await GetDocumentByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
             }
             else
             {
@@ -52,7 +52,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             //await AssignIndexForCartInformation();
 
             //Here there is only one active cart Information present for one user
-            var result = await GetByFilter(c => c.UserId == userId && c.CartStatus == nameof(CartStatusEnum.Active));
+            var result = await GetDocumentByFilter(c => c.UserId == userId && c.CartStatus == nameof(CartStatusEnum.Active));
 
             _logger.LogInformation("Get User CartInformation ended");
 
@@ -69,7 +69,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
 
         public async Task<CartInformation?> UpdateCartInformation(CartInformation cartInformation)
         {
-            var isCartInfo = await GetByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
+            var isCartInfo = await GetDocumentByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
             if(isCartInfo is not null)
             {
                 var filter = Builders<CartInformation>.Filter.Eq(x => x.Id, cartInformation.Id);
@@ -78,7 +78,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
                 var updateResult = await UpdateOneDocument(filter, update);
                 if(updateResult.IsAcknowledged)
                 {
-                    var updatedCartInfo = await GetByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
+                    var updatedCartInfo = await GetDocumentByFilter(c => c.UserId == cartInformation.UserId && c.CartStatus == nameof(CartStatusEnum.Active));
 
                     return updatedCartInfo;
                 }
@@ -122,7 +122,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
 
         public async Task<bool> CartActiveMenuItemsClear(string userId)
         {
-            var cartItems = await GetByFilter(c => c.UserId == userId && c.CartStatus == nameof(CartStatusEnum.Active));
+            var cartItems = await GetDocumentByFilter(c => c.UserId == userId && c.CartStatus == nameof(CartStatusEnum.Active));
 
             if(cartItems is not null)
             {

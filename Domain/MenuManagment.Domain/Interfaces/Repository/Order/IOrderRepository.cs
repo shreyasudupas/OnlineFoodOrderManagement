@@ -10,5 +10,7 @@ namespace MenuManagment.Mongo.Domain.Interfaces.Repository.Order
         Task<OrderInformation?> UpdateOrderInformation(OrderInformation order);
         Task<List<OrderInformation>> GetOrderListInformationBasedOnStatus(string status);
 
+        Task<List<OrderInformation>> GetAllOrdersBasedOnUserId(string userId);
+
     }
 }

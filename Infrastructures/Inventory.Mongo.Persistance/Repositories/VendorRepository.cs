@@ -43,7 +43,7 @@ namespace Inventory.Mongo.Persistance.Repositories
 
                 await CreateOneDocument(mapToVendorModel);
 
-                var getVendorWithId = await GetByFilter(v => v.VendorName == vendor.VendorName);
+                var getVendorWithId = await GetDocumentByFilter(v => v.VendorName == vendor.VendorName);
 
                 return getVendorWithId;
             }
@@ -219,7 +219,7 @@ namespace Inventory.Mongo.Persistance.Repositories
                     var result = await UpdateOneDocument(filter, update);
                     if (result.IsAcknowledged)
                     {
-                        var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
+                        var getVendorWithId = await GetDocumentByFilter(v => v.Id == vendor.Id);
                         return getVendorWithId;
                     }
                     else

@@ -18,7 +18,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                 .ForMember(dest => dest.OrderPlacedDateTime, act => act.MapFrom((src, dest) =>
                 {
                     if (string.IsNullOrEmpty(src.OrderPlacedDateTime))
-                        return new DateTime();
+                        return DateTime.Now;
                     else
                     {
                         var date = DateTime.Parse(src.OrderPlacedDateTime);

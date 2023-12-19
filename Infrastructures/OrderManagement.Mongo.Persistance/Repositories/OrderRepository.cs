@@ -33,7 +33,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             {
                 await CreateOneDocument(order);
 
-                var getOrder = await GetByFilter(order=>order.OrderStatus == OrderStatusEnum.OrderPlaced.ToString() 
+                var getOrder = await GetDocumentByFilter(order=>order.OrderStatus == OrderStatusEnum.OrderPlaced.ToString() 
                     && order.UserDetails.UserId == order.UserDetails.UserId);
                 return getOrder;
             }
@@ -66,6 +66,20 @@ namespace OrderManagement.Mongo.Persistance.Repositories
                 _logger.LogError($"Order Id: {order.Id} not present");
                 return null;
             }
+        }
+
+        public async Task<List<OrderInformation>> GetAllOrdersBasedOnUserId(string userId)
+        {
+            List<OrderInformation> result = new();
+            if(!string.IsNullOrEmpty(userId))
+            {
+                var builder = Builders<OrderInformation>.Filter;
+                var filter = builder.Eq(order => order.UserDetails.UserId, userId);
+
+                result = await ListDocumentsByFilter(filter, x => x.OrderPlacedDateTime);
+            }
+            
+            return result;
         }
     }
 }

@@ -33,12 +33,12 @@ namespace Inventory.Mongo.Persistance.Repositories
 
             if (menu != null)
             {
-                var ifExists = await GetByFilter(vm => vm.ItemName == menu.ItemName && vm.VendorId == menu.VendorId);
+                var ifExists = await GetDocumentByFilter(vm => vm.ItemName == menu.ItemName && vm.VendorId == menu.VendorId);
                 if (ifExists == null)
                 {
                     await CreateOneDocument(mapToMenuModel);
 
-                    var createdMenu = await GetByFilter(m => m.VendorId == menu.VendorId && m.ItemName == menu.ItemName);
+                    var createdMenu = await GetDocumentByFilter(m => m.VendorId == menu.VendorId && m.ItemName == menu.ItemName);
 
                     if (createdMenu != null)
                     {
@@ -85,7 +85,7 @@ namespace Inventory.Mongo.Persistance.Repositories
         {
             _logger.LogInformation($"GetAllVendorMenuByVendorId started with id: {VendorId}");
 
-            var menu = await GetListByFilter(v => v.VendorId == VendorId);
+            var menu = await ListDocumentsByFilter(v => v.VendorId == VendorId);
 
             if (menu != null)
             {

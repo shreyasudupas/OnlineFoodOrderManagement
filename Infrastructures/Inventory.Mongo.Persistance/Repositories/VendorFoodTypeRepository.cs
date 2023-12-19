@@ -56,13 +56,13 @@ namespace Inventory.Mongo.Persistance.Repositories
         public async Task<VendorFoodType> AddVendorFoodType(VendorFoodTypeDto FoodType)
         {
             _logger.LogInformation("AddVendorFoodTypeById started");
-            var ifExists = await GetByFilter(f => f.TypeName == FoodType.TypeName);
+            var ifExists = await GetDocumentByFilter(f => f.TypeName == FoodType.TypeName);
             if (ifExists == null)
             {
                 var mapDtoToModel = _mapper.Map<VendorFoodType>(FoodType);
                 await CreateOneDocument(mapDtoToModel);
 
-                var updatedFoodType = await GetByFilter(f => f.TypeName == FoodType.TypeName);
+                var updatedFoodType = await GetDocumentByFilter(f => f.TypeName == FoodType.TypeName);
                 return updatedFoodType;
             }
             else
@@ -87,7 +87,7 @@ namespace Inventory.Mongo.Persistance.Repositories
 
                 var result = await UpdateOneDocument(filter, update);
 
-                var getVendorWithId = await GetByFilter(v => v.Id == vendor.Id);
+                var getVendorWithId = await GetDocumentByFilter(v => v.Id == vendor.Id);
 
                 return getVendorWithId;
             }
