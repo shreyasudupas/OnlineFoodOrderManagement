@@ -7,7 +7,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public string UserId { get; init; }
         public CartInformationRecord CartInfo { get; init; }
         public PaymentDetailDto PaymentInfo { get; init; }
-        public UserAddressDetails UserAddress { get; init; }
+        public UserAddressDetail UserAddress { get; init; }
     }
 
     public record CartInformationRecord
@@ -24,7 +24,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public bool PaymentSuccess { get; init; }
     }
 
-    public record UserAddressDetails
+    public record UserAddressDetail
     {
         public string FullAddress { get; init; }
         public string City { get; init; }

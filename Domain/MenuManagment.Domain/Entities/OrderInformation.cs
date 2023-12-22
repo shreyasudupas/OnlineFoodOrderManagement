@@ -18,17 +18,23 @@ namespace MenuManagment.Mongo.Domain.Entities
         [BsonElement("menuItems")]
         public List<MenuItem> MenuItems { get; set; }
 
-        [BsonElement("paymentDetails")]
-        public PaymentOrderDetail PaymentDetails { get; set; }
+        [BsonElement("totalPrice")]
+        public double TotalPrice { get; set; }
 
-        [BsonElement("userDetails")]
-        public UserOrderDetails UserDetails { get; set; }
+        [BsonElement("paymentDetail")]
+        public PaymentOrderDetail PaymentDetail { get; set; }
+
+        [BsonElement("userDetail")]
+        public UserOrderDetail UserDetail { get; set; }
 
         [BsonElement("orderPlacedDateTime")]
         public DateTime OrderPlacedDateTime { get; set; }
 
         [BsonElement("orderStatus")]
         public string OrderStatus { get; set; }
+
+        [BsonElement("vendorDetail")]
+        public VendorDetail VendorDetail { get; set; }
     }
 
     public class PaymentOrderDetail
@@ -46,7 +52,7 @@ namespace MenuManagment.Mongo.Domain.Entities
         public bool PaymentSuccess { get; set; }
     }
 
-    public class UserOrderDetails
+    public class UserOrderDetail
     {
         [BsonElement("userId")]
         public string UserId { get; set; }
@@ -59,5 +65,20 @@ namespace MenuManagment.Mongo.Domain.Entities
 
         [BsonElement("longitude")]
         public double Longitude { get; set; }
+
+        [BsonElement("area")]
+        public string Area { get; set; }
+
+        [BsonElement("city")]
+        public string City { get; set; }
+    }
+
+    public class VendorDetail
+    {
+        [BsonElement("vendorId")]
+        public string VendorId { get; set; }
+
+        [BsonElement("vendorName")]
+        public string VendorName { get; set; }
     }
 }

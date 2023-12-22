@@ -10,19 +10,21 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public string CartId { get; set; }
 
         public List<MenuItemDto> MenuItems { get; set; }
+        public double TotalPrice { get; set; }
 
-        public PaymentOrderDetailDto PaymentDetails { get; set; }
+        public PaymentOrderDetailDto PaymentDetail { get; set; }
 
-        public UserOrderDetailsDto UserDetails { get; set; }
+        public UserOrderDetailsDto UserDetail { get; set; }
 
         public string OrderPlacedDateTime { get; set; }
 
         public OrderStatusEnum OrderStatus { get; set; }
+        public VendorDetailDto VendorDetail { get; set; }
     }
 
     public class PaymentOrderDetailDto
     {
-        public double TotalPrice { get; set; }
+        public double Price { get; set; }
 
         public string SelectedPayment { get; set; }
 
@@ -40,5 +42,16 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
+
+        public string Area { get; set; }
+
+        public string City { get; set; }
+    }
+
+    public class VendorDetailDto
+    {
+        public string VendorId { get; set; }
+
+        public string VendorName { get; set; }
     }
 }

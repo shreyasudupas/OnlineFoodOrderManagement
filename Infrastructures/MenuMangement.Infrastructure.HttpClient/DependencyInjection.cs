@@ -5,6 +5,7 @@ using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
 using MenuMangement.Infrastructure.HttpClient.Services.Order;
 using MenuMangement.Infrastructure.HttpClient.Services.Payment;
+using MenuMangement.Infrastructure.HttpClient.Services.Vendor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Saga.Orchestrator.Core.Interfaces.Services;
@@ -52,12 +53,19 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
+            services.AddHttpClient("VendorManagementClient", config =>
+            {
+                config.BaseAddress = new Uri(configuration.GetSection("ExternalAPIs:VendorManagementApi").Value);
+                config.DefaultRequestHeaders.Clear();
+            });
+
             services.AddTransient<Saga.Orchestrator.Core.Interfaces.Wrappers.IIdsHttpClientWrapper, IdsHttpClientWrapper>();
             services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
             services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<ICartInformationWrapper, CartInformationClientWrapper>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IVendorSerivce, VendorService>();
         }
     }
 }

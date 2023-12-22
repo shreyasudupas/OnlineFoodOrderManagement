@@ -44,13 +44,16 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
 
 
             CreateMap<PaymentOrderDetailDto, PaymentOrderDetail>()
-                .ForMember(dest=>dest.Price,act=>act.MapFrom(src=>src.TotalPrice))
+                .ForMember(dest=>dest.Price,act=>act.MapFrom(src=>src.Price))
                 .ForMember(dest => dest.PaymentSuccess, act => act.MapFrom(src => src.PaymentSuccess))
                 .ForMember(dest => dest.MethodOfDelivery, act => act.MapFrom(src => src.MethodOfDelivery))
                 .ForMember(dest => dest.SelectedPayment, act => act.MapFrom(src => src.SelectedPayment))
                 .ReverseMap();
 
-            CreateMap<UserOrderDetailsDto, UserOrderDetails>()
+            CreateMap<UserOrderDetailsDto, UserOrderDetail>()
+                .ReverseMap();
+
+            CreateMap<VendorDetailDto, VendorDetail>()
                 .ReverseMap();
         }
     }

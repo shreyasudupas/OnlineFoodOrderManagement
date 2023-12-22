@@ -16,17 +16,20 @@ namespace Saga.Orchestrator.Core.Orchestrator
         private readonly IIdsHttpClientWrapper _idsHttpClientWrapper;
         private readonly ICartInformationWrapper _cartInformationWrapper;
         private readonly IOrderService _orderService;
+        private readonly IVendorSerivce _vendorSerivce;
         public PaymentOrchestrator(IPaymentService paymentService,
             ILogger<PaymentOrchestrator> logger,
             ICartInformationWrapper cartInformationWrapper,
             IIdsHttpClientWrapper idsHttpClientWrapper,
-            IOrderService orderService)
+            IOrderService orderService,
+            IVendorSerivce vendorSerivce)
         {
             _paymentService = paymentService;
             _logger = logger;
             _cartInformationWrapper = cartInformationWrapper;
             _idsHttpClientWrapper = idsHttpClientWrapper;
             _orderService = orderService;
+            _vendorSerivce = vendorSerivce;
         }
 
         public async Task<PaymentProcessDto> PaymentProcess(PaymentInformationRecord paymentInformation)
@@ -42,7 +45,7 @@ namespace Saga.Orchestrator.Core.Orchestrator
                     {
                         var token = JsonConvert.DeserializeObject<AccessTokenModel>(tokenResult);
 
-                        var currentPrice = paymentInformation.PaymentInfo.TotalPrice;
+                        var currentPrice = paymentInformation.PaymentInfo.TotalPrice; //call API to get reward points
                         var accessToken = token.AccessToken;
 
                         if (!string.IsNullOrEmpty(accessToken))
@@ -56,63 +59,76 @@ namespace Saga.Orchestrator.Core.Orchestrator
                             }
                             else
                             {
-                                //next add order to orderManagment microservice
-                                var orderInfo = new OrderInformationDto
-                                {
-                                    CartId = paymentInformation.CartInfo.CartId,
-                                    Id = "",
-                                    OrderPlacedDateTime = "",
-                                    PaymentDetails = new PaymentOrderDetailDto
-                                    {
-                                        MethodOfDelivery = paymentInformation.PaymentInfo.MethodOfDelivery,
-                                        PaymentSuccess = paymentSucess,
-                                        SelectedPayment = paymentInformation.PaymentInfo.SelectedPayment,
-                                        TotalPrice = paymentInformation.PaymentInfo.TotalPrice
-                                    },
-                                    OrderStatus = MenuManagment.Mongo.Domain.Enum.OrderStatusEnum.OrderPlaced,
-                                    UserDetails = new UserOrderDetailsDto
-                                    {
-                                        FullAddress = paymentInformation.UserAddress.FullAddress,
-                                        Latitude = paymentInformation.UserAddress.Latitude,
-                                        Longitude = paymentInformation.UserAddress.Longitude,
-                                        UserId = paymentInformation.UserId
-                                    },
-                                    MenuItems = new List<MenuItemDto>()
-                                };
-                                orderInfo.MenuItems = paymentInformation.CartInfo.MenuItems;
-                                var orderResult = await _orderService.AddOrderInformation(orderInfo, accessToken);
+                                var vendorId = paymentInformation.CartInfo.MenuItems.Select(m => m.VendorId).First();
+                                var vendorDetailFromApi = await _vendorSerivce.GetVendorById(vendorId, accessToken);
 
-                                if(orderResult is not null)
+                                if(vendorDetailFromApi is null)
                                 {
-                                    _logger.LogInformation("Order status success");
+                                    return await CallReversePaymentAPI(paymentInformation, accessToken, response, currentPrice);
                                 }
                                 else
                                 {
-                                    var error = "Error oc cured in Order Microservice";
-                                    _logger.LogError(error);
+                                    //next add order to orderManagment microservice
+                                    var orderInfo = new OrderInformationDto
+                                    {
+                                        CartId = paymentInformation.CartInfo.CartId,
+                                        Id = "",
+                                        OrderPlacedDateTime = "",
+                                        TotalPrice = currentPrice,
+                                        PaymentDetail = new PaymentOrderDetailDto
+                                        {
+                                            MethodOfDelivery = paymentInformation.PaymentInfo.MethodOfDelivery,
+                                            PaymentSuccess = paymentSucess,
+                                            SelectedPayment = paymentInformation.PaymentInfo.SelectedPayment,
+                                            Price = paymentInformation.PaymentInfo.TotalPrice
+                                        },
+                                        OrderStatus = MenuManagment.Mongo.Domain.Enum.OrderStatusEnum.OrderPlaced,
+                                        UserDetail = new UserOrderDetailsDto
+                                        {
+                                            FullAddress = paymentInformation.UserAddress.FullAddress,
+                                            Latitude = paymentInformation.UserAddress.Latitude,
+                                            Longitude = paymentInformation.UserAddress.Longitude,
+                                            UserId = paymentInformation.UserId,
+                                            Area = paymentInformation.UserAddress.Area,
+                                            City = paymentInformation.UserAddress.City
+                                        },
+                                        MenuItems = new List<MenuItemDto>(),
+                                        VendorDetail = new VendorDetailDto
+                                        {
+                                            VendorId = vendorDetailFromApi.Id,
+                                            VendorName = vendorDetailFromApi.VendorName
+                                        }
+                                    };
+                                    orderInfo.MenuItems = paymentInformation.CartInfo.MenuItems;
+                                    var orderResult = await _orderService.AddOrderInformation(orderInfo, accessToken);
 
-                                    await ReversePaymentProcess(paymentInformation,accessToken,response, currentPrice);
+                                    if (orderResult is not null)
+                                    {
+                                        _logger.LogInformation("Order status success");
+                                    }
+                                    else
+                                    {
+                                        return await CallReversePaymentAPI(paymentInformation, accessToken, response, currentPrice);
+                                    }
+
+
+                                    //clear the cart
+                                    var cartResult = await _cartInformationWrapper.ClearCartInformation(paymentInformation.UserId, accessToken);
+                                    if (cartResult)
+                                    {
+                                        _logger.LogInformation("Cart Clearing operation completed");
+                                        response.Message = "Payment Operation completed";
+                                    }
+                                    else
+                                    {
+                                        _logger.LogError("Error in Cart Clearing operation");
+                                        response.Message = "Error occured in clearing the cart";
+                                    }
+
+                                    response.IsSuccess = cartResult;
 
                                     return response;
-                                }
-
-
-                                //clear the cart
-                                var cartResult = await _cartInformationWrapper.ClearCartInformation(paymentInformation.UserId, accessToken);
-                                if(cartResult)
-                                {
-                                    _logger.LogInformation("Cart Clearing operation completed");
-                                    response.Message = "Payment Operation completed";
-                                }
-                                else
-                                {
-                                    _logger.LogError("Error in Cart Clearing operation");
-                                    response.Message = "Error occured in clearing the cart";
-                                }
-
-                                response.IsSuccess = cartResult;
-
-                                return response;
+                                }    
                             }
                         }
                         else
@@ -145,11 +161,15 @@ namespace Saga.Orchestrator.Core.Orchestrator
 
             return response;
         }
+        
 
-        private async Task<PaymentProcessDto> ReversePaymentProcess(PaymentInformationRecord paymentInformation,
+        private async Task<PaymentProcessDto> CallReversePaymentAPI(PaymentInformationRecord paymentInformation,
             string token, PaymentProcessDto response,
             double currentPrice)
         {
+            var error = "Error occured in Order Microservice";
+            _logger.LogError(error);
+
             var paymentRevertSucess = await _paymentService.PaymentByRewardPoints(paymentInformation.UserId, token,new PaymentDetailDto
             {
                 TotalPrice = currentPrice

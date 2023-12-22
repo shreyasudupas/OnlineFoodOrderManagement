@@ -83,5 +83,36 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
                 throw;
             }
         }
+
+        public async Task<string> GetApiCall(string url, string clientName, string token)
+        {
+            HttpResponseMessage responseMessage;
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient(clientName);
+
+                if (!string.IsNullOrEmpty(token))
+                    httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                responseMessage = await httpClient.GetAsync(url);
+
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var result = await responseMessage.Content.ReadAsStringAsync();
+
+                    return result;
+                }
+                else
+                {
+                    _logger.LogError($"Error in Delete the data to url:{url} with errors: {responseMessage.RequestMessage}");
+                    return string.Empty;
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error occured in calling Deelte API, error: {exception.Message}");
+                throw;
+            }
+        }
     }
 }

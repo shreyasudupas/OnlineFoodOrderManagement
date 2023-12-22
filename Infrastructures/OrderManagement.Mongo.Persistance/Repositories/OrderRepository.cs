@@ -34,7 +34,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
                 await CreateOneDocument(order);
 
                 var getOrder = await GetDocumentByFilter(order=>order.OrderStatus == OrderStatusEnum.OrderPlaced.ToString() 
-                    && order.UserDetails.UserId == order.UserDetails.UserId);
+                    && order.UserDetail.UserId == order.UserDetail.UserId);
                 return getOrder;
             }
             else
@@ -74,7 +74,7 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             if(!string.IsNullOrEmpty(userId))
             {
                 var builder = Builders<OrderInformation>.Filter;
-                var filter = builder.Eq(order => order.UserDetails.UserId, userId);
+                var filter = builder.Eq(order => order.UserDetail.UserId, userId);
 
                 result = await ListDocumentsByFilter(filter, x => x.OrderPlacedDateTime);
             }
