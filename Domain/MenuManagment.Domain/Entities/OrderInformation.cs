@@ -71,6 +71,12 @@ namespace MenuManagment.Mongo.Domain.Entities
 
         [BsonElement("city")]
         public string City { get; set; }
+
+        [BsonElement("phoneNumber")]
+        public string PhoneNumber { get; set; }
+
+        [BsonElement("emailId")]
+        public string EmailId { get; set; }
     }
 
     public class VendorDetail

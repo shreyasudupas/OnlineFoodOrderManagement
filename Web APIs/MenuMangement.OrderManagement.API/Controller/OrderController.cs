@@ -1,9 +1,11 @@
 ﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
+using MenuManagment.Mongo.Domain.Enum;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.AddOrderInformation;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderInformation;
 using OrderManagement.Microservice.Core.Querries.Orders.GetAllOrders;
+using OrderManagement.Microservice.Core.Querries.Orders.GetVendorOrders;
 
 namespace MenuMangement.OrderManagement.API.Controller
 {
@@ -25,6 +27,19 @@ namespace MenuMangement.OrderManagement.API.Controller
         public async Task<OrderInformationDto> UpdateOrderInformation([FromBody] UpdateOrderInformationCommand updateOrderInformationCommand)
         {
             return await Mediator.Send(updateOrderInformationCommand);
+        }
+
+        [HttpGet("/api/order/list/status")]
+        public async Task<List<OrderInformationDto>> GetOrdersBasedOnStatus([FromQuery]string vendorId,string orderStatus)
+        {
+            return await Mediator.Send(new GetVendorOrdersBasedOnOrderStatusQuery
+            {
+                VendorStatus = new GetVendorByStatusRecord
+                {
+                    OrderStatus = (OrderStatusEnum)Enum.Parse(typeof(OrderStatusEnum),orderStatus),
+                    VendorId = vendorId
+                }
+            });
         }
     }
 }

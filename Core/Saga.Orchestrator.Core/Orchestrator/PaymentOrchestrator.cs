@@ -90,7 +90,9 @@ namespace Saga.Orchestrator.Core.Orchestrator
                                             Longitude = paymentInformation.UserAddress.Longitude,
                                             UserId = paymentInformation.UserId,
                                             Area = paymentInformation.UserAddress.Area,
-                                            City = paymentInformation.UserAddress.City
+                                            City = paymentInformation.UserAddress.City,
+                                            PhoneNumber = paymentInformation.UserAddress.PhoneNumber,
+                                            EmailId = paymentInformation.UserAddress.EmailId
                                         },
                                         MenuItems = new List<MenuItemDto>(),
                                         VendorDetail = new VendorDetailDto

@@ -1,0 +1,47 @@
+[{
+  "_id": {
+    "$oid": "65846bf6d32b123fcdec2f38"
+  },
+  "cartId": "64afed494f4706702ff29726",
+  "menuItems": [
+    {
+      "id": "649d94bcfc1379d6857a9b75",
+      "vendorId": "64230eaa0b6042e775edad46",
+      "itemName": "Rava Idly",
+      "image": {
+        "imageId": "",
+        "imageFileName": ""
+      },
+      "foodType": "Vegiterian",
+      "category": "Breakfast",
+      "price": 30,
+      "discount": 0,
+      "quatity": 1
+    }
+  ],
+  "totalPrice": 30,
+  "paymentDetail": {
+    "price": 30,
+    "selectedPayment": "Reward",
+    "methodOfDelivery": "Offline",
+    "paymentSuccess": true
+  },
+  "userDetail": {
+    "userId": "6ea2af92-02cc-420f-be99-73625bda3ce1",
+    "fullAddress": "2nd Cross Road ,Katriguppe",
+    "latitude": 12.9302528,
+    "longitude": 77.5487488,
+    "area": "Katriguppe",
+    "city": "Bengaluru",
+    "phoneNumber": "383843430",
+    "emailId": "shreyasudupas@gmail.com"
+  },
+  "orderPlacedDateTime": {
+    "$date": "2023-12-21T16:46:46.101Z"
+  },
+  "orderStatus": "OrderPlaced",
+  "vendorDetail": {
+    "vendorId": "64230eaa0b6042e775edad46",
+    "vendorName": "Vendor 1"
+  }
+}]

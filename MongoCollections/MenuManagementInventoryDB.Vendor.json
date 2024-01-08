@@ -58,7 +58,9 @@
   "image": {
     "imageId": "64874a56620fccc959d51e33",
     "imageFileName": "Vendor 1_64874a56620fccc959d51e33.jpg"
-  }
+  },
+  "vendorType": "Online",
+  "registrationProcess": "Completed"
 },
 {
   "_id": {
@@ -108,7 +110,9 @@
   "image": {
     "imageId": "64d0cb432d5114a8add81cdc",
     "imageFileName": "SLV Upahar_64d0cb432d5114a8add81cdc.jpg"
-  }
+  },
+  "vendorType": "Online",
+  "registrationProcess": "Completed"
 },
 {
   "_id": {
@@ -170,7 +174,9 @@
   "image": {
     "imageId": "",
     "imageFileName": ""
-  }
+  },
+  "vendorType": "Online",
+  "registrationProcess": "Completed"
 },
 {
   "_id": {
@@ -232,7 +238,9 @@
   "image": {
     "imageId": "",
     "imageFileName": ""
-  }
+  },
+  "vendorType": "Online",
+  "registrationProcess": "Completed"
 },
 {
   "_id": {
@@ -294,7 +302,9 @@
   "image": {
     "imageId": "",
     "imageFileName": ""
-  }
+  },
+  "vendorType": "Online",
+  "registrationProcess": "Completed"
 },
 {
   "_id": {
@@ -356,5 +366,38 @@
   "image": {
     "imageId": "",
     "imageFileName": ""
-  }
+  },
+  "vendorType": "Online",
+  "registrationProcess": "Completed"
+},
+{
+  "_id": {
+    "$oid": "65008617477aa4889d5e6976"
+  },
+  "vendorName": "Meghana Biriyani",
+  "vendorDescription": "Meghana Biriyani Jayanagar 4th Block",
+  "categories": [],
+  "cuisineTypes": [],
+  "rating": 0,
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "area": "Jayanagar 4th Block",
+  "coordinates": {
+    "type": "Point",
+    "coordinates": [
+      12.926252692762848,
+      77.58341610431673
+    ]
+  },
+  "addressLine1": "33rd Cross Road, Jayanagar 4th Block, South Zone, Bengaluru, Bangalore South, Bangalore Urban, Karnataka, 5600011, India",
+  "addressLine2": "",
+  "openTime": "09:00:06",
+  "closeTime": "23:00:06",
+  "active": false,
+  "image": {
+    "imageId": "",
+    "imageFileName": ""
+  },
+  "vendorType": "Online & Offline",
+  "registrationProcess": "Completed"
 }]

@@ -31,5 +31,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public string Area { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
+        public string PhoneNumber { get; set; }
+        public string EmailId { get; set; }
     }
 }

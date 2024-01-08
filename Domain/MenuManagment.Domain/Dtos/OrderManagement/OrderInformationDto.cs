@@ -46,6 +46,8 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public string Area { get; set; }
 
         public string City { get; set; }
+        public string PhoneNumber { get; set; }
+        public string EmailId { get; set; }
     }
 
     public class VendorDetailDto

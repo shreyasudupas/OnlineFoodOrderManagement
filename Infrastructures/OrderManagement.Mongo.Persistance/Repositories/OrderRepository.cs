@@ -76,10 +76,28 @@ namespace OrderManagement.Mongo.Persistance.Repositories
                 var builder = Builders<OrderInformation>.Filter;
                 var filter = builder.Eq(order => order.UserDetail.UserId, userId);
 
-                result = await ListDocumentsByFilter(filter, x => x.OrderPlacedDateTime);
+                result = await ListDocumentsByDesendingSortFilter(filter, x => x.OrderPlacedDateTime);
             }
             
             return result;
+        }
+
+        public async Task<List<OrderInformation>?> GetOrderInformationBasedOnOrderStatus(string vendorId,string orderStatus)
+        {
+            List<OrderInformation> result = new();
+            if(!string.IsNullOrEmpty(vendorId) && !string.IsNullOrEmpty(orderStatus))
+            {
+                var builder = Builders<OrderInformation>.Filter;
+                var filter = builder.Eq(order => order.VendorDetail.VendorId, vendorId) & builder.Eq(order => order.OrderStatus, orderStatus);
+
+                result = await ListDocumentsByDesendingSortFilter(filter,o=>o.OrderPlacedDateTime);
+                return result;
+            }
+            else
+            {
+                _logger.LogError("vendorId: {0} is empty or orderStatus: {1} is empty",vendorId,orderStatus);
+                return null;
+            }
         }
     }
 }
