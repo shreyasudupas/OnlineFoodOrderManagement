@@ -35,6 +35,9 @@ namespace MenuManagment.Mongo.Domain.Entities
 
         [BsonElement("vendorDetail")]
         public VendorDetail VendorDetail { get; set; }
+
+        [BsonElement("uiOrderNumber")]
+        public long UIOrderNumber { get; set; }   //Only to identity by the User in the UI
     }
 
     public class PaymentOrderDetail

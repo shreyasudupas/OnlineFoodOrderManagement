@@ -99,5 +99,26 @@ namespace OrderManagement.Mongo.Persistance.Repositories
                 return null;
             }
         }
+
+        //This function is to get the order number which will be shown in the UI for User to identify the order Numbers
+        public async Task<long> GetNextUIBasedOrderNumber(string vendorId)
+        {
+            long uiOrderNumber = 0;
+            var builder = Builders<OrderInformation>.Filter;
+            var filter = builder.Eq(order => order.VendorDetail.VendorId, vendorId);
+
+            var getAllOrder = await ListDocumentsByDesendingSortFilter(filter, order => order.OrderPlacedDateTime);
+            var getLatestOrder = getAllOrder.FirstOrDefault();
+            if (getLatestOrder != null)
+            {
+                uiOrderNumber = getLatestOrder.UIOrderNumber + 1;
+            }
+            else
+            {
+                uiOrderNumber++;
+            }
+
+            return uiOrderNumber;
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
 
         public OrderStatusEnum OrderStatus { get; set; }
         public VendorDetailDto VendorDetail { get; set; }
+        public long UIOrderNumber { get; set; }
     }
 
     public class PaymentOrderDetailDto

@@ -26,6 +26,8 @@ namespace OrderManagement.Microservice.Core.Commands.OrderInformationCommand.Add
         public async Task<OrderInformationDto> Handle(AddOrderInformationCommand request, CancellationToken cancellationToken)
         {
             var mapFromDtoModel = _mapper.Map<OrderInformation>(request.OrderInfo);
+            var getUiBasedOrderId = await _orderRepository.GetNextUIBasedOrderNumber(request.OrderInfo.VendorDetail.VendorId);
+            mapFromDtoModel.UIOrderNumber = getUiBasedOrderId;
             var orderDetails = await _orderRepository.AddOrderInformation(mapFromDtoModel);
 
             var response = _mapper.Map<OrderInformationDto>(orderDetails);

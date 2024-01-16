@@ -29,17 +29,25 @@ namespace MenuMangement.OrderManagement.API.Controller
             return await Mediator.Send(updateOrderInformationCommand);
         }
 
-        [HttpGet("/api/order/list/status")]
-        public async Task<List<OrderInformationDto>> GetOrdersBasedOnStatus([FromQuery]string vendorId,string orderStatus)
+        [HttpPost("/api/order/list/status")]
+        public async Task<List<OrderInformationDto>> GetOrdersBasedOnStatus([FromBody] GetOrderStatusByVendorDto getOrderStatusByVendor)
         {
-            return await Mediator.Send(new GetVendorOrdersBasedOnOrderStatusQuery
+            List<OrderStatusEnum> orderStatusList = new();
+            foreach (var status in getOrderStatusByVendor.VendorStatus)
             {
-                VendorStatus = new GetVendorByStatusRecord
+                orderStatusList.Add((OrderStatusEnum)Enum.Parse(typeof(OrderStatusEnum), status));
+            }
+
+            var query = new GetVendorOrdersBasedOnOrderStatusQuery { 
+                VendorStatus =  new GetVendorByStatusRecord
                 {
-                    OrderStatus = (OrderStatusEnum)Enum.Parse(typeof(OrderStatusEnum),orderStatus),
-                    VendorId = vendorId
+                    VendorId = getOrderStatusByVendor.VendorId,
+                    OrderStatus = orderStatusList.ToArray()
                 }
-            });
+            };
+
+            var result = await Mediator.Send(query);
+            return result;
         }
     }
 }

@@ -30,10 +30,18 @@ namespace OrderManagement.Microservice.Core.Querries.Orders.GetVendorOrders
         {
             if(request is not null)
             {
-                var ordersByVendor = await _orderRepository.GetOrderInformationBasedOnOrderStatus(request.VendorStatus.VendorId,
-                    request.VendorStatus.OrderStatus.ToString());
-                var orderDtos = _mapper.Map<List<OrderInformationDto>>(ordersByVendor);
-                return orderDtos;
+                List<OrderInformationDto> result = new();
+
+                foreach(var status in request.VendorStatus.OrderStatus)
+                {
+                    var ordersByVendor = await _orderRepository.GetOrderInformationBasedOnOrderStatus(request.VendorStatus.VendorId,
+                        status.ToString());
+                    var orderDtos = _mapper.Map<List<OrderInformationDto>>(ordersByVendor);
+
+                    result.AddRange(orderDtos);
+                }
+                
+                return result;
             }
             else
             {
