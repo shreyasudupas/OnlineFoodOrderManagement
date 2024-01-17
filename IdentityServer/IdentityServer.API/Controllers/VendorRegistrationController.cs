@@ -3,6 +3,7 @@ using IdenitityServer.Core.Domain.Model;
 using IdenitityServer.Core.Features.Register;
 using IdenitityServer.Core.Features.Utility;
 using IdenitityServer.Core.Features.Utility.UserInfo;
+using IdenitityServer.Core.Features.Vendor.Commands;
 using IdenitityServer.Core.Features.VendorMapping.Commands.AddVendorUserMapping;
 using IdenitityServer.Core.Features.VendorMapping.Commands.UpdateVendorUserMapping;
 using IdenitityServer.Core.Features.VendorMapping.Query.GetVendorUserBasedOnEmailId;
@@ -93,6 +94,13 @@ namespace IdentityServer.API.Controllers
                                         EmailId = userInfo.Email,
                                         Username = userInfo.UserName
                                     }
+                                });
+
+                                //add vendorId claim to the user
+                                var userVendorIdClaim = await _mediator.Send(new AddVendorIdToClaimCommand
+                                {
+                                    UserId = userInfo.Id,
+                                    VendorId = decryptVendorId
                                 });
                             }
                             else

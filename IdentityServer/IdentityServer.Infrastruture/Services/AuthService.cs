@@ -247,22 +247,22 @@ namespace IdentityServer.Infrastruture.Services
             return vendorAddress;
         }
 
-        public async Task<bool> AddVendorClaim(VendorUserIdMapping vendorUserIdMapping)
+        public async Task<bool> AddVendorClaim(string userId, string vendorId)
         {
-            var user = await _userManager.FindByIdAsync(vendorUserIdMapping.UserId);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if(user != null)
             {
-                var vendorIdClaim = new Claim("vendorId", vendorUserIdMapping.VendorId);
+                var vendorIdClaim = new Claim("vendorId", vendorId);
 
                 var result1 = await _userManager.AddClaimAsync(user, vendorIdClaim);
-                _logger.LogInformation($"Claim for user: {vendorUserIdMapping.UserId}, vendorId success:{result1.Succeeded}");
+                _logger.LogInformation("Claim for user: {0}, vendorId success:{1}",userId,result1.Succeeded);
 
                 return true;
             }
             else
             {
-                _logger.LogError($"user not found with id: {vendorUserIdMapping.UserId}");
+                _logger.LogError("user not found with id: {0}", userId);
                 return false;
             }
         }

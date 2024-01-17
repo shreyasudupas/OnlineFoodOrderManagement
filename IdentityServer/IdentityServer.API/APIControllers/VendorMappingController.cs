@@ -34,7 +34,7 @@ namespace IdentityServer.API.APIControllers
         }
 
         [HttpGet("/api/vendor-user-mapping/enabled")]
-        public async Task<bool> IsVendorUserMappingEnabled([FromQuery] string vendorId,string userId)
+        public async Task<VendorUserMappingEnableResponse> IsVendorUserMappingEnabled([FromQuery] string vendorId,string userId)
         {
             return await Mediator.Send(new CheckIfVendorsUserEnabledQuery { VendorId = vendorId, UserId = userId });
         }

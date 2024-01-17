@@ -35,26 +35,9 @@ namespace IdenitityServer.Core.Features.VendorMapping.Query.GetAllVendorUserMapp
         public async Task<List<VendorMappingResponse>> Handle(GetAllVendorUserMappingQuery request, CancellationToken cancellationToken)
         {
             var userMappingResult = await _vendorUserMappingService.GetVendorUserMapping(request.VendorId);
-            var mapToResposne = _mapper.Map<List<VendorMappingResponse>>(userMappingResult);
-
-            foreach(var user in mapToResposne)
-            {
-                if(user.UserId != null)
-                {
-                    var userInfo = await _userService.GetUserInformationById(user.UserId);
-
-                    if(userInfo != null)
-                    {
-                        user.Username = userInfo.UserName;
-                        user.EmailId = userInfo.Email;
-                    }
-                    else
-                    {
-                        _logger.LogError($"Error in getting User mapping for vendorId: {request.VendorId} and uSerId:{user.UserId}");
-                    }
-                }
-            }
-            return mapToResposne;
+            var mapResponse = _mapper.Map<List<VendorMappingResponse>>(userMappingResult);
+            
+            return mapResponse;
         }
     }
 }

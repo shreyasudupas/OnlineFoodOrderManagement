@@ -1,4 +1,5 @@
 ﻿using IdenitityServer.Core.Features.Utility;
+using IdenitityServer.Core.Features.Vendor.Commands;
 using IdenitityServer.Core.Features.Vendor.Query.IsVendorEnabledQuery;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,12 @@ namespace IdentityServer.API.APIControllers
         public async Task<bool> UpdateUserEnable([FromBody] UpdateUserEnableCommand command)
         {
             return await Mediator.Send(command);
+        }
+
+        [HttpPost("/api/vendor/add/vendorClaim")]
+        public async Task<bool> AddVendorClaimToUser([FromBody] AddVendorIdToClaimCommand addVendorIdToClaimCommand)
+        {
+            return await Mediator.Send(addVendorIdToClaimCommand);
         }
     }
 }

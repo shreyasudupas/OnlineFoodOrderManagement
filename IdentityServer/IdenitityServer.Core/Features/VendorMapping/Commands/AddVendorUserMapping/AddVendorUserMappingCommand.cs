@@ -39,7 +39,7 @@ namespace IdenitityServer.Core.Features.VendorMapping.Commands.AddVendorUserMapp
 
             if(!string.IsNullOrEmpty(request.NewVendorUserMapping.VendorId))
             {
-                var vendorClaim = await _authService.AddVendorClaim(mapToModel);
+                var vendorClaim = await _authService.AddVendorClaim(mapToModel.UserId,mapToModel.VendorId);
                 if (vendorClaim)
                 {
                     _logger.LogInformation("Vendor Claim Added for Vendor {0}",request.NewVendorUserMapping.VendorId);
