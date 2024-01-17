@@ -1,4 +1,6 @@
-﻿namespace IdenitityServer.Core.Domain.Response
+﻿using IdenitityServer.Core.Domain.Enums;
+
+namespace IdenitityServer.Core.Domain.Response
 {
     public class VendorMappingResponse
     {
@@ -8,5 +10,6 @@
         public string EmailId { get; set; }
         public string VendorId { get; set; }
         public bool Enabled { get; set; }
+        public VendorUserTypeEnum UserType { get; set; }
     }
 }

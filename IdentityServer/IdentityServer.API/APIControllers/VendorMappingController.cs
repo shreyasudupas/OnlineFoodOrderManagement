@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.VendorMapping.Commands.AddVendorUserMapping;
 using IdenitityServer.Core.Features.VendorMapping.Commands.UpdateVendorUserMapping;
+using IdenitityServer.Core.Features.VendorMapping.Query.CheckIfVendorsUserEnabled;
 using IdenitityServer.Core.Features.VendorMapping.Query.GetAllVendorUserMapping;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,12 @@ namespace IdentityServer.API.APIControllers
         public async Task<VendorMappingResponse> UpdateVendorUserMapping([FromBody] UpdateVendorUserMappingCommand updateVendorUserMapping)
         {
             return await Mediator.Send(updateVendorUserMapping);
+        }
+
+        [HttpGet("/api/vendor-user-mapping/enabled")]
+        public async Task<bool> IsVendorUserMappingEnabled([FromQuery] string vendorId,string userId)
+        {
+            return await Mediator.Send(new CheckIfVendorsUserEnabledQuery { VendorId = vendorId, UserId = userId });
         }
     }
 }

@@ -43,18 +43,37 @@ namespace IdentityServer.Infrastruture.Services
         public async Task<VendorUserIdMapping> UpdateVendorUserIdMapping(VendorUserIdMapping vendorUserIdMapping)
         {
             var getVendorUserMapping = await _applicationDbContext.VendorUserIdMappings
-                .Where(v => v.Id == vendorUserIdMapping.Id).FirstOrDefaultAsync();
+                .Where(v => v.Id == vendorUserIdMapping.Id)
+                .FirstOrDefaultAsync();
 
             if(getVendorUserMapping != null)
             {
-                getVendorUserMapping.Enabled = vendorUserIdMapping.Enabled;
                 getVendorUserMapping.UserId = vendorUserIdMapping.UserId;
                 getVendorUserMapping.VendorId = vendorUserIdMapping.VendorId;
+                getVendorUserMapping.EmailId = vendorUserIdMapping.EmailId;
+                getVendorUserMapping.Username = vendorUserIdMapping.Username;
 
                 await _applicationDbContext.SaveChangesAsync();
             }
 
             return vendorUserIdMapping;
+        }
+
+        public async Task<VendorUserIdMapping> GetVendorUserMappingBasedOnEmailId(string emailId)
+        {
+            var vendorUserMapping = await _applicationDbContext.VendorUserIdMappings
+                .Where(v => v.EmailId == emailId)
+                .FirstOrDefaultAsync();
+            return vendorUserMapping;
+        }
+
+        public async Task<VendorUserIdMapping> GetVendorUserMapping(string userId,string vendorId)
+        {
+            var vendorUserMapping = await _applicationDbContext.VendorUserIdMappings
+                .Where(v => v.UserId == userId && v.VendorId == vendorId)
+                .FirstOrDefaultAsync();
+
+            return vendorUserMapping;
         }
     }
 }

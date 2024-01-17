@@ -5,6 +5,8 @@ using IdenitityServer.Core.Features.Login;
 using IdenitityServer.Core.Features.Logout;
 using IdenitityServer.Core.Features.Register;
 using IdenitityServer.Core.Features.Utility;
+using IdenitityServer.Core.Features.VendorMapping.Commands.AddVendorUserMapping;
+using IdenitityServer.Core.Features.VendorMapping.Commands.UpdateVendorUserMapping;
 using IdentityModel;
 using IdentityServer.API.Controllers.ViewModels;
 using IdentityServer.Infrastruture.Database;

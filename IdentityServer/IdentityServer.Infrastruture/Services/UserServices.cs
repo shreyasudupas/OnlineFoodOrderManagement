@@ -412,5 +412,12 @@ namespace IdentityServer.Infrastruture.Services
                 return false;
             }
         }
+
+        public async Task<UserProfile> GetUserInfoByUserName(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var modelMapUserProfile = user.MapToProfile(_context);
+            return modelMapUserProfile;
+        }
     }
 }
