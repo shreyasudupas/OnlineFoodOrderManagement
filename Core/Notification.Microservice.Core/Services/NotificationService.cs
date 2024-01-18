@@ -4,11 +4,11 @@ using Notification.Microservice.Core.Interface;
 
 namespace Notification.Microservice.Core.Services
 {
-    public class GetNotificationService : INotificationService
+    public class NotificationService : INotificationService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public GetNotificationService(IServiceScopeFactory serviceScopeFactory)
+        public NotificationService(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
         }

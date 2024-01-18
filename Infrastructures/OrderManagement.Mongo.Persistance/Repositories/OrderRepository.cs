@@ -88,7 +88,8 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             if(!string.IsNullOrEmpty(vendorId) && !string.IsNullOrEmpty(orderStatus))
             {
                 var builder = Builders<OrderInformation>.Filter;
-                var filter = builder.Eq(order => order.VendorDetail.VendorId, vendorId) & builder.Eq(order => order.OrderStatus, orderStatus);
+                var filter = builder.Eq(order => order.VendorDetail.VendorId, vendorId) & builder.Eq(order => order.OrderStatus, orderStatus)
+                    & builder.Lte(order=>order.OrderPlacedDateTime, DateTime.Now);
 
                 result = await ListDocumentsByDesendingSortFilter(filter,o=>o.OrderPlacedDateTime);
                 return result;

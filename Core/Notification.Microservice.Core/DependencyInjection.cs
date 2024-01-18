@@ -28,7 +28,7 @@ namespace Notification.Microservice.Core
 
             services.AddSignalR();
 
-            services.AddSingleton<INotificationService, GetNotificationService>();
+            services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<IConnectionMapping,ConnectionMapping>();
 
             return services;
