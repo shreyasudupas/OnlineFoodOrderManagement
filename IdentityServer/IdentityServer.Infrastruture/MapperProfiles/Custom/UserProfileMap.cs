@@ -27,7 +27,7 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                 UserName = applicationUser.UserName,
                 LockoutEnd = applicationUser.LockoutEnd,
                 AccessFailedCount = applicationUser.AccessFailedCount,
-                Address = GetUserAddressInfo(applicationUser, context),
+                //Address = GetUserAddressInfo(applicationUser, context),
                 //IsAdmin = applicationUser.IsAdmin,
                 ImagePath = applicationUser.ImagePath,
                 CartAmount = applicationUser.CartAmount,

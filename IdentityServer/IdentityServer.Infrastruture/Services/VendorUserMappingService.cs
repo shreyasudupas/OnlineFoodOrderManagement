@@ -1,5 +1,6 @@
 ﻿using IdenitityServer.Core.Common.Interfaces;
 using IdenitityServer.Core.Domain.DBModel;
+using IdenitityServer.Core.Domain.Response;
 using IdentityServer.Infrastruture.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,10 +22,26 @@ namespace IdentityServer.Infrastruture.Services
             _logger = logger;
         }
 
-        public async Task<List<VendorUserIdMapping>> GetVendorUserMapping(string VendorId)
+        public async Task<List<VendorMappingResponse>> GetVendorUserMapping(string VendorId)
         {
-            var vendorUserList = await _applicationDbContext.VendorUserIdMappings
-                .Where(v => v.VendorId == VendorId).ToListAsync();
+            //var vendorUserList = await _applicationDbContext.VendorUserIdMappings
+            //    .Where(v => v.VendorId == VendorId).ToListAsync();
+            var query = (from vendorUserMapping in _applicationDbContext.VendorUserIdMappings
+                         join userInfo in _applicationDbContext.Users
+                        on vendorUserMapping.UserId equals userInfo.Id into VendorUserGroup
+                         from userEnable in VendorUserGroup.DefaultIfEmpty()
+                         where vendorUserMapping.VendorId == VendorId
+                         select new VendorMappingResponse
+                         {
+                             Id = vendorUserMapping.Id,
+                             EmailId = vendorUserMapping.EmailId,
+                             Enabled = (userEnable == null) ? false : userEnable.Enabled,
+                             UserId = vendorUserMapping.UserId,
+                             Username = vendorUserMapping.Username,
+                             UserType = vendorUserMapping.UserType,
+                             VendorId = vendorUserMapping.VendorId
+                         });
+            var vendorUserList = await query.ToListAsync();
 
             return vendorUserList;
         }
@@ -40,7 +57,7 @@ namespace IdentityServer.Infrastruture.Services
             return vendorUserIdMapping;
         }
 
-        public async Task<VendorUserIdMapping> UpdateVendorUserIdMapping(VendorUserIdMapping vendorUserIdMapping)
+        public async Task<VendorUserIdMapping> UpdateVendorUserIdMapping(VendorUserIdMapping vendorUserIdMapping,bool enabled)
         {
             var getVendorUserMapping = await _applicationDbContext.VendorUserIdMappings
                 .Where(v => v.Id == vendorUserIdMapping.Id)
@@ -52,6 +69,10 @@ namespace IdentityServer.Infrastruture.Services
                 getVendorUserMapping.VendorId = vendorUserIdMapping.VendorId;
                 getVendorUserMapping.EmailId = vendorUserIdMapping.EmailId;
                 getVendorUserMapping.Username = vendorUserIdMapping.Username;
+
+                var userProfile = await _applicationDbContext.Users.Where(x => x.Id == vendorUserIdMapping.UserId)
+                                .FirstOrDefaultAsync();
+                userProfile.Enabled = enabled;
 
                 await _applicationDbContext.SaveChangesAsync();
             }

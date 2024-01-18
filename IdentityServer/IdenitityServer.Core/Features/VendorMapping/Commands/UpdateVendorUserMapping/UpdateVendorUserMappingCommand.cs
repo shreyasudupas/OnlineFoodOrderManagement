@@ -17,23 +17,28 @@ namespace IdenitityServer.Core.Features.VendorMapping.Commands.UpdateVendorUserM
     {
         private readonly IVendorUserMappingService _vendorUserMappingService;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly IUtilsService _utilsService;
 
         public UpdateVendorUserMappingCommandHandler(IVendorUserMappingService vendorUserMappingService,
             IMapper mapper,
-            IUserService userService)
+            IUtilsService utilsService)
         {
             _vendorUserMappingService = vendorUserMappingService;
             _mapper = mapper;
-            _userService = userService;
+            _utilsService = utilsService;
         }
 
         public async Task<VendorMappingResponse> Handle(UpdateVendorUserMappingCommand request, CancellationToken cancellationToken)
         {
             var mapToModel = _mapper.Map<VendorUserIdMapping>(request.UpdateVendorUserMapping);
-            var result = await _vendorUserMappingService.UpdateVendorUserIdMapping(mapToModel);
+            var result = await _vendorUserMappingService.UpdateVendorUserIdMapping(mapToModel,request.UpdateVendorUserMapping.Enabled);
             var mapToResponse = _mapper.Map<VendorMappingResponse>(result);
-            //enable is not updated from here
+
+            if (result is not null)
+            {
+                mapToResponse.Enabled = request.UpdateVendorUserMapping.Enabled;
+            }
+
             return mapToResponse;
         }
     }
