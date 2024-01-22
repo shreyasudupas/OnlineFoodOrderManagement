@@ -1,4 +1,4 @@
-﻿namespace Saga.Orchestrator.Core.Interfaces.Wrappers
+﻿namespace MenuMangement.HttpClient.Domain.Interfaces.Wrappers
 {
     public interface IIdsHttpClientWrapper
     {

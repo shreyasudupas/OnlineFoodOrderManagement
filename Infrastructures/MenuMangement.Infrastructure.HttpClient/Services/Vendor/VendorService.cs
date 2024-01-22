@@ -1,8 +1,8 @@
 ﻿using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
+using MenuMangement.HttpClient.Domain.Interfaces.Services;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Saga.Orchestrator.Core.Interfaces.Services;
 
 namespace MenuMangement.Infrastructure.HttpClient.Services.Vendor;
 public class VendorService : BaseClientWrapper ,IVendorSerivce

@@ -1,6 +1,6 @@
-﻿using MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient;
+﻿using MenuMangement.HttpClient.Domain.Interfaces.Wrappers;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient;
 using Microsoft.Extensions.Logging;
-using Saga.Orchestrator.Core.Interfaces.Wrappers;
 
 namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.CartInformationClient
 {

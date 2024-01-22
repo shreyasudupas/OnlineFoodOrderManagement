@@ -1,8 +1,8 @@
 ﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
+using MenuMangement.HttpClient.Domain.Dtos;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Mvc;
 using Saga.Orchestrator.Core.Commands.PaymentCommand;
-using Saga.Orchestrator.Core.Models.Dtos;
 
 namespace MenuOrder.OrchestratorMicroService.API.Controllers
 {

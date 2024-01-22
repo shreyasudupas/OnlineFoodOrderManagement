@@ -1,4 +1,4 @@
-﻿using MenuManagement.HttpClient.Domain.Interface;
+﻿using MenuMangement.HttpClient.Domain.Interfaces.Wrappers;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text;

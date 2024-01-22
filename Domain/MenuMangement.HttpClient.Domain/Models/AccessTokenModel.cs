@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Saga.Orchestrator.Core.Models
+namespace MenuMangement.HttpClient.Domain.Models
 {
     public class AccessTokenModel
     {

@@ -71,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Infrastrutur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.MessagingQueue.Core", "Core\VendorRegistration.Webjob.Core\MenuManagement.MessagingQueue.Core.csproj", "{A1EDE62B-C935-466E-B757-7C5AA795F550}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.HttpClient.Domain", "Shared\MenuManagement.RabbitMqClient.Domain\MenuManagement.HttpClient.Domain.csproj", "{1FCAD0ED-E106-429F-A547-36E9C5AC55E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.HttpClient.Domain", ",", "{1FCAD0ED-E106-429F-A547-36E9C5AC55E5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuMangement.RabbitMqClient.Domain", "Domain\MenuMangement.RabbitMqClient.Domain\MenuMangement.RabbitMqClient.Domain.csproj", "{6621E721-815F-4D2E-9EC3-CD7C2851DD14}"
 EndProject
@@ -94,7 +94,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoCollections", "MongoCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saga.Orchestrator.Core", "Core\Saga.Orchestrator.Core\Saga.Orchestrator.Core.csproj", "{013FCEEA-4D66-4BAE-A137-66C26B02F6C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuOrder.OrchestratorMicroService.API", "Web APIs\MenuOrder.OrchestratorMicroService.API\MenuOrder.OrchestratorMicroService.API.csproj", "{5512C92D-68B1-43E6-A285-322130FC9161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.OrchestratorMicroService.API", "Web APIs\MenuOrder.OrchestratorMicroService.API\MenuOrder.OrchestratorMicroService.API.csproj", "{5512C92D-68B1-43E6-A285-322130FC9161}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.SignalR.HubService", "Web APIs\MenuManagement.SignalR.HubService\MenuManagement.SignalR.HubService.csproj", "{F6CC0C33-8BC4-4718-8515-DD570CAFE8F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRHub.Base.Infrastructure", "Infrastructures\SignalRHub.Base.Infrastructure\SignalRHub.Base.Infrastructure.csproj", "{09CA1007-C087-4EB5-A3AC-6030437F3E0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuMangement.HttpClient.Domain", "Domain\MenuMangement.HttpClient.Domain\MenuMangement.HttpClient.Domain.csproj", "{5700D9E5-8900-4013-A981-3ECDF6928140}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -226,6 +232,18 @@ Global
 		{5512C92D-68B1-43E6-A285-322130FC9161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5512C92D-68B1-43E6-A285-322130FC9161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5512C92D-68B1-43E6-A285-322130FC9161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6CC0C33-8BC4-4718-8515-DD570CAFE8F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6CC0C33-8BC4-4718-8515-DD570CAFE8F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6CC0C33-8BC4-4718-8515-DD570CAFE8F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6CC0C33-8BC4-4718-8515-DD570CAFE8F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09CA1007-C087-4EB5-A3AC-6030437F3E0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09CA1007-C087-4EB5-A3AC-6030437F3E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09CA1007-C087-4EB5-A3AC-6030437F3E0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09CA1007-C087-4EB5-A3AC-6030437F3E0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5700D9E5-8900-4013-A981-3ECDF6928140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5700D9E5-8900-4013-A981-3ECDF6928140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5700D9E5-8900-4013-A981-3ECDF6928140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5700D9E5-8900-4013-A981-3ECDF6928140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -270,6 +288,9 @@ Global
 		{BB9F71C7-7A3B-4B54-93E9-1B0FE6AEC018} = {EC4FB9AF-520F-4422-ACE2-7498F259E28F}
 		{013FCEEA-4D66-4BAE-A137-66C26B02F6C1} = {71B47887-05DC-4269-8571-CEF8482A5638}
 		{5512C92D-68B1-43E6-A285-322130FC9161} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
+		{F6CC0C33-8BC4-4718-8515-DD570CAFE8F7} = {811FA712-EC2E-4759-B8D3-1F6428E99167}
+		{09CA1007-C087-4EB5-A3AC-6030437F3E0E} = {48513472-D17E-4F30-AFCB-FB29350ECB0E}
+		{5700D9E5-8900-4013-A981-3ECDF6928140} = {4611F8E5-4B06-4279-94CF-F1A7A449C0C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9205ABE5-5F68-4004-8637-2E366D0E7280}

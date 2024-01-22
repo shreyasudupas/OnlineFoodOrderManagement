@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Notification.Microservice.Core\Notification.Microservice.Core.csproj" />
-    <ProjectReference Include="..\..\Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MenuMangement.Infrastructure.HttpClient\MenuMangement.Infrastructure.HttpClient.csproj" />
     <ProjectReference Include="..\..\Infrastructures\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
     <ProjectReference Include="..\..\Infrastructures\Notification.Mongo.Persistance\Notification.Mongo.Persistance.csproj" />
     <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />

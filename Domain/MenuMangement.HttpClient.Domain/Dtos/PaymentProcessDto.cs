@@ -1,4 +1,4 @@
-﻿namespace Saga.Orchestrator.Core.Models.Dtos
+﻿namespace MenuMangement.HttpClient.Domain.Dtos
 {
     public class PaymentProcessDto
     {

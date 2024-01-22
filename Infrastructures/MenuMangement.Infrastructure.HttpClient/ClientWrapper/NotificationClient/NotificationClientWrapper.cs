@@ -1,5 +1,5 @@
-﻿using MenuManagement.HttpClient.Domain.Interface;
-using MenuManagement.MessagingQueue.Core.Models;
+﻿using MenuMangement.HttpClient.Domain.Interfaces.Wrappers;
+using MenuMangement.HttpClient.Domain.Model;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text;

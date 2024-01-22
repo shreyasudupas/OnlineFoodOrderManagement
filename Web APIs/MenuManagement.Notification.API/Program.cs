@@ -9,10 +9,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MongoDb.Shared.Persistance;
 using Notification.Microservice.Core;
-using Notification.Microservice.Core.Hub;
 using Notification.Mongo.Persistance;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MenuMangement.Infrastructure.HttpClient;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,8 +51,9 @@ var configuration = new ConfigurationBuilder()
     builder.Services.AddNotificationMongoInfrastructure(configuration);
     builder.Services.AddSharedInjection();
     builder.Services.AddSharedMongoServices(configuration);
+    builder.Services.AddInfrastrutureHttpClient(configuration);
 
-    builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -86,20 +88,6 @@ var configuration = new ConfigurationBuilder()
                 logger.LogError(context.Exception, "Authentication Failed");
 
                 return Task.CompletedTask;
-            },
-            OnMessageReceived = context =>
-            {
-                var accessToken = context.Request.Query["access_token"];
-
-                // If the request is for our hub...
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/hubs/notification")))
-                {
-                    // Read the token out of the query string
-                    context.Token = accessToken;
-                }
-                return Task.CompletedTask;
             }
         };
     });
@@ -129,7 +117,6 @@ app.RegisterSharedMiddleware();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<NotificationHub>("/hubs/notification");
     endpoints.MapControllers();
 });
 

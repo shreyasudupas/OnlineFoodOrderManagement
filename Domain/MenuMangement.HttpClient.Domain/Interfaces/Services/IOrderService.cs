@@ -1,6 +1,6 @@
 ﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
 
-namespace Saga.Orchestrator.Core.Interfaces.Services;
+namespace MenuMangement.HttpClient.Domain.Interfaces.Services;
 
 public interface IOrderService
 {

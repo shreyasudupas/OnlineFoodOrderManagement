@@ -1,11 +1,11 @@
 ﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
+using MenuMangement.HttpClient.Domain.Dtos;
+using MenuMangement.HttpClient.Domain.Interfaces.Services;
+using MenuMangement.HttpClient.Domain.Interfaces.Wrappers;
+using MenuMangement.HttpClient.Domain.Models;
+using MenuMangement.HttpClient.Domain.Orchestrator;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Saga.Orchestrator.Core.Interfaces.Orchestrator;
-using Saga.Orchestrator.Core.Interfaces.Services;
-using Saga.Orchestrator.Core.Interfaces.Wrappers;
-using Saga.Orchestrator.Core.Models;
-using Saga.Orchestrator.Core.Models.Dtos;
 
 namespace Saga.Orchestrator.Core.Orchestrator
 {

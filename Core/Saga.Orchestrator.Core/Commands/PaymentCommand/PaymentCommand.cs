@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
-using Saga.Orchestrator.Core.Interfaces.Orchestrator;
-using Saga.Orchestrator.Core.Models.Dtos;
+using MenuMangement.HttpClient.Domain.Dtos;
+using MenuMangement.HttpClient.Domain.Orchestrator;
 
 namespace Saga.Orchestrator.Core.Commands.PaymentCommand
 {

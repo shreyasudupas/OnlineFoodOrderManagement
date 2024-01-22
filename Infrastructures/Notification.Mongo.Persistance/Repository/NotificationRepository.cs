@@ -1,14 +1,10 @@
-﻿using AutoMapper;
-using MenuManagment.Mongo.Domain.Mongo.Entities;
+﻿using MenuManagment.Mongo.Domain.Mongo.Entities;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository.Notification;
 using MenuManagment.Mongo.Domain.Mongo.Models;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
-using Notification.Microservice.Core.Domain.Service;
-using Notification.Microservice.Core.Hub;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,20 +13,13 @@ namespace Notification.Mongo.Persistance.Repository
 {
     public class NotificationRepository : BaseRepository<Notifications>, INotificationRepository
     {
-        private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        private readonly IHubContext<NotificationHub, INotificationHub> _notificationHub;
-        private readonly IConnectionMapping _connectionMapping;
+
         public NotificationRepository(IMongoDBContext mongoDBContext,
-            IMapper mapper,
-            ILogger<NotificationRepository> logger,
-            IHubContext<NotificationHub, INotificationHub> notificationHub,
-            IConnectionMapping connectionMapping) : base(mongoDBContext)
+            ILogger<NotificationRepository> logger
+            ) : base(mongoDBContext)
         {
-            _mapper = mapper;
             _logger = logger;
-            _notificationHub = notificationHub;
-            _connectionMapping = connectionMapping;
         }
 
         public async Task<List<Notifications>> GetAllNotifications()
@@ -58,14 +47,9 @@ namespace Notification.Mongo.Persistance.Repository
                 _logger.LogInformation("AddNotification ended");
 
                 //call hub
-                var result = await GetNewNotificationCount(newNotification.UserId);
-                var connectionManagers = _connectionMapping.GetAllConnectionManager().Where(x=>x.Role == newNotification.Role);
+                //var notificationCount = await GetNewNotificationCount(newNotification.UserId);
                 
-                foreach(var connectionManager in connectionManagers)
-                {
-                    await _notificationHub.Clients.Client(connectionManager.ConnectionId).SendUserNotification(result);
-                }
-                
+                //await _notificationHubService.SendNotificationToConnectedUsers(newNotification.UserId, newNotification.Role, notificationCount);
 
                 return newNotification;
             }
@@ -87,11 +71,9 @@ namespace Notification.Mongo.Persistance.Repository
             {
                 _logger.LogInformation("UpdateNotificationToAsRead has updated");
 
-                var result = await GetNewNotificationCount(updateNotification.UserId);
-                var connectionManager = _connectionMapping.GetAllConnectionManager().Where(x => x.UserId == updateNotification.UserId)
-                    .FirstOrDefault();
-
-                await _notificationHub.Clients.Client(connectionManager.ConnectionId).SendUserNotification(result);
+                //var notificationCount = await GetNewNotificationCount(updateNotification.UserId);
+                
+                //await _notificationHubService.SendNotificationToConnectedUsers(updateNotification.UserId, updateNotification.Role, notificationCount);
 
                 return updateNotification;
             }else

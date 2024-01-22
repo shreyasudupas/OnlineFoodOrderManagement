@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IdenitityServer.Core.Domain.Model
+﻿namespace MenuMangement.HttpClient.Domain.Model
 {
     public class NotificationModel
     {
