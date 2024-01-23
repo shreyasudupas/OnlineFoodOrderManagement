@@ -289,6 +289,7 @@ namespace IdentityServer.Infrastruture.Database
                 {
                     UserName = "admin",
                     Email = "admin@test.com",
+                    Fullname = "Admin Lastname",
                     //Address = new List<UserAddress>
                     //            {
                     //                new UserAddress
@@ -312,6 +313,7 @@ namespace IdentityServer.Infrastruture.Database
                 {
                     UserName = "user",
                     Email = "user@test.com",
+                    Fullname = "User Lastname",
                     Address = new List<UserAddress>
                                 {
                                     new UserAddress
