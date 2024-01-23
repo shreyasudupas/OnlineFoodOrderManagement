@@ -34,7 +34,8 @@ namespace IdentityServer.API.GraphQL.Mutation
                         Enabled = user.Enabled,
                         EmailConfirmed = user.EmailConfirmed??false,
                         PhoneNumber = user.PhoneNumber,
-                        PhoneNumberConfirmed = user.PhoneNumberConfirmed??false
+                        PhoneNumberConfirmed = user.PhoneNumberConfirmed??false,
+                        Fullname = user.FullName
                     });
                 })
                 .Type<SaveUserInformationOutputType>()

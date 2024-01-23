@@ -34,7 +34,8 @@ namespace IdenitityServer.Core.MapperProfiles.Custom
                 Points = applicationUser.Points,
                 CreatedDate = applicationUser.CreatedDate,
                 Enabled = applicationUser.Enabled,
-                UserType = applicationUser.UserType
+                UserType = applicationUser.UserType,
+                Fullname = applicationUser.Fullname
             };
             return result;
         }

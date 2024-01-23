@@ -208,6 +208,7 @@ namespace IdentityServer.Infrastruture.Services
                 currentUser.EmailConfirmed = user.EmailConfirmed;
                 currentUser.PhoneNumber = (user.PhoneNumber == null) ? currentUser.PhoneNumber : user.PhoneNumber; //if input mutation variable value not passed
                 currentUser.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
+                currentUser.Fullname = user.Fullname;
 
                 var result = await _userManager.UpdateAsync(currentUser);
 

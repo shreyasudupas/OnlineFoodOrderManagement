@@ -56,5 +56,7 @@ namespace IdenitityServer.Core.Domain.DBModel
         public List<DropdownModel> Roles { get; set; }
         public bool Enabled { get; set; }
         public UserTypeEnum UserType { get; set; }
+
+        public string Fullname { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace IdenitityServer.Core.Domain.Request
         public string? PhoneNumber { get; set; }
 
         public bool? PhoneNumberConfirmed { get; set; }
+        public string FullName { get; set; }
     }
 }

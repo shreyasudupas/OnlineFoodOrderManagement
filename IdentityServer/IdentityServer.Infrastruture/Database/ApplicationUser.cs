@@ -17,5 +17,7 @@ namespace IdentityServer.Infrastruture.Database
         public bool Enabled { get; set; }
 
         public UserTypeEnum UserType { get; set; }
+
+        public string Fullname { get; set; }
     }
 }
