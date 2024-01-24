@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Entities
 {
@@ -17,8 +18,11 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("description")]
         public string Description { get; set; }
 
-        [BsonElement("userId")]
-        public string UserId { get; set; }
+        [BsonElement("fromUserId")]
+        public string FromUserId { get; set; }
+
+        [BsonElement("toUserId")]
+        public string ToUserId { get; set; }
 
         [BsonElement("role")]
         public string Role { get; set; }

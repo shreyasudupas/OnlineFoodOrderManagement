@@ -2,8 +2,10 @@
 {
     public record NotificationSignalRRequest
     {
-        public string UserId { get; set; }
-        public string Role { get; set; }
+        public string FromUserId { get; set; }
+        public bool isSendAll { get; set; }
+
+        public string ToUserId { get; set; }
         public int NotificationCount { get; set; }
     }
 }

@@ -35,15 +35,16 @@ namespace Notification.Microservice.Core.Command.AddNotification
             var response = await _notificationRepository.AddNotifications(mapModel);
             var mapToDto = _mapper.Map<NotificationDto>(response);
 
-            var count = await _notificationRepository.GetNewNotificationCount(request.NewNotification.UserId);
+            var count = await _notificationRepository.GetNewNotificationCount(request.NewNotification.FromUserId);
 
             if(!string.IsNullOrEmpty(response.Id))
             {
                 await _signalRNotificationClient.GetAsyncCall(new MenuMangement.HttpClient.Domain.Models.NotificationSignalRRequest
                 {
                     NotificationCount = count+1,
-                    Role = request.NewNotification.Role,
-                    UserId = request.NewNotification.UserId
+                    isSendAll = request.NewNotification.SendAll,
+                    FromUserId = request.NewNotification.FromUserId,
+                    ToUserId = request.NewNotification.ToUserId
                 }, "");
             }
             

@@ -11,20 +11,21 @@ public class NotificationService : INotificationHubService
     private readonly IHubContext<NotificationHub, INotificationHub> _notificationHub;
 
     public NotificationService(IConnectionManager connectionManager,
-        IHubContext<NotificationHub, INotificationHub> notificationHub)
+        IHubContext<NotificationHub, INotificationHub> notificationHub
+        )
     {
         _connectionManager = connectionManager;
         _notificationHub = notificationHub;
     }
 
-    public async Task SendNotificationToConnectedUsers(string userId,string role,int userNotificationCount)
+    public async Task SendNotificationToConnectedUsers(string toUserId,string role,int userNotificationCount)
     {
-        var connectionManagers = _connectionManager.GetAllUsersConnections().Where(x => x.Role == role);
+        var userSignalManager = _connectionManager.GetAllUsersConnections().Where(x => x.UserId == toUserId).FirstOrDefault();
 
-        foreach (var connectionManager in connectionManagers)
+        if (userSignalManager is not null)
         {
             await _notificationHub.Clients
-                .Client(connectionManager.ConnectionId)
+                .Client(userSignalManager.ConnectionId)
                 .SendUserNotification(userNotificationCount);
         }
     }

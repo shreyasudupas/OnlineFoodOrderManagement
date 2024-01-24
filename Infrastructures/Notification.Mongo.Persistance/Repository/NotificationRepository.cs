@@ -29,7 +29,7 @@ namespace Notification.Mongo.Persistance.Repository
         }
         public async Task<List<Notifications>> GetAllNotificationByUserId(string userId,Pagination pagination)
         {
-            var result = await GetAllItemsByPaginationWithFilter(n => n.UserId == userId, n=>n.RecordedTimeStamp,false , pagination);
+            var result = await GetAllItemsByPaginationWithFilter(n => n.FromUserId == userId, n=>n.RecordedTimeStamp,false , pagination);
             return result?.ToList();
         }
 
@@ -39,7 +39,7 @@ namespace Notification.Mongo.Persistance.Repository
             var recordedDateTime = newNotification.RecordedTimeStamp = System.DateTime.Now;
             await CreateOneDocument(newNotification);
 
-            var getNotification = await GetDocumentByFilter(n => n.Description == newNotification.Description && n.UserId == newNotification.UserId
+            var getNotification = await GetDocumentByFilter(n => n.Description == newNotification.Description && n.FromUserId == newNotification.FromUserId
                 && n.RecordedTimeStamp == recordedDateTime);
             if(getNotification != null)
             {
@@ -92,7 +92,7 @@ namespace Notification.Mongo.Persistance.Repository
 
         public async Task<int> GetNewNotificationCount(string userId)
         {
-            var response = await ListDocumentsByFilter(n => n.UserId == userId && n.Read == false);
+            var response = await ListDocumentsByFilter(n => n.FromUserId == userId && n.Read == false);
             var getCount = response.Count;
             return getCount;
         }

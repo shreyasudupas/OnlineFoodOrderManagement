@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MenuManagment.Microservice.Core.Dtos
 {
@@ -10,7 +11,8 @@ namespace MenuManagment.Microservice.Core.Dtos
 
         public string Description { get; set; }
 
-        public string UserId { get; set; }
+        public string FromUserId { get; set; }
+        public string ToUserId { get; set; }
 
         public string Role { get; set; }
 

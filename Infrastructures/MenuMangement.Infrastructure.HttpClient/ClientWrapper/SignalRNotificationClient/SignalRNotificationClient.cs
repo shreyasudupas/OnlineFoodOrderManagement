@@ -19,7 +19,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.SignalRNotificat
             try
             {
                 var clientName = "SignalRServiceClient";
-                var result = await GetApiCall($"count?userId={notificationSignalRRequest.UserId}&role={notificationSignalRRequest.Role}&count={notificationSignalRRequest.NotificationCount}", clientName, token);
+                var result = await GetApiCall($"count?fromUserId={notificationSignalRRequest.FromUserId}&isSendAll={notificationSignalRRequest.isSendAll}&toUserId={notificationSignalRRequest.ToUserId}&count={notificationSignalRRequest.NotificationCount}", clientName, token);
                 
             }
             catch (Exception exception)

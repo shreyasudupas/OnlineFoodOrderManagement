@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace SignalRHub.Base.Infrastructure.Hubs
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public sealed class NotificationHub : Hub<INotificationHub>
+    public class NotificationHub : Hub<INotificationHub>
     {
         private readonly IConnectionManager connectionManager;
 

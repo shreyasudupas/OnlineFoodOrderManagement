@@ -2,6 +2,6 @@
 {
     public interface INotificationHubService
     {
-        Task SendNotificationToConnectedUsers(string userId, string role, int userNotificationCount);
+        Task SendNotificationToConnectedUsers(string toUserId, string role, int userNotificationCount);
     }
 }

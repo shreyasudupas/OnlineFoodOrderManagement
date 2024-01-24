@@ -4,6 +4,8 @@ using SignalRHub.Base.Infrastructure;
 using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
 using SignalRHub.Base.Infrastructure.Hubs;
 using MenuMangement.Infrastructure.HttpClient;
+using MenuMangement.HttpClient.Domain.Models;
+using SignalRHub.Base.Infrastructure.NotificationFactory.FactoryMethod;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,13 +117,21 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<NotificationHub>("/notificationHub");
 });
 
-app.MapGet("/api/notification/count", async (HttpRequest request,INotificationHubService notificationHubService) =>
+app.MapGet("/api/notification/count", async (HttpRequest request, INotificationFactory notificationFactory) =>
 {
-    var userId = request.Query["userId"];
-    var role = request.Query["role"];
+    var fromUserId = request.Query["fromUserId"];
+    var toUserId = request.Query["toUserId"];
+    var isSendAll = Convert.ToBoolean(request.Query["isSendAll"]);
     var notificationCount = Convert.ToInt32(request.Query["count"]);
 
-    await notificationHubService.SendNotificationToConnectedUsers(userId,role,notificationCount);
+    //await notificationHubService.SendNotificationToConnectedUsers(toUserId, role, notificationCount);
+    await notificationFactory.SendNotification(new NotificationSignalRRequest
+    {
+        FromUserId = fromUserId,
+        ToUserId = toUserId,
+        isSendAll = isSendAll,
+        NotificationCount = notificationCount
+    });
 
     Results.Ok();
 });

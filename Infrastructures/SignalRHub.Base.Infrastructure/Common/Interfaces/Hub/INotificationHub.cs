@@ -2,4 +2,5 @@
 public interface INotificationHub
 {
     Task SendUserNotification(int notificationCount);
+    Task SendToAllNotification();
 }
