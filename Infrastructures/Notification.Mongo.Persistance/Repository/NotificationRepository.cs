@@ -46,11 +46,6 @@ namespace Notification.Mongo.Persistance.Repository
                 newNotification.Id = getNotification.Id;
                 _logger.LogInformation("AddNotification ended");
 
-                //call hub
-                //var notificationCount = await GetNewNotificationCount(newNotification.UserId);
-                
-                //await _notificationHubService.SendNotificationToConnectedUsers(newNotification.UserId, newNotification.Role, notificationCount);
-
                 return newNotification;
             }
             else
@@ -70,10 +65,6 @@ namespace Notification.Mongo.Persistance.Repository
             if(notifcationUpdateResult.IsAcknowledged)
             {
                 _logger.LogInformation("UpdateNotificationToAsRead has updated");
-
-                //var notificationCount = await GetNewNotificationCount(updateNotification.UserId);
-                
-                //await _notificationHubService.SendNotificationToConnectedUsers(updateNotification.UserId, updateNotification.Role, notificationCount);
 
                 return updateNotification;
             }else
