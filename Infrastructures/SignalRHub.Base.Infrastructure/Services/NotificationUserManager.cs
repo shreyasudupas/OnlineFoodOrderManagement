@@ -1,14 +1,14 @@
 ﻿using MenuManagement.SignalR.HubService.Common.Models;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Hub;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
 
 namespace SignalRHub.Base.Infrastructure.Services;
 
-public class ConnectionManager : IConnectionManager
+public class NotificationUserManager : INotificationUserManager
 {
-    private readonly List<HubUser> _hubUsers;
+    private readonly List<NotificationHubUser> _hubUsers;
     private readonly object _lockObj = new object();
 
-    public ConnectionManager()
+    public NotificationUserManager()
     {
         _hubUsers = new();
     }
@@ -20,7 +20,7 @@ public class ConnectionManager : IConnectionManager
             var user = _hubUsers.Find(x => x.UserId == userId);
             if (user == null)
             {
-                _hubUsers.Add(new HubUser
+                _hubUsers.Add(new NotificationHubUser
                 {
                     UserId = userId,
                     Role = role,
@@ -30,12 +30,12 @@ public class ConnectionManager : IConnectionManager
         }
     }
 
-    public List<HubUser> GetAllUsersConnections()
+    public List<NotificationHubUser> GetAllUsersConnections()
     {
         return _hubUsers;
     }
 
-    public HubUser? GetUserConnection(string userId)
+    public NotificationHubUser? GetUserConnection(string userId)
     {
         var user = _hubUsers.Find(x => x.UserId == userId);
         if (user is not null)

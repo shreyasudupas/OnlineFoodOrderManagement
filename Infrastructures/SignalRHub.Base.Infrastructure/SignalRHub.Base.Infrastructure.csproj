@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Dtos\" />
-    <Folder Include="Common\Interfaces\Services\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Notification.Mongo.Persistance\Notification.Mongo.Persistance.csproj" />
+    <ProjectReference Include="..\..\Domain\MenuMangement.HttpClient.Domain\MenuMangement.HttpClient.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SignalRHub.Base.Infrastructure.Common.Interfaces.Hub;
 using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
-using System.Security.Claims;
+using System.Data;
 
 namespace SignalRHub.Base.Infrastructure.Hubs
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class NotificationHub : Hub<INotificationHub>
+    public class OrdersHub : Hub<IOrderHub>
     {
-        private readonly INotificationUserManager connectionManager;
+        private readonly IVendorUserManager _vendorUserManager;
 
-        public NotificationHub(INotificationUserManager connectionManager)
+        public OrdersHub(IVendorUserManager vendorUserManager)
         {
-            this.connectionManager = connectionManager;
+            _vendorUserManager = vendorUserManager;
         }
 
         public string GetConnectionId()
@@ -22,9 +22,9 @@ namespace SignalRHub.Base.Infrastructure.Hubs
             var claims = Context.User?.Claims;
             var userId = claims?.Where(x => x.Type == "userId").Select(x => x.Value).FirstOrDefault();
 
-            if(!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(userId))
             {
-                var userConnectionInfo = connectionManager.GetUserConnection(userId);
+                var userConnectionInfo = _vendorUserManager.GetVendorUserConnection(userId);
 
                 if (userConnectionInfo != null)
                 {
@@ -41,10 +41,12 @@ namespace SignalRHub.Base.Infrastructure.Hubs
         {
             var claims = Context.User?.Claims;
             var userId = claims?.Where(x => x.Type == "userId").Select(x => x.Value).FirstOrDefault();
-            var role = claims?.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).FirstOrDefault();
+            var vendorId = claims?.Where(x=>x.Type == "vendorId").Select(x=>x.Value).FirstOrDefault();
 
-            if(!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(role) && claims is not null)
-                connectionManager.AddConnection(userId, role, Context.ConnectionId);
+            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(vendorId) && claims is not null)
+            {
+                _vendorUserManager.AddVendorConnection(userId,Context.ConnectionId, vendorId);
+            }
 
             await base.OnConnectedAsync();
         }
@@ -52,10 +54,12 @@ namespace SignalRHub.Base.Infrastructure.Hubs
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var claims = Context.User?.Claims;
-            var name = claims?.Where(x => x.Type == "userId").Select(x => x.Value).FirstOrDefault();
+            var userId = claims?.Where(x => x.Type == "userId").Select(x => x.Value).FirstOrDefault();
 
-            if(!string.IsNullOrEmpty(name))
-                connectionManager.RemoveConnection(name, Context.ConnectionId);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                _vendorUserManager.RemoveVendorConnection(userId,Context.ConnectionId);
+            }
 
             await base.OnDisconnectedAsync(exception);
         }

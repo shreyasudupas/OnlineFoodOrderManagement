@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SignalRHub.Base.Infrastructure.Common.Interfaces.Hub;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
 using SignalRHub.Base.Infrastructure.Hubs;
 
 namespace SignalRHub.Base.Infrastructure.NotificationFactory.Manager
@@ -7,10 +8,10 @@ namespace SignalRHub.Base.Infrastructure.NotificationFactory.Manager
     public class SingleUserNotification : ISingleUserNotificaton
     {
         private readonly IHubContext<NotificationHub, INotificationHub> _notificationHub;
-        private readonly IConnectionManager _connectionManager;
+        private readonly INotificationUserManager _connectionManager;
 
         public SingleUserNotification(IHubContext<NotificationHub, INotificationHub> notificationHub,
-            IConnectionManager connectionManager)
+            INotificationUserManager connectionManager)
         {
             _notificationHub = notificationHub;
             _connectionManager = connectionManager;

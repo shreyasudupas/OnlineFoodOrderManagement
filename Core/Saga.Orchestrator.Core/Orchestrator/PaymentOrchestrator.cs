@@ -17,12 +17,14 @@ namespace Saga.Orchestrator.Core.Orchestrator
         private readonly ICartInformationWrapper _cartInformationWrapper;
         private readonly IOrderService _orderService;
         private readonly IVendorSerivce _vendorSerivce;
+        private readonly ISignalROrderClientWrapper _signalROrderClientWrapper;
         public PaymentOrchestrator(IPaymentService paymentService,
             ILogger<PaymentOrchestrator> logger,
             ICartInformationWrapper cartInformationWrapper,
             IIdsHttpClientWrapper idsHttpClientWrapper,
             IOrderService orderService,
-            IVendorSerivce vendorSerivce)
+            IVendorSerivce vendorSerivce,
+            ISignalROrderClientWrapper signalROrderClientWrapper)
         {
             _paymentService = paymentService;
             _logger = logger;
@@ -30,6 +32,7 @@ namespace Saga.Orchestrator.Core.Orchestrator
             _idsHttpClientWrapper = idsHttpClientWrapper;
             _orderService = orderService;
             _vendorSerivce = vendorSerivce;
+            _signalROrderClientWrapper = signalROrderClientWrapper;
         }
 
         public async Task<PaymentProcessDto> PaymentProcess(PaymentInformationRecord paymentInformation)
@@ -113,6 +116,12 @@ namespace Saga.Orchestrator.Core.Orchestrator
                                         return await CallReversePaymentAPI(paymentInformation, accessToken, response, currentPrice);
                                     }
 
+                                    //order info send to signalR service
+                                    var orderPublishResult = _signalROrderClientWrapper.PostCallAsync(orderResult, accessToken);
+                                    if(orderPublishResult is null)
+                                    {
+                                        _logger.LogError("Order Publishing to SignalR Service failed");
+                                    }
 
                                     //clear the cart
                                     var cartResult = await _cartInformationWrapper.ClearCartInformation(paymentInformation.UserId, accessToken);

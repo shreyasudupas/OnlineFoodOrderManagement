@@ -18,11 +18,11 @@ namespace Notification.Microservice.Core.Command.AddNotification
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly IMapper _mapper;
-        private readonly ISignalRNotificationClient _signalRNotificationClient;
+        private readonly ISignalRNotificationClientWrapper _signalRNotificationClient;
 
         public AddNotificationCommandHandler(INotificationRepository notificationRepository,
             IMapper mapper,
-            ISignalRNotificationClient signalRNotificationClient)
+            ISignalRNotificationClientWrapper signalRNotificationClient)
         {
             _notificationRepository = notificationRepository;
             _mapper = mapper;
@@ -39,7 +39,7 @@ namespace Notification.Microservice.Core.Command.AddNotification
 
             if(!string.IsNullOrEmpty(response.Id))
             {
-                await _signalRNotificationClient.GetAsyncCall(new MenuMangement.HttpClient.Domain.Models.NotificationSignalRRequest
+                await _signalRNotificationClient.GetCallAsync(new MenuMangement.HttpClient.Domain.Models.NotificationSignalRRequest
                 {
                     NotificationCount = count+1,
                     isSendAll = request.NewNotification.SendAll,

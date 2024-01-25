@@ -6,6 +6,7 @@ using SignalRHub.Base.Infrastructure.Hubs;
 using MenuMangement.Infrastructure.HttpClient;
 using MenuMangement.HttpClient.Domain.Models;
 using SignalRHub.Base.Infrastructure.NotificationFactory.FactoryMethod;
+using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,6 +116,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<NotificationHub>("/notificationHub");
+    endpoints.MapHub<OrdersHub>("/orderHub");
 });
 
 app.MapGet("/api/notification/count", async (HttpRequest request, INotificationFactory notificationFactory) =>
@@ -134,6 +136,13 @@ app.MapGet("/api/notification/count", async (HttpRequest request, INotificationF
     });
 
     Results.Ok();
+});
+
+app.MapPost("/api/recieveorder/new", async (OrderInformationDto orderInfo, IOrderManager orderManager) =>
+{
+    await orderManager.SendLatestOrderToClients(orderInfo);
+
+    Results.Ok(orderInfo);
 });
 
 app.Run();
