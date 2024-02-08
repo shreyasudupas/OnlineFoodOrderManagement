@@ -135,14 +135,16 @@ app.MapGet("/api/notification/count", async (HttpRequest request, INotificationF
         NotificationCount = notificationCount
     });
 
-    Results.Ok();
-});
+    return Results.Ok();
+}).RequireAuthorization();
 
 app.MapPost("/api/recieveorder/new", async (OrderInformationDto orderInfo, IOrderManager orderManager) =>
 {
     await orderManager.SendLatestOrderToClients(orderInfo);
 
-    Results.Ok(orderInfo);
-});
+    return Results.Ok(orderInfo);
+})
+.Produces<OrderInformationDto>()
+.RequireAuthorization();
 
 app.Run();

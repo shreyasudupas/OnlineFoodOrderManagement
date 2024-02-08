@@ -4,6 +4,7 @@ using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.AddressMapping.AddStateAssociation;
 using IdenitityServer.Core.Features.Utility;
+using IdenitityServer.Core.Features.Utility.UpdatePoints;
 using IdenitityServer.Core.Features.Utility.UpdateUserPoints;
 using IdenitityServer.Core.Features.Utility.VendorIdMapping;
 using MenuOrder.Shared.Controller;
@@ -196,6 +197,12 @@ namespace IdentityServer.API.APIControllers
         public async Task<bool> UpdateUserPoints([FromBody] UpdateUserPointsCommand updateUserPointsCommand)
         {
             return await Mediator.Send(updateUserPointsCommand);
+        }
+
+        [HttpPost("/api/utility/reverse/points")]
+        public async Task<bool> UpdateUserPoints([FromBody] UpdatePointsCommand updatePointsCommand)
+        {
+            return await Mediator.Send(updatePointsCommand);
         }
     }
 }

@@ -25,5 +25,7 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<string> GetUserIdByVendorClaim(string vendorId);
         Task<bool> UpdateUserPoints(string userId, double amountDebited);
         Task<UserProfile> GetUserInfoByUserName(string userName);
+
+        Task<bool> UpdateReversePoints(string userId, double amountToBeDebited);
     }
 }

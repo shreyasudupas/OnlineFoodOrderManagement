@@ -1,7 +1,12 @@
-﻿using MenuMangement.HttpClient.Domain.Interfaces.Services;
+﻿using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
+using MenuMangement.HttpClient.Domain.Interfaces.GraphQl;
+using MenuMangement.HttpClient.Domain.Interfaces.Services;
 using MenuMangement.HttpClient.Domain.Interfaces.Wrappers;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.CartInformationClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdentityServer;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdsGraphQl;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.SignalRNotificationClient;
@@ -66,6 +71,9 @@ namespace MenuMangement.Infrastructure.HttpClient
                 config.DefaultRequestHeaders.Clear();
             });
 
+            services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(configuration.GetSection("ExternalAPIs:GraphQlClient").Value,
+                new NewtonsoftJsonSerializer()));
+
             services.AddTransient<IIdsHttpClientWrapper, IdsHttpClientWrapper>();
             services.AddTransient<INotificationClientWrapper, NotificationClientWrapper>();
             services.AddTransient<IInventoryClientWrapper, InventoryClientWrapper>();
@@ -75,6 +83,8 @@ namespace MenuMangement.Infrastructure.HttpClient
             services.AddTransient<IVendorSerivce, VendorService>();
             services.AddTransient<ISignalRNotificationClientWrapper, SignalRNotificationClientWrapper>();
             services.AddTransient<ISignalROrderClientWrapper,SignalROrderClientWrapper>();
+
+            services.AddTransient<IGetUserRewardQuery, GetUserRewardQuery>();
         }
     }
 }

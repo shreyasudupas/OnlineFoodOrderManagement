@@ -414,6 +414,24 @@ namespace IdentityServer.Infrastruture.Services
             }
         }
 
+        public async Task<bool> UpdateReversePoints(string userId,double amountToBeReversed)
+        {
+            var user = await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+            if(user is not null)
+            {
+                user.Points = amountToBeReversed;
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            else
+            {
+                _logger.LogError("User not found with Id: {0}",userId);
+                return false;
+            }
+        }
+
         public async Task<UserProfile> GetUserInfoByUserName(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);

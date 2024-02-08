@@ -1,5 +1,4 @@
-﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
-using MenuMangement.HttpClient.Domain.Interfaces.Services;
+﻿using MenuMangement.HttpClient.Domain.Interfaces.Services;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -15,18 +14,13 @@ namespace MenuMangement.Infrastructure.HttpClient.Services.Payment
             _logger = logger;
         }
 
-        public async Task<bool> PaymentByRewardPoints(string userId,string token, PaymentDetailDto payementDetail)
+        public async Task<bool> PaymentByRewardPoints(string url,string userId,string token, string bodyContent)
         {
             try
             {
                 var clientName = "IDSClient";
-                var body = new
-                {
-                    UserId = userId,
-                    AmountToBeDebited = payementDetail.TotalPrice
-                };
-                var bodyContent = JsonConvert.SerializeObject(body);
-                var resultContent = await PostApiCall("utility/update/points", clientName, token, bodyContent);
+                
+                var resultContent = await PostApiCall(url, clientName, token, bodyContent);
 
                 if (!string.IsNullOrEmpty(resultContent))
                 {
