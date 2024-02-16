@@ -1,6 +1,8 @@
 using AutoMapper;
 using HotChocolate.Types;
 using IdenitityServer.Core;
+using IdenitityServer.Core.Common.Interfaces.Repository;
+using IdenitityServer.Core.Features.UserPointsCalculation.Aggregate;
 using IdenitityServer.Core.MapperProfiles;
 using IdenitityServer.Core.MutationResolver;
 using IdenitityServer.Core.QueryResolvers;
@@ -136,6 +138,8 @@ namespace IdentityServer.API
                 .AddType<ApiScopeQueryExtensionType>()
                 .AddType<ClientQueryExtensionType>()
                 .AddType<AddressQueryExtensionType>()
+                .AddType<UserPointsQueryExtensionType>()
+                .AddType<UserPointsOutputType>()
                 .AddMutationType(m => m.Name("Mutation"))
                 .AddType<SaveUserInformationExtensionType>()
                 .AddType<ApiScopeMutationExtensionType>()
@@ -148,6 +152,8 @@ namespace IdentityServer.API
                 .AddType<IdentityResourceMutationExtensionType>()
                 .AddType<IdentityResourceQueryExtensionType>()
                 .AddType<UserClaimExtensionType>()
+                .AddType<UserPointsEventOutputType>()
+                .AddType<UserPointsMutationExtensionType>()
                 //.RegisterService<AddModifyUserAddressResolver>()
                 .RegisterService<UserProfileResolver>()
                 .RegisterService<IProfileUser>()
@@ -164,6 +170,8 @@ namespace IdentityServer.API
                 .RegisterService<IdenitityResourceQueryResolver>()
                 .RegisterService<IdentityResourcesMutationResolver>()
                 .RegisterService<UserClaimMutationResolver>()
+                .RegisterService<UserPoint>() //register aggrigate class
+                .RegisterService<IUserPointEventRepository>()
                 .AddAuthorization()
                 //.AddMutationConventions()
                 ;

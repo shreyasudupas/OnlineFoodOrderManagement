@@ -1,4 +1,5 @@
-﻿using IdenitityServer.Core.MutationResolver;
+﻿using IdenitityServer.Core.Features.UserPointsCalculation.Aggregate;
+using IdenitityServer.Core.MutationResolver;
 using IdenitityServer.Core.QueryResolvers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,8 @@ namespace IdenitityServer.Core
             services.AddScoped<IdenitityResourceQueryResolver>();
             services.AddScoped<IdentityResourcesMutationResolver>();
             services.AddScoped<UserClaimMutationResolver>();
+
+            services.AddScoped<UserPoint>();
 
             return services;
         }
