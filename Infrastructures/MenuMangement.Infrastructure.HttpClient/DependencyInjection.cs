@@ -11,6 +11,8 @@ using MenuMangement.Infrastructure.HttpClient.ClientWrapper.InventoryClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.NotificationClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.SignalRNotificationClient;
 using MenuMangement.Infrastructure.HttpClient.ClientWrapper.SignalROrderClient;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.SpendUserPointsGraphqlClient;
+using MenuMangement.Infrastructure.HttpClient.ClientWrapper.UserPointsGraphQlClient;
 using MenuMangement.Infrastructure.HttpClient.Services.Order;
 using MenuMangement.Infrastructure.HttpClient.Services.Payment;
 using MenuMangement.Infrastructure.HttpClient.Services.Vendor;
@@ -85,6 +87,8 @@ namespace MenuMangement.Infrastructure.HttpClient
             services.AddTransient<ISignalROrderClientWrapper,SignalROrderClientWrapper>();
 
             services.AddTransient<IGetUserRewardQuery, GetUserRewardQuery>();
+            services.AddTransient<IUserPointsGraphQlClient, UserPointsGraphQlClient>();
+            services.AddTransient<IUserPointsMuationGraphqlClient, UserPointsMutationGraphqlClient>();
         }
     }
 }

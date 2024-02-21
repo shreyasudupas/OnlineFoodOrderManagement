@@ -17,19 +17,19 @@ namespace IdentityServer.API.GraphQL.Mutation
             return result;
         }
 
-        public async Task<UserPointResponse> SpendPoints(UserPointsAddSpendInput userPointsAdd,
+        public async Task<UserPointResponse> SpendPoints(UserPointsAddSpendInput userPointsSpend,
             [Service] UserPoint userPointService)
         {
-            var result = await userPointService.RemovePoints(userPointsAdd.UserId, userPointsAdd.Points);
+            var result = await userPointService.RemovePoints(userPointsSpend.UserId, userPointsSpend.Points);
             return result;
         }
 
-        public async Task<UserPointResponse> UserPointsAdjusted(UserPointsAdjustedInput userPointsAdjustedInput,
+        public async Task<UserPointResponse> UserPointsAdjusted(UserPointsAdjustedInput userPointsAdjusted,
             [Service] UserPoint userPointService)
         {
-            var result = await userPointService.AdjustPoints(userPointsAdjustedInput.UserId
-                ,userPointsAdjustedInput.Points
-                ,userPointsAdjustedInput.AdminId);
+            var result = await userPointService.AdjustPoints(userPointsAdjusted.UserId
+                ,userPointsAdjusted.Points
+                ,userPointsAdjusted.AdjustedUserId);
             return result;
         }
     }

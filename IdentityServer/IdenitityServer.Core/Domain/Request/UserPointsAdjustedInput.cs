@@ -4,6 +4,6 @@
     {
         public string UserId { get; set; }
         public double Points { get; set; }
-        public string AdminId { get; set; }
+        public string AdjustedUserId { get; set; }
     }
 }

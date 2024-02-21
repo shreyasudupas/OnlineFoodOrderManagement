@@ -1,4 +1,4 @@
-﻿namespace MenuMangement.HttpClient.Domain.Models
+﻿namespace MenuMangement.HttpClient.Domain.Models.Graphql
 {
     public class GetRewardResponseType
     {

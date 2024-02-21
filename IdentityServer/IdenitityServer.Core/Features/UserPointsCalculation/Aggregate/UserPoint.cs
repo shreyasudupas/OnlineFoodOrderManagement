@@ -178,7 +178,14 @@ namespace IdenitityServer.Core.Features.UserPointsCalculation.Aggregate
             var existedEvent = await _userPointEventRepository.GetCurrentUserEvent(userPointsSpentEvent.userId);
             if(existedEvent is not null)
             {
+                if(existedEvent.PointsInHand <= 0)
+                {
+                    var error = "User does not have enough points to spend";
+                    _logger.LogError(error);
+                    throw new UserEventException(error);
+                }
                 userPointsEventDbModel.PointsInHand = existedEvent.PointsInHand - userPointsSpentEvent.points;
+                userPointsEventDbModel.PointsAdjusted = userPointsSpentEvent.points;
             }
             else
             {
@@ -208,8 +215,8 @@ namespace IdenitityServer.Core.Features.UserPointsCalculation.Aggregate
             if (existedEvent is not null)
             {
                 //adjusting is just a add operation but add by admin and not by userId
-                existedEvent.PointsInHand = existedEvent.PointsInHand + userPointsAdjustedEvent.points;
-                existedEvent.PointsAdjusted = userPointsAdjustedEvent.points;
+                userPointsEventDbModel.PointsInHand = existedEvent.PointsInHand + userPointsAdjustedEvent.points;
+                userPointsEventDbModel.PointsAdjusted = userPointsAdjustedEvent.points;
             }
             else
             {

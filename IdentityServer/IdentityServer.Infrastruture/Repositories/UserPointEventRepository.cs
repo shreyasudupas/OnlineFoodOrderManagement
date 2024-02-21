@@ -44,7 +44,7 @@ namespace IdentityServer.Infrastruture.Repositories
         {
             try
             {
-                await _applicationDbContext.UserPointsEvents.AddAsync(userPointsEvent);
+                await _applicationDbContext.AddAsync(userPointsEvent);
                 await _applicationDbContext.SaveChangesAsync();
 
                 _logger.LogInformation("Event for userId:{0} is saved", userPointsEvent.UserId);

@@ -1,7 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Client.Abstractions;
 using MenuMangement.HttpClient.Domain.Interfaces.GraphQl;
-using MenuMangement.HttpClient.Domain.Models;
+using MenuMangement.HttpClient.Domain.Models.Graphql;
 
 namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.IdsGraphQl
 {
