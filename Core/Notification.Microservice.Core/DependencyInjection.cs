@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Notification.Microservice.Core.Interface;
 using Notification.Microservice.Core.Mapping;
 using Notification.Microservice.Core.Services;
-using System;
 using System.Reflection;
 
 namespace Notification.Microservice.Core
@@ -23,8 +22,6 @@ namespace Notification.Microservice.Core
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddSingleton<TimerControl>();
-
 
             services.AddSingleton<INotificationService, NotificationService>();
 

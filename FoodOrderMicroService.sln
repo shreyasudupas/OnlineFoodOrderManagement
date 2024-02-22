@@ -57,15 +57,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.Shared", "Shared\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{10B2A374-10E6-4725-B67E-0CA0106B42A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.InventoryMicroService.API", "Web APIs\MenuManagement.InventoryMicroService.API\MenuManagement.InventoryMicroService.API.csproj", "{E9C655BE-46DB-4954-92EC-91D0FB51D2B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.InventoryMicroService.API", "API\MenuManagement.InventoryMicroService.API\MenuManagement.InventoryMicroService.API.csproj", "{E9C655BE-46DB-4954-92EC-91D0FB51D2B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Notification.API", "Web APIs\MenuManagement.Notification.API\MenuManagement.Notification.API.csproj", "{DE93097F-6C48-4650-926C-60FD8EDB0912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.Notification.API", "API\MenuManagement.Notification.API\MenuManagement.Notification.API.csproj", "{DE93097F-6C48-4650-926C-60FD8EDB0912}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.SignalR.HubService", "Web APIs\MenuManagement.SignalR.HubService\MenuManagement.SignalR.HubService.csproj", "{CEBBB85F-9902-4FA1-9BB0-58E251353A19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuManagement.SignalR.HubService", "API\MenuManagement.SignalR.HubService\MenuManagement.SignalR.HubService.csproj", "{CEBBB85F-9902-4FA1-9BB0-58E251353A19}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuMangement.OrderManagement.API", "Web APIs\MenuMangement.OrderManagement.API\MenuMangement.OrderManagement.API.csproj", "{6E55CFCB-3C98-4D89-8220-39789D038FEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuMangement.OrderManagement.API", "API\MenuMangement.OrderManagement.API\MenuMangement.OrderManagement.API.csproj", "{6E55CFCB-3C98-4D89-8220-39789D038FEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.OrchestratorMicroService.API", "Web APIs\MenuOrder.OrchestratorMicroService.API\MenuOrder.OrchestratorMicroService.API.csproj", "{F23B62EF-60F3-4ACE-B9B3-1889C7618AA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuOrder.OrchestratorMicroService.API", "API\MenuOrder.OrchestratorMicroService.API\MenuOrder.OrchestratorMicroService.API.csproj", "{F23B62EF-60F3-4ACE-B9B3-1889C7618AA3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VendorRegistration.WebJob", "WebJobs\VendorRegistration.WebJob\VendorRegistration.WebJob.csproj", "{0B1B4B06-B34B-4A48-83A1-5F177266F1DB}"
 EndProject

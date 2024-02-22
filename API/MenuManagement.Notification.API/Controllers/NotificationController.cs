@@ -9,7 +9,6 @@ using Notification.Microservice.Core.Interface;
 using Notification.Microservice.Core.Querries.GetAllNotification;
 using Notification.Microservice.Core.Querries.GetAllNotificationByUserId;
 using Notification.Microservice.Core.Querries.GetNotificationById;
-using Notification.Microservice.Core.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,26 +17,15 @@ namespace MenuManagement.Notification.API.Controllers
     [Authorize]
     public class NotificationController : ControllerBase
     {
-        //private readonly IHubContext<NotificationHub, INotificationHub> _notificationHub;
-        private readonly TimerControl _timerControl;
-        private readonly IProfileUser _profileUser;
         private readonly IMediator _mediator;
-        private readonly INotificationService _notificationService;
 
         public NotificationController(
-            //IHubContext<NotificationHub,
-            //INotificationHub> notificationHub,
-            TimerControl timerControl
-            , IProfileUser profileUser
+            IProfileUser profileUser
             , IMediator mediator
             , INotificationService notificationService
             )
         {
-            //_notificationHub = notificationHub;
-            _timerControl = timerControl;
-            _profileUser = profileUser;
             _mediator = mediator;
-            _notificationService = notificationService;
         }
 
         [HttpGet("/api/notification/list")]
@@ -66,25 +54,17 @@ namespace MenuManagement.Notification.API.Controllers
         }
 
         //[AllowAnonymous]
-        [HttpGet("/api/notification/{userId}/count")]
-        public async Task<IActionResult> NewNotificationCount(string userId)
-        {
-            var result = _notificationService.GetNotificationCount(userId);
-            return Ok(result);
-        }
+        //[HttpGet("/api/notification/{userId}/count")]
+        //public async Task<IActionResult> NewNotificationCount(string userId)
+        //{
+        //    var result = _notificationService.GetNotificationCount(userId);
+        //    return Ok(result);
+        //}
 
         [HttpGet("/api/notification")]
         public async Task<NotificationDto> GetNotificationById([FromQuery]string id)
         {
             return await _mediator.Send(new GetNotificationByIdQuery { Id = id });
         }
-
-        //[AllowAnonymous]
-        //[HttpPost("/api/notification/test")]
-        //public async Task<IActionResult> TestAPi([FromQuery]int count,string connectionId)
-        //{
-        //    await _notificationHub.Clients.Client(connectionId).SendUserNotification(count);
-        //    return Ok();
-        //}
     }
 }
