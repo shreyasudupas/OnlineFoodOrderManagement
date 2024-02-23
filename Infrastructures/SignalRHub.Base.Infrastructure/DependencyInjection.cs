@@ -10,7 +10,10 @@ public static class DependencyInjection
 {
     public static void AddSignalRInfrastructure(this IServiceCollection services)
     {
-        services.AddSignalR();
+        services.AddSignalR(opt =>
+        {
+            opt.EnableDetailedErrors = true;
+        });
 
         services.AddSingleton<INotificationUserManager, NotificationUserManager>();
         services.AddSingleton<IVendorUserManager, VendorUserManager>();
