@@ -2,7 +2,7 @@
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository.Notification;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Logging;
-using MongoDb.Shared.Persistance.DBContext;
+using Microsoft.Extensions.Options;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -15,9 +15,10 @@ namespace Notification.Mongo.Persistance.Repository
     {
         private readonly ILogger _logger;
 
-        public NotificationRepository(IMongoDBContext mongoDBContext,
+        public NotificationRepository(
+            IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings,
             ILogger<NotificationRepository> logger
-            ) : base(mongoDBContext)
+            ) : base(mongoDatabaseSettings)
         {
             _logger = logger;
         }

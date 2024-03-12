@@ -15,6 +15,8 @@ using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
 using MongoDB.Libmongocrypt;
 using MongoDB.Driver.GeoJsonObjectModel;
+using MenuManagment.Mongo.Domain.Mongo.Models;
+using Microsoft.Extensions.Options;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -22,10 +24,11 @@ namespace Inventory.Mongo.Persistance.Repositories
     {
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        public VendorRepository(IMongoDBContext mongoDBContext,
+        public VendorRepository(
+            IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings,
             ILogger<VendorRepository> logger,
             IMapper mapper
-            ) : base(mongoDBContext)
+            ) : base(mongoDatabaseSettings)
         {
             _logger = logger;
             _mapper = mapper;

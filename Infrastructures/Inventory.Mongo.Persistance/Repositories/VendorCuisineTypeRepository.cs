@@ -7,9 +7,10 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDb.Shared.Persistance.Extensions;
+using MenuManagment.Mongo.Domain.Mongo.Models;
+using Microsoft.Extensions.Options;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -20,7 +21,8 @@ namespace Inventory.Mongo.Persistance.Repositories
 
         public VendorCuisineTypeRepository(IMapper mapper
             , ILogger<VendorCuisineTypeRepository> logger,
-            IMongoDBContext mongoDBContext) : base(mongoDBContext)
+            IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings
+            ) : base(mongoDatabaseSettings)
         {
             _mapper = mapper;
             _logger = logger;

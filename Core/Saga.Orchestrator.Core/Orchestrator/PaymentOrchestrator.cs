@@ -154,7 +154,6 @@ namespace Saga.Orchestrator.Core.Orchestrator
             {
                 CartId = paymentInformation.CartInfo.CartId,
                 Id = "",
-                OrderPlacedDateTime = "",
                 TotalPrice = paymentInformation.PaymentInfo.TotalPrice,
                 PaymentDetail = new PaymentOrderDetailDto
                 {
@@ -163,7 +162,10 @@ namespace Saga.Orchestrator.Core.Orchestrator
                     SelectedPayment = paymentInformation.PaymentInfo.SelectedPayment,
                     Price = paymentInformation.PaymentInfo.TotalPrice
                 },
-                OrderStatus = MenuManagment.Mongo.Domain.Enum.OrderStatusEnum.OrderPlaced,
+                Status = new OrderStatusDetailDto
+                {
+                    OrderPlaced = DateTime.Now.ToString()
+                },
                 UserDetail = new UserOrderDetailsDto
                 {
                     FullAddress = paymentInformation.UserAddress.FullAddress,
@@ -178,8 +180,8 @@ namespace Saga.Orchestrator.Core.Orchestrator
                 MenuItems = new List<MenuItemDto>(),
                 VendorDetail = new VendorDetailDto
                 {
-                    VendorId = vendorDetailFromApi.Id,
-                    VendorName = vendorDetailFromApi.VendorName
+                    VendorId = vendorDetailFromApi?.Id,
+                    VendorName = vendorDetailFromApi?.VendorName
                 }
             };
         }

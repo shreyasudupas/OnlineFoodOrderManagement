@@ -41,7 +41,7 @@ namespace OrderManagement.Microservice.Core.Querries.Orders.GetVendorOrders
                     result.AddRange(orderDtos);
                 }
 
-                result = result.OrderBy(x => x.OrderPlacedDateTime).ToList();
+                result = result.OrderBy(x => x.CreatedDate).ToList();
                 return result;
             }
             else

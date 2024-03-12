@@ -1,4 +1,5 @@
 ﻿using MenuManagment.Mongo.Domain.Entities;
+using MenuManagment.Mongo.Domain.Enum;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

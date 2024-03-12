@@ -11,9 +11,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MongoDb.Shared.Persistance.Repositories;
-using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
 using System;
+using Microsoft.Extensions.Options;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -21,10 +21,10 @@ namespace Inventory.Mongo.Persistance.Repositories
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        public MenuImagesRepository(IMongoDBContext context
+        public MenuImagesRepository(IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings
             , ILogger<MenuImagesRepository> logger
             , IMapper mapper
-            ) : base(context)
+            ) : base(mongoDatabaseSettings)
         {
             _logger = logger;
             _mapper = mapper;

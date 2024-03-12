@@ -1,6 +1,6 @@
 ﻿using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
 using MenuManagment.Mongo.Domain.Mongo.Models;
-using MongoDb.Shared.Persistance.DBContext;
+using Microsoft.Extensions.Options;
 using MongoDb.Shared.Persistance.Interfaces;
 using MongoDB.Driver;
 using System;
@@ -14,11 +14,15 @@ namespace MongoDb.Shared.Persistance.Repositories
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IEntity
     {
         protected IMongoCollection<TEntity> mongoCollection;
-        private IMongoDBContext _context;
-        public BaseRepository(IMongoDBContext context)
+        public BaseRepository(
+            IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings)
         {
-            _context = context;
-            mongoCollection = _context.GetCollection<TEntity>(typeof(TEntity).Name);
+            var mongoClient = new MongoClient(mongoDatabaseSettings.Value.ConnectionString);
+
+            var mongoDatabase = mongoClient.GetDatabase(
+                                mongoDatabaseSettings.Value.DatabaseName);
+
+            mongoCollection = mongoDatabase.GetCollection<TEntity>(typeof(TEntity).Name);
         }
         public async Task CreateOneDocument(TEntity document)
         {

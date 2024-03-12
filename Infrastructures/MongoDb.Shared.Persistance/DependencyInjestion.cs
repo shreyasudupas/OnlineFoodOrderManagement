@@ -9,7 +9,6 @@ namespace MongoDb.Shared.Persistance
     {
         public static IServiceCollection AddSharedMongoServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IMongoDBContext, MongoDBContext>();
             services.Configure<MongoDatabaseConfiguration>(configuration.GetSection("MongoOrderDBSettings"));
             return services;
         }

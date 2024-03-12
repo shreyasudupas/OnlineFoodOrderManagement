@@ -1,4 +1,4 @@
-﻿using MenuManagment.Mongo.Domain.Enum;
+﻿using System;
 using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
@@ -16,11 +16,11 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
 
         public UserOrderDetailsDto UserDetail { get; set; }
 
-        public string OrderPlacedDateTime { get; set; }
-
-        public OrderStatusEnum OrderStatus { get; set; }
+        public OrderStatusDetailDto Status { get; set; }
         public VendorDetailDto VendorDetail { get; set; }
         public long UIOrderNumber { get; set; }
+        public string OrderCancelledReason { get; set; } = null;
+        public DateTime CreatedDate { get; set; }
     }
 
     public class PaymentOrderDetailDto
@@ -56,5 +56,18 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public string VendorId { get; set; }
 
         public string VendorName { get; set; }
+    }
+
+    public class OrderStatusDetailDto
+    {
+        public string OrderPlaced { get; set; } = null;
+
+        public string OrderInProgress { get; set; } = null;
+
+        public string OrderReady { get; set; } = null;
+
+        public string OrderDone { get; set; } = null;
+
+        public string OrderCancelled { get; set; } = null;
     }
 }

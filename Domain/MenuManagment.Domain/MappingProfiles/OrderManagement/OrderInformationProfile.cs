@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
 using MenuManagment.Mongo.Domain.Entities;
-using MenuManagment.Mongo.Domain.Enum;
 using System;
 
 namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
@@ -11,33 +10,12 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
         public OrderInformationProfile()
         {
             CreateMap<OrderInformationDto, OrderInformation>()
-                .ForMember(dest=> dest.OrderStatus,act=>act.MapFrom((src,dest)=>
-                {
-                    return src.OrderStatus.ToString();
-                }))
-                .ForMember(dest => dest.OrderPlacedDateTime, act => act.MapFrom((src, dest) =>
-                {
-                    if (string.IsNullOrEmpty(src.OrderPlacedDateTime))
-                        return DateTime.Now;
-                    else
-                    {
-                        var date = DateTime.Parse(src.OrderPlacedDateTime);
-                        return date;
-                    }
-                }));
+                .ForMember(dest=>dest.OrderStatusDetails,act=>act.MapFrom(src=>src.Status))
+                ;
 
             CreateMap<OrderInformation,OrderInformationDto>()
-                .ForMember(dest => dest.OrderStatus, act => act.MapFrom((src, dest) =>
-                {
-                    OrderStatusEnum orderStatusEnum;
-                    var enumConverterEval = System.Enum.TryParse(src.OrderStatus, out orderStatusEnum);
-
-                    return orderStatusEnum;
-                }))
-                .ForMember(dest => dest.OrderPlacedDateTime, act => act.MapFrom((src, dest) =>
-                {
-                    return src.OrderPlacedDateTime.ToLocalTime();
-                }));
+                .ForMember(dest => dest.Status, act => act.MapFrom(src => src.OrderStatusDetails))
+                ;
 
             CreateMap<MenuItemDto,MenuItem>()
                 .ReverseMap();
@@ -55,6 +33,132 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
 
             CreateMap<VendorDetailDto, VendorDetail>()
                 .ReverseMap();
+
+            CreateMap<OrderStatusDetailDto, OrderStatusDetail>()
+                .ForMember(dest => dest.OrderPlaced, act => act.MapFrom((src, dest) =>
+                {
+                    if(src.OrderPlaced == null)
+                    {
+                        DateTime? d = null;
+                        return d;
+                    } 
+                    else
+                    {
+                        var d = DateTime.Parse(src.OrderPlaced);
+                        return d;
+                    }
+                }))
+                .ForMember(dest => dest.OrderInProgress, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderInProgress == null)
+                    {
+                        DateTime? d = null;
+                        return d;
+                    }
+                    else
+                    {
+                        var d = DateTime.Parse(src.OrderInProgress);
+                        return d;
+                    }
+                }))
+                .ForMember(dest => dest.OrderReady, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderInProgress == null)
+                    {
+                        DateTime? d = null;
+                        return d;
+                    }
+                    else
+                    {
+                        var d = DateTime.Parse(src.OrderReady);
+                        return d;
+                    }
+                }))
+                .ForMember(dest => dest.OrderDone, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderDone == null)
+                    {
+                        DateTime? d = null;
+                        return d;
+                    }
+                    else
+                    {
+                        var d = DateTime.Parse(src.OrderDone);
+                        return d;
+                    }
+                }))
+                .ForMember(dest => dest.OrderCancelled, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderCancelled == null)
+                    {
+                        DateTime? d = null;
+                        return d;
+                    }
+                    else
+                    {
+                        var d = DateTime.Parse(src.OrderCancelled);
+                        return d;
+                    }
+                }))
+                ;
+
+            CreateMap<OrderStatusDetail, OrderStatusDetailDto>()
+                .ForMember(dest => dest.OrderPlaced, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderPlaced == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return src.OrderPlaced.ToString();
+                    }
+                }))
+                .ForMember(dest => dest.OrderInProgress, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderInProgress == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return src.OrderInProgress.ToString();
+                    }
+                }))
+                .ForMember(dest => dest.OrderReady, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderReady == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return src.OrderReady.ToString();
+                    }
+                }))
+                .ForMember(dest => dest.OrderDone, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderDone == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return src.OrderDone.ToString();
+                    }
+                }))
+                .ForMember(dest => dest.OrderCancelled, act => act.MapFrom((src, dest) =>
+                {
+                    if (src.OrderCancelled == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return src.OrderCancelled.ToString();
+                    }
+                }))
+                ;
         }
     }
 }

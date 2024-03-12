@@ -27,17 +27,21 @@ namespace MenuManagment.Mongo.Domain.Entities
         [BsonElement("userDetail")]
         public UserOrderDetail UserDetail { get; set; }
 
-        [BsonElement("orderPlacedDateTime")]
-        public DateTime OrderPlacedDateTime { get; set; }
 
         [BsonElement("orderStatus")]
-        public string OrderStatus { get; set; }
+        public OrderStatusDetail OrderStatusDetails { get; set; }
 
         [BsonElement("vendorDetail")]
         public VendorDetail VendorDetail { get; set; }
 
         [BsonElement("uiOrderNumber")]
         public long UIOrderNumber { get; set; }   //Only to identity by the User in the UI
+
+        [BsonElement("orderCancelledReason")]
+        public string OrderCancelledReason { get; set; } = null;
+
+        [BsonElement("createdDate")]
+        public DateTime CreatedDate { get; set; }
     }
 
     public class PaymentOrderDetail
@@ -89,5 +93,24 @@ namespace MenuManagment.Mongo.Domain.Entities
 
         [BsonElement("vendorName")]
         public string VendorName { get; set; }
+    }
+
+    public class OrderStatusDetail
+    {
+        [BsonElement("orderPlaced")]
+        public DateTime? OrderPlaced { get; set; } = null;
+
+        [BsonElement("orderInProgress")]
+        public DateTime? OrderInProgress { get; set; } = null;
+
+        [BsonElement("orderReady")]
+        public DateTime? OrderReady { get; set; } = null;
+
+        [BsonElement("orderDone")]
+        public DateTime? OrderDone { get; set; } = null;
+
+        [BsonElement("orderCancelled")]
+        public DateTime? OrderCancelled { get; set; } = null;
+
     }
 }

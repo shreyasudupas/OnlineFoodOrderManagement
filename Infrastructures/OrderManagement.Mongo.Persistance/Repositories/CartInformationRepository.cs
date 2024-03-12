@@ -1,8 +1,8 @@
 ﻿using MenuManagment.Mongo.Domain.Entities;
 using MenuManagment.Mongo.Domain.Enum;
-using MenuManagment.Mongo.Domain.Mongo.Entities;
+using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Logging;
-using MongoDb.Shared.Persistance.DBContext;
+using Microsoft.Extensions.Options;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
 using OrderManagement.Microservice.Core.Common.Interfaces.CartInformation;
@@ -14,8 +14,9 @@ namespace OrderManagement.Mongo.Persistance.Repositories
         private readonly ILogger _logger;
 
         public CartInformationRepository(ILogger<CartInformationRepository> logger,
-            IMongoDBContext mongoDBContext)
-            : base(mongoDBContext)
+            IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings
+            )
+            : base(mongoDatabaseSettings)
         {
             _logger = logger;
         }

@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using MenuManagment.Mongo.Domain.Mongo.Models;
+using Microsoft.Extensions.Options;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -18,9 +20,10 @@ namespace Inventory.Mongo.Persistance.Repositories
     {
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        public VendorsMenuRepository(IMongoDBContext mongoDBContext,
+        public VendorsMenuRepository(
+            IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings,
             ILogger<VendorsMenuRepository> logger,
-            IMapper mapper) : base(mongoDBContext)
+            IMapper mapper) : base(mongoDatabaseSettings)
         {
             _logger = logger;
             _mapper = mapper;
