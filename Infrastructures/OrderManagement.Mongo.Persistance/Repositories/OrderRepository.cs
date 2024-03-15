@@ -15,19 +15,32 @@ namespace OrderManagement.Mongo.Persistance.Repositories
     {
         private ILogger<OrderRepository> _logger;
         public OrderRepository(IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings,
-            //IMongoDBContext context
             ILogger<OrderRepository> logger) : base(mongoDatabaseSettings)
         {
             _logger = logger;
         }
 
-        public async Task<List<OrderInformation>> GetOrderListInformationBasedOnStatus(string status)
+        public async Task<List<OrderInformation>> GetOrderListInformationBasedOnStatus(string[] status)
         {
             var builder = Builders<OrderInformation>.Filter;
-            var filter = BuildOrderStatusEqualFilter(status,builder);
+
+            FilterDefinition<OrderInformation> filter;
+            filter = GetFilterOrderStatus(status, builder);
+
             var orders = await GetListByFilterDefinition(filter);
 
             return orders;
+        }
+
+        private static FilterDefinition<OrderInformation> GetFilterOrderStatus(string[] status, FilterDefinitionBuilder<OrderInformation> builder)
+        {
+            FilterDefinition<OrderInformation> filter = builder.Eq(order => order.CurrentOrderStatus, status[0]);
+            for (var i = 1; i < status.Length; i++)
+            {
+                filter |= builder.Eq(order => order.CurrentOrderStatus, status[i]);
+            }
+
+            return filter;
         }
 
         public async Task<OrderInformation?> AddOrderInformation(OrderInformation order)
@@ -85,14 +98,17 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             return result;
         }
 
-        public async Task<List<OrderInformation>?> GetOrderInformationBasedOnOrderStatus(string vendorId,string orderStatus)
+        public async Task<List<OrderInformation>?> GetOrderInformationBasedOnOrderStatus(string vendorId,string[] orderStatus)
         {
             List<OrderInformation> result = new();
-            if(!string.IsNullOrEmpty(vendorId) && !string.IsNullOrEmpty(orderStatus))
+            if(!string.IsNullOrEmpty(vendorId) && orderStatus.Count() != 0)
             {
                 var builder = Builders<OrderInformation>.Filter;
-                var filter = builder.Eq(order => order.VendorDetail.VendorId, vendorId)
-                    & BuildOrderStatusDateLesserThanEqualFilter(orderStatus, DateTime.Now, builder);
+                FilterDefinition<OrderInformation> filter;
+                filter = GetFilterOrderStatus(orderStatus, builder) & builder.Eq(order => order.VendorDetail.VendorId, vendorId);
+
+                //var filter = builder.Eq(order => order.VendorDetail.VendorId, vendorId)
+                //    & BuildOrderStatusDateLesserThanEqualFilter(orderStatus, DateTime.Now, builder);
 
                 result = await ListDocumentsByDesendingSortFilter(filter,o=>o.CreatedDate);
                 return result;

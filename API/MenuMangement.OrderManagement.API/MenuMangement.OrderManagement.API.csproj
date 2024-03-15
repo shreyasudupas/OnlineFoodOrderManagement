@@ -15,7 +15,6 @@
     <ProjectReference Include="..\..\Core\OrderManagement.Microservice.Core\OrderManagement.Microservice.Core.csproj" />
     <ProjectReference Include="..\..\Infrastructures\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
     <ProjectReference Include="..\..\Infrastructures\OrderManagement.Mongo.Persistance\OrderManagement.Mongo.Persistance.csproj" />
-    <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
   </ItemGroup>
 
 </Project>

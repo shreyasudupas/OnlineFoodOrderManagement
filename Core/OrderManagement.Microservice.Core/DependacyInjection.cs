@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
-using MenuManagment.Mongo.Domain.MappingProfiles;
 using MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -22,6 +22,7 @@ namespace OrderManagement.Microservice.Core
             serviceCollection.AddSingleton(mapper);
 
             serviceCollection.AddMediatR(Assembly.GetExecutingAssembly());
+            serviceCollection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

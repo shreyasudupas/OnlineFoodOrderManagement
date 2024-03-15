@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\MenuOrder.Shared\MenuOrder.Shared.csproj" />
   </ItemGroup>
 
 </Project>

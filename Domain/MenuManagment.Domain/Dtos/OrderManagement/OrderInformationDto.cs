@@ -19,6 +19,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public OrderStatusDetailDto Status { get; set; }
         public VendorDetailDto VendorDetail { get; set; }
         public long UIOrderNumber { get; set; }
+        public string CurrentOrderStatus { get; set; }
         public string OrderCancelledReason { get; set; } = null;
         public DateTime CreatedDate { get; set; }
     }

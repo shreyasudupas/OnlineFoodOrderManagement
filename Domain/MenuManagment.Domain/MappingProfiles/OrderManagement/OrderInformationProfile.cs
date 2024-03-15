@@ -63,7 +63,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                 }))
                 .ForMember(dest => dest.OrderReady, act => act.MapFrom((src, dest) =>
                 {
-                    if (src.OrderInProgress == null)
+                    if (src.OrderReady == null)
                     {
                         DateTime? d = null;
                         return d;

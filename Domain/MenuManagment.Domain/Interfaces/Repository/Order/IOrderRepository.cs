@@ -9,10 +9,10 @@ namespace MenuManagment.Mongo.Domain.Interfaces.Repository.Order
     {
         Task<OrderInformation?> AddOrderInformation(OrderInformation order);
         Task<OrderInformation?> UpdateOrderInformation(OrderInformation order);
-        Task<List<OrderInformation>> GetOrderListInformationBasedOnStatus(string status);
+        Task<List<OrderInformation>> GetOrderListInformationBasedOnStatus(string[] status);
 
         Task<List<OrderInformation>> GetAllOrdersBasedOnUserId(string userId);
-        Task<List<OrderInformation>> GetOrderInformationBasedOnOrderStatus(string vendorId, string orderStatus);
+        Task<List<OrderInformation>> GetOrderInformationBasedOnOrderStatus(string vendorId, string[] orderStatus);
         Task<long> GetNextUIBasedOrderNumber(string vendorId);
 
     }

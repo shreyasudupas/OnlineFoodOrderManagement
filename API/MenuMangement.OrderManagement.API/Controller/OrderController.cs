@@ -2,7 +2,7 @@
 using MenuManagment.Mongo.Domain.Enum;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Mvc;
-using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.AddOrderInformation;
+using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.OrderPlaced;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderInformation;
 using OrderManagement.Microservice.Core.Querries.Orders.GetAllOrders;
 using OrderManagement.Microservice.Core.Querries.Orders.GetVendorOrders;
@@ -18,9 +18,9 @@ namespace MenuMangement.OrderManagement.API.Controller
         }
 
         [HttpPost("/api/order")]
-        public async Task<OrderInformationDto> AddOrderInformation([FromBody] AddOrderInformationCommand addOrderInformationCommand)
+        public async Task<OrderInformationDto> AddOrderInformation([FromBody] OrderPlacedCommand orderPlacedCommand)
         {
-            return await Mediator.Send(addOrderInformationCommand);
+            return await Mediator.Send(orderPlacedCommand);
         }
 
         [HttpPut("/api/order")]
@@ -30,24 +30,9 @@ namespace MenuMangement.OrderManagement.API.Controller
         }
 
         [HttpPost("/api/order/list/status")]
-        public async Task<List<OrderInformationDto>> GetOrdersBasedOnStatus([FromBody] GetOrderStatusByVendorDto getOrderStatusByVendor)
+        public async Task<List<OrderInformationDto>> GetOrdersBasedOnStatus([FromBody] GetVendorOrdersBasedOnOrderStatusQuery getVendorOrdersBasedOnOrderStatusQuery)
         {
-            List<OrderStatusEnum> orderStatusList = new();
-            foreach (var status in getOrderStatusByVendor.VendorStatus)
-            {
-                orderStatusList.Add((OrderStatusEnum)Enum.Parse(typeof(OrderStatusEnum), status));
-            }
-
-            var query = new GetVendorOrdersBasedOnOrderStatusQuery { 
-                VendorStatus =  new GetVendorByStatusRecord
-                {
-                    VendorId = getOrderStatusByVendor.VendorId,
-                    OrderStatus = orderStatusList.ToArray()
-                }
-            };
-
-            var result = await Mediator.Send(query);
-            return result;
+            return await Mediator.Send(getVendorOrdersBasedOnOrderStatusQuery);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Saga.Orchestrator.Core.Orchestrator
                                 }
                                 else
                                 {
-                                    OrderInformationDto orderInfo = BuildOrderInformationModel(paymentInformation, vendorDetailFromApi);
+                                    OrderInformationDto orderInfo = BuildOrderPlacedInformationModel(paymentInformation, vendorDetailFromApi);
                                     orderInfo.MenuItems = paymentInformation.CartInfo.MenuItems;
                                     var orderResult = await _orderService.AddOrderInformation(orderInfo, accessToken);
 
@@ -146,7 +146,7 @@ namespace Saga.Orchestrator.Core.Orchestrator
             return response;
         }
 
-        private static OrderInformationDto BuildOrderInformationModel(PaymentInformationRecord paymentInformation,
+        private static OrderInformationDto BuildOrderPlacedInformationModel(PaymentInformationRecord paymentInformation,
             VendorDto? vendorDetailFromApi)
         {
             //next add order to orderManagment microservice

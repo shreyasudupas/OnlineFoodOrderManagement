@@ -37,6 +37,9 @@ namespace MenuManagment.Mongo.Domain.Entities
         [BsonElement("uiOrderNumber")]
         public long UIOrderNumber { get; set; }   //Only to identity by the User in the UI
 
+        [BsonElement("currentOrderStatus")]
+        public string CurrentOrderStatus { get; set; } = null;
+
         [BsonElement("orderCancelledReason")]
         public string OrderCancelledReason { get; set; } = null;
 
