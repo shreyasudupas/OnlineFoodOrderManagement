@@ -1,12 +1,12 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SignalRHub.Base.Infrastructure;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
 using SignalRHub.Base.Infrastructure.Hubs;
 using MenuMangement.Infrastructure.HttpClient;
 using MenuMangement.HttpClient.Domain.Models;
 using SignalRHub.Base.Infrastructure.NotificationFactory.FactoryMethod;
 using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Manager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -141,6 +141,15 @@ app.MapGet("/api/notification/count", async (HttpRequest request, INotificationF
 app.MapPost("/api/recieveorder/new", async (OrderInformationDto orderInfo, IOrderManager orderManager) =>
 {
     await orderManager.SendLatestOrderToClients(orderInfo);
+
+    return Results.Ok(orderInfo);
+})
+.Produces<OrderInformationDto>()
+.RequireAuthorization();
+
+app.MapPost("/api/recieveorder/cancel", async (OrderInformationDto orderInfo, IOrderManager orderManager) =>
+{
+    await orderManager.SendOrderCancellationUpdatesBackToVendor(orderInfo);
 
     return Results.Ok(orderInfo);
 })

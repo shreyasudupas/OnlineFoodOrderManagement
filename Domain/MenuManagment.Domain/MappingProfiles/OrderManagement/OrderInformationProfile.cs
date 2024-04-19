@@ -111,7 +111,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                     }
                     else
                     {
-                        return src.OrderPlaced.ToString();
+                        return src.OrderPlaced?.ToLocalTime().ToString();
                     }
                 }))
                 .ForMember(dest => dest.OrderInProgress, act => act.MapFrom((src, dest) =>
@@ -122,7 +122,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                     }
                     else
                     {
-                        return src.OrderInProgress.ToString();
+                        return src.OrderInProgress?.ToLocalTime().ToString();
                     }
                 }))
                 .ForMember(dest => dest.OrderReady, act => act.MapFrom((src, dest) =>
@@ -133,7 +133,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                     }
                     else
                     {
-                        return src.OrderReady.ToString();
+                        return src.OrderReady?.ToLocalTime().ToString();
                     }
                 }))
                 .ForMember(dest => dest.OrderDone, act => act.MapFrom((src, dest) =>
@@ -144,7 +144,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                     }
                     else
                     {
-                        return src.OrderDone.ToString();
+                        return src.OrderDone?.ToLocalTime().ToString();
                     }
                 }))
                 .ForMember(dest => dest.OrderCancelled, act => act.MapFrom((src, dest) =>
@@ -155,7 +155,7 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
                     }
                     else
                     {
-                        return src.OrderCancelled.ToString();
+                        return src.OrderCancelled?.ToLocalTime().ToString();
                     }
                 }))
                 ;

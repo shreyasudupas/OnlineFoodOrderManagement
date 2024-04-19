@@ -12,6 +12,7 @@ namespace Notification.Microservice.Core.Command.AddNotification
     public class AddNotificationCommand : IRequest<NotificationDto>
     {
         public NotificationDto NewNotification { get; set; }
+        public string Token { get; set; }
     }
 
     public class AddNotificationCommandHandler : IRequestHandler<AddNotificationCommand, NotificationDto>
@@ -35,17 +36,17 @@ namespace Notification.Microservice.Core.Command.AddNotification
             var response = await _notificationRepository.AddNotifications(mapModel);
             var mapToDto = _mapper.Map<NotificationDto>(response);
 
-            var count = await _notificationRepository.GetNewNotificationCount(request.NewNotification.FromUserId);
+            var count = await _notificationRepository.GetNewNotificationCount(request.NewNotification.ToUserId);
 
             if(!string.IsNullOrEmpty(response.Id))
             {
                 await _signalRNotificationClient.GetCallAsync(new MenuMangement.HttpClient.Domain.Models.NotificationSignalRRequest
                 {
-                    NotificationCount = count+1,
+                    NotificationCount = count,
                     isSendAll = request.NewNotification.SendAll,
                     FromUserId = request.NewNotification.FromUserId,
                     ToUserId = request.NewNotification.ToUserId
-                }, "");
+                }, request.Token);
             }
             
 

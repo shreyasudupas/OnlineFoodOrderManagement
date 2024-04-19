@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SignalRHub.Base.Infrastructure.Common.Interfaces.Hub;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Manager;
 using System.Data;
 
 namespace SignalRHub.Base.Infrastructure.Hubs

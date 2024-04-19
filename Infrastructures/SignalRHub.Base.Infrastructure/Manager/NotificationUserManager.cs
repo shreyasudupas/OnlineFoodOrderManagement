@@ -1,7 +1,7 @@
 ﻿using MenuManagement.SignalR.HubService.Common.Models;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Manager;
 
-namespace SignalRHub.Base.Infrastructure.Services;
+namespace SignalRHub.Base.Infrastructure.Manager;
 
 public class NotificationUserManager : INotificationUserManager
 {

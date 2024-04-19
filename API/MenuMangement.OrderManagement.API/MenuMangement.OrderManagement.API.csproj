@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\OrderManagement.Microservice.Core\OrderManagement.Microservice.Core.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MenuMangement.Infrastructure.HttpClient\MenuMangement.Infrastructure.HttpClient.csproj" />
     <ProjectReference Include="..\..\Infrastructures\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
     <ProjectReference Include="..\..\Infrastructures\OrderManagement.Mongo.Persistance\OrderManagement.Mongo.Persistance.csproj" />
   </ItemGroup>

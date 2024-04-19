@@ -30,18 +30,18 @@ namespace Notification.Mongo.Persistance.Repository
         }
         public async Task<List<Notifications>> GetAllNotificationByUserId(string userId,Pagination pagination)
         {
-            var result = await GetAllItemsByPaginationWithFilter(n => n.FromUserId == userId, n=>n.RecordedTimeStamp,false , pagination);
+            var result = await GetAllItemsByPaginationWithFilter(n => n.ToUserId == userId, n=>n.RecordedTimeStamp,false , pagination);
             return result?.ToList();
         }
 
         public async Task<Notifications> AddNotifications(Notifications newNotification)
         {
             _logger.LogInformation("AddNotification started..");
-            var recordedDateTime = newNotification.RecordedTimeStamp = System.DateTime.Now;
+            //var recordedDateTime = newNotification.RecordedTimeStamp = System.DateTime.Now;
             await CreateOneDocument(newNotification);
 
             var getNotification = await GetDocumentByFilter(n => n.Description == newNotification.Description && n.FromUserId == newNotification.FromUserId
-                && n.RecordedTimeStamp == recordedDateTime);
+                && n.RecordedTimeStamp == newNotification.RecordedTimeStamp);
             if(getNotification != null)
             {
                 newNotification.Id = getNotification.Id;
@@ -84,9 +84,25 @@ namespace Notification.Mongo.Persistance.Repository
 
         public async Task<int> GetNewNotificationCount(string userId)
         {
-            var response = await ListDocumentsByFilter(n => n.FromUserId == userId && n.Read == false);
+            var response = await ListDocumentsByFilter(n => n.ToUserId == userId && n.Read == false);
             var getCount = response.Count;
             return getCount;
+        }
+
+        public async Task<bool> DeleteNotification(string Id)
+        {
+            var filter = Builders<Notifications>.Filter.Eq(x => x.Id, Id);
+            var result = await DeleteOneDocument(filter);
+
+            if (result.IsAcknowledged)
+            {
+                return true;
+            }
+            else
+            {
+                _logger.LogError("Error Occured in Delteing the Notification with Id: {Id}",Id);
+                return false;
+            }
         }
     }
 }

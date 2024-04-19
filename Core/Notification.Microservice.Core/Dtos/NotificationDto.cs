@@ -16,7 +16,7 @@ namespace MenuManagment.Microservice.Core.Dtos
 
         public string Role { get; set; }
 
-        public DateTime RecordedTimeStamp { get; set; }
+        public string RecordedTimeStamp { get; set; } = string.Empty;
 
         public string Link { get; set; }
 

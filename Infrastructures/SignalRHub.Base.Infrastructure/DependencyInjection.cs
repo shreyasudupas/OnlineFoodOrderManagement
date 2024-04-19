@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
 using SignalRHub.Base.Infrastructure.NotificationFactory.FactoryMethod;
 using SignalRHub.Base.Infrastructure.NotificationFactory.Manager;
-using SignalRHub.Base.Infrastructure.Services;
+using SignalRHub.Base.Infrastructure.Manager;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Manager;
 
 namespace SignalRHub.Base.Infrastructure;
 

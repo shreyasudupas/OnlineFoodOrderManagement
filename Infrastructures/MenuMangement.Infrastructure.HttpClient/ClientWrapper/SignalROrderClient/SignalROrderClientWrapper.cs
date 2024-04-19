@@ -15,13 +15,13 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.SignalROrderClie
             _logger = logger;
         }
 
-        public async Task<OrderInformationDto?> PostCallAsync(OrderInformationDto orderInformationDto,string token)
+        public async Task<OrderInformationDto?> PostCallAsync(string routeUrl,OrderInformationDto orderInformationDto,string token)
         {
             try
             {
                 var clientName = "SignalRServiceClient";
                 var payload = JsonSerializer.Serialize(orderInformationDto);
-                var result = await PostApiCall($"recieveorder/new", clientName, token, payload);
+                var result = await PostApiCall(routeUrl, clientName, token, payload);
                 var orderInfoResult = JsonSerializer.Deserialize<OrderInformationDto>(result);
                 return orderInformationDto;
 

@@ -104,7 +104,7 @@ namespace MenuMangement.Infrastructure.HttpClient.ClientWrapper.BaseClient
                 }
                 else
                 {
-                    _logger.LogError($"Error in Delete the data to url:{url} with errors: {responseMessage.RequestMessage}");
+                    _logger.LogError($"Error in Get API for the url:{url} with errors: {responseMessage.RequestMessage}");
                     return string.Empty;
                 }
             }

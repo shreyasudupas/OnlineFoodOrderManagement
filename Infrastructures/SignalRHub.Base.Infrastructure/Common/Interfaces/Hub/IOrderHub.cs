@@ -5,5 +5,7 @@ namespace SignalRHub.Base.Infrastructure.Common.Interfaces.Hub
     public interface IOrderHub
     {
         Task PublishLatestOrderInformation(OrderInformationDto orderInformation);
+
+        Task PublishCancelOrder(OrderInformationDto orderInformation);
     }
 }

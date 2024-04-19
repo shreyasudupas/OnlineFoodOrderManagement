@@ -1,7 +1,7 @@
-﻿using SignalRHub.Base.Infrastructure.Common.Interfaces.Models;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
+﻿using SignalRHub.Base.Infrastructure.Common.Interfaces.Manager;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Models;
 
-namespace SignalRHub.Base.Infrastructure.Services
+namespace SignalRHub.Base.Infrastructure.Manager
 {
     public class VendorUserManager : IVendorUserManager
     {

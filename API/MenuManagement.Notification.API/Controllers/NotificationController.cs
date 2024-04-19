@@ -3,12 +3,16 @@ using MenuManagment.Microservice.Core.Dtos;
 using MenuOrder.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using Notification.Microservice.Core.Command.AddNotification;
+using Notification.Microservice.Core.Command.DeleteNotification;
 using Notification.Microservice.Core.Command.UpdateNotification;
 using Notification.Microservice.Core.Interface;
 using Notification.Microservice.Core.Querries.GetAllNotification;
 using Notification.Microservice.Core.Querries.GetAllNotificationByUserId;
 using Notification.Microservice.Core.Querries.GetNotificationById;
+using Notification.Microservice.Core.Querries.GetNotificationCountByUserId;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -44,7 +48,16 @@ namespace MenuManagement.Notification.API.Controllers
         [HttpPost("/api/notification")]
         public async Task<NotificationDto> AddNotification([FromBody]NotificationDto notification)
         {
-            return await _mediator.Send(new AddNotificationCommand { NewNotification = notification });
+            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer", "");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                return await _mediator.Send(new AddNotificationCommand { NewNotification = notification, Token = token });
+            }
+            else
+            {
+                throw new ArgumentNullException("token is passed is empty");
+            }
         }
 
         [HttpPut("/api/notification")]
@@ -65,6 +78,35 @@ namespace MenuManagement.Notification.API.Controllers
         public async Task<NotificationDto> GetNotificationById([FromQuery]string id)
         {
             return await _mediator.Send(new GetNotificationByIdQuery { Id = id });
+        }
+
+        [HttpGet("/api/notification/{userId}/count")]
+        public async Task<int> GetNotificationUserCount(string userId)
+        {
+            return await _mediator.Send(new GetNotificationCountByUserIdQuery
+            {
+                UserId = userId
+            });
+        }
+
+        [HttpDelete("/api/notification")]
+        public async Task<bool> DeleteNotificationById([FromQuery]string Id,string userId)
+        {
+            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer", "");
+
+            if(!string.IsNullOrEmpty(token))
+            {
+                return await _mediator.Send(new DeleteNotificationCommand
+                {
+                    Id = Id,
+                    UserId = userId,
+                    Token = token
+                });
+            }
+            else
+            {
+                throw new ArgumentNullException("token is passed is empty");
+            }
         }
     }
 }

@@ -1,14 +1,17 @@
 ﻿using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
-using MenuManagment.Mongo.Domain.Enum;
 using MenuOrder.Shared.Controller;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.OrderPlaced;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderInformation;
+using OrderManagement.Microservice.Core.Common.Model;
 using OrderManagement.Microservice.Core.Querries.Orders.GetAllOrders;
 using OrderManagement.Microservice.Core.Querries.Orders.GetVendorOrders;
 
 namespace MenuMangement.OrderManagement.API.Controller
 {
+    [Authorize]
     public class OrderController : BaseController
     {
         [HttpGet("/api/order/list")]
@@ -24,9 +27,14 @@ namespace MenuMangement.OrderManagement.API.Controller
         }
 
         [HttpPut("/api/order")]
-        public async Task<OrderInformationDto> UpdateOrderInformation([FromBody] UpdateOrderInformationCommand updateOrderInformationCommand)
+        public async Task<OrderInformationDto> UpdateOrderInformation([FromBody] UpdateInformationModel updateInformation)
         {
-            return await Mediator.Send(updateOrderInformationCommand);
+            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer", "");
+            return await Mediator.Send(new UpdateOrderInformationCommand
+            {
+                OrderInfo = updateInformation.OrderInfo,
+                Token = token
+            });
         }
 
         [HttpPost("/api/order/list/status")]

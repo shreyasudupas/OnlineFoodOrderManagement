@@ -1,6 +1,6 @@
 ﻿using SignalRHub.Base.Infrastructure.Common.Interfaces.Models;
 
-namespace SignalRHub.Base.Infrastructure.Common.Interfaces.Services
+namespace SignalRHub.Base.Infrastructure.Common.Interfaces.Manager
 {
     public interface IVendorUserManager
     {

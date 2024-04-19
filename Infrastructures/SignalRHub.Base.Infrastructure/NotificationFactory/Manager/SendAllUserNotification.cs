@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SignalRHub.Base.Infrastructure.Common.Interfaces.Hub;
-using SignalRHub.Base.Infrastructure.Common.Interfaces.Services;
+using SignalRHub.Base.Infrastructure.Common.Interfaces.Manager;
 using SignalRHub.Base.Infrastructure.Hubs;
 
 namespace SignalRHub.Base.Infrastructure.NotificationFactory.Manager

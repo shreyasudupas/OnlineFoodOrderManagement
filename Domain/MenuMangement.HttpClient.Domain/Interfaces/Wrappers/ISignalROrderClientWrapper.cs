@@ -4,6 +4,6 @@ namespace MenuMangement.HttpClient.Domain.Interfaces.Wrappers
 {
     public interface ISignalROrderClientWrapper
     {
-        Task<OrderInformationDto?> PostCallAsync(OrderInformationDto orderInformationDto, string token);
+        Task<OrderInformationDto?> PostCallAsync(string routeUrl, OrderInformationDto orderInformationDto, string token);
     }
 }

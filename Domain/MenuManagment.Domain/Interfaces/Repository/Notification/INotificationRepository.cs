@@ -13,5 +13,6 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository.Notification
         Task<Notifications> UpdateNotificationToAsRead(Notifications updateNotification);
         Task<int> GetNewNotificationCount(string userId);
         Task<Notifications> GetNotificationBasedOnId(string id);
+        Task<bool> DeleteNotification(string Id);
     }
 }

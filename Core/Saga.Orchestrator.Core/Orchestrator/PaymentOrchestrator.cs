@@ -90,7 +90,7 @@ namespace Saga.Orchestrator.Core.Orchestrator
                                     }
 
                                     //order info send to signalR service
-                                    var orderPublishResult = _signalROrderClientWrapper.PostCallAsync(orderResult, accessToken);
+                                    var orderPublishResult = _signalROrderClientWrapper.PostCallAsync($"recieveorder/new", orderResult, accessToken);
                                     if (orderPublishResult is null)
                                     {
                                         _logger.LogError("Order Publishing to SignalR Service failed");

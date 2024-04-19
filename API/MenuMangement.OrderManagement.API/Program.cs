@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MongoDb.Shared.Persistance;
 using OrderManagement.Mongo.Persistance;
+using MenuMangement.Infrastructure.HttpClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,7 @@ builder.Services.OrderManagementCore();
 builder.Services.AddOrderManagementPersistance(configuration);
 builder.Services.AddSharedInjection();
 builder.Services.AddSharedMongoServices(configuration);
+builder.Services.AddInfrastrutureHttpClient(configuration);
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", opt =>
