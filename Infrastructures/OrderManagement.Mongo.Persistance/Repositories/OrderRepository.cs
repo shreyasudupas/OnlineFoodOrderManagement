@@ -8,6 +8,8 @@ using MenuManagment.Mongo.Domain.Interfaces.Repository.Order;
 using MenuManagment.Mongo.Domain.Enum;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Options;
+using OrderManagement.Microservice.Core.Common.Model;
+using MenuManagment.Mongo.Domain.Models;
 
 namespace OrderManagement.Mongo.Persistance.Repositories
 {
@@ -208,6 +210,28 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             {
                 throw new Exception("OrderStatus not existing");
             }
+        }
+
+        public async Task<OrderCountModel> GetOrderCountByVendorId(string vendorId)
+        {
+            OrderCountModel response = new();
+            var result = await mongoCollection.Aggregate().Match(x=>x.VendorDetail.VendorId == vendorId).Group( k=> k.CurrentOrderStatus , g=> new
+            {
+                Status = g.Key,
+                TotalCount = g.Count()
+            }).ToListAsync();
+
+            if(result.Count > 0)
+            {
+                response.OrderPlacedCount = result.Where(x=>x.Status == "OrderPlaced").Select(x=>x.TotalCount).FirstOrDefault();
+                response.OrderInProgressCount = result.Where(x => x.Status == "OrderInProgress").Select(x => x.TotalCount).FirstOrDefault();
+                response.OrderCancelledCount = result.Where(x => x.Status == "OrderCancelled").Select(x => x.TotalCount).FirstOrDefault();
+            }
+            else
+            {
+                throw new Exception($"Order Status Count is not present for VendorId: {vendorId}");
+            }
+            return response;
         }
     }
 }

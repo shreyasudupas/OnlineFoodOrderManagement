@@ -7,6 +7,7 @@ using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.OrderPl
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderInformation;
 using OrderManagement.Microservice.Core.Common.Model;
 using OrderManagement.Microservice.Core.Querries.Orders.GetAllOrders;
+using OrderManagement.Microservice.Core.Querries.Orders.GetOrderCount;
 using OrderManagement.Microservice.Core.Querries.Orders.GetVendorOrders;
 
 namespace MenuMangement.OrderManagement.API.Controller
@@ -41,6 +42,13 @@ namespace MenuMangement.OrderManagement.API.Controller
         public async Task<List<OrderInformationDto>> GetOrdersBasedOnStatus([FromBody] GetVendorOrdersBasedOnOrderStatusQuery getVendorOrdersBasedOnOrderStatusQuery)
         {
             return await Mediator.Send(getVendorOrdersBasedOnOrderStatusQuery);
+        }
+
+        [HttpGet("/api/order/count")]
+        //[AllowAnonymous]
+        public async Task<GetOrderCountResponse> GetOrderCount([FromQuery]string vendorId)
+        {
+            return await Mediator.Send(new GetOrderCountQuery { VendorId = vendorId });
         }
     }
 }
