@@ -3,6 +3,7 @@ using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.FastOrderCancellation;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.OrderPlaced;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderInformation;
 using OrderManagement.Microservice.Core.Common.Model;
@@ -49,6 +50,17 @@ namespace MenuMangement.OrderManagement.API.Controller
         public async Task<GetOrderCountResponse> GetOrderCount([FromQuery]string vendorId)
         {
             return await Mediator.Send(new GetOrderCountQuery { VendorId = vendorId });
+        }
+
+        [HttpPost("/api/order/fastCancellation")]
+        public async Task<OrderInformationDto> FastOrderCancellation([FromBody] OrderInformationDto orderInformation)
+        {
+            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer", "");
+            return await Mediator.Send(new FastOrderCancellationCommand
+            {
+                OrderInfo = orderInformation,
+                Token = token
+            });
         }
     }
 }

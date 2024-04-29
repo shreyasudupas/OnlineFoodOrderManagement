@@ -21,7 +21,7 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public long UIOrderNumber { get; set; }
         public string CurrentOrderStatus { get; set; }
         public string OrderCancelledReason { get; set; } = null;
-        public DateTime CreatedDate { get; set; }
+        public string CreatedDate { get; set; }
     }
 
     public class PaymentOrderDetailDto
@@ -33,6 +33,10 @@ namespace MenuManagment.Mongo.Domain.Dtos.OrderManagement
         public string MethodOfDelivery { get; set; }
 
         public bool PaymentSuccess { get; set; }
+
+        public bool OrderCancelled { get; set; }
+
+        public bool PaymentCredited { get; set; }
     }
 
     public class UserOrderDetailsDto

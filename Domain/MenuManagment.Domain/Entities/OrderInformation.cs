@@ -60,6 +60,12 @@ namespace MenuManagment.Mongo.Domain.Entities
 
         [BsonElement("paymentSuccess")]
         public bool PaymentSuccess { get; set; }
+
+        [BsonElement("orderCancelled")]
+        public bool OrderCancelled { get; set; }
+
+        [BsonElement("paymentCredited")]
+        public bool PaymentCredited { get; set; }
     }
 
     public class UserOrderDetail

@@ -11,10 +11,19 @@ namespace MenuManagment.Mongo.Domain.MappingProfiles.OrderManagement
         {
             CreateMap<OrderInformationDto, OrderInformation>()
                 .ForMember(dest=>dest.OrderStatusDetails,act=>act.MapFrom(src=>src.Status))
+                .ForMember(dest => dest.CreatedDate, act => act.MapFrom((src, dest) =>
+                {
+                    var d = DateTime.Parse(src.CreatedDate);
+                    return d;
+                }))
                 ;
 
             CreateMap<OrderInformation,OrderInformationDto>()
                 .ForMember(dest => dest.Status, act => act.MapFrom(src => src.OrderStatusDetails))
+                .ForMember(dest => dest.CreatedDate, act => act.MapFrom((src, dest) =>
+                {
+                    return src.CreatedDate.ToLocalTime().ToString();
+                }))
                 ;
 
             CreateMap<MenuItemDto,MenuItem>()
