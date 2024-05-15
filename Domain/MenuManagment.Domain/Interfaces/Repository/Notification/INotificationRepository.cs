@@ -10,9 +10,11 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository.Notification
         Task<List<Notifications>> GetAllNotifications();
         Task<List<Notifications>> GetAllNotificationByUserId(string userId, Pagination pagination);
         Task<Notifications> AddNotifications(Notifications newNotification);
-        Task<Notifications> UpdateNotificationToAsRead(Notifications updateNotification);
+        Task<bool> UpdateNotificationToAsRead(string notificationId);
         Task<int> GetNewNotificationCount(string userId);
         Task<Notifications> GetNotificationBasedOnId(string id);
         Task<bool> DeleteNotification(string Id);
+
+        Task<Notifications> UpdateNotification(Notifications notification);
     }
 }

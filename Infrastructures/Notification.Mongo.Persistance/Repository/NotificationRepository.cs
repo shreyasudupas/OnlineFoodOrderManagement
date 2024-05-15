@@ -3,6 +3,7 @@ using MenuManagment.Mongo.Domain.Mongo.Interfaces.Repository.Notification;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDb.Shared.Persistance.Extensions;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace Notification.Mongo.Persistance.Repository
         }
         public async Task<List<Notifications>> GetAllNotificationByUserId(string userId,Pagination pagination)
         {
-            var result = await GetAllItemsByPaginationWithFilter(n => n.ToUserId == userId, n=>n.RecordedTimeStamp,false , pagination);
+            var result = await GetAllItemsByPaginationWithFilter(n => n.ToUserId == userId, n=>n.CreatedDate,false , pagination);
             return result?.ToList();
         }
 
@@ -41,7 +42,7 @@ namespace Notification.Mongo.Persistance.Repository
             await CreateOneDocument(newNotification);
 
             var getNotification = await GetDocumentByFilter(n => n.Description == newNotification.Description && n.FromUserId == newNotification.FromUserId
-                && n.RecordedTimeStamp == newNotification.RecordedTimeStamp);
+                && n.CreatedDate == newNotification.CreatedDate);
             if(getNotification != null)
             {
                 newNotification.Id = getNotification.Id;
@@ -56,21 +57,44 @@ namespace Notification.Mongo.Persistance.Repository
             }
         }
 
-        public async Task<Notifications> UpdateNotificationToAsRead(Notifications updateNotification)
+        public async Task<bool> UpdateNotificationToAsRead(string notificationId)
         {
-            _logger.LogInformation("UpdateNotificationToAsRead started..");
-            var filter = Builders<Notifications>.Filter.Eq(n => n.Id,updateNotification.Id);
+            _logger.LogInformation("{MethodName} started..",nameof(UpdateNotificationToAsRead));
+            var filter = Builders<Notifications>.Filter.Eq(n => n.Id, notificationId);
             var update = Builders<Notifications>.Update.Set(n => n.Read, true);
             var notifcationUpdateResult = await UpdateOneDocument(filter,update);
 
             if(notifcationUpdateResult.IsAcknowledged)
             {
-                _logger.LogInformation("UpdateNotificationToAsRead has updated");
+                _logger.LogInformation("{MethodName} has updated", nameof(UpdateNotificationToAsRead));
 
-                return updateNotification;
+                return true;
             }else
             {
-                _logger.LogError($"Error in saving UpdateNotificationToAsRead {updateNotification.Id}");
+                _logger.LogError("Error in saving {MethodName} with Id:{notificationId}", nameof(UpdateNotificationToAsRead),
+                    notificationId);
+                return false;
+            }
+        }
+
+        public async Task<Notifications> UpdateNotification(Notifications notification)
+        {
+            _logger.LogInformation("{methodName} update has started..",nameof(UpdateNotification));
+
+            var filter = Builders<Notifications>.Filter.Eq(n => n.Id, notification.Id);
+            var update = Builders<Notifications>.Update.ApplyMultiFields(notification);
+            var notifcationUpdateResult = await UpdateOneDocument(filter, update);
+
+            if (notifcationUpdateResult.IsAcknowledged)
+            {
+                _logger.LogInformation("{methodName} has updated", nameof(UpdateNotification));
+
+                return notification;
+            }
+            else
+            {
+                _logger.LogError("Error in saving {NotificationMethod} with Id: {notification.Id}",nameof(UpdateNotification)
+                    ,notification.Id);
                 return null;
             }
         }

@@ -16,22 +16,20 @@ namespace Notification.Microservice.Core.Command.UpdateNotification
     public class UpdateNotificationCommandHandler : IRequestHandler<UpdateNotificationCommand, NotificationDto>
     {
         private readonly INotificationRepository _notificationRepository;
-
         private readonly IMapper _mapper;
 
-        public UpdateNotificationCommandHandler(INotificationRepository notificationRepository, IMapper mapper)
+        public UpdateNotificationCommandHandler(INotificationRepository notificationRepository,
+            IMapper mapper)
         {
-            _notificationRepository = notificationRepository;
-            _mapper = mapper;
+            this._notificationRepository = notificationRepository;
+            this._mapper = mapper;
         }
 
         public async Task<NotificationDto> Handle(UpdateNotificationCommand request, CancellationToken cancellationToken)
         {
-            var modelRequest = _mapper.Map<Notifications>(request.Notification);
-            var result = await _notificationRepository.UpdateNotificationToAsRead(modelRequest);
-            var resultToDto = _mapper.Map<NotificationDto>(result);
-
-            return resultToDto;
+            var notificationModel = _mapper.Map<Notifications>(request.Notification);
+            var result = await _notificationRepository.UpdateNotification(notificationModel);
+            return _mapper.Map<NotificationDto>(result);
         }
     }
 }

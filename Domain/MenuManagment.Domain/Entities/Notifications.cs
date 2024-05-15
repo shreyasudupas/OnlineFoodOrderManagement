@@ -2,7 +2,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Entities
 {
@@ -11,6 +10,9 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+
+        [BsonElement("priority")]
+        public string Priority { get; set; }
 
         [BsonElement("title")]
         public string Title { get; set; }
@@ -27,16 +29,28 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("role")]
         public string Role { get; set; }
 
-        [BsonElement("notification_recorded_timestamp")]
-        public DateTime RecordedTimeStamp { get; set; }
-
-        [BsonElement("link")]
-        public string Link { get; set; }
+        [BsonElement("data")]
+        public NotificationData Data { get; set; }
 
         [BsonElement("sendAll")]
         public bool SendAll { get; set; }
 
         [BsonElement("read")]
         public bool Read { get; set; }
+
+        [BsonElement("created_date")]
+        public DateTime CreatedDate { get; set; }
+    }
+
+    public class NotificationData
+    {
+        [BsonElement("uri")]
+        public string Uri { get; set; }
+
+        [BsonElement("request_type")]
+        public string RequestType { get; set; }
+
+        [BsonElement("body")]
+        public string Body { get; set; }
     }
 }

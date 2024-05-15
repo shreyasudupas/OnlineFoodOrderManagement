@@ -66,6 +66,12 @@ namespace MenuManagement.Notification.API.Controllers
             return await _mediator.Send(new UpdateNotificationCommand { Notification = notification });
         }
 
+        [HttpPost("/api/notification/{notificationId}/updateRead")]
+        public async Task<bool> UpdateNotificationToRead([FromQuery] string notificationId)
+        {
+            return await _mediator.Send(new UpdateNotificationReadOnlyCommand { NotificationId = notificationId });
+        }
+
         //[AllowAnonymous]
         //[HttpGet("/api/notification/{userId}/count")]
         //public async Task<IActionResult> NewNotificationCount(string userId)

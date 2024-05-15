@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MenuManagment.Microservice.Core.Dtos
 {
     public class NotificationDto
     {
         public string Id { get; set; }
+
+        public string Priority { get; set; }
 
         public string Title { get; set; }
 
@@ -16,13 +17,22 @@ namespace MenuManagment.Microservice.Core.Dtos
 
         public string Role { get; set; }
 
-        public string RecordedTimeStamp { get; set; } = string.Empty;
-
-        public string Link { get; set; }
+        public NotificationDataDto Data { get; set; }
 
         public bool SendAll { get; set; }
 
         public bool Read { get; set; }
 
+        public string CreatedDate { get; set; } = DateTime.Now.ToLocalTime().ToString();
+
+    }
+
+    public class NotificationDataDto
+    {
+        public string Uri { get; set; } = null;
+
+        public string RequestType { get; set; } = null;
+
+        public string Body { get; set; } = null;
     }
 }

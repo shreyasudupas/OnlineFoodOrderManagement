@@ -10,24 +10,26 @@ namespace Notification.Microservice.Core.Mapping
         public NotificationProfile()
         {
             CreateMap<Notifications, NotificationDto>()
-                .ForMember(dest=>dest.RecordedTimeStamp,act=>act.MapFrom((src,dest)=>
+                .ForMember(dest=>dest.CreatedDate,act=>act.MapFrom((src,dest)=>
                 {
-                    return src.RecordedTimeStamp.ToString();
+                    return src.CreatedDate.ToString();
                 }))
                 ;
 
             CreateMap<NotificationDto, Notifications>()
-                .ForMember(dest => dest.RecordedTimeStamp, act => act.MapFrom((src, dest) =>
+                .ForMember(dest => dest.CreatedDate, act => act.MapFrom((src, dest) =>
                 {
-                    if (string.IsNullOrEmpty(src.RecordedTimeStamp))
-                        return DateTime.Now;
-                    else
+                    if (!string.IsNullOrEmpty(src.CreatedDate))
                     {
-                        var d = DateTime.Parse(src.RecordedTimeStamp);
+                        var d = DateTime.Parse(src.CreatedDate);
                         return d;
                     }
+                    return DateTime.Now;
                 }))
                 ;
+
+            CreateMap<NotificationDataDto, NotificationData>()
+                .ReverseMap();
         }
     }
 }
