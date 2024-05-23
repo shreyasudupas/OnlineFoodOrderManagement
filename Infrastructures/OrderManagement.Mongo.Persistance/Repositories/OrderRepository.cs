@@ -1,6 +1,5 @@
 ﻿using MenuManagment.Mongo.Domain.Entities;
 using Microsoft.Extensions.Logging;
-using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
 using MongoDb.Shared.Persistance.Extensions;
@@ -8,7 +7,6 @@ using MenuManagment.Mongo.Domain.Interfaces.Repository.Order;
 using MenuManagment.Mongo.Domain.Enum;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Options;
-using OrderManagement.Microservice.Core.Common.Model;
 using MenuManagment.Mongo.Domain.Models;
 
 namespace OrderManagement.Mongo.Persistance.Repositories
@@ -232,6 +230,24 @@ namespace OrderManagement.Mongo.Persistance.Repositories
                 throw new Exception($"Order Status Count is not present for VendorId: {vendorId}");
             }
             return response;
+        }
+
+        public async Task<bool> UpdateOrderStatusToOrderDoneBasedOnOrderId(string orderId)
+        {
+            var order = await GetById(orderId);
+
+            if(order is not null)
+            {
+                var filter = Builders<OrderInformation>.Filter.Eq(o => o.Id, orderId);
+                var update = Builders<OrderInformation>.Update.Set(o => o.OrderStatusDetails.OrderDone, DateTime.Now)
+                    .Set(o=>o.CurrentOrderStatus, nameof(OrderStatusEnum.OrderDone));
+
+                await UpdateOneDocument(filter,update);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

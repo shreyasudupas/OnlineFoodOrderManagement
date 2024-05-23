@@ -1,5 +1,4 @@
 ﻿using MenuManagment.Mongo.Domain.Entities;
-using MenuManagment.Mongo.Domain.Enum;
 using MenuManagment.Mongo.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,6 +15,7 @@ namespace MenuManagment.Mongo.Domain.Interfaces.Repository.Order
         Task<List<OrderInformation>> GetOrderInformationBasedOnOrderStatus(string vendorId, string[] orderStatus);
         Task<long> GetNextUIBasedOrderNumber(string vendorId);
         Task<OrderCountModel> GetOrderCountByVendorId(string vendorId);
+        Task<bool> UpdateOrderStatusToOrderDoneBasedOnOrderId(string orderId);
 
     }
 }

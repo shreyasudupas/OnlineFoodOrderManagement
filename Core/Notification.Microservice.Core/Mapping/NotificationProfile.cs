@@ -12,7 +12,7 @@ namespace Notification.Microservice.Core.Mapping
             CreateMap<Notifications, NotificationDto>()
                 .ForMember(dest=>dest.CreatedDate,act=>act.MapFrom((src,dest)=>
                 {
-                    return src.CreatedDate.ToString();
+                    return src.CreatedDate.ToLocalTime().ToString();
                 }))
                 ;
 

@@ -67,7 +67,7 @@ namespace MenuManagement.Notification.API.Controllers
         }
 
         [HttpPost("/api/notification/{notificationId}/updateRead")]
-        public async Task<bool> UpdateNotificationToRead([FromQuery] string notificationId)
+        public async Task<bool> UpdateNotificationToRead(string notificationId)
         {
             return await _mediator.Send(new UpdateNotificationReadOnlyCommand { NotificationId = notificationId });
         }

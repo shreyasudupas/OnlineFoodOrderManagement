@@ -6,6 +6,7 @@ using Microsoft.Net.Http.Headers;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.FastOrderCancellation;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.OrderPlaced;
 using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderInformation;
+using OrderManagement.Microservice.Core.Commands.OrderInformationCommand.UpdateOrderStatusToDone;
 using OrderManagement.Microservice.Core.Common.Model;
 using OrderManagement.Microservice.Core.Querries.Orders.GetAllOrders;
 using OrderManagement.Microservice.Core.Querries.Orders.GetOrderCount;
@@ -61,6 +62,12 @@ namespace MenuMangement.OrderManagement.API.Controller
                 OrderInfo = orderInformation,
                 Token = token
             });
+        }
+
+        [HttpPatch("/api/order/statusUpdate")]
+        public async Task<bool> OrderStatusUpdateToDone([FromBody] UpdateOrderStatusToDoneCommand updateOrderStatusToDoneCommand)
+        {
+            return await Mediator.Send(updateOrderStatusToDoneCommand);
         }
     }
 }
