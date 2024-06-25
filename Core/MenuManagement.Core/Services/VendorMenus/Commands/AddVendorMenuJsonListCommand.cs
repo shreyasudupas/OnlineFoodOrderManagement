@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Inventory.Microservice.Core.Common.SchemaGenerator;
 using MediatR;
 using MenuManagment.Mongo.Domain.Models;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
 {
     public class AddVendorMenuJsonListCommand : IRequest<bool>
     {
-        public List<AddVendorMenuJson> JsonVendorMenuList { get; set; }
+        public string Content { get; set; }
         public string VendorId { get; set; }
     }
 
@@ -29,9 +31,16 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
 
         public async Task<bool> Handle(AddVendorMenuJsonListCommand request, CancellationToken cancellationToken)
         {
-            var vendorMenuDtoRequestList = CreateVendorMenuDtoList(request.JsonVendorMenuList,request.VendorId);
+            List<VendorMenuDto> vendorMenus;
+            try
+            {
+                vendorMenus = JsonSchmeaGeneratorFunction.CheckIfFileContentMatchesSchema<List<VendorMenuDto>>(request.Content);
 
-            var result = await _vendorsMenuRepository.AddVendorMenuList(vendorMenuDtoRequestList);
+            } catch(Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+            var result = await _vendorsMenuRepository.AddVendorMenuList(vendorMenus);
             return result;
         }
 

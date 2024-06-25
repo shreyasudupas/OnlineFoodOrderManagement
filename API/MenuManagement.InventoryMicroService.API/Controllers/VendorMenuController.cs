@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using MenuManagment.Mongo.Domain.Models;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text;
 
 namespace MenuManagement.InventoryMicroService.API.Controllers
 {
@@ -96,25 +96,11 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                     using var reader = new StreamReader(addListVendorMenuModel.UploadFile.OpenReadStream());
                     var content = reader.ReadToEnd();
 
-                    JSchemaGenerator generator = new JSchemaGenerator();
-                    JSchema schema = generator.Generate(typeof(List<AddVendorMenuJson>));
-
-                    JsonTextReader jsonReader = new JsonTextReader(new StringReader(content));
-
-                    JSchemaValidatingReader validatingReader = new JSchemaValidatingReader(jsonReader);
-                    validatingReader.Schema = schema;
-
-                    JsonSerializer serializer = new JsonSerializer();
-                    var lists = serializer.Deserialize<List<AddVendorMenuJson>>(validatingReader);
-
-                    if(lists.Count > 0)
+                    success = await Mediator.Send(new AddVendorMenuJsonListCommand
                     {
-                        success = await Mediator.Send(new AddVendorMenuJsonListCommand
-                        {
-                            JsonVendorMenuList = lists,
-                            VendorId = addListVendorMenuModel.VendorId
-                        });
-                    }
+                        Content = content,
+                        VendorId = addListVendorMenuModel.VendorId
+                    });
                 }
                 else
                 {
@@ -129,5 +115,42 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpGet("/api/vendormenus/schema")]
+        public async Task<string> GetVendorMenuAddSchema()
+        {
+            return await Mediator.Send(new GetVendorMenuSchemaQuery());
+        }
+
+        [HttpGet("/api/vendormenus/sample/download")]
+        public IActionResult DownloadFile()
+        {
+            var model = new List<VendorMenuDto>
+            {
+                new VendorMenuDto
+                {
+                    ItemName = "",
+                    FoodType = "Vegiterian",
+                    Category = "Breakfast",
+                    Price = 0,
+                    Discount = 0,
+                    Active = true
+                }
+            };
+
+            string jsonString = JsonSerializer.Serialize(model, _options);
+            var fileName = "sample.json";
+            var mimeType = "application/json";
+            var fileBytes = Encoding.ASCII.GetBytes(jsonString);
+
+            return File(fileBytes, mimeType,fileName);
+        }
+
+        private static readonly JsonSerializerOptions _options = new() 
+        { 
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
     }
 }
