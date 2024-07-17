@@ -8,6 +8,8 @@ using MenuManagment.Mongo.Domain.Enum;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Options;
 using MenuManagment.Mongo.Domain.Models;
+using MenuManagment.Mongo.Domain.Dtos.OrderManagement;
+using MongoDB.Bson;
 
 namespace OrderManagement.Mongo.Persistance.Repositories
 {
@@ -248,6 +250,27 @@ namespace OrderManagement.Mongo.Persistance.Repositories
             }
 
             return false;
+        }
+
+        public async ValueTask<List<VendorOrderInformationSummary>> GetVendorOrderInformationSummary()
+        {
+            var vendorOrderInfoList = mongoCollection.Aggregate().Match(x => !x.CurrentOrderStatus.Contains("OrderInProgress"))
+                .Group<VendorOrderInformationSummary>(new BsonDocument()
+                {
+                    { "_id", "$vendorDetail.vendorId" },
+                    { "count", new BsonDocument  {
+                        {
+                            "$sum" , 1 }
+                        }
+                    },
+                    { "vendorName" , new BsonDocument {
+                        { "$first" , "$vendorDetail.vendorName" } 
+                        }
+                    }
+                })
+                .ToList();
+
+            return vendorOrderInfoList;
         }
     }
 }
