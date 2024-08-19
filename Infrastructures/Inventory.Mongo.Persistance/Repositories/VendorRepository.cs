@@ -17,6 +17,7 @@ using MongoDB.Libmongocrypt;
 using MongoDB.Driver.GeoJsonObjectModel;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Driver.Linq;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -126,13 +127,13 @@ namespace Inventory.Mongo.Persistance.Repositories
             return IfDocumentExists();
         }
 
-        public async Task<Categories> AddCategoryToVendor(string vendorId, CategoryDto category)
+        public async Task<VendorCategory> AddCategoryToVendor(string vendorId, CategoryDto category)
         {
             var vendor = await GetById(vendorId);
 
             if (vendor != null)
             {
-                var mapDtoToCategory = _mapper.Map<Categories>(category);
+                var mapDtoToCategory = _mapper.Map<VendorCategory>(category);
 
                 var vendorCategoryExists = vendor.Categories.Any(c => c.Name == category.Name);
                 if (!vendorCategoryExists)
@@ -170,7 +171,7 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
         }
 
-        public async Task<List<Categories>> GetAllVendorCategories(string vendorId)
+        public async Task<List<VendorCategory>> GetAllVendorCategories(string vendorId)
         {
             var vendor = await GetById(vendorId);
 
@@ -185,7 +186,7 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
         }
 
-        public async Task<Categories> GetCategoryById(string Id, string VendorId)
+        public async Task<VendorCategory> GetCategoryById(string Id, string VendorId)
         {
             _logger.LogInformation("GetCategoryById started..");
             var vendor = await GetById(VendorId);
@@ -245,10 +246,10 @@ namespace Inventory.Mongo.Persistance.Repositories
 
         }
 
-        public async Task<Categories> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto)
+        public async Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto)
         {
             _logger.LogInformation("UpdateVendorCategoryDocument started..");
-            var mapToCategoryModel = _mapper.Map<Categories>(categoryDto);
+            var mapToCategoryModel = _mapper.Map<VendorCategory>(categoryDto);
             var vendor = await GetById(vendorId);
 
             if (vendor != null)
@@ -258,8 +259,8 @@ namespace Inventory.Mongo.Persistance.Repositories
 
 
                 var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorId)
-                    & Builders<Vendor>.Filter.ElemMatch(v => v.Categories, f => f.Id == mapToCategoryModel.Id);
-                var update = Builders<Vendor>.Update.Set(f => f.Categories[-1], mapToCategoryModel);
+                    & Builders<Vendor>.Filter.ElemMatch(v => v.Categories, Builders<VendorCategory>.Filter.Eq(c=>c.Id,itemToBeUpdated.Id));
+                var update = Builders<Vendor>.Update.Set(f => f.Categories.FirstMatchingElement(), mapToCategoryModel);
 
                 var result = await UpdateOneDocument(filter, update);
                 if (result.IsAcknowledged)

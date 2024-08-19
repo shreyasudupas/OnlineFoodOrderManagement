@@ -16,11 +16,11 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
 
         Task<Vendor> GetVendorDocument(string id);
         Task<Vendor> GetVendorDocumentByCustomerfilter(Expression<Func<VendorDto, bool>> filterExpression);
-        Task<Categories> AddCategoryToVendor(string vendorId, CategoryDto category);
-        Task<List<Categories>> GetAllVendorCategories(string vendorId);
+        Task<VendorCategory> AddCategoryToVendor(string vendorId, CategoryDto category);
+        Task<List<VendorCategory>> GetAllVendorCategories(string vendorId);
         Task<Vendor> UpdateVendorDocument(VendorDto vendorData);
-        Task<Categories> GetCategoryById(string Id, string VendorId);
-        Task<Categories> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto);
+        Task<VendorCategory> GetCategoryById(string Id, string VendorId);
+        Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto);
 
         Task<List<Vendor>> GetNearestDistanceOfVendorsByRadiusInKM(double latitude, double longitude, double distanceInKm);
 

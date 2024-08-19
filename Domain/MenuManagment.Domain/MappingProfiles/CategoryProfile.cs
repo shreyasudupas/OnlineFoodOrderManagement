@@ -2,6 +2,9 @@
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using System;
+using MenuManagment.Mongo.Domain.Dtos.Inventory;
+using MenuManagment.Mongo.Domain.Entities;
+using MenuManagment.Mongo.Domain.Entities.SubModel;
 
 namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
 {
@@ -9,7 +12,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
     {
         public CategoryProfile()
         {
-            CreateMap<CategoryDto, Categories>()
+            CreateMap<CategoryDto, VendorCategory>()
                 .ForMember(act => act.OpenTime, opt => opt.MapFrom((src, dest) => {
 
                     var splitTime = src.OpenTime.Split(':');
@@ -28,12 +31,28 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                     var time = new TimeSpan(hours, min, sec);
                     return time;
                 }))
+                .ForMember(act => act.CategoryReleaseDate, opt => opt.MapFrom((src, dest) =>
+                {
+                    var d = DateTime.Parse(src.ReleaseDateTime);
+                    return d;
+                }))
                 ;
 
-            CreateMap<Categories, CategoryDto>()
+            CreateMap<VendorCategory, CategoryDto>()
                 .ForMember(act => act.OpenTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.OpenTime))
                 .ForMember(act => act.CloseTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.CloseTime))
+                .ForMember(act=>act.ReleaseDateTime,opt=>opt.MapFrom((src,dest)=>
+                {
+                    return src.CategoryReleaseDate.ToLocalTime().ToString();
+                }))
+                .ForMember(act=>act.MenuItems,opt=>opt.MapFrom(src=>src.MenuItems))
                 ;
+
+            CreateMap<VendorCategoryMenuDto, VendorCategoryMenu>()
+                .ReverseMap();
+
+            CreateMap<ImageModelDto, ImageModel>()
+                .ReverseMap();
         }
     }
 }

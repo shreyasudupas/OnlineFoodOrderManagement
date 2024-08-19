@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Entities
 {
-    public class Vendor : IEntity
+    public sealed record Vendor : IEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -20,9 +20,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("vendorDescription")]
         public string VendorDescription { get; set; }
 
-
         [BsonElement("categories")]
-        public List<Categories> Categories { get; set; }
+        public List<VendorCategory> Categories { get; set; }
 
         [BsonElement("cuisineTypes")]
         public List<string> CuisineType { get; set; }
@@ -65,14 +64,5 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
 
         [BsonElement("registrationProcess")]
         public string RegistrationProcess { get; set; }
-    }
-
-    public class Coordinates
-    {
-        [BsonElement("Latitude")]
-        public double Latitude { get; set; }
-
-        [BsonElement("Longitude")]
-        public double Longitude { get; set; }
     }
 }

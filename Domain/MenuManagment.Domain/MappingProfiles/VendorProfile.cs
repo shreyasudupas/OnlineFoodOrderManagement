@@ -5,6 +5,7 @@ using System;
 using MenuManagment.Mongo.Domain.Dtos.Inventory;
 using MenuManagment.Mongo.Domain.Entities.SubModel;
 using MongoDB.Driver.GeoJsonObjectModel;
+using MenuManagment.Mongo.Domain.Entities;
 
 namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
 {
@@ -73,7 +74,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
             //CreateMap<CoordinatesDto, Coordinates>()
             //    .ReverseMap();
 
-            CreateMap<CategoryDto, Categories>()
+            CreateMap<CategoryDto, VendorCategory>()
                 .ForMember(act => act.OpenTime, opt => opt.MapFrom((src, dest) => {
 
                     var splitTime = src.OpenTime.Split(':');
@@ -92,12 +93,24 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                     var time = new TimeSpan(hours, min, sec);
                     return time;
                 }))
+                .ForMember(act => act.CategoryReleaseDate, opt => opt.MapFrom((src, dest) =>
+                {
+                    var d = DateTime.Parse(src.ReleaseDateTime);
+                    return d;
+                }))
                 ;
 
-            CreateMap<Categories, CategoryDto>()
+            CreateMap<VendorCategory, CategoryDto>()
                 .ForMember(act => act.OpenTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.OpenTime))
                 .ForMember(act => act.CloseTime, opt => opt.MapFrom((src, dest) => new DateTime() + src.CloseTime))
+                .ForMember(act => act.ReleaseDateTime, opt => opt.MapFrom((src, dest) =>
+                {
+                    return src.CategoryReleaseDate.ToLocalTime().ToString();
+                }))
                 ;
+
+            CreateMap<VendorCategoryMenuDto, VendorCategoryMenu>()
+                .ReverseMap();
 
             CreateMap<ImageModelDto, ImageModel>()
                 .ReverseMap();
