@@ -131,7 +131,7 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 {
                     ItemName = "",
                     FoodType = "Vegiterian",
-                    Category = "Breakfast",
+                    CategoryId = "Breakfast",
                     Price = 0,
                     Discount = 0,
                     Active = true

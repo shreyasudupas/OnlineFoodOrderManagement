@@ -1,9 +1,7 @@
-﻿using MenuManagment.Mongo.Domain.Entities;
-using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
+﻿using MenuManagment.Mongo.Domain.Mongo.Interfaces.Entity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using System.Collections.Generic;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Entities
 {
@@ -30,8 +28,5 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
 
         [BsonElement("categoryReleaseDate")]
         public DateTime CategoryReleaseDate { get; set; }
-
-        [BsonElement("menuList")]
-        public List<VendorCategoryMenu> MenuItems { get; set; } = new ();
     }
 }

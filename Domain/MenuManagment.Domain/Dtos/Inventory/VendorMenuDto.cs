@@ -34,8 +34,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 
         [Required]
         [Description("Can add various custom category that belongs to the vendor like Eg: Breakfast, Lunch etc.")]
-        [JsonProperty("category")]
-        public string Category { get; set; } = string.Empty;
+        [JsonProperty("categoryId")]
+        public string CategoryId { get; set; } = string.Empty;
 
         [Required]
         [JsonProperty("price")]

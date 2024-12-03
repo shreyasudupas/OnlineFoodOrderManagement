@@ -145,6 +145,7 @@ namespace IdentityServer.Infrastruture.Services
                 Email = registerAdminResponse.Email,
                 CreatedDate = DateTime.Now,
                 Enabled = true,
+                UserType = IdenitityServer.Core.Domain.Enums.UserTypeEnum.Admin
                 //IsAdmin = true,
             };
 

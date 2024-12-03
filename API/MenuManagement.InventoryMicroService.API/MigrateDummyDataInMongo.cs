@@ -98,9 +98,9 @@ namespace MenuManagement.InventoryMicroService.API
                     },
                 };
 
-                var dummyMenu = new List<VendorMenuDto>
+                var dummyMenu = new List<VendorsMenus>
                 {
-                    new VendorMenuDto
+                    new VendorsMenus
                     {
                         Id= "",
                         VendorId = "",
@@ -108,11 +108,11 @@ namespace MenuManagement.InventoryMicroService.API
                         Image = new MenuManagment.Mongo.Domain.Entities.SubModel.ImageModel{  ImageId="",ImageFileName=""},
                         Price=20,
                         FoodType= dummyFoodType.TypeName,
-                        Category = dummyCategories[0].Name,
+                        CategoryId = dummyCategories[0].Name,
                         Active=true,
                         Discount = 0
                     },
-                    new VendorMenuDto
+                    new VendorsMenus
                     {
                         Id= "",
                         VendorId = "",
@@ -120,11 +120,11 @@ namespace MenuManagement.InventoryMicroService.API
                         Image = new MenuManagment.Mongo.Domain.Entities.SubModel.ImageModel{  ImageId="",ImageFileName=""},
                         Price=35,
                         FoodType= dummyFoodType.TypeName,
-                        Category = dummyCategories[0].Name,
+                        CategoryId = dummyCategories[0].Name,
                         Active=true,
                         Discount = 10
                     },
-                    new VendorMenuDto
+                    new VendorsMenus
                     {
                         Id= "",
                         VendorId="",
@@ -132,7 +132,7 @@ namespace MenuManagement.InventoryMicroService.API
                         Image = new MenuManagment.Mongo.Domain.Entities.SubModel.ImageModel{  ImageId="",ImageFileName=""},
                         Price=45,
                         FoodType= dummyFoodType.TypeName,
-                        Category = dummyCategories[1].Name,
+                        CategoryId = dummyCategories[1].Name,
                         Active=true,
                         Discount = 0,
                         Rating = 3

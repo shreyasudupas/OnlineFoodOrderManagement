@@ -213,5 +213,19 @@ namespace IdentityServer.Infrastruture.Services
                 return false;
             }
         }
+
+        public async ValueTask<IEnumerable<VendorAdminUserResponseModel>> GetAllVendorAdminUsers()
+        {
+            var users = await _context.Users.Where(u => u.Enabled == false
+            && u.UserType == IdenitityServer.Core.Domain.Enums.UserTypeEnum.Vendor)
+                .Select(u=> new VendorAdminUserResponseModel
+                {
+                    Id = u.Id,
+                    Username = u.UserName
+                })
+                .ToListAsync();
+
+            return users;
+        }
     }
 }

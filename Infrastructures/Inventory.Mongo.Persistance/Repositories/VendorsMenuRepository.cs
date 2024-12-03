@@ -19,50 +19,38 @@ namespace Inventory.Mongo.Persistance.Repositories
     public class VendorsMenuRepository : BaseRepository<VendorsMenus>, IVendorsMenuRepository
     {
         private readonly ILogger _logger;
-        private readonly IMapper _mapper;
         public VendorsMenuRepository(
             IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings,
-            ILogger<VendorsMenuRepository> logger,
-            IMapper mapper) : base(mongoDatabaseSettings)
+            ILogger<VendorsMenuRepository> logger) : base(mongoDatabaseSettings)
         {
             _logger = logger;
-            _mapper = mapper;
         }
 
-        public async Task<VendorsMenus> AddVendorMenus(VendorMenuDto menu)
+        public async Task<VendorsMenus> AddVendorMenus(VendorsMenus vendorMenus)
         {
             _logger.LogInformation("AddVendorMenus started");
-            var mapToMenuModel = _mapper.Map<VendorsMenus>(menu);
 
-            if (menu != null)
+            var ifExists = await GetDocumentByFilter(vm => vm.ItemName == vendorMenus.ItemName && vm.VendorId == vendorMenus.VendorId);
+            if (ifExists == null)
             {
-                var ifExists = await GetDocumentByFilter(vm => vm.ItemName == menu.ItemName && vm.VendorId == menu.VendorId);
-                if (ifExists == null)
+                await CreateOneDocument(vendorMenus);
+
+                var createdMenu = await GetDocumentByFilter(m => m.VendorId == vendorMenus.VendorId && m.ItemName == vendorMenus.ItemName);
+
+                if (createdMenu != null)
                 {
-                    await CreateOneDocument(mapToMenuModel);
-
-                    var createdMenu = await GetDocumentByFilter(m => m.VendorId == menu.VendorId && m.ItemName == menu.ItemName);
-
-                    if (createdMenu != null)
-                    {
-                        return createdMenu;
-                    }
-                    else
-                    {
-                        _logger.LogInformation($"Menu with vendorId {menu.VendorId} not found");
-                        return mapToMenuModel;
-                    }
+                    return createdMenu;
                 }
                 else
                 {
-                    _logger.LogError("ItemName already present");
-                    return mapToMenuModel;
+                    _logger.LogInformation($"Menu with vendorId {vendorMenus.VendorId} not found");
+                    return vendorMenus;
                 }
             }
             else
             {
-                _logger.LogError("No Items present");
-                return null;
+                _logger.LogError("ItemName already present");
+                return vendorMenus;
             }
         }
 
@@ -118,21 +106,21 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
         }
 
-        public async Task<VendorsMenus> UpdateVendorMenus(VendorMenuDto menu)
+        public async Task<VendorsMenus> UpdateVendorMenus(VendorsMenus vendorsMenus)
         {
             _logger.LogInformation("UpdateVendorMenus started..");
-            var vendorMenu = await GetById(menu.Id);
+            var vendorMenu = await GetById(vendorsMenus.Id);
             if (vendorMenu != null)
             {
-                var mapToVendorMenusModel = _mapper.Map<VendorsMenus>(menu);
-                var filter = Builders<VendorsMenus>.Filter.Eq(vm => vm.Id, mapToVendorMenusModel.Id);
-                var update = Builders<VendorsMenus>.Update.ApplyMultiFields(mapToVendorMenusModel);
+                
+                var filter = Builders<VendorsMenus>.Filter.Eq(vm => vm.Id, vendorsMenus.Id);
+                var update = Builders<VendorsMenus>.Update.ApplyMultiFields(vendorsMenus);
 
                 var result = await UpdateOneDocument(filter, update);
                 if (result.IsAcknowledged)
                 {
                     _logger.LogInformation("UpdateVendorMenus update complete");
-                    return mapToVendorMenusModel;
+                    return vendorsMenus;
                 }
                 else
                 {
@@ -142,7 +130,7 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
             else
             {
-                _logger.LogError($"No vendor menu with Id: {menu.Id}");
+                _logger.LogError($"No vendor menu with Id: {vendorsMenus.Id}");
                 return null;
             }
         }
@@ -172,15 +160,13 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
         }
 
-        public async Task<bool> AddVendorMenuList(List<VendorMenuDto> vendorsMenuDtos)
+        public async Task<bool> AddVendorMenuList(List<VendorsMenus> vendorsMenus)
         {
             try
             {
                 _logger.LogInformation("Add List VendorMenu started...");
 
-                var mapToVendorMenus = _mapper.Map<List<VendorsMenus>>(vendorsMenuDtos);
-
-                await CreateManyDocument(mapToVendorMenus);
+                await CreateManyDocument(vendorsMenus);
 
                 _logger.LogInformation("Add List VendorMenu ended...");
 

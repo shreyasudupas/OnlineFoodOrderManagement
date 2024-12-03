@@ -9,6 +9,8 @@ using Inventory.Microservice.Core.Services.Vendor.Querries.GetNearestVendors;
 using Inventory.Microservice.Core.Services.Vendor.Querries.GetVendorById;
 using Inventory.Microservice.Core.Services.Vendor.VendorDetails.Commands.AddVendors;
 using Inventory.Microservice.Core.Services.Vendor.VendorDetails.Query.GetVendorList;
+using Inventory.Microservice.Core.Services.VendorMenus.Query;
+using MenuManagment.Mongo.Domain.Dtos.Inventory;
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
@@ -65,10 +67,12 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
             return await Mediator.Send(addCategoryCommand);
         }
 
+        [AllowAnonymous]
         [HttpGet("/api/vendor/{vendorId}/category/{categoryId}")]
-        public async Task<CategoryDto> GetAllVendorCategories(string vendorId,string categoryId)
+        public async Task<VendorCategoryMenu> GetAllVendorCategories(string vendorId,string categoryId)
         {
-            return await Mediator.Send(new GetCategoryByIdQuery { VendorId = vendorId , Id = categoryId });
+            //return await Mediator.Send(new GetCategoryByIdQuery { VendorId = vendorId , Id = categoryId });
+            return await Mediator.Send(new GetVendorCategoryMenuByCategoryId { VendorId = vendorId, CategoryId = categoryId });
         }
 
         [HttpPut("/api/vendor/update/category")]

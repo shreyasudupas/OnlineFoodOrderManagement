@@ -2,6 +2,7 @@
 using Inventory.Microservice.Core.Common.SchemaGenerator;
 using MediatR;
 using MenuManagment.Mongo.Domain.Models;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using System;
@@ -40,7 +41,9 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
             {
                 throw new Exception(ex.Message.ToString());
             }
-            var result = await _vendorsMenuRepository.AddVendorMenuList(vendorMenus);
+
+            var mapToVendorMenus = _mapper.Map<List<VendorsMenus>>(vendorMenus);
+            var result = await _vendorsMenuRepository.AddVendorMenuList(mapToVendorMenus);
             return result;
         }
 
@@ -57,7 +60,7 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
                     Rating = 0,
                     FoodType= json.FoodType,
                     Discount= json.Discount,
-                    Category= json.Category,
+                    CategoryId= json.Category,
                     Active= json.Active,
                     Image = new MenuManagment.Mongo.Domain.Entities.SubModel.ImageModel()
                 });

@@ -37,7 +37,7 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Query
                 {
                     Id = vendorMenu.Id,
                     VendorId = vendorMenu.VendorId,
-                    Category = vendorMenu.Category,
+                    Category = vendorMenu.CategoryId,
                     FoodType = vendorMenu.FoodType,
                     ImageId = imageMenu.Id,
                     ItemName = vendorMenu.ItemName,
@@ -54,7 +54,7 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Query
                 {
                     Id = vendorMenu.Id,
                     VendorId = vendorMenu.VendorId,
-                    Category = vendorMenu.Category,
+                    Category = vendorMenu.CategoryId,
                     FoodType = vendorMenu.FoodType,
                     ItemName = vendorMenu.ItemName,
                     ImageId = "",

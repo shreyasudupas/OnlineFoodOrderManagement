@@ -4,15 +4,18 @@ using IdenitityServer.Core.Domain.Request;
 using IdenitityServer.Core.Domain.Response;
 using IdenitityServer.Core.Features.AddressMapping.AddStateAssociation;
 using IdenitityServer.Core.Features.Utility;
+using IdenitityServer.Core.Features.Utility.GetAllVendorAdminUsers;
 using IdenitityServer.Core.Features.Utility.UpdatePoints;
 using IdenitityServer.Core.Features.Utility.UpdateUserPoints;
 using IdenitityServer.Core.Features.Utility.VendorIdMapping;
+using IdenitityServer.Core.Features.VendorMapping.Commands.AddNewVendorUserMapping;
 using MenuOrder.Shared.Controller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -203,6 +206,21 @@ namespace IdentityServer.API.APIControllers
         public async Task<bool> UpdateUserPoints([FromBody] UpdatePointsCommand updatePointsCommand)
         {
             return await Mediator.Send(updatePointsCommand);
+        }
+
+        [HttpGet("/api/utility/get/vendoradmin")]
+        public async Task<IEnumerable<VendorAdminUserResponseModel>> GetAllVendorAdminUsers()
+        {
+            return await Mediator.Send(new GetAllVendorAdminUserQuery());
+        }
+
+        [HttpPost("/api/utility/add/new/vendorUserMapping")]
+        public async Task AddNewVendorUserMapping([FromBody] VendorIdMappingResponse vendorIdMappingResponse)
+        {
+            await Mediator.Send(new AddNewVendorUserMappingCommand
+            {
+                UserVendorIdMapping = vendorIdMappingResponse
+            });
         }
     }
 }

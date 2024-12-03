@@ -1,6 +1,7 @@
 ﻿using IdenitityServer.Core.Domain.DBModel;
 using IdenitityServer.Core.Domain.Model;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IdenitityServer.Core.Common.Interfaces
@@ -27,5 +28,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<UserProfile> GetUserInfoByUserName(string userName);
 
         Task<bool> UpdateReversePoints(string userId, double amountToBeDebited);
+        Task AddNewVendorUserIdMappingAsync(VendorUserIdMapping vendorUserIdMapping, CancellationToken cancellationToken);
     }
 }

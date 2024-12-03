@@ -251,15 +251,19 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
         public async Task<List<ImageDataModel>> GetMenuImagesByParam([FromQuery] string searchParam)
         {
             var response = new List<ImageDataModel>();
-            var result = await Mediator.Send(new GetMenuImagesByItemName { SearchParam = searchParam });
 
-            if(result != null)
+            if (!string.IsNullOrEmpty(searchParam))
             {
-                foreach(var image in result)
-                {
-                    var getImageModel = await GetImageModel(image);
+                var result = await Mediator.Send(new GetMenuImagesByItemName { SearchParam = searchParam });
 
-                    response.Add(getImageModel);
+                if (result != null)
+                {
+                    foreach (var image in result)
+                    {
+                        var getImageModel = await GetImageModel(image);
+
+                        response.Add(getImageModel);
+                    }
                 }
             }
 

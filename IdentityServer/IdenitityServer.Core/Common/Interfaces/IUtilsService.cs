@@ -19,5 +19,6 @@ namespace IdenitityServer.Core.Common.Interfaces
         Task<ApiResourceScopeModel> AddApiResourceScope(int scopeId, int apiResourceId);
         Task<bool> DeleteApiResourceScope(string scopeName, int apiResourceId);
         Task<bool> UpdateUserEnable(string userId, bool enable);
+        ValueTask<IEnumerable<VendorAdminUserResponseModel>> GetAllVendorAdminUsers();
     }
 }

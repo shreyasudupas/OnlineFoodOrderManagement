@@ -1,7 +1,4 @@
-﻿using MenuManagment.Mongo.Domain.Dtos.Inventory;
-using System.Collections.Generic;
-
-namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
+﻿namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 
 public class CategoryDto
 {
@@ -17,5 +14,4 @@ public class CategoryDto
     public bool Active { get; set; }
 
     public string ReleaseDateTime { get; set; }
-    public List<VendorCategoryMenuDto> MenuItems { get; set; } = new();
 }

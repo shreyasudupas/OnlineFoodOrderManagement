@@ -4,6 +4,7 @@ using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using System.Threading;
 using System.Threading.Tasks;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
 
 namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
 {
@@ -25,14 +26,11 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
 
         public async Task<VendorMenuDto> Handle(AddVendorMenusCommand request, CancellationToken cancellationToken)
         {
-            var result = await _menuRepository.AddVendorMenus(request.Menu);
-            if (request != null)
-            {
-                var mapTODto = _mapper.Map<VendorMenuDto>(result);
-                return mapTODto;
-            }
-            else
-                return null;
+            var mapToMenuModel = _mapper.Map<VendorsMenus>(request.Menu);
+            var result = await _menuRepository.AddVendorMenus(mapToMenuModel);
+
+            var mapToDto = _mapper.Map<VendorMenuDto>(result);
+            return mapToDto;
         }
     }
 }

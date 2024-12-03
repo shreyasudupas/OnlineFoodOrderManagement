@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Threading;
+using MenuManagment.Mongo.Domain.Dtos.Inventory;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
 {
@@ -20,10 +22,11 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
         Task<List<VendorCategory>> GetAllVendorCategories(string vendorId);
         Task<Vendor> UpdateVendorDocument(VendorDto vendorData);
         Task<VendorCategory> GetCategoryById(string Id, string VendorId);
-        Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto);
+        Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, VendorCategory categoryDto);
 
         Task<List<Vendor>> GetNearestDistanceOfVendorsByRadiusInKM(double latitude, double longitude, double distanceInKm);
 
         Task<bool> UpdateVendorStatus(string vendorId, string status);
+        Task<VendorCategoryMenu> GetVendorMenuListWithCategoryIdAsync(string vendorId, string categoryId, CancellationToken cancellationToken);
     }
 }

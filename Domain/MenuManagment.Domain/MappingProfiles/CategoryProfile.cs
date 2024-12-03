@@ -2,9 +2,6 @@
 using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
 using MenuManagment.Mongo.Domain.Mongo.Entities;
 using System;
-using MenuManagment.Mongo.Domain.Dtos.Inventory;
-using MenuManagment.Mongo.Domain.Entities;
-using MenuManagment.Mongo.Domain.Entities.SubModel;
 
 namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
 {
@@ -45,14 +42,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                 {
                     return src.CategoryReleaseDate.ToLocalTime().ToString();
                 }))
-                .ForMember(act=>act.MenuItems,opt=>opt.MapFrom(src=>src.MenuItems))
                 ;
-
-            CreateMap<VendorCategoryMenuDto, VendorCategoryMenu>()
-                .ReverseMap();
-
-            CreateMap<ImageModelDto, ImageModel>()
-                .ReverseMap();
         }
     }
 }

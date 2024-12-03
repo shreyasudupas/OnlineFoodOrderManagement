@@ -11,13 +11,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDb.Shared.Persistance.Repositories;
-using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
-using MongoDB.Libmongocrypt;
 using MongoDB.Driver.GeoJsonObjectModel;
 using MenuManagment.Mongo.Domain.Mongo.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver.Linq;
+using System.Threading;
+using MenuManagment.Mongo.Domain.Dtos.Inventory;
 
 namespace Inventory.Mongo.Persistance.Repositories
 {
@@ -246,31 +246,29 @@ namespace Inventory.Mongo.Persistance.Repositories
 
         }
 
-        public async Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, CategoryDto categoryDto)
+        public async Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, VendorCategory vendorCategory)
         {
             _logger.LogInformation("UpdateVendorCategoryDocument started..");
-            var mapToCategoryModel = _mapper.Map<VendorCategory>(categoryDto);
             var vendor = await GetById(vendorId);
 
             if (vendor != null)
             {
                 //update category since FE is not sending category
-                var itemToBeUpdated = vendor.Categories.Where(x => x.Id == mapToCategoryModel.Id).FirstOrDefault();
-
+                var itemToBeUpdated = vendor.Categories.Where(x => x.Id == vendorCategory.Id).FirstOrDefault();
 
                 var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorId)
                     & Builders<Vendor>.Filter.ElemMatch(v => v.Categories, Builders<VendorCategory>.Filter.Eq(c=>c.Id,itemToBeUpdated.Id));
-                var update = Builders<Vendor>.Update.Set(f => f.Categories.FirstMatchingElement(), mapToCategoryModel);
+                var update = Builders<Vendor>.Update.Set(f => f.Categories.FirstMatchingElement(), vendorCategory);
 
                 var result = await UpdateOneDocument(filter, update);
                 if (result.IsAcknowledged)
                 {
-                    return mapToCategoryModel;
+                    return vendorCategory;
                 }
                 else
                 {
                     _logger.LogError($"Error updating the Vendor with Id {vendor}");
-                    return mapToCategoryModel;
+                    return vendorCategory;
                 }
             }
             else
@@ -330,16 +328,76 @@ namespace Inventory.Mongo.Persistance.Repositories
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
-            } 
-            else
-            {
-                return false;
             }
 
+            return false;
+        }
+
+        public async Task<VendorCategoryMenu> GetVendorMenuListWithCategoryIdAsync(string vendorId, string categoryId, CancellationToken cancellationToken)
+        {
+            var catgoriesUnwindStage = new BsonDocument("$unwind", "$categories");
+
+            var matchStage = new BsonDocument("$match", 
+                new BsonDocument("$and", new BsonArray
+                {
+                    new BsonDocument("_id",new ObjectId(vendorId)),
+                    new BsonDocument("categories._id",new ObjectId(categoryId))
+                }));
+
+            var categoryLookupStage = new BsonDocument("$lookup" , 
+                    new BsonDocument("from", nameof(VendorsMenus))
+                    .Add("localField", "categories._id")
+                    .Add("foreignField", "categoryId")
+                    .Add("as", "menuLists")
+            );
+
+            var menuListMap = new BsonDocument("$map", new BsonDocument
+            {
+                { "input", "$menuLists" },
+                { "as", "menuList" },
+                { "in", new BsonDocument
+                        {
+                            { "_id", "$$menuList._id" },
+                            { "itemName", "$$menuList.itemName" },
+                            { "foodType", "$$menuList.foodType" },
+                            { "price", "$$menuList.price" },
+                            { "discount", "$$menuList.discount" },
+                            { "rating", "$$menuList.rating" },
+                            { "active", "$$menuList.active" },
+                            { "image", new BsonDocument {
+                                            { "imageId", "$$menuList.image.imageId" },
+                                            { "imageFileName", "$$menuList.image.imageFileName" }
+                                       }
+                            },
+                        }
+                }
+            });
+
+            var projectMapMenuList = new BsonDocument("$project", new BsonDocument
+            {
+                { "_id", 1 },
+                { "vendorName", 1 },
+                { "categories", 
+                    new BsonDocument {
+                        { "_id", 1 },
+                        { "name", 1 },
+                        { "description", 1 },
+                        { "openTime", 1 },
+                        { "closeTime", 1 },
+                        { "active", 1 },
+                        { "categoryReleaseDate" , 1 },
+                        { "menuLists" , menuListMap }
+                    }
+                },
+            });
+
+            var pipeline = new[] { catgoriesUnwindStage, matchStage, categoryLookupStage, projectMapMenuList };
+            var vendorCategoryMenuList = await mongoCollection.Aggregate<VendorCategoryMenu>(
+                pipeline,
+                cancellationToken: cancellationToken)
+                .FirstOrDefaultAsync();
+
+            return vendorCategoryMenuList;
         }
     }
 }

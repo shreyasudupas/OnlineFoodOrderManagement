@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IdentityServer.Infrastruture.Services
@@ -437,6 +438,26 @@ namespace IdentityServer.Infrastruture.Services
             var user = await _userManager.FindByNameAsync(userName);
             var modelMapUserProfile = user.MapToProfile(_context);
             return modelMapUserProfile;
+        }
+
+        public async Task AddNewVendorUserIdMappingAsync(VendorUserIdMapping vendorUserIdMapping, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users
+                .Where(x=>x.Id.Equals(vendorUserIdMapping.UserId))
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if(user is not null)
+            {
+                vendorUserIdMapping.Username = user.UserName;
+                vendorUserIdMapping.EmailId = user.Email;
+                vendorUserIdMapping.UserType = IdenitityServer.Core.Domain.Enums.VendorUserTypeEnum.VendorUser;
+
+                await _context.VendorUserIdMappings.AddAsync(vendorUserIdMapping,cancellationToken);
+
+                user.Enabled = true;
+
+                await _context.SaveChangesAsync(cancellationToken);
+            }
         }
     }
 }

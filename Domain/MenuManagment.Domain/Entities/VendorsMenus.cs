@@ -23,8 +23,9 @@ namespace MenuManagment.Mongo.Domain.Mongo.Entities
         [BsonElement("foodType")]
         public string FoodType { get; set; }
 
-        [BsonElement("category")]
-        public string Category { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("categoryId")]
+        public string CategoryId { get; set; }
 
         [BsonElement("price")]
         public double Price { get; set; }

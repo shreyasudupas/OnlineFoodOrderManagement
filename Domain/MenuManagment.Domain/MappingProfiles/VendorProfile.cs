@@ -109,7 +109,7 @@ namespace MenuManagment.Mongo.Domain.Mongo.MappingProfile
                 }))
                 ;
 
-            CreateMap<VendorCategoryMenuDto, VendorCategoryMenu>()
+            CreateMap<VendorCategoryMenuDto, Domain.Entities.VendorCategoryMenu>()
                 .ReverseMap();
 
             CreateMap<ImageModelDto, ImageModel>()

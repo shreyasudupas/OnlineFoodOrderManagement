@@ -124,6 +124,6 @@ app.UseEndpoints(endpoints =>
 });
 
 //Database Seed
-app.UseMigration();
+//app.UseMigration();
 
 app.Run();

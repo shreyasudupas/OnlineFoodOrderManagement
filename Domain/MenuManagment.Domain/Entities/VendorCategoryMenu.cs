@@ -8,7 +8,7 @@ public sealed record VendorCategoryMenu
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public string Id { get; } = ObjectId.GenerateNewId().ToString();
 
     [BsonElement("itemName")]
     public string ItemName { get; set; }
