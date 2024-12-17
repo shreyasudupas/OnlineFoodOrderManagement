@@ -456,6 +456,23 @@ namespace IdentityServer.Infrastruture.Services
 
                 user.Enabled = true;
 
+                //add enable and vendorId claim UsersClaims
+
+                var enableClaim = new IdentityUserClaim<string>
+                {
+                    UserId = user.Id,
+                    ClaimType = "enabled",
+                    ClaimValue = "True"
+                };
+
+                var vendorIdClaim = new IdentityUserClaim<string>
+                {
+                    UserId = user.Id,
+                    ClaimType = "vendorId",
+                    ClaimValue = vendorUserIdMapping.VendorId
+                };
+                await _context.UserClaims.AddRangeAsync(new[] { enableClaim, vendorIdClaim }, cancellationToken);
+
                 await _context.SaveChangesAsync(cancellationToken);
             }
         }
