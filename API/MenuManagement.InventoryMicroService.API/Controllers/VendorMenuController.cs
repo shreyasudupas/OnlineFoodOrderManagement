@@ -131,7 +131,11 @@ namespace MenuManagement.InventoryMicroService.API.Controllers
                 {
                     ItemName = "",
                     FoodType = "Vegiterian",
-                    CategoryId = "Breakfast",
+                    CategoryDetails = new CategoryDetailsDto
+                    {
+                        CategoryId = "",
+                        CategoryName="Sample Category Name"
+                    },
                     Price = 0,
                     Discount = 0,
                     Active = true

@@ -1,7 +1,10 @@
 ﻿using MenuManagment.Mongo.Domain.Entities.SubModel;
+using MenuManagment.Mongo.Domain.Mongo.Entities;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 {
@@ -34,8 +37,8 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
 
         [Required]
         [Description("Can add various custom category that belongs to the vendor like Eg: Breakfast, Lunch etc.")]
-        [JsonProperty("categoryId")]
-        public string CategoryId { get; set; } = string.Empty;
+        [JsonProperty("categoryDetails")]
+        public CategoryDetailsDto CategoryDetails { get; set; }
 
         [Required]
         [JsonProperty("price")]
@@ -52,5 +55,49 @@ namespace MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos
         [Description("Initial adding of menu items it can be set to true")]
         [JsonProperty("active")]
         public bool Active { get; set; }
+
+        public static List<VendorMenuDto> MaptoDto(List<VendorsMenus> vendorMenus, List<VendorCategory> categories)
+        {
+            List<VendorMenuDto> response = new();
+            foreach (var category in categories)
+            {
+                var categoryMenus = vendorMenus.Where(x => x.CategoryId == category.Id);
+                foreach (var vendorMenu in categoryMenus)
+                {
+                    response.Add(new VendorMenuDto
+                    {
+                        Id = vendorMenu.Id,
+                        ItemName = vendorMenu.ItemName,
+                        Price = vendorMenu.Price,
+                        VendorId = vendorMenu.VendorId,
+                        CategoryDetails = new CategoryDetailsDto
+                        {
+                            CategoryId = category.Id,
+                            CategoryName = category.Name
+                        },
+                        Rating = vendorMenu.Rating,
+                        Image = new ImageModel
+                        {
+                            ImageFileName = vendorMenu.Image.ImageFileName,
+                            ImageId = vendorMenu.Image.ImageId
+                        },
+                        FoodType = vendorMenu.FoodType,
+                        Discount = vendorMenu.Discount,
+                        Active = vendorMenu.Active,
+                    });
+                }
+            }
+
+            return response;
+        }
+    }
+
+    public record CategoryDetailsDto
+    {
+        [JsonProperty("categoryId")]
+        public string CategoryId { get; set; } = string.Empty;
+
+        [JsonProperty("categoryName")]
+        public string CategoryName { get; set; } = string.Empty;
     }
 }

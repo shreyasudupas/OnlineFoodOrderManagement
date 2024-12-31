@@ -60,7 +60,11 @@ namespace Inventory.Microservice.Core.Services.VendorMenus.Commands
                     Rating = 0,
                     FoodType= json.FoodType,
                     Discount= json.Discount,
-                    CategoryId= json.Category,
+                    CategoryDetails= new CategoryDetailsDto
+                    {
+                        CategoryId = json.CategoryId,
+                        CategoryName = json.CategoryName
+                    },
                     Active= json.Active,
                     Image = new MenuManagment.Mongo.Domain.Entities.SubModel.ImageModel()
                 });

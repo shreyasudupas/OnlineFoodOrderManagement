@@ -11,8 +11,11 @@ namespace MenuManagment.Mongo.Domain.Models
         [JsonProperty("foodType", Required = Required.Always)]
         public string FoodType { get; set; }
 
-        [JsonProperty("category", Required = Required.Always)]
-        public string Category { get; set; }
+        [JsonProperty("categoryId", Required = Required.Always)]
+        public string CategoryId { get; set; }
+
+        [JsonProperty("categoryName", Required = Required.Always)]
+        public string CategoryName { get; set; }
 
         [JsonProperty("price", Required = Required.Always)]
         public double Price { get; set; }

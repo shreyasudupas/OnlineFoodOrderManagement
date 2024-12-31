@@ -80,7 +80,6 @@ namespace Inventory.Mongo.Persistance.Repositories
 
             if (menu != null)
             {
-                _logger.LogInformation("GetAllVendorMenuByVendorId ended");
                 return menu;
             }
             else
