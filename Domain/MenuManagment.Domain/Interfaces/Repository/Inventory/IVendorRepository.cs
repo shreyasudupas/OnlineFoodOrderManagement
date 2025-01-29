@@ -11,16 +11,16 @@ namespace MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository
 {
     public interface IVendorRepository
     {
-        Task<Vendor> AddVendorDocument(VendorDto vendor);
-        Task<List<Vendor>> AddVendorDocuments(List<VendorDto> vendors);
+        Task<Vendor> AddVendorDocument(Vendor vendor);
+        Task<List<Vendor>> AddVendorDocuments(List<Vendor> vendors);
         Task<List<Vendor>> GetAllVendorDocuments();
         int IfVendorCollectionExists();
 
         Task<Vendor> GetVendorDocument(string id);
         Task<Vendor> GetVendorDocumentByCustomerfilter(Expression<Func<VendorDto, bool>> filterExpression);
-        Task<VendorCategory> AddCategoryToVendor(string vendorId, CategoryDto category);
+        Task<VendorCategory> AddCategoryToVendor(string vendorId, VendorCategory vendorCategory);
         Task<List<VendorCategory>> GetAllVendorCategories(string vendorId);
-        Task<Vendor> UpdateVendorDocument(VendorDto vendorData);
+        Task<Vendor> UpdateVendorDocument(Vendor vendorData);
         Task<VendorCategory> GetCategoryById(string Id, string VendorId);
         Task<VendorCategory> UpdateVendorCategoryDocument(string vendorId, VendorCategory categoryDto);
 

@@ -24,18 +24,15 @@ namespace Inventory.Mongo.Persistance.Repositories
     public class VendorRepository : BaseRepository<Vendor>, IVendorRepository
     {
         private readonly ILogger _logger;
-        private readonly IMapper _mapper;
         public VendorRepository(
             IOptions<MongoDatabaseConfiguration> mongoDatabaseSettings,
-            ILogger<VendorRepository> logger,
-            IMapper mapper
+            ILogger<VendorRepository> logger
             ) : base(mongoDatabaseSettings)
         {
             _logger = logger;
-            _mapper = mapper;
         }
 
-        public async Task<Vendor> AddVendorDocument(VendorDto vendor)
+        public async Task<Vendor> AddVendorDocument(Vendor vendor)
         {
             _logger.LogInformation("AddVendorDocument started..");
 
@@ -43,9 +40,7 @@ namespace Inventory.Mongo.Persistance.Repositories
 
             if (vendor != null)
             {
-                var mapToVendorModel = _mapper.Map<Vendor>(vendor);
-
-                await CreateOneDocument(mapToVendorModel);
+                await CreateOneDocument(vendor);
 
                 var getVendorWithId = await GetDocumentByFilter(v => v.VendorName == vendor.VendorName);
 
@@ -58,7 +53,7 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
         }
 
-        public async Task<List<Vendor>> AddVendorDocuments(List<VendorDto> vendors)
+        public async Task<List<Vendor>> AddVendorDocuments(List<Vendor> vendors)
         {
             _logger.LogInformation("AddVendorDocuments started..");
 
@@ -66,11 +61,9 @@ namespace Inventory.Mongo.Persistance.Repositories
 
             if (vendors.Count > 0)
             {
-                var mapToVendorModel = _mapper.Map<List<Vendor>>(vendors);
+                await CreateManyDocument(vendors);
 
-                await CreateManyDocument(mapToVendorModel);
-
-                return mapToVendorModel;
+                return vendors;
             }
             else
             {
@@ -127,29 +120,27 @@ namespace Inventory.Mongo.Persistance.Repositories
             return IfDocumentExists();
         }
 
-        public async Task<VendorCategory> AddCategoryToVendor(string vendorId, CategoryDto category)
+        public async Task<VendorCategory> AddCategoryToVendor(string vendorId, VendorCategory vendorCategory)
         {
             var vendor = await GetById(vendorId);
 
             if (vendor != null)
             {
-                var mapDtoToCategory = _mapper.Map<VendorCategory>(category);
-
-                var vendorCategoryExists = vendor.Categories.Any(c => c.Name == category.Name);
+                var vendorCategoryExists = vendor.Categories.Any(c => c.Name == vendorCategory.Name);
                 if (!vendorCategoryExists)
                 {
                     //add id to categories
-                    mapDtoToCategory.Id = ObjectId.GenerateNewId(DateTime.Now).ToString();
+                    vendorCategory.Id = ObjectId.GenerateNewId(DateTime.Now).ToString();
 
                     var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorId);
-                    var update = Builders<Vendor>.Update.Push(m => m.Categories, mapDtoToCategory);
+                    var update = Builders<Vendor>.Update.Push(m => m.Categories, vendorCategory);
 
                     var result = await UpdateOneDocument(filter, update);
 
                     if (result.IsAcknowledged)
                     {
                         var vendorUpdated = await GetById(vendorId);
-                        var updatedCategory = vendorUpdated.Categories.Find(x => x.Name == category.Name);
+                        var updatedCategory = vendorUpdated.Categories.Find(x => x.Name == vendorCategory.Name);
                         return updatedCategory;
                     }
                     else
@@ -160,7 +151,7 @@ namespace Inventory.Mongo.Persistance.Repositories
                 }
                 else
                 {
-                    _logger.LogError($"category with Name: {category.Name} already exists");
+                    _logger.LogError($"category with Name: {vendorCategory.Name} already exists");
                     return null;
                 }
             }
@@ -202,23 +193,21 @@ namespace Inventory.Mongo.Persistance.Repositories
             }
         }
 
-        public async Task<Vendor> UpdateVendorDocument(VendorDto vendorData)
+        public async Task<Vendor> UpdateVendorDocument(Vendor vendorData)
         {
             try
             {
                 _logger.LogInformation("UpdateVendorDocument started..");
                 var vendor = await GetById(vendorData.Id);
-
-                var mapToVendorModel = _mapper.Map<Vendor>(vendorData);
+                
                 if (vendor != null)
                 {
-
                     //update category since FE is not sending category and Registrion Process as well
-                    mapToVendorModel.Categories = vendor.Categories;
-                    mapToVendorModel.RegistrationProcess = vendor.RegistrationProcess;
+                    vendorData.Categories = vendor.Categories;
+                    vendorData.RegistrationProcess = vendor.RegistrationProcess;
 
                     var filter = Builders<Vendor>.Filter.Eq(x => x.Id, vendorData.Id);
-                    var update = Builders<Vendor>.Update.ApplyMultiFields(mapToVendorModel);
+                    var update = Builders<Vendor>.Update.ApplyMultiFields(vendorData);
 
                     var result = await UpdateOneDocument(filter, update);
                     if (result.IsAcknowledged)
@@ -229,7 +218,7 @@ namespace Inventory.Mongo.Persistance.Repositories
                     else
                     {
                         _logger.LogError($"Error updating the Vendor with Id {vendorData.Id}");
-                        return mapToVendorModel;
+                        return vendorData;
                     }
                 }
                 else

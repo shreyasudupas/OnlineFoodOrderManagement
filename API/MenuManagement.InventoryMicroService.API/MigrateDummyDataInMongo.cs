@@ -43,58 +43,58 @@ namespace MenuManagement.InventoryMicroService.API
                     Active = true
                 };
 
-                var dummyVendors = new VendorDto
+                var dummyVendors = new Vendor
                 {
                     Id = "",
                     AddressLine1 = "sample",
                     AddressLine2 = null,
                     Area = "Kathreguppe",
-                    Categories = new List<CategoryDto>(),
+                    Categories = new List<VendorCategory>(),
                     City = "Bengaluru",
-                    Coordinates = new CoordinatesDto
-                    {
-                        Latitude = 12.2334,
-                        Longitude = 92.1212
-                    },
+                    //Coordinates = new CoordinatesDto
+                    //{
+                    //    Latitude = 12.2334,
+                    //    Longitude = 92.1212
+                    //},
                     State = "Karnataka",
                     Rating = 4,
                     CuisineType = new List<string> { "Indian" },
                     VendorDescription = "sample",
                     VendorName = "Vendor 1",
-                    OpenTime =  "07:30:00",
-                    CloseTime = "22:30:00",
+                    //OpenTime =  "07:30:00",
+                    //CloseTime = "22:30:00",
                     Active= false,
                     VendorType = "Online"
                 };
 
-                var dummyCategories = new List<CategoryDto>
+                var dummyCategories = new List<VendorCategory>
                 {
-                    new CategoryDto
+                    new VendorCategory
                     {
                         Id = "",
                         Name="Breakfast",
                         Active=true,
                         Description="",
-                        OpenTime = "07:30:00",
-                        CloseTime = "11:30:00"
+                        //OpenTime = "07:30:00",
+                        //CloseTime = "11:30:00"
                     },
-                    new CategoryDto
+                    new VendorCategory
                     {
                         Id = "",
                         Name="Lunch",
                         Active=true,
                         Description="",
-                        OpenTime = "11:30:00",
-                        CloseTime = "15:00:00"
+                        //OpenTime = "11:30:00",
+                        //CloseTime = "15:00:00"
                     },
-                    new CategoryDto
+                    new VendorCategory
                     {
                         Id = "",
                         Name="Dinner",
                         Active=true,
                         Description="",
-                        OpenTime="18:00:00",
-                        CloseTime = "22:30:00"
+                        //OpenTime="18:00:00",
+                        //CloseTime = "22:30:00"
                     },
                 };
 

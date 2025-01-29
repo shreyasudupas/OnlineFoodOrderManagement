@@ -5,7 +5,7 @@ using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Inventory.Microservice.Core.Services.Vendor.Commands.UpdateVendorDetails
+namespace Inventory.Microservice.Core.Services.Vendors.Commands.UpdateVendorDetails
 {
     public class UpdateVendorDetailsCommand : IRequest<VendorDto>
     {
@@ -25,7 +25,8 @@ namespace Inventory.Microservice.Core.Services.Vendor.Commands.UpdateVendorDetai
 
         public async Task<VendorDto> Handle(UpdateVendorDetailsCommand request, CancellationToken cancellationToken)
         {
-            var result = await vendorRepository.UpdateVendorDocument(request.VendorDetail);
+            var mapToVendorModel = _mapper.Map<MenuManagment.Mongo.Domain.Mongo.Entities.Vendor>(request.VendorDetail);
+            var result = await vendorRepository.UpdateVendorDocument(mapToVendorModel);
             if (result != null)
             {
                 var mapToModel = _mapper.Map<VendorDto>(result);

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.32.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\MenuManagment.Domain\MenuManagment.Mongo.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\Inventory.Mongo.Persistance\Inventory.Mongo.Persistance.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MongoDb.Shared.Persistance\MongoDb.Shared.Persistance.csproj" />
+    <ProjectReference Include="..\MenuManagement.AI.Domain\MenuManagement.AI.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

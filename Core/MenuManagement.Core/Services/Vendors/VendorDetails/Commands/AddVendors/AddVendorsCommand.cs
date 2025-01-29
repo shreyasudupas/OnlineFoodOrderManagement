@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Inventory.Microservice.Core.Services.Vendor.VendorDetails.Commands.AddVendors
+namespace Inventory.Microservice.Core.Services.Vendors.VendorDetails.Commands.AddVendors
 {
     public class AddVendorsCommand : IRequest<List<VendorDto>>
     {
@@ -26,7 +26,8 @@ namespace Inventory.Microservice.Core.Services.Vendor.VendorDetails.Commands.Add
 
         public async Task<List<VendorDto>> Handle(AddVendorsCommand request, CancellationToken cancellationToken)
         {
-            var result = await _vendorRepository.AddVendorDocuments(request.VendorsInput);
+            var mapToVendorModel = _mapper.Map<List<MenuManagment.Mongo.Domain.Mongo.Entities.Vendor>>(request.VendorsInput);
+            var result = await _vendorRepository.AddVendorDocuments(mapToVendorModel);
             if (result.Count > 0)
             {
                 var mapToDto = _mapper.Map<List<VendorDto>>(result);

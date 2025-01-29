@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using MenuManagment.Mongo.Domain.Mongo.Inventory.Dtos;
-using MenuManagment.Mongo.Domain.Mongo.Entities;
+﻿using MenuManagment.Mongo.Domain.Mongo.Entities;
 using MenuManagment.Mongo.Domain.Mongo.Interfaces.Inventory.Repository;
 using Microsoft.Extensions.Logging;
-using MongoDb.Shared.Persistance.DBContext;
 using MongoDb.Shared.Persistance.Extensions;
 using MongoDb.Shared.Persistance.Repositories;
 using MongoDB.Driver;
